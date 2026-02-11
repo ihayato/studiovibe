@@ -538,7 +538,12 @@ section {
 /* Responsive adjustments for Business Sections */
 @media (max-width: 900px) {
 
-    .business-section .container,
+    .business-section .container {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
     .business-section.alt-layout .container {
         flex-direction: column-reverse;
         text-align: center;
