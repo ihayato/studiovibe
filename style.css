@@ -454,6 +454,13 @@ section {
     border-color: rgba(123, 44, 191, 0.3);
 }
 
+.visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
 .visual-placeholder {
     font-size: 2rem;
     font-weight: 700;
