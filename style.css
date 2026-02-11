@@ -533,6 +533,11 @@ section {
         padding-top: 20px;
     }
 
+    .btn-ip {
+        margin-top: 30px;
+        font-family: var(--font-jp);
+    }
+
     .business-visual {
         width: 100%;
         height: 300px;
