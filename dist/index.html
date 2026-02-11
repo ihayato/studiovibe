@@ -6,11 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Studio VIBE | AI Anime Studio</title>
   <meta name="description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
+  <!-- OGP -->
+  <meta property="og:title" content="Studio VIBE | AI Anime Studio" />
+  <meta property="og:description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
+  <meta property="og:image" content="https://vibe.co.jp/img/og.png" />
+  <meta property="og:url" content="https://vibe.co.jp/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Studio VIBE" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Studio VIBE | AI Anime Studio" />
+  <meta name="twitter:description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
+  <meta name="twitter:image" content="https://vibe.co.jp/img/og.png" />
+  <link rel="icon" type="image/png" href="/assets/favicon-DckqrgUg.png">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
     rel="stylesheet">
-  <script type="module" crossorigin src="/assets/index-D5VIzFTN.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-AYizibu2.css">
+  <script type="module" crossorigin src="/assets/main-kAmvUFd0.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/style-DnYTqw2G.js">
+  <link rel="stylesheet" crossorigin href="/assets/style-_Z8r6GQo.css">
+  <link rel="stylesheet" crossorigin href="/assets/main-B00NR0mh.css">
 </head>
 
 <body>
@@ -23,6 +39,7 @@
           <li><a href="#works">Works</a></li>
           <li><a href="#business">Business</a></li>
           <li><a href="#team">Team</a></li>
+          <li><a href="/about.html">About</a></li>
           <li><a href="#contact" class="btn-primary">Contact</a></li>
         </ul>
       </nav>
@@ -88,14 +105,14 @@
             <!-- Slide 1 -->
             <div class="swiper-slide">
               <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/placeholder1"
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/_rhso7_7XRg"
                   title="YouTube video player" frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen></iframe>
               </div>
               <div class="work-info">
-                <h3>Project A: The Beginning</h3>
-                <p>AIアニメの新たな可能性を切り拓く、18分の長編叙事詩。</p>
+                <h3>短編アニメ「ニンジャ犯科帳『強さの秘訣』」</h3>
+                <p>2026年1月公開。DaVinci Resolveを活用した、初のチーム制作作品。</p>
               </div>
             </div>
             <!-- Slide 2 -->
@@ -122,6 +139,19 @@
               <div class="work-info">
                 <h3>短編アニメ「ニンジャ犯科帳『こわいまんじゅう』」</h3>
                 <p>2025年11月公開。おそらく世界初の10分尺の、フルAIジャパニメーション。<br>スタジオ代表イケハヤがMacBook Air（M2）1台で、37時間掛けて制作。</p>
+              </div>
+            </div>
+            <!-- Slide 4 -->
+            <div class="swiper-slide">
+              <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/htHYiSUocOI"
+                  title="YouTube video player" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+              </div>
+              <div class="work-info">
+                <h3>実写風MV「アンダルシアの犬」</h3>
+                <p>2025年10月公開。パブリックドメインの名画「アンダルシアの犬」をオマージュしたミュージックビデオ。制作時間は8時間。</p>
               </div>
             </div>
           </div>
@@ -298,6 +328,10 @@
             <label for="message">Message</label>
             <textarea id="message" name="message" rows="5" required></textarea>
           </div>
+          <div class="form-group turnstile-container">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="dark"></div>
+          </div>
+          <div id="form-message" class="form-message"></div>
           <button type="submit" class="btn-submit">Send Message</button>
         </form>
       </div>

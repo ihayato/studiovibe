@@ -737,6 +737,200 @@ section {
     border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
+/* About Page */
+.page-hero {
+    padding: 160px 0 60px;
+    text-align: center;
+}
+
+.page-hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    font-family: var(--font-jp);
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.about-section {
+    padding: 60px 0;
+}
+
+.about-card {
+    background: #111;
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.company-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-jp);
+}
+
+.company-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.company-table tr:last-child {
+    border-bottom: none;
+}
+
+.company-table th {
+    text-align: left;
+    padding: 20px 20px 20px 0;
+    color: #888;
+    font-weight: 400;
+    width: 120px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.company-table td {
+    padding: 20px 0;
+    line-height: 1.8;
+}
+
+.founder-section {
+    padding: 80px 0;
+}
+
+.founder-content {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.founder-img-wrapper {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.founder-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #333;
+    margin-bottom: 15px;
+}
+
+.founder-name h3 {
+    margin-bottom: 5px;
+}
+
+.founder-role {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.founder-social a {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.founder-social a:hover {
+    color: #fff;
+}
+
+.founder-message {
+    font-family: var(--font-jp);
+    line-height: 2;
+    color: #ccc;
+}
+
+.founder-message p {
+    margin-bottom: 20px;
+}
+
+.career-section {
+    padding: 80px 0;
+}
+
+.timeline {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 40px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-color), transparent);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 40px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -46px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid #000;
+}
+
+.timeline-year {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 8px;
+}
+
+.timeline-content p {
+    font-family: var(--font-jp);
+    color: #aaa;
+    line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+    .page-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .founder-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-card {
+        padding: 25px;
+    }
+
+    .company-table th {
+        display: block;
+        padding-bottom: 5px;
+    }
+
+    .company-table td {
+        display: block;
+        padding-top: 0;
+        padding-bottom: 20px;
+    }
+}
+
 /* Footer */
 footer {
     text-align: center;
