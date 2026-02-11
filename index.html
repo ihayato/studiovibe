@@ -7,6 +7,7 @@
   <title>Studio VIBE | AI Anime Studio</title>
   <meta name="description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
   <link rel="icon" type="image/png" href="/img/favicon.png">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script type="module" src="/main.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
@@ -298,6 +299,10 @@
             <label for="message">Message</label>
             <textarea id="message" name="message" rows="5" required></textarea>
           </div>
+          <div class="form-group turnstile-container">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="dark"></div>
+          </div>
+          <div id="form-message" class="form-message"></div>
           <button type="submit" class="btn-submit">Send Message</button>
         </form>
       </div>

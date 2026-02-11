@@ -703,6 +703,40 @@ section {
     opacity: 0.9;
 }
 
+.btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.turnstile-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.form-message {
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: none;
+    font-family: var(--font-jp);
+}
+
+.form-message.success {
+    display: block;
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.form-message.error {
+    display: block;
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
 /* Footer */
 footer {
     text-align: center;

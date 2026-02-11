@@ -75,3 +75,63 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Contact Form Submission
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formMessage = document.getElementById('form-message');
+        const submitBtn = contactForm.querySelector('.btn-submit');
+        const originalBtnText = submitBtn.textContent;
+
+        // Get Turnstile token
+        const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+        if (!turnstileToken) {
+            formMessage.textContent = '認証チェックを完了してください。';
+            formMessage.className = 'form-message error';
+            return;
+        }
+
+        // Disable button
+        submitBtn.disabled = true;
+        submitBtn.textContent = '送信中...';
+        formMessage.className = 'form-message';
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    type: document.getElementById('type').value,
+                    message: document.getElementById('message').value,
+                    turnstileToken,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                formMessage.textContent = data.message || '送信しました！';
+                formMessage.className = 'form-message success';
+                contactForm.reset();
+                // Reset Turnstile widget
+                if (window.turnstile) {
+                    window.turnstile.reset();
+                }
+            } else {
+                formMessage.textContent = data.error || '送信に失敗しました。';
+                formMessage.className = 'form-message error';
+            }
+        } catch (err) {
+            formMessage.textContent = '通信エラーが発生しました。再度お試しください。';
+            formMessage.className = 'form-message error';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        }
+    });
+}
