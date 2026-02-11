@@ -529,6 +529,12 @@ section {
     text-decoration-color: #fff;
 }
 
+.btn-ip {
+    margin-top: 40px;
+    font-family: var(--font-jp);
+    display: inline-block;
+}
+
 /* Responsive adjustments for Business Sections */
 @media (max-width: 900px) {
 
