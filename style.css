@@ -517,6 +517,18 @@ section {
     border-left: 3px solid var(--accent-color);
 }
 
+.card-detail a {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-decoration-color: rgba(123, 44, 191, 0.5);
+    transition: all 0.3s;
+}
+
+.card-detail a:hover {
+    color: #fff;
+    text-decoration-color: #fff;
+}
+
 /* Responsive adjustments for Business Sections */
 @media (max-width: 900px) {
 
