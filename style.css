@@ -414,7 +414,7 @@ section {
 /* Business Grid */
 .business-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
@@ -422,34 +422,47 @@ section {
     background: #111;
     padding: 40px 30px;
     border-radius: 10px;
-    text-align: center;
+    text-align: left;
     transition: transform 0.3s;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
 }
 
 .business-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
     border-color: rgba(123, 44, 191, 0.5);
     box-shadow: 0 10px 30px rgba(123, 44, 191, 0.1);
 }
 
 .card-icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #4361ee;
     margin-bottom: 20px;
+    opacity: 0.8;
 }
 
 .business-card h3 {
-    font-family: var(--font-jp);
-    font-size: 1.2rem;
+    font-family: var(--font-main);
+    font-size: 1.5rem;
     margin-bottom: 15px;
+    color: #fff;
 }
 
-.business-card p {
+.business-card>p {
+    font-family: var(--font-jp);
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.card-detail p {
     font-family: var(--font-jp);
     font-size: 0.9rem;
-    color: #aaa;
+    color: #888;
+    line-height: 1.6;
 }
 
 /* Team */
