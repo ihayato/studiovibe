@@ -1,4 +1,5 @@
 import './style.css'
+import { initI18n } from './i18n.js'
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -135,3 +136,6 @@ if (contactForm) {
         }
     });
 }
+
+// Initialize language switcher
+initI18n();

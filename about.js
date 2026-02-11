@@ -1,4 +1,5 @@
 import './style.css'
+import { initI18n } from './i18n.js'
 
 // Mobile Menu Toggle
 const menuToggle = document.querySelector('.mobile-menu-toggle');
@@ -28,3 +29,6 @@ window.addEventListener('scroll', () => {
         header.classList.remove('scrolled');
     }
 });
+
+// Initialize language switcher
+initI18n();

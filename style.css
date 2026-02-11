@@ -104,6 +104,28 @@ nav a.active {
     box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
 }
 
+/* Language Toggle */
+.lang-toggle {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    margin-left: 15px;
+}
+
+.lang-toggle:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #000;
+}
+
 /* Mobile Menu */
 .mobile-menu-toggle {
     display: none;
