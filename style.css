@@ -433,6 +433,42 @@ section {
     background: var(--accent-color);
 }
 
+/* Strengths Section */
+#strengths {
+    padding: 100px 0;
+}
+
+.strengths-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.strengths-lead {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+.strengths-content p {
+    font-size: 1rem;
+    line-height: 2;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+    font-family: var(--font-jp);
+}
+
+.strengths-content a {
+    color: var(--accent-color);
+    text-decoration: underline;
+    transition: opacity 0.3s ease;
+}
+
+.strengths-content a:hover {
+    opacity: 0.8;
+}
+
 /* Business Sections */
 .business-section {
     min-height: 80vh;

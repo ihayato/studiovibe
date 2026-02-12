@@ -2,7 +2,7 @@
 const translations = {
     ja: {
         // Hero
-        'hero.tagline': '制約を武器に、<br class="sp-only">物語を紡ぐ',
+        'hero.tagline': 'コミュニティとともに<br class="sp-only">物語を紡ぐ',
         'hero.subtitle': '「フルAIアニメ」特化型スタジオ',
         'hero.cta': 'View Works',
 
@@ -10,6 +10,15 @@ const translations = {
         'philosophy.subtitle': 'Our Core Value',
         'philosophy.quote': '「AIじゃできない」を嘆くな<br />「AIでできること」を極めろ',
         'philosophy.text': '<strong>「AIアニメ」は完璧ではありません。</strong><br><br>技術的な制約は多く、商業レベルの作品を作るのは困難です。<br><br>しかし。<br><br>私たちは「今のAIではできないこと」を数えるのではなく、<br>今ある技術で最高峰のエンターテインメントを創り出したいと考えています。<br><br>それがStudio VIBEの在り方です。',
+
+        // Strengths
+        'strengths.subtitle': '私たちの強み',
+        'strengths.lead': '<strong>Studio VIBEの強みは、2021年から培っている「クリエイターコミュニティ」にあります。</strong>',
+        'strengths.p1': '私たちのオリジナルIP「クリプトニンジャ」は、ファンアートクリエイターに対して「無許諾での商用利用」を許可する特異なライセンスを提供しています（<a href="https://note.com/ihayato/n/ne2d4454ad816" target="_blank">ガイドライン</a>）。',
+        'strengths.p2': 'これまでも、多くのクリエイターがクリプトニンジャを活用し、収益化に成功しています。',
+        'strengths.p3': '公式として「AI読み込み可能なイラスト素材」も提供し、こちらも多くのファン、クリエイターに利活用いただいています。',
+        'strengths.p4': 'AIは一部のプロのものではなく、「クリエイティブの民主化」を実現するツールだと確信しています。',
+        'strengths.p5': 'あなたがクリエイターとして、私たちの活動に参加してくれることを心待ちにしております。',
 
         // Works
         'works.subtitle': 'Recent Creations',
@@ -105,7 +114,7 @@ const translations = {
 
     en: {
         // Hero
-        'hero.tagline': 'Turning Constraints<br class="sp-only"> into Stories',
+        'hero.tagline': 'Weaving Stories<br class="sp-only"> with Community',
         'hero.subtitle': 'A Studio Specialized in "Full AI Animation"',
         'hero.cta': 'View Works',
 
@@ -113,6 +122,15 @@ const translations = {
         'philosophy.subtitle': 'Our Core Value',
         'philosophy.quote': 'Don\'t lament what AI can\'t do.<br />Master what AI can.',
         'philosophy.text': '<strong>"AI animation" is not perfect.</strong><br><br>There are many technical constraints, and creating commercially viable works is challenging.<br><br>However.<br><br>Rather than counting what today\'s AI cannot do,<br>we aim to create the finest entertainment with the technology available now.<br><br>That is what Studio VIBE is all about.',
+
+        // Strengths
+        'strengths.subtitle': 'Our Strengths',
+        'strengths.lead': '<strong>Studio VIBE\'s strength lies in the "creator community" we have been building since 2021.</strong>',
+        'strengths.p1': 'Our original IP "CryptoNinja" offers a unique license that allows fan art creators to use it commercially without permission (<a href="https://note.com/ihayato/n/ne2d4454ad816" target="_blank">Guidelines</a>).',
+        'strengths.p2': 'Many creators have already leveraged CryptoNinja to successfully monetize their work.',
+        'strengths.p3': 'We also officially provide "AI-loadable illustration assets," which are widely used by fans and creators alike.',
+        'strengths.p4': 'We firmly believe that AI is not just a tool for a select few professionals, but a tool that realizes the "democratization of creativity."',
+        'strengths.p5': 'We look forward to you joining our activities as a creator.',
 
         // Works
         'works.subtitle': 'Recent Creations',
