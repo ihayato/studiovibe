@@ -1,6 +1,14 @@
 export default async function handler(req, res) {
+    // Only allow POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    // CORS: only allow same-origin
+    const origin = req.headers.origin || req.headers.referer || '';
+    const allowedOrigins = ['https://vibe.co.jp', 'http://localhost:5173', 'http://localhost:3000'];
+    if (!allowedOrigins.some(o => origin.startsWith(o))) {
+        return res.status(403).json({ error: 'Forbidden' });
     }
 
     const { name, email, type, message, turnstileToken } = req.body;
@@ -9,6 +17,29 @@ export default async function handler(req, res) {
     if (!name || !email || !message || !turnstileToken) {
         return res.status(400).json({ error: '必須項目を入力してください。' });
     }
+
+    // Input length limits (prevent abuse)
+    if (name.length > 100) {
+        return res.status(400).json({ error: '名前は100文字以内で入力してください。' });
+    }
+    if (email.length > 254) {
+        return res.status(400).json({ error: 'メールアドレスが長すぎます。' });
+    }
+    if (message.length > 5000) {
+        return res.status(400).json({ error: 'メッセージは5000文字以内で入力してください。' });
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: '有効なメールアドレスを入力してください。' });
+    }
+
+    // Sanitize inputs (strip potential injection)
+    const sanitize = (str) => str.replace(/[<>]/g, '').trim();
+    const safeName = sanitize(name);
+    const safeMessage = sanitize(message);
+    const safeType = ['production', 'speaking', 'recruitment', 'other'].includes(type) ? type : 'other';
 
     // Verify Cloudflare Turnstile
     try {
@@ -48,10 +79,10 @@ export default async function handler(req, res) {
                     title: '📩 新しいお問い合わせ',
                     color: 0x7b2cbf,
                     fields: [
-                        { name: '👤 お名前', value: name, inline: true },
+                        { name: '👤 お名前', value: safeName, inline: true },
                         { name: '📧 メール', value: email, inline: true },
-                        { name: '📋 種別', value: typeLabels[type] || type, inline: true },
-                        { name: '💬 メッセージ', value: message },
+                        { name: '📋 種別', value: typeLabels[safeType] || safeType, inline: true },
+                        { name: '💬 メッセージ', value: safeMessage },
                     ],
                     timestamp: new Date().toISOString(),
                 },
