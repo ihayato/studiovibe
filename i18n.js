@@ -22,6 +22,8 @@ const translations = {
 
         // Works
         'works.subtitle': 'Recent Creations',
+        'works.slide_bluecat.title': '短編アニメ「ニンジャ犯科帳『幸せの青い猫』」',
+        'works.slide_bluecat.desc': '2026年2月公開。チーム制作2作目となる作品。公開時点でおそらく世界最長のフルAI短編ジャパニメーション作品です。',
         'works.slide1.title': '短編アニメ「ニンジャ犯科帳『強さの秘訣』」',
         'works.slide1.desc': '2026年1月公開。DaVinci Resolveを活用した、初のチーム制作作品。',
         'works.slide2.title': 'フルAIミュージックビデオ「クォ・ヴァディス」',
@@ -134,6 +136,8 @@ const translations = {
 
         // Works
         'works.subtitle': 'Recent Creations',
+        'works.slide_bluecat.title': 'Short Anime "Ninja Hankachō: The Blue Cat of Happiness"',
+        'works.slide_bluecat.desc': 'Released February 2026. The second team-produced work. At the time of release, likely the world\'s longest full AI Japanimation short film.',
         'works.slide1.title': 'Short Anime "Ninja Hankachō: The Secret of Strength"',
         'works.slide1.desc': 'Released January 2026. Our first team-produced work utilizing DaVinci Resolve.',
         'works.slide2.title': 'Full AI Music Video "Quo Vadis"',
