@@ -17,8 +17,8 @@ const translations = {
         'strengths.p1': '私たちのオリジナルIP「クリプトニンジャ」は、ファンアートクリエイターに対して「無許諾での商用利用」を許可する特異なライセンスを提供しています（<a href="https://note.com/ihayato/n/ne2d4454ad816" target="_blank">ガイドライン</a>）。',
         'strengths.p2': 'これまでも、多くのクリエイターがクリプトニンジャを活用し、収益化に成功しています。',
         'strengths.p3': '公式として「AI読み込み可能なイラスト素材」も提供し、こちらも多くのファン、クリエイターに利活用いただいています。',
-        'strengths.p4': 'AIは一部のプロのものではなく、「クリエイティブの民主化」を実現するツールだと確信しています。',
-        'strengths.p5': 'あなたがクリエイターとして、私たちの活動に参加してくれることを心待ちにしております。',
+        'strengths.salon': 'また、Studio VIBEが主宰する「AIクリエイティブサロン[<a href="https://aimusic.salon/" target="_blank">https://aimusic.salon/</a>]」は、2000人以上の参加者が集まる業界最大手のコミュニティとなっています。',
+        'strengths.p4': '私たちは、AIは一部のプロのものではなく、「クリエイティブの民主化」を実現するツールだと確信しています。',
 
         // Works
         'works.subtitle': 'Recent Creations',
@@ -131,8 +131,8 @@ const translations = {
         'strengths.p1': 'Our original IP "CryptoNinja" offers a unique license that allows fan art creators to use it commercially without permission (<a href="https://note.com/ihayato/n/ne2d4454ad816" target="_blank">Guidelines</a>).',
         'strengths.p2': 'Many creators have already leveraged CryptoNinja to successfully monetize their work.',
         'strengths.p3': 'We also officially provide "AI-loadable illustration assets," which are widely used by fans and creators alike.',
-        'strengths.p4': 'We firmly believe that AI is not just a tool for a select few professionals, but a tool that realizes the "democratization of creativity."',
-        'strengths.p5': 'We look forward to you joining our activities as a creator.',
+        'strengths.salon': 'Also, the "AI Creative Salon" [<a href="https://aimusic.salon/" target="_blank">https://aimusic.salon/</a>] presided over by Studio VIBE has become the industry\'s largest community with over 2,000 participants.',
+        'strengths.p4': 'We are convinced that AI is not just a tool for a select few professionals, but a tool that realizes the "democratization of creativity."',
 
         // Works
         'works.subtitle': 'Recent Creations',
