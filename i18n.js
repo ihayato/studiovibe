@@ -68,7 +68,7 @@ const translations = {
         'tv.subtitle': 'テレビアニメ制作実績',
         'tv.title': 'テレビアニメ「忍ばない！クリプトニンジャ咲耶」（1〜3期）',
         'tv.meta': '制作：ファンワークス ／ 原作：イケハヤ',
-        'tv.desc': 'Studio VIBE代表のイケハヤは、テレビアニメの制作経験もあります。<br>NFTを活用したクラウドファンディングで1億円以上を調達、現在3期まで放送しています。',
+        'tv.desc': 'Studio VIBE代表のイケハヤは、テレビアニメの制作経験もあります。<br>NFTを活用したクラウドファンディングで1億円以上を調達、現在3期まで放送しています。<br>制作は株式会社ファンワークス、AI不使用の作品となっております。',
         'tv.btn': 'テレビアニメを観る（Amazonプライム）',
 
         // Contact
@@ -182,7 +182,7 @@ const translations = {
         'tv.subtitle': 'TV Anime Production',
         'tv.title': 'TV Anime "Shinobanai! CryptoNinja Sakuya" (Seasons 1-3)',
         'tv.meta': 'Production: FanWorks / Original Story: Ikehaya',
-        'tv.desc': 'Studio VIBE founder Ikehaya has experience producing TV anime.<br>Raised over 100 million yen through NFT-based crowdfunding, currently airing through Season 3.',
+        'tv.desc': 'Studio VIBE founder Ikehaya has experience producing TV anime.<br>Raised over 100 million yen through NFT-based crowdfunding, currently airing through Season 3.<br>Produced by FanWorks Inc., this is a non-AI production.',
         'tv.btn': 'Watch on Amazon Prime',
 
         // Contact
