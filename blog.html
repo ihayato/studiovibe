@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | Studio VIBE</title>
+    <meta name="description" content="Studio VIBEのチームブログ。" />
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <script type="module" src="/blog.js"></script>
+</head>
+
+<body>
+    <header id="header">
+        <div class="container">
+            <a href="/" class="logo">Studio VIBE</a>
+            <nav>
+                <ul>
+                    <li><a href="/#philosophy">Philosophy</a></li>
+                    <li><a href="/#works">Works</a></li>
+                    <li><a href="/#business">Business</a></li>
+                    <li><a href="/#team">Team</a></li>
+                    <li><a href="/about.html">Company</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="/#contact" class="btn-primary">Contact</a></li>
+                </ul>
+            </nav>
+            <button id="lang-toggle" class="lang-toggle" aria-label="Toggle language">EN</button>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="container">
+                <h1 data-i18n="blog.hero.title">Blog</h1>
+                <p class="page-subtitle" data-i18n="blog.hero.subtitle">ブログ / 記事</p>
+            </div>
+        </section>
+
+        <!-- Blog List Section -->
+        <section class="blog-section">
+            <div class="container">
+                <div id="blog-loading" class="loading-spinner">
+                    <p>Loading posts...</p>
+                </div>
+                <div id="blog-error" class="error-message" style="display: none;">
+                    <p>記事の読み込みに失敗しました。</p>
+                </div>
+                <div id="blog-grid" class="blog-grid" style="display: none;">
+                    <!-- Blog posts will be injected here via JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Studio VIBE</div>
+            <p data-i18n="footer.copy">&copy; 2026 Studio VIBE. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

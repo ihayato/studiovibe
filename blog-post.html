@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Post | Studio VIBE</title>
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/blog.css">
+
+    <script type="module" src="/blog-post.js"></script>
+</head>
+
+<body>
+    <header id="header">
+        <div class="container">
+            <a href="/" class="logo">Studio VIBE</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/#philosophy" data-i18n="nav.philosophy">Philosophy</a></li>
+                    <li><a href="/#works" data-i18n="nav.works">Works</a></li>
+                    <li><a href="/#business" data-i18n="nav.business">Business</a></li>
+                    <li><a href="/#team" data-i18n="nav.team">Team</a></li>
+                    <li><a href="/about.html" data-i18n="nav.company">Company</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                </ul>
+            </nav>
+            <a href="/#contact" class="btn-primary" data-i18n="nav.contact">Contact</a>
+            <button id="lang-toggle" class="lang-toggle" aria-label="Toggle language">EN</button>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="blog-post-page">
+            <div class="container post-container">
+                <a href="/blog.html" class="back-link">← Back to Blog</a>
+
+                <div id="post-loading" class="loading-spinner">
+                    <p>Loading post...</p>
+                </div>
+
+                <div id="post-error" class="error-message" style="display: none;">
+                    <p>記事が見つからないか、読み込みに失敗しました。</p>
+                </div>
+
+                <article id="post-content" class="post-content-container" style="display: none;">
+                    <div class="post-header">
+                        <div id="post-meta" class="post-meta">
+                            <span id="post-date" class="post-date"></span>
+                            <span id="post-category" class="post-category"></span>
+                        </div>
+                        <h1 id="post-title" class="post-title"></h1>
+                        <div id="post-author" class="post-author-block"></div>
+                    </div>
+
+                    <div id="post-hero" class="post-hero-image"></div>
+
+                    <div id="post-body" class="post-body"></div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Studio VIBE</div>
+            <p data-i18n="footer.copy">&copy; 2026 Studio VIBE. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
