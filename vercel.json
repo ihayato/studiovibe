@@ -3,7 +3,22 @@
     "buildCommand": "vite build",
     "outputDirectory": "dist",
     "framework": "vite",
+    "redirects": [
+        {
+            "source": "/mitaseo",
+            "destination": "/mitaseo/",
+            "permanent": false
+        }
+    ],
     "rewrites": [
+        {
+            "source": "/mitaseo/",
+            "destination": "https://mitama-seori-site.vercel.app/"
+        },
+        {
+            "source": "/mitaseo/:path*",
+            "destination": "https://mitama-seori-site.vercel.app/:path*"
+        },
         {
             "source": "/blog",
             "destination": "/blog.html"
