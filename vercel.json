@@ -8,6 +8,11 @@
             "source": "/mitaseo",
             "destination": "/mitaseo/",
             "permanent": false
+        },
+        {
+            "source": "/otetsudai",
+            "destination": "/otetsudai/",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -18,6 +23,14 @@
         {
             "source": "/mitaseo/:path*",
             "destination": "https://mitama-seori-site.vercel.app/:path*"
+        },
+        {
+            "source": "/luna-occulta",
+            "destination": "https://cn-kitan-web.vercel.app/luna-occulta"
+        },
+        {
+            "source": "/luna-occulta/:path*",
+            "destination": "https://cn-kitan-web.vercel.app/luna-occulta/:path*"
         },
         {
             "source": "/blog",
