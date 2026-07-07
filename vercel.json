@@ -5,6 +5,11 @@
     "framework": "vite",
     "redirects": [
         {
+            "source": "/luna-occulta/",
+            "destination": "/luna-occulta",
+            "permanent": false
+        },
+        {
             "source": "/mitaseo",
             "destination": "/mitaseo/",
             "permanent": false
