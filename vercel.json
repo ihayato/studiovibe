@@ -18,9 +18,22 @@
             "source": "/otetsudai",
             "destination": "/otetsudai/",
             "permanent": false
+        },
+        {
+            "source": "/hankacho",
+            "destination": "/hankacho/",
+            "permanent": false
         }
     ],
     "rewrites": [
+        {
+            "source": "/hankacho/",
+            "destination": "https://ninja-hankacho-site.vercel.app/"
+        },
+        {
+            "source": "/hankacho/:path*",
+            "destination": "https://ninja-hankacho-site.vercel.app/:path*"
+        },
         {
             "source": "/mitaseo/",
             "destination": "https://mitama-seori-site.vercel.app/"
