@@ -23,9 +23,22 @@
             "source": "/hankacho",
             "destination": "/hankacho/",
             "permanent": false
+        },
+        {
+            "source": "/sakuya",
+            "destination": "/sakuya/",
+            "permanent": false
         }
     ],
     "rewrites": [
+        {
+            "source": "/sakuya/",
+            "destination": "https://sakuya-site.vercel.app/"
+        },
+        {
+            "source": "/sakuya/:path*",
+            "destination": "https://sakuya-site.vercel.app/:path*"
+        },
         {
             "source": "/hankacho/",
             "destination": "https://ninja-hankacho-site.vercel.app/"
