@@ -33,7 +33,7 @@
     "rewrites": [
         {
             "source": "/island",
-            "destination": "/poc/island/index.html"
+            "destination": "/poc/island/"
         },
         {
             "source": "/sakuya/",
