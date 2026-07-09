@@ -1,0 +1,20 @@
+name = "vibe-presence"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "Room"
+
+[[durable_objects.bindings]]
+name = "BOARD"
+class_name = "Board"
+
+# 無料プランのDOはsqliteバックエンド必須（Roomはstorage未使用なので挙動は不変・alarmも使える）
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Board"]
