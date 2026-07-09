@@ -147,11 +147,13 @@ export function createLele(opts = {}) {
   // 腕（黒・手のひらは濃いグレーの肉球風）
   const mkArm = (side) => {
     const shoulder = new THREE.Group();
-    shoulder.position.set(0.19 * side, 0.44, 0);
-    shoulder.rotation.z = 0.13 * side; // 開きすぎると胴から浮いて「腕が二重」に見える＝体に沿わせる
-    const arm = mesh(new THREE.CapsuleGeometry(0.072, 0.13, 8, 20), M.black, 0, -0.09, 0);
+    // 付け根から胴の表面の外に出す（x0.225以下だと腕全体が胴の球に埋まり「腕がない」ように見える）
+    shoulder.position.set(0.245 * side, 0.44, 0.03);
+    shoulder.rotation.z = 0.45 * side; // 参照画準拠で斜め外へ＝黒腕が白胴からはっきり見える
+    const arm = mesh(new THREE.CapsuleGeometry(0.075, 0.16, 8, 20), M.black, 0, -0.1, 0);
     arm.scale.set(1, 1, 0.62);
     shoulder.add(arm);
+    body.add(shoulder);
     return shoulder;
   };
   const armL = mkArm(1);
@@ -192,8 +194,8 @@ export function createLele(opts = {}) {
     legR.rotation.x = -Math.sin(p) * 0.55 * w;
     armL.rotation.x = -Math.sin(p) * 0.4 * w + Math.sin(t * 1.9) * 0.05 * (1 - w);
     armR.rotation.x = Math.sin(p) * 0.4 * w + Math.sin(t * 1.9 + 1) * 0.05 * (1 - w);
-    armL.rotation.z = 0.13 + Math.abs(Math.sin(p)) * 0.15 * w + Math.sin(t * 2.2) * 0.03 * (1 - w);
-    armR.rotation.z = -0.13 - Math.abs(Math.sin(p + 1)) * 0.15 * w - Math.sin(t * 2.2 + 0.8) * 0.03 * (1 - w);
+    armL.rotation.z = 0.45 + Math.abs(Math.sin(p)) * 0.15 * w + Math.sin(t * 2.2) * 0.03 * (1 - w);
+    armR.rotation.z = -0.45 - Math.abs(Math.sin(p + 1)) * 0.15 * w - Math.sin(t * 2.2 + 0.8) * 0.03 * (1 - w);
     if (poseT > 0.001) {
       const wave = Math.sin(t * 6) * 0.12;
       armL.rotation.z = THREE.MathUtils.lerp(armL.rotation.z, 2.1 + wave, poseT);
