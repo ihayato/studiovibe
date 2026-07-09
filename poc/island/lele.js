@@ -110,7 +110,6 @@ export function createLele(opts = {}) {
     torso: toon(0xffffff, torsoTex),
     white: toon(0xf6f6f4),
     black: toon(0x2b2830),
-    pad: toon(0x4a4650),
     bandana: toon(band.color),
   };
 
@@ -148,15 +147,11 @@ export function createLele(opts = {}) {
   // 腕（黒・手のひらは濃いグレーの肉球風）
   const mkArm = (side) => {
     const shoulder = new THREE.Group();
-    shoulder.position.set(0.205 * side, 0.43, 0);
-    shoulder.rotation.z = 0.28 * side;
+    shoulder.position.set(0.19 * side, 0.44, 0);
+    shoulder.rotation.z = 0.13 * side; // 開きすぎると胴から浮いて「腕が二重」に見える＝体に沿わせる
     const arm = mesh(new THREE.CapsuleGeometry(0.072, 0.13, 8, 20), M.black, 0, -0.09, 0);
     arm.scale.set(1, 1, 0.62);
     shoulder.add(arm);
-    const palm = mesh(new THREE.SphereGeometry(0.06, 20, 16), M.pad, 0, -0.155, 0.012);
-    palm.scale.set(0.9, 0.75, 0.5);
-    shoulder.add(palm);
-    body.add(shoulder);
     return shoulder;
   };
   const armL = mkArm(1);
@@ -170,8 +165,9 @@ export function createLele(opts = {}) {
   headMesh.scale.set(1.05, 1, 0.97);
   head.add(headMesh);
   for (const s of [1, -1]) {
-    const ear = mesh(new THREE.SphereGeometry(0.105, 24, 18), M.black, 0.21 * s, 0.42, -0.02);
-    ear.scale.set(1, 0.92, 0.6);
+    // 頭にしっかり食い込ませる（中心距離>頭半径だと接するだけで浮いた円盤に見える）
+    const ear = mesh(new THREE.SphereGeometry(0.105, 24, 18), M.black, 0.19 * s, 0.38, -0.02);
+    ear.scale.set(1, 0.92, 0.78);
     head.add(ear);
   }
 
@@ -196,8 +192,8 @@ export function createLele(opts = {}) {
     legR.rotation.x = -Math.sin(p) * 0.55 * w;
     armL.rotation.x = -Math.sin(p) * 0.4 * w + Math.sin(t * 1.9) * 0.05 * (1 - w);
     armR.rotation.x = Math.sin(p) * 0.4 * w + Math.sin(t * 1.9 + 1) * 0.05 * (1 - w);
-    armL.rotation.z = 0.28 + Math.abs(Math.sin(p)) * 0.15 * w + Math.sin(t * 2.2) * 0.03 * (1 - w);
-    armR.rotation.z = -0.28 - Math.abs(Math.sin(p + 1)) * 0.15 * w - Math.sin(t * 2.2 + 0.8) * 0.03 * (1 - w);
+    armL.rotation.z = 0.13 + Math.abs(Math.sin(p)) * 0.15 * w + Math.sin(t * 2.2) * 0.03 * (1 - w);
+    armR.rotation.z = -0.13 - Math.abs(Math.sin(p + 1)) * 0.15 * w - Math.sin(t * 2.2 + 0.8) * 0.03 * (1 - w);
     if (poseT > 0.001) {
       const wave = Math.sin(t * 6) * 0.12;
       armL.rotation.z = THREE.MathUtils.lerp(armL.rotation.z, 2.1 + wave, poseT);
