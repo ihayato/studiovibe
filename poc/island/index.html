@@ -589,7 +589,10 @@
     }
 
     #photo-modal .card {
-      width: min(560px, 90vw);
+      width: min(560px, 92vw);
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
       background: rgba(13, 11, 20, 0.96);
       border: 1px solid rgba(244, 143, 184, 0.6);
       border-radius: 14px;
@@ -601,10 +604,14 @@
     }
 
     #photo-img {
-      width: 100%;
+      max-width: 100%;
+      max-height: 56vh;
+      width: auto;
+      align-self: center;
+      object-fit: contain;
       border-radius: 8px;
       display: block;
-      margin-bottom: 14px;
+      margin: 8px auto 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -639,13 +646,20 @@
     #photo-close {
       position: absolute;
       top: 8px;
-      right: 14px;
-      background: none;
-      border: none;
+      right: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
       color: #f4f2ec;
       font-size: 22px;
+      line-height: 1;
       cursor: pointer;
-      opacity: 0.7;
+      z-index: 1;
     }
 
     /* サウンドトグル（既定OFF） */
@@ -1180,6 +1194,7 @@
       <div class="actions">
         <button class="btn" id="photo-save">画像を保存</button>
         <button class="btn" id="photo-tweet">Xでポスト</button>
+        <button class="btn" id="photo-close2">とじる</button>
       </div>
       <div class="tip">保存した画像をポストに添付してシェアしてね</div>
     </div>

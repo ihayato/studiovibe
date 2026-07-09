@@ -39,6 +39,14 @@ scene.fog = new THREE.Fog(0x232c4a, 15, 46); // 青紫の月霧
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 160);
 camera.position.set(2.4, 2.2, 6.8);
 
+// 画面実寸への追従（リスナー登録は末尾・毎秒の照合はanimate内。モバイルのresize取りこぼし対策）
+const applySize = () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
+let sizeCheckT = 0;
+
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0.5, 3.2);
 controls.enableDamping = true;
@@ -2260,14 +2268,15 @@ const takePhoto = () => {
   const pad = Math.round(cv.height * 0.05);
   c2.fillStyle = 'rgba(7,7,11,0.82)';
   c2.fillRect(0, cv.height - pad * 1.9, cv.width, pad * 1.9);
+  // 縦長写真では左右の銘が重なるため、フォントは幅にも比例させて収める
   c2.textBaseline = 'middle';
   c2.textAlign = 'left';
   c2.fillStyle = '#f4f2ec';
-  c2.font = `700 ${Math.round(pad * 0.72)}px Futura, "Avenir Next", sans-serif`;
+  c2.font = `700 ${Math.round(Math.min(pad * 0.72, cv.width * 0.045))}px Futura, "Avenir Next", sans-serif`;
   c2.fillText('STUDIO VIBE', pad, cv.height - pad * 0.95);
   c2.textAlign = 'right';
   c2.fillStyle = '#7be0ff';
-  c2.font = `700 ${Math.round(pad * 0.5)}px Futura, "Avenir Next", sans-serif`;
+  c2.font = `700 ${Math.round(Math.min(pad * 0.5, cv.width * 0.031))}px Futura, "Avenir Next", sans-serif`;
   c2.fillText('VIBES INTO WORLDS.', cv.width - pad, cv.height - pad * 0.95);
   photoUrl = cv.toDataURL('image/png');
   if (photoImg) photoImg.src = photoUrl;
@@ -2300,6 +2309,8 @@ if (photoTweet) {
 }
 const photoClose = document.getElementById('photo-close');
 if (photoClose) photoClose.addEventListener('click', () => photoModal.classList.remove('show'));
+const photoClose2 = document.getElementById('photo-close2');
+if (photoClose2) photoClose2.addEventListener('click', () => photoModal.classList.remove('show'));
 if (photoModal) {
   photoModal.addEventListener('click', (e) => {
     if (e.target === photoModal) photoModal.classList.remove('show');
@@ -2791,6 +2802,14 @@ function animate() {
   const dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
   const pos = tarte.group.position;
+
+  // resizeイベントを取りこぼしても描画領域がズレたまま固まらないよう、毎秒実寸を照合
+  sizeCheckT -= dt;
+  if (sizeCheckT <= 0) {
+    sizeCheckT = 1;
+    const el = renderer.domElement;
+    if (el.clientWidth !== window.innerWidth || el.clientHeight !== window.innerHeight) applySize();
+  }
 
   const kx = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
   const kz = (keys.s ? 1 : 0) - (keys.w ? 1 : 0);
@@ -3284,8 +3303,6 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
   window.__poc = { tarte: tarte.group, target, camera, controls, toggleMusic, shards, collected, DECK_POS, obstacles, PLATFORMS, get near() { return currentNear; }, get py() { return py; }, get grounded() { return grounded; } };
 }
 
-addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+addEventListener('resize', applySize);
+// iOSはキーボードやURLバーの伸縮をvisualViewport側でしか通知しないことがある
+if (window.visualViewport) window.visualViewport.addEventListener('resize', applySize);
