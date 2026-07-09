@@ -2210,6 +2210,11 @@ if (padEl && padKnob) {
   };
   padEl.addEventListener('pointerup', padEnd);
   padEl.addEventListener('pointercancel', padEnd);
+  // タッチ端末では島じゅうどこでも常時表示
+  if (IS_TOUCH) {
+    padEl.classList.add('show');
+    document.body.classList.add('pad-on');
+  }
 }
 
 // ---------- HUD ----------
@@ -2991,10 +2996,6 @@ function animate() {
     sound.update(dt, { duck: musicOn });
     // 島の外（桟橋・岬・登り道・星見台）にいる間だけ「もどる」を出す
     if (homeBtn) homeBtn.classList.toggle('show', Math.hypot(pos.x, pos.z) > WALK_R + 0.3);
-    // タッチ端末では、登り道エリアにいる間だけ操作パッドを出す
-    const showPad = IS_TOUCH && onTrail;
-    if (padEl) padEl.classList.toggle('show', showPad);
-    document.body.classList.toggle('pad-on', showPad);
   }
 
   // 撮影スポットでは片手をあげてポーズ
