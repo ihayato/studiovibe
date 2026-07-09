@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>STUDIO VIBE | VIBES INTO WORLDS. ― 衝動を、世界に。</title>
   <meta name="description" content="夜空に浮かぶ小さな島を歩く、Studio VIBEのバーチャルスタジオ。ゲーム・アニメ・音楽の三館、月見の岬、浮灯籠の登り道、旅人の帳。" />
   <!-- OGP（og:imageは絶対URL必須。公開URLが vibe.co.jp 直下でなくなる場合はここを直す） -->
@@ -23,9 +23,19 @@
     html,
     body {
       margin: 0;
+      width: 100%;
       height: 100%;
       overflow: hidden;
       background: #07070b;
+      overscroll-behavior: none;
+    }
+
+    /* iOSのエッジスワイプ等でページごと横に引きずられて戻らなくなるのを防ぐ。
+       画面は常に固定し、スクロールはパネル内部だけに許す */
+    body {
+      position: fixed;
+      inset: 0;
+      touch-action: none;
     }
 
     canvas {
