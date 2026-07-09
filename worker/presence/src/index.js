@@ -1,4 +1,4 @@
-// vibe-presence: 島のプレゼンス同期（位置・向き・歩行状態のみ。会話なし・保存なし）
+// vibe-presence: 島のプレゼンス同期（位置・向き・歩行・装具のみ。会話なし・保存なし）
 
 const MAX_VISITORS = 10; // 島に同時に立てる人数（10人×10通/秒×9配信=900msg/s・DOには余裕）
 
@@ -18,6 +18,7 @@ const fin = (v, lo = -60, hi = 60) => {
   const n = Number(v);
   return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : 0;
 };
+const cosmeticMask = (v) => Math.max(0, Math.floor(Number(v) || 0)) & 7;
 
 export class Room {
   constructor(state, env) {
@@ -95,6 +96,7 @@ export class Room {
           yaw: fin(m.yaw, -7, 7),
           w: 0,
           j: 0,
+          a: cosmeticMask(m.a),
         };
         const peers = [...this.clients.values()]
           .filter((c) => c !== entry && c.state)
@@ -107,7 +109,8 @@ export class Room {
         entry.state.yaw = fin(m.yaw, -7, 7);
         entry.state.w = fin(m.w, 0, 1);
         entry.state.j = fin(m.j, 0, 20);
-        this.broadcast({ t: 'p', id, x: entry.state.x, z: entry.state.z, yaw: entry.state.yaw, w: entry.state.w, j: entry.state.j }, id);
+        entry.state.a = cosmeticMask(m.a);
+        this.broadcast({ t: 'p', id, x: entry.state.x, z: entry.state.z, yaw: entry.state.yaw, w: entry.state.w, j: entry.state.j, a: entry.state.a }, id);
       } else if (m.t === 'e' && entry.state) {
         // エモート（頭上の吹き出し）。種類番号だけ中継する
         const k = Math.max(0, Math.floor(Number(m.k) || 0)) % 8;

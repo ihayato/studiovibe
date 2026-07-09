@@ -1,13 +1,21 @@
 // プレゼンス同期クライアント — 島にいる他の訪問者を映す。
-// 送るのは位置・向き・歩行・ジャンプだけ。会話・保存なし。
+// 送るのは位置・向き・歩行・ジャンプ・装具だけ。会話・保存なし。
 import * as THREE from 'three';
 import { createAvatar } from './avatars.js';
+import { createCosmeticRig } from './cosmetics.js';
 
-const WS_BASE = ['localhost', '127.0.0.1'].includes(location.hostname)
-  ? 'ws://127.0.0.1:8787/ws'
+const IS_LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const SEARCH = new URLSearchParams(location.search);
+// ローカルでは Worker が起動していないことが多いため、通常は静かなソロ散策にする。
+// 同時接続を確認したい時だけ ?presence=local でローカル Worker へ接続する。
+const LOCAL_PRESENCE_ENABLED = SEARCH.get('presence') === 'local';
+const requestedLocalPort = SEARCH.get('presencePort') || '8787';
+const LOCAL_PRESENCE_PORT = /^\d{2,5}$/.test(requestedLocalPort) ? requestedLocalPort : '8787';
+const WS_BASE = IS_LOCAL
+  ? `ws://127.0.0.1:${LOCAL_PRESENCE_PORT}/ws`
   : 'wss://vibe-presence.nubonba.workers.dev/ws';
 // ?room=xxx で部屋を分けられる（検証・将来のシーン分け用）
-const ROOM = new URLSearchParams(location.search).get('room');
+const ROOM = SEARCH.get('room');
 const WS_URL = ROOM ? `${WS_BASE}?room=${encodeURIComponent(ROOM)}` : WS_BASE;
 
 const SEND_MS = 100;
@@ -63,6 +71,8 @@ class RemotePeer {
     this.g.position.set(s.x, terrainH(s.x, s.z), s.z);
     this.g.rotation.y = s.yaw;
     this.g.add(makeNameLabel(s.name));
+    this.cosmeticRig = createCosmeticRig(s.a, { illuminate: false });
+    this.g.add(this.cosmeticRig.group);
     this.tx = s.x; this.tz = s.z; this.tyaw = s.yaw;
     this.w = 0; this.tw = 0;
     this.j = 0; this.tj = 0;
@@ -74,6 +84,7 @@ class RemotePeer {
   setTarget(m) {
     this.tx = m.x; this.tz = m.z; this.tyaw = m.yaw;
     this.tw = m.w; this.tj = m.j;
+    if (m.a != null) this.cosmeticRig.apply(m.a);
   }
 
   update(dt, t) {
@@ -91,6 +102,7 @@ class RemotePeer {
     const yawVel = (this.g.rotation.y - this.prevYaw) / Math.max(dt, 1e-4);
     this.prevYaw = this.g.rotation.y;
     this.avatar.update(dt, t, this.w, this.walkPhase, yawVel);
+    this.cosmeticRig.update(dt, t);
   }
 
   dispose() {
@@ -110,6 +122,15 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
 
   const notify = () => onCount && onCount(peers.size + 1);
 
+  if (IS_LOCAL && !LOCAL_PRESENCE_ENABLED) {
+    notify();
+    return {
+      update() {},
+      count: () => 1,
+      sendEmote() {},
+    };
+  }
+
   const connect = () => {
     try {
       ws = new WebSocket(WS_URL);
@@ -120,11 +141,11 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
     ws.addEventListener('open', () => {
       retries = 0;
       const s = getState();
-      ws.send(JSON.stringify({ t: 'hi', name: identity.name, c: identity.c, v: identity.v, x: r3(s.x), z: r3(s.z), yaw: r3(s.yaw) }));
+      ws.send(JSON.stringify({ t: 'hi', name: identity.name, c: identity.c, v: identity.v, x: r3(s.x), z: r3(s.z), yaw: r3(s.yaw), a: s.a || 0 }));
       sendTimer = setInterval(() => {
         if (ws.readyState !== WebSocket.OPEN) return;
         const p = getState();
-        ws.send(JSON.stringify({ t: 'p', x: r3(p.x), z: r3(p.z), yaw: r3(p.yaw), w: r3(p.w), j: r3(p.j) }));
+        ws.send(JSON.stringify({ t: 'p', x: r3(p.x), z: r3(p.z), yaw: r3(p.yaw), w: r3(p.w), j: r3(p.j), a: p.a || 0 }));
       }, SEND_MS);
     });
 

@@ -119,6 +119,10 @@ export function createSound() {
       tone(1318.5, { dur: 0.32, peak: 0.1 });
       tone(1760, { dur: 0.42, peak: 0.08, delay: 0.07 });
     },
+    coin: () => {
+      tone(987.8, { type: 'triangle', dur: 0.16, peak: 0.1 });
+      tone(1480, { dur: 0.28, peak: 0.08, delay: 0.055 });
+    },
     shutter: () => {
       noise({ dur: 0.05, peak: 0.2, hp: 3000 });
       tone(1200, { type: 'square', dur: 0.04, peak: 0.04, delay: 0.05 });

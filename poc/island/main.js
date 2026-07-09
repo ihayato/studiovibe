@@ -6,6 +6,9 @@ import { createAvatar, loadIdentity } from './avatars.js';
 import { SHELLS } from './tarte.js';
 import { initPresence, makeNameLabel } from './net.js';
 import { createSound } from './sound.js';
+import { COSMETIC_ITEMS, cosmeticsToMask, createCosmeticRig } from './cosmetics.js';
+
+const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || new URLSearchParams(location.search).has('pad'); // ?pad でPCでも確認できる
 
 // 渡島記念札コントラクト(Base mainnet・2026-07-08デプロイ)
 const NFT_CONTRACT = '0x1d3f8c6Bf7B9C174d03f4ED61a0928dEE04Ce728';
@@ -27,7 +30,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.25; // 月夜=あつ森テイストの明るさへ
 document.body.appendChild(renderer.domElement);
@@ -40,20 +43,30 @@ const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerH
 camera.position.set(2.4, 2.2, 6.8);
 
 // 画面実寸への追従（リスナー登録は末尾・毎秒の照合はanimate内）。
-// iOSはwindow.innerHeightが古い値のまま固まることがあるため、visualViewportの実測を唯一の正とし、
-// bodyのサイズ（--app-w/--app-h。HUDのアンカーもbody基準）とレンダラーを両方これで決める
+// 通常のiPhoneはvisualViewportを使うが、Braveの「デスクトップ用サイト」状態では
+// layout viewportだけが広く、visualViewportだけが狭く返る。canvasを左端に固定しないため、
+// その不一致が大きい時だけlayout viewportへ戻す。
 const viewSize = () => {
   const vv = window.visualViewport;
+  const layoutW = Math.round(document.documentElement.clientWidth || window.innerWidth);
+  const layoutH = Math.round(document.documentElement.clientHeight || window.innerHeight);
+  const visualW = Math.round(vv ? vv.width : layoutW);
+  const visualH = Math.round(vv ? vv.height : layoutH);
+  const layoutViewportIsDesktop = IS_TOUCH && layoutW > visualW * 1.4;
   return {
-    w: Math.round(vv ? vv.width : window.innerWidth),
-    h: Math.round(vv ? vv.height : window.innerHeight),
+    w: layoutViewportIsDesktop ? layoutW : visualW,
+    h: layoutViewportIsDesktop ? layoutH : visualH,
   };
 };
 const applySize = () => {
   const { w, h } = viewSize();
   document.documentElement.style.setProperty('--app-w', w + 'px');
   document.documentElement.style.setProperty('--app-h', h + 'px');
-  camera.aspect = w / h;
+  const aspect = w / h;
+  camera.aspect = aspect;
+  // 縦長画面は水平視野が極端に狭くなるため、館や橋がアバターの背後へ消えない程度に広げる。
+  const portrait = THREE.MathUtils.clamp((0.78 - aspect) / 0.32, 0, 1);
+  camera.fov = THREE.MathUtils.lerp(40, 56, portrait);
   camera.updateProjectionMatrix();
   renderer.setSize(w, h);
 };
@@ -71,7 +84,7 @@ let lastManualOrbit = -10;
 let orbiting = false; // ユーザーがカメラ操作中か（望みの距離の更新に使う）
 let camDesiredDist = camera.position.distanceTo(controls.target); // カメラの「望みの距離」（遮蔽で寄せられても、晴れたらここへ戻す）
 controls.addEventListener('start', () => {
-  lastManualOrbit = clock ? clock.elapsedTime : 0;
+  lastManualOrbit = clock ? clock.getElapsed() : 0;
   orbiting = true;
 });
 controls.addEventListener('end', () => {
@@ -216,8 +229,21 @@ let animeScreenMesh = null;
 const zoneRings = []; // 足元リング（近づくと強く光る）
 const musicRefs = { rim: null, spots: [] };
 let musicLevel = 0;
+// 中央広場から野外ステージへ歩いて上がれる、低い四段の入口。
+const MUSIC_STAGE_STEPS = [[1.32, 0.08, 0.82], [1.05, 0.16, 1.0], [0.8, 0.24, 1.15], [0.55, 0.32, 1.3]];
 const ZONE_R = 5.2 * R_SCALE;
 for (const z of ZONES) z.pos = new THREE.Vector3(Math.cos(z.angle) * ZONE_R, 0, Math.sin(z.angle) * ZONE_R);
+const MUSIC_ZONE = ZONES.find((z) => z.key === 'music');
+const zoneLocalToWorld = (zone, lx, lz, y = 0) => {
+  const yaw = Math.atan2(-zone.pos.x, -zone.pos.z);
+  return new THREE.Vector3(
+    zone.pos.x + lx * Math.cos(yaw) + lz * Math.sin(yaw),
+    y,
+    zone.pos.z - lx * Math.sin(yaw) + lz * Math.cos(yaw)
+  );
+};
+const MUSIC_STAGE_POS = zoneLocalToWorld(MUSIC_ZONE, 0, -0.24);
+const MUSIC_STAGE_NEAR = { key: 'music-stage', title: '咲耶のステージ', jp: 'MVと並ぶ一枚', go: '📷 ステージで撮る' };
 
 // 円形コライダー（貫通防止）。topYを持つ障害物は、プレイヤーがtopY付近以上の高さにいる間は水平押し出しをスキップ（＝上に乗れる）
 const obstacles = [];
@@ -758,18 +784,24 @@ const fireflies = [];
 // 浮遊岩
 const rocks = [];
 {
-  for (let i = 0; i < 5; i++) {
-    const a = (i / 5) * Math.PI * 2 + 0.6;
-    const r = (9 + (i % 2) * 1.6) * R_SCALE;
-    const s = 0.35 + Math.random() * 0.45;
+  // 島外ルート（70°/120°/180°）から外した固定配置。ランダム配置は再読込ごとに橋を塞ぐため使わない。
+  const FLOATING_ROCK_DEFS = [
+    [0.6, 9.4, 0.48, 0.35],
+    [1.64, 10.4, 0.42, 0.95],
+    [3.75, 9.6, 0.55, 0.3],
+    [4.45, 10.6, 0.4, 0.75],
+    [5.67, 9.3, 0.5, 0.45],
+  ];
+  FLOATING_ROCK_DEFS.forEach(([a, rBase, s, y0], i) => {
+    const r = rBase * R_SCALE;
     const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(s, 0), toon(0x141420));
-    rock.position.set(Math.cos(a) * r, -0.5 + Math.random() * 2.2, Math.sin(a) * r);
-    rock.rotation.set(Math.random() * 3, Math.random() * 3, 0);
-    rock.userData = { y0: rock.position.y, ph: Math.random() * 7, sp: 0.1 + Math.random() * 0.15 };
+    rock.position.set(Math.cos(a) * r, y0, Math.sin(a) * r);
+    rock.rotation.set(0.45 + i * 0.51, 0.3 + i * 0.93, i * 0.17);
+    rock.userData = { y0, ph: i * 1.37, sp: 0.11 + (i % 3) * 0.035 };
     addOutlines(rock, { min: 0.01, max: 0.02 });
     scene.add(rock);
     rocks.push(rock);
-  }
+  });
 }
 
 // 樹木テクスチャ（中央の大樹と道沿いの木で共有）
@@ -830,6 +862,7 @@ const blossomLight = new THREE.PointLight(0xffd9e8, 2.2, 12);
   trunk.position.y = 1.4;
   trunk.castShadow = true;
   sakuraTree.add(trunk);
+  camColliders.push(trunk);
 
   // 太い枝（幹の上部から外側かつ上向きへ放射）
   const BRANCH_N = 5;
@@ -841,6 +874,7 @@ const blossomLight = new THREE.PointLight(0xffd9e8, 2.2, 12);
     branch.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
     branch.position.set(Math.cos(ang) * 0.34, 2.45, Math.sin(ang) * 0.34).addScaledVector(dir, len * 0.5);
     sakuraTree.add(branch);
+    camColliders.push(branch);
   }
 
   // 花冠（桜クラスタ球をドーム状に重ねる。発光する呼吸マテリアルを共有）
@@ -859,6 +893,7 @@ const blossomLight = new THREE.PointLight(0xffd9e8, 2.2, 12);
     c.position.set(x, y, z);
     c.scale.set(1, 0.75, 1);
     sakuraTree.add(c);
+    camColliders.push(c);
   }
   sakuraTree.userData.crownMat = crownMat;
 
@@ -930,17 +965,34 @@ const srgbTex = (src) => {
   tx.colorSpace = THREE.SRGBColorSpace;
   return tx;
 };
-const kitanVideos = [];
-const kitanVideoTex = (src) => {
+const deferredVideos = [];
+const registerDeferredVideo = (material, src, zone) => {
   const v = document.createElement('video');
-  v.src = src;
   v.muted = true;
   v.loop = true;
   v.playsInline = true;
-  kitanVideos.push(v);
-  const t = new THREE.VideoTexture(v);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
+  v.preload = 'none';
+  const texture = new THREE.VideoTexture(v);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const slot = { material, src, zone, video: v, texture, active: false };
+  v.addEventListener('loadeddata', () => {
+    material.map = texture;
+    material.needsUpdate = true;
+  }, { once: true });
+  deferredVideos.push(slot);
+  return slot;
+};
+const kitanVideoMaterial = (src, zone, poster) => {
+  const material = new THREE.MeshBasicMaterial({ map: srgbTex(poster) });
+  registerDeferredVideo(material, src, zone);
+  return material;
+};
+const activateDeferredVideo = (slot) => {
+  if (slot.active) return;
+  slot.active = true;
+  slot.video.src = slot.src;
+  slot.video.load();
+  slot.video.play().catch(() => {});
 };
 const floaties = [];
 
@@ -957,7 +1009,12 @@ const makeLabel = (en, jp, colorHex) => {
     ctx.font = '700 34px "Shippori Mincho B1", "Hiragino Mincho ProN", serif';
     ctx.fillText(jp, w / 2, 138, w - 48);
   });
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.69), new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide }));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.69), new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  }));
   m.userData.noOutline = true;
   labels.push(m);
   return m;
@@ -1085,7 +1142,7 @@ for (const z of ZONES) {
 
       const phoneScreen = new THREE.Mesh(
         new THREE.PlaneGeometry(1.78, 3.56),
-        new THREE.MeshBasicMaterial({ map: kitanVideoTex('/kitan/game_intro.mp4') })
+        kitanVideoMaterial('/kitan/game_intro.mp4', z.key, '/kitan/jacket_shokugetsu.webp')
       );
       phoneScreen.position.set(0, 2.0, 0.22);
       phoneScreen.userData.noOutline = true;
@@ -1119,7 +1176,7 @@ for (const z of ZONES) {
       stand.add(beam);
       const scroll = new THREE.Mesh(
         new THREE.PlaneGeometry(0.62, 1.1),
-        new THREE.MeshBasicMaterial({ map: kitanVideoTex('/kitan/op_title_loop.mp4') })
+        kitanVideoMaterial('/kitan/op_title_loop.mp4', z.key, '/kitan/jacket_shokugetsu.webp')
       );
       scroll.position.set(0, 0.95, 0.02);
       scroll.userData.noOutline = true;
@@ -1230,7 +1287,7 @@ for (const z of ZONES) {
     // 2枚目（ミタセオPV）。「ハの字」右側
     const screenMesh2 = new THREE.Mesh(
       new THREE.PlaneGeometry(3.15, 1.75),
-      new THREE.MeshBasicMaterial({ map: kitanVideoTex('/pv_mitaseo.mp4') })
+      kitanVideoMaterial('/pv_mitaseo.mp4', z.key, '/ogp_island.png')
     );
     buildFilmScreen(1.95, -0.5, -0.21, screenMesh2);
 
@@ -1250,6 +1307,13 @@ for (const z of ZONES) {
     stage.position.set(0, 0.18, -0.35);
     stage.castShadow = true;
     g.add(stage);
+    const stageStepMat = toon(0x30263e);
+    for (const [lz, topY, width] of MUSIC_STAGE_STEPS) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(width, topY, 0.26), stageStepMat);
+      step.position.set(0, topY / 2, lz);
+      step.castShadow = step.receiveShadow = true;
+      g.add(step);
+    }
     // ステージ幕（ストライプ）
     const curtain = new THREE.Mesh(new THREE.CylinderGeometry(1.57, 1.73, 0.3, 48, 1, true), toon(0xffffff, curtainTex));
     curtain.position.set(0, 0.16, -0.35);
@@ -1262,6 +1326,41 @@ for (const z of ZONES) {
     musicRefs.rim = rim;
     camColliders.push(stage);
 
+    // ステージ中央の撮影印。MVを背に立つ場所を、床のカメラ紋でひと目に分かるようにする。
+    const photoRing = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.54, 40), glowMat(0xffe0ee, 0.68));
+    photoRing.rotation.x = -Math.PI / 2;
+    photoRing.position.set(0, 0.39, -0.24);
+    photoRing.userData.noOutline = true;
+    g.add(photoRing);
+    const photoFill = new THREE.Mesh(new THREE.CircleGeometry(0.42, 40), glowMat(0xf48fb8, 0.08));
+    photoFill.rotation.x = -Math.PI / 2;
+    photoFill.position.set(0, 0.388, -0.24);
+    photoFill.userData.noOutline = true;
+    g.add(photoFill);
+    const photoMarkTex = canvasTex(128, 128, (ctx, w, h) => {
+      ctx.strokeStyle = '#fff4f8';
+      ctx.fillStyle = 'rgba(255,244,248,0.16)';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.roundRect(21, 38, 86, 61, 13);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#fff4f8';
+      ctx.fillRect(41, 25, 32, 16);
+      ctx.beginPath();
+      ctx.arc(64, 68, 18, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+    const photoMark = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.36, 0.36),
+      new THREE.MeshBasicMaterial({ map: photoMarkTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    );
+    photoMark.rotation.x = -Math.PI / 2;
+    photoMark.position.set(0, 0.398, -0.24);
+    photoMark.userData.noOutline = true;
+    g.add(photoMark);
+    zoneRings.push({ ring: photoRing, fill: photoFill, zone: MUSIC_STAGE_NEAR });
+
     // MVスクリーン（ステージ背面いっぱいの大型LEDウォール）
     {
       const mvGlowFrame = new THREE.Mesh(new THREE.PlaneGeometry(4.62, 2.68), glowMat(z.color, 0.28));
@@ -1270,7 +1369,7 @@ for (const z of ZONES) {
       g.add(mvGlowFrame);
       const mvScreen = new THREE.Mesh(
         new THREE.PlaneGeometry(4.5, 2.53),
-        new THREE.MeshBasicMaterial({ map: kitanVideoTex('/mv_sakuya.mp4') })
+        kitanVideoMaterial('/mv_sakuya-540.mp4', z.key, '/kitan/standing_sakuya.webp')
       );
       mvScreen.position.set(0, 1.72, -1.6);
       mvScreen.userData.noOutline = true;
@@ -1360,15 +1459,17 @@ for (const z of ZONES) {
         [0.7, 1.5, 0.55, 0.26], [-0.7, 1.5, 0.55, 0.26],
       ],
       music: [
-        [0, -0.35, 1.8, 0.36], [1.7, 0.15, 0.38], [-1.7, 0.15, 0.38],
+        [0, -0.35, 1.8, 0.36],
+        ...MUSIC_STAGE_STEPS.map(([lz, topY, width]) => [0, lz, width / 2, topY, true]),
+        [1.7, 0.15, 0.38], [-1.7, 0.15, 0.38],
       ],
     }[z.key];
     // topYLocal付きのエントリはベンチ座面／ステージ床＝乗れる足場として登録
-    for (const [lx, lz, orr, topYLocal] of OBS) {
+    for (const [lx, lz, orr, topYLocal, platformOnly] of OBS) {
       const w2 = worldOf(lx, lz);
       if (topYLocal != null) {
         const topY = terrainH(w2.x, w2.z) + topYLocal;
-        addObstacle(w2.x, w2.z, orr, topY);
+        if (!platformOnly) addObstacle(w2.x, w2.z, orr, topY);
         addPlatform(w2.x, w2.z, orr, topY);
       } else {
         addObstacle(w2.x, w2.z, orr);
@@ -1404,7 +1505,7 @@ for (const z of ZONES) {
 {
   // Math.PI*0.32方向の桜(旧6本目)はANIME館の右スクリーン(ミタセオPV)と干渉するため撤去(距離1.67<干渉判定1.5余裕なし)
   const treeDefs = [
-    [-Math.PI / 6, 6.3, 0], [Math.PI / 2, 6.4, 1], [Math.PI * 0.6, 6.2, 0],
+    [-Math.PI / 6, 6.3, 0], [Math.PI / 2, 6.4, 1], [Math.PI * 0.79, 6.2, 0],
     [-Math.PI * 0.82, 6.3, 1], [-Math.PI * 0.35, 6.5, 0],
   ];
   treeDefs.forEach(([a, rBase, kind]) => {
@@ -1414,6 +1515,7 @@ for (const z of ZONES) {
     trunk.position.y = 0.35;
     trunk.castShadow = true;
     tree.add(trunk);
+    camColliders.push(trunk);
     let crownY, crownR;
     if (kind === 0) {
       const l1 = new THREE.Mesh(new THREE.ConeGeometry(0.62, 1.05, 14), toon(0xffffff, pineTex));
@@ -1422,6 +1524,7 @@ for (const z of ZONES) {
       const l2 = new THREE.Mesh(new THREE.ConeGeometry(0.46, 0.82, 14), toon(0xffffff, pineTex));
       l2.position.y = 1.62;
       tree.add(l1, l2);
+      camColliders.push(l1, l2);
       crownY = 1.1;
       crownR = 0.62;
     } else {
@@ -1432,6 +1535,7 @@ for (const z of ZONES) {
       const blossom2 = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 12), toon(0xffffff, sakuraTex));
       blossom2.position.set(0.3, 1.55, 0.1);
       tree.add(blossom, blossom2);
+      camColliders.push(blossom, blossom2);
       crownY = 1.25;
       crownR = 0.62;
     }
@@ -1445,8 +1549,9 @@ for (const z of ZONES) {
   });
 
   // 茂み
+  const bushAngles = [0, 1.37, 2.29, 3.49, 4.13, 5.05, 5.97];
   for (let i = 0; i < 7; i++) {
-    const a = i * 0.92 + 0.45;
+    const a = bushAngles[i];
     const r = (5.2 + (i % 3) * 0.6) * R_SCALE;
     const bushRadius = 0.22 + (i % 2) * 0.08;
     const bush = new THREE.Mesh(new THREE.SphereGeometry(bushRadius, 14, 10), toon(0xffffff, pineTex));
@@ -1462,7 +1567,8 @@ for (const z of ZONES) {
     scene.add(bush);
   }
   // 地面の岩
-  for (let i = 0; i < 6; i++) {
+  // i=4はGAME館中央に重なるため置かない。
+  for (const i of [0, 1, 2, 3, 5]) {
     const a = i * 1.13 + 0.2;
     const r = (4.6 + (i % 3) * 0.8) * R_SCALE;
     const rockRadius = 0.13 + (i % 3) * 0.07;
@@ -1566,32 +1672,8 @@ const mists = [];
   }
 }
 
-// ---------- ANIME館：実映像（ショーリール）をスクリーンへ ----------
-{
-  const video = document.createElement('video');
-  video.src = '/video/hero-bg.mp4';
-  video.muted = true;
-  video.loop = true;
-  video.playsInline = true;
-  video.addEventListener('loadeddata', () => {
-    const vt = new THREE.VideoTexture(video);
-    vt.colorSpace = THREE.SRGBColorSpace;
-    if (animeScreenMesh) {
-      animeScreenMesh.material.map = vt;
-      animeScreenMesh.material.needsUpdate = true;
-    }
-  });
-  const tryPlay = () => video.play().catch(() => {});
-  tryPlay();
-  addEventListener('pointerdown', tryPlay, { once: true });
-}
-
-// 月蝕綺譚の動画（掛け軸・絵札）も同様に再生
-{
-  const playAll = () => kitanVideos.forEach((v) => v.play().catch(() => {}));
-  playAll();
-  addEventListener('pointerdown', playAll, { once: true });
-}
+// ---------- ANIME館：実映像（ショーリール）を近づいた時だけスクリーンへ ----------
+if (animeScreenMesh) registerDeferredVideo(animeScreenMesh.material, '/video/hero-bg-720.mp4', 'anime');
 
 // ---------- MUSIC館：音を灯す（主題歌＋音反応） ----------
 // ---------- サウンド（BGM+SE・既定OFF） ----------
@@ -1711,10 +1793,10 @@ const updateShardHud = () => {
   if (shardsTextEl) shardsTextEl.textContent = `かけら ${collected.size}/7`;
 };
 updateShardHud();
-const spawnBurst = (x, z, color) => {
+const spawnBurst = (x, z, color, y = 0.03) => {
   const ring = new THREE.Mesh(new THREE.RingGeometry(0.1, 0.16, 40), glowMat(color, 0.8));
   ring.rotation.x = -Math.PI / 2;
-  ring.position.set(x, 0.03, z);
+  ring.position.set(x, y, z);
   scene.add(ring);
   bursts.push({ mesh: ring, t: 0 });
 };
@@ -1928,6 +2010,7 @@ const MISAKI_NEAR = { key: 'misaki', title: '月見の岬', jp: '月と島をひ
 
   const label = makeLabel('PHOTO SPOT', '月見の岬', 0xf4e6c0);
   label.position.set(DECK_POS.x, DECK_TOP + 2.0, DECK_POS.z);
+  label.userData.fadeNear = 4;
   g.add(label);
 
   addPlatform(DECK_POS.x, DECK_POS.z, 1.98, DECK_TOP);
@@ -2068,10 +2151,219 @@ const HOSHIMI_NEAR = { key: 'hoshimi', title: '星見台', jp: '雲海と月を�
   }
   const hLabel = makeLabel('PHOTO SPOT', '星見台', 0xeaf6ff);
   hLabel.position.set(HOSHI_POS.x, HOSHI_TOP + 1.9, HOSHI_POS.z);
+  hLabel.userData.fadeNear = 4;
   g.add(hLabel);
   addPlatform(HOSHI_POS.x, HOSHI_POS.z, 1.45, HOSHI_TOP);
   addOutlines(g);
   scene.add(g);
+}
+
+// ---------- 星屑夜市（西の浮島） ----------
+// MUSIC館と案内板の間から短い光橋を渡る、買い物のための小さな第二島。
+const MARKET_ANGLE = Math.PI;
+const M_AX = Math.cos(MARKET_ANGLE), M_AZ = Math.sin(MARKET_ANGLE);
+const MARKET_BRIDGE_S0 = 7.2, MARKET_BRIDGE_S1 = 12.15, MARKET_BRIDGE_HALF_W = 0.72;
+const MARKET_S = 13.45, MARKET_TOP = 0.34, MARKET_WALK_R = 2.18;
+const marketXZ = (s, q) => ({ x: M_AX * s - M_AZ * q, z: M_AZ * s + M_AX * q });
+const MARKET_POS = new THREE.Vector3(M_AX * MARKET_S, 0, M_AZ * MARKET_S);
+const marketShopXZ = marketXZ(MARKET_S + 0.25, 0);
+const MARKET_SHOP_POS = new THREE.Vector3(marketShopXZ.x, MARKET_TOP, marketShopXZ.z);
+const MARKET_NEAR = { key: 'market', title: '星屑夜市', jp: '旅の装いをひとつ', go: '✦ 夜市をのぞく' };
+
+{
+  const g = new THREE.Group();
+  const bridgeMat = toon(0x39304a);
+
+  // 島側は低い四段。地形から橋へ、歩いたまま自然に上がれる。
+  for (const [s, topY] of [[7.35, 0.07], [7.7, 0.14], [8.05, 0.21], [8.4, 0.28]]) {
+    const { x, z } = marketXZ(s, 0);
+    const step = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.61, 0.34, 18), toon(0x8e8cb0));
+    step.position.set(x, topY - 0.17, z);
+    step.castShadow = step.receiveShadow = true;
+    g.add(step);
+    addPlatform(x, z, 0.52, topY);
+  }
+
+  // 夜市へ続く橋。足元の金と水色の灯りが進行方向をつくる。
+  const plankGeo = new THREE.BoxGeometry(1.5, 0.07, 0.34);
+  let pi = 0;
+  for (let s = 8.6; s <= MARKET_BRIDGE_S1; s += 0.43, pi++) {
+    const p = marketXZ(s, (pi % 3 - 1) * 0.012);
+    const plank = new THREE.Mesh(plankGeo, bridgeMat);
+    plank.position.set(p.x, MARKET_TOP - 0.035, p.z);
+    plank.rotation.y = MARKET_ANGLE + Math.PI / 2 + Math.sin(pi * 1.7) * 0.018;
+    plank.castShadow = plank.receiveShadow = true;
+    g.add(plank);
+    addPlatform(p.x, p.z, 0.78, MARKET_TOP);
+    if (pi % 2 === 0) {
+      for (const side of [-1, 1]) {
+        const edge = marketXZ(s, side * 0.73);
+        const lamp = glowSprite(side > 0 ? 0xf0c869 : 0x7be0ff, 0.28, 0.34);
+        lamp.position.set(edge.x, MARKET_TOP + 0.1, edge.z);
+        g.add(lamp);
+      }
+    }
+  }
+
+  // 浮島本体。木の夜市床の下に、星の欠片を抱いた濃紺の岩盤が浮く。
+  const floor = new THREE.Mesh(new THREE.CylinderGeometry(2.34, 2.42, 0.18, 44), toon(0xffffff, woodTex));
+  floor.position.set(MARKET_POS.x, MARKET_TOP - 0.09, MARKET_POS.z);
+  floor.castShadow = floor.receiveShadow = true;
+  g.add(floor);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 0.38, 1.65, 28), new THREE.MeshStandardMaterial({ color: 0x12101d, roughness: 1 }));
+  base.position.set(MARKET_POS.x, MARKET_TOP - 0.92, MARKET_POS.z);
+  g.add(base);
+  for (const [q, color] of [[-0.92, 0xf0c869], [0, 0x7be0ff], [0.92, 0xf48fb8]]) {
+    const p = marketXZ(MARKET_S + 0.15, q);
+    const crystal = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.68, 5), glowMat(color, 0.34));
+    crystal.position.set(p.x, MARKET_TOP - 1.78 - Math.abs(q) * 0.12, p.z);
+    crystal.rotation.x = Math.PI;
+    crystal.userData.noOutline = true;
+    g.add(crystal);
+  }
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(2.32, 0.025, 8, 80), new THREE.MeshBasicMaterial({ color: 0xf0c869 }));
+  rim.rotation.x = Math.PI / 2;
+  rim.position.set(MARKET_POS.x, MARKET_TOP + 0.012, MARKET_POS.z);
+  rim.userData.noOutline = true;
+  g.add(rim);
+
+  // 一軒だけの装具店。屋根の三色は、三館から集まった品が並ぶことを示す。
+  const stallX = MARKET_POS.x - 1.02;
+  const counter = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.58, 1.38), toon(0x4b3041));
+  counter.position.set(stallX + 0.22, MARKET_TOP + 0.29, MARKET_POS.z);
+  counter.castShadow = true;
+  g.add(counter);
+  for (const side of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.07, 1.42, 10), toon(0x362436));
+    post.position.set(stallX - 0.12, MARKET_TOP + 0.71, MARKET_POS.z + side * 0.66);
+    post.castShadow = true;
+    g.add(post);
+  }
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.12, 1.72), toon(0x6f395b));
+  roof.position.set(stallX - 0.03, MARKET_TOP + 1.46, MARKET_POS.z);
+  roof.rotation.z = -0.08;
+  roof.castShadow = true;
+  g.add(roof);
+  for (const [zOff, color] of [[-0.48, 0xf48fb8], [0, 0xf0c869], [0.48, 0x7be0ff]]) {
+    const charm = new THREE.Mesh(new THREE.OctahedronGeometry(0.09), glowMat(color, 0.75));
+    charm.position.set(stallX + 0.48, MARKET_TOP + 0.82, MARKET_POS.z + zOff);
+    charm.userData.noOutline = true;
+    g.add(charm);
+  }
+
+  const shopRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.84, 40), glowMat(0xf0c869, 0.62));
+  shopRing.rotation.x = -Math.PI / 2;
+  shopRing.position.set(MARKET_SHOP_POS.x, MARKET_TOP + 0.018, MARKET_SHOP_POS.z);
+  shopRing.userData.noOutline = true;
+  g.add(shopRing);
+  const shopFill = new THREE.Mesh(new THREE.CircleGeometry(0.7, 40), glowMat(0xf0c869, 0.05));
+  shopFill.rotation.x = -Math.PI / 2;
+  shopFill.position.set(MARKET_SHOP_POS.x, MARKET_TOP + 0.016, MARKET_SHOP_POS.z);
+  shopFill.userData.noOutline = true;
+  g.add(shopFill);
+  zoneRings.push({ ring: shopRing, fill: shopFill, zone: MARKET_NEAR });
+
+  const marketLabel = makeLabel('NIGHT MARKET', '星屑夜市', 0xf0c869);
+  marketLabel.position.set(MARKET_POS.x, MARKET_TOP + 1.0, MARKET_POS.z);
+  marketLabel.scale.setScalar(0.78);
+  marketLabel.userData.fadeNear = 4;
+  g.add(marketLabel);
+  const marketLight = new THREE.PointLight(0xf0c869, 0.85, 5.2, 2);
+  marketLight.position.set(MARKET_POS.x, MARKET_TOP + 1.6, MARKET_POS.z);
+  g.add(marketLight);
+
+  addPlatform(MARKET_POS.x, MARKET_POS.z, 2.28, MARKET_TOP);
+  addObstacle(stallX - 0.06, MARKET_POS.z, 0.64);
+  addOutlines(g, { min: 0.008, max: 0.02 });
+  scene.add(g);
+}
+
+// ---------- 星屑コイン（日替わりで島に戻る通貨） ----------
+const COIN_STORAGE_KEY = 'vibe.island.coins.v1';
+const todayKey = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+const coinState = (() => {
+  const date = todayKey();
+  try {
+    const raw = JSON.parse(localStorage.getItem(COIN_STORAGE_KEY) || 'null');
+    const balance = Math.max(0, Math.min(9999, Math.floor(Number(raw?.balance) || 0)));
+    const daily = raw?.date === date && Array.isArray(raw.collected) ? raw.collected.map(String) : [];
+    return { balance, date, collected: new Set(daily) };
+  } catch {
+    return { balance: 0, date, collected: new Set() };
+  }
+})();
+let coinBalance = coinState.balance;
+const collectedCoins = coinState.collected;
+const saveCoinState = () => {
+  try {
+    localStorage.setItem(COIN_STORAGE_KEY, JSON.stringify({
+      balance: coinBalance,
+      date: coinState.date,
+      collected: [...collectedCoins],
+    }));
+  } catch {}
+};
+const coinsTextEl = document.getElementById('coins-text');
+const shopCoinsEl = document.getElementById('shop-coins');
+const updateCoinHud = () => {
+  if (coinsTextEl) coinsTextEl.textContent = String(coinBalance);
+  if (shopCoinsEl) shopCoinsEl.textContent = String(coinBalance);
+};
+updateCoinHud();
+
+const musicCoinL = zoneLocalToWorld(MUSIC_ZONE, -1.04, 0.02);
+const musicCoinR = zoneLocalToWorld(MUSIC_ZONE, 1.04, 0.02);
+const pierCoin = pierXZ(10.9, 0);
+const courseStartCoin = courseXZ(9.1, 0);
+const courseHighCoin = courseXZ(17.1, 0.3);
+const marketBridgeCoin = marketXZ(10.55, 0);
+const marketCoinL = marketXZ(MARKET_S, -1.18);
+const marketCoinR = marketXZ(MARKET_S, 1.18);
+const marketRareCoin = marketXZ(MARKET_S + 0.7, 1.45);
+const COIN_SPAWNS = [
+  ['plaza-east', 2.45, 2.45, 1], ['plaza-west', -2.4, 2.3, 1],
+  ['garden-east', 3.55, -0.5, 1], ['garden-west', -3.55, -0.45, 1],
+  ['game-east', 4.55, -3.35, 1], ['game-west', -4.35, -3.45, 1],
+  ['south-east', 1.25, -5.45, 1], ['south-west', -1.35, -5.55, 1],
+  ['music-left', musicCoinL.x, musicCoinL.z, 1], ['music-right', musicCoinR.x, musicCoinR.z, 1],
+  ['moon-bridge', pierCoin.x, pierCoin.z, 1], ['moon-deck', DECK_POS.x, DECK_POS.z, 2],
+  ['athletic-start', courseStartCoin.x, courseStartCoin.z, 1], ['athletic-high', courseHighCoin.x, courseHighCoin.z, 2],
+  ['market-bridge', marketBridgeCoin.x, marketBridgeCoin.z, 1],
+  ['market-left', marketCoinL.x, marketCoinL.z, 1], ['market-right', marketCoinR.x, marketCoinR.z, 1],
+  ['market-rare', marketRareCoin.x, marketRareCoin.z, 2],
+];
+const coins = [];
+for (let i = 0; i < COIN_SPAWNS.length; i++) {
+  const [id, x, z, value] = COIN_SPAWNS[i];
+  const coin = new THREE.Group();
+  const disk = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.045, 28), new THREE.MeshStandardMaterial({
+    color: value > 1 ? 0xffed9d : 0xf0c869,
+    emissive: value > 1 ? 0xd9a94c : 0xa66f1d,
+    emissiveIntensity: 0.9,
+    roughness: 0.38,
+    metalness: 0.5,
+  }));
+  disk.rotation.z = Math.PI / 2;
+  disk.userData.noOutline = true;
+  const edge = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.018, 8, 28), new THREE.MeshBasicMaterial({ color: 0xffefad }));
+  edge.rotation.y = Math.PI / 2;
+  edge.userData.noOutline = true;
+  const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.055, 0), new THREE.MeshBasicMaterial({ color: 0xfff8d2 }));
+  star.position.x = 0.028;
+  star.scale.y = 1.35;
+  star.userData.noOutline = true;
+  const halo = glowSprite(value > 1 ? 0xffe89a : 0xf0c869, value > 1 ? 0.68 : 0.52, 0.28);
+  coin.add(disk, edge, star, halo);
+  const floorY = supportY(x, z, 1e9);
+  const baseY = floorY + 0.46;
+  coin.position.set(x, baseY, z);
+  coin.userData = { id, value, baseY, floorY, ph: i * 1.47, halo };
+  coin.visible = !collectedCoins.has(id);
+  scene.add(coin);
+  coins.push(coin);
 }
 
 // 撮影演出：タルトがスポット中央へ立ち、定点の構図へカメラが回り込んで一枚を撮る
@@ -2110,6 +2402,16 @@ const HOSHIMI_SHOT = {
   toPos: new THREE.Vector3(HOSHI_POS.x - 0.54, HOSHI_TOP + 0.85, HOSHI_POS.z + 2.54),
   toTgt: new THREE.Vector3(HOSHI_POS.x + 0.08, HOSHI_TOP + 0.55, HOSHI_POS.z - 0.39),
 };
+// 咲耶ステージ：MVウォールを背景いっぱいに入れ、客席側から少し斜めに狙う定点
+const musicShotCamera = zoneLocalToWorld(MUSIC_ZONE, 1.05, 3.12);
+musicShotCamera.y = supportY(musicShotCamera.x, musicShotCamera.z, 1e9) + 1.32;
+const musicStageTop = supportY(MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z, 1e9);
+const MUSIC_SHOT = {
+  key: 'music-stage',
+  toP: MUSIC_STAGE_POS.clone(),
+  toPos: musicShotCamera,
+  toTgt: new THREE.Vector3(MUSIC_STAGE_POS.x, musicStageTop + 0.82, MUSIC_STAGE_POS.z),
+};
 
 // ---------- 住人リーリー（桟橋の入り口の案内係） ----------
 const lele = createAvatar('lele', 0); // 正典の赤バンダナ
@@ -2131,6 +2433,127 @@ tarte.group.rotation.y = Math.PI;
 tarte.group.add(makeNameLabel(identity.name));
 scene.add(tarte.group);
 
+// ---------- 夜市の装具（購入・装備・見た目同期） ----------
+const COSMETIC_STORAGE_KEY = 'vibe.island.cosmetics.v1';
+const validCosmeticIds = new Set(COSMETIC_ITEMS.map((item) => item.id));
+const cosmeticState = (() => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(COSMETIC_STORAGE_KEY) || 'null');
+    const owned = new Set((Array.isArray(raw?.owned) ? raw.owned : []).filter((id) => validCosmeticIds.has(id)));
+    const equipped = new Set((Array.isArray(raw?.equipped) ? raw.equipped : []).filter((id) => owned.has(id)));
+    return { owned, equipped };
+  } catch {
+    return { owned: new Set(), equipped: new Set() };
+  }
+})();
+const ownedCosmetics = cosmeticState.owned;
+const equippedCosmetics = cosmeticState.equipped;
+// 同じ頭装具が古い保存データで重複していた場合も、一番新しい一つだけに整える。
+for (const slot of new Set(COSMETIC_ITEMS.map((item) => item.slot))) {
+  const sameSlot = COSMETIC_ITEMS.filter((item) => item.slot === slot && equippedCosmetics.has(item.id));
+  sameSlot.slice(0, -1).forEach((item) => equippedCosmetics.delete(item.id));
+}
+let equippedCosmeticMask = cosmeticsToMask(equippedCosmetics);
+const cosmeticRig = createCosmeticRig(equippedCosmeticMask);
+tarte.group.add(cosmeticRig.group);
+const saveCosmetics = () => {
+  try {
+    localStorage.setItem(COSMETIC_STORAGE_KEY, JSON.stringify({
+      owned: [...ownedCosmetics],
+      equipped: [...equippedCosmetics],
+    }));
+  } catch {}
+};
+const applyCosmetics = () => {
+  equippedCosmeticMask = cosmeticsToMask(equippedCosmetics);
+  cosmeticRig.apply(equippedCosmeticMask);
+  saveCosmetics();
+};
+applyCosmetics();
+
+const shopPanel = document.getElementById('shop-panel');
+const shopItemsEl = document.getElementById('shop-items');
+const shopCloseBtn = document.getElementById('shop-close');
+const equipCosmetic = (item) => {
+  for (const other of COSMETIC_ITEMS) {
+    if (other.slot === item.slot) equippedCosmetics.delete(other.id);
+  }
+  equippedCosmetics.add(item.id);
+};
+const renderShop = () => {
+  updateCoinHud();
+  if (!shopItemsEl) return;
+  shopItemsEl.replaceChildren();
+  for (const item of COSMETIC_ITEMS) {
+    const owned = ownedCosmetics.has(item.id);
+    const equipped = equippedCosmetics.has(item.id);
+    const row = document.createElement('div');
+    row.className = `shop-item${equipped ? ' is-equipped' : ''}`;
+    row.setAttribute('role', 'listitem');
+    row.style.setProperty('--item-color', item.color);
+    const swatch = document.createElement('span');
+    swatch.className = 'shop-swatch';
+    swatch.setAttribute('aria-hidden', 'true');
+    swatch.textContent = item.glyph;
+    const copy = document.createElement('div');
+    copy.className = 'shop-copy';
+    const name = document.createElement('div');
+    name.className = 'shop-name';
+    name.textContent = item.name;
+    const detail = document.createElement('div');
+    detail.className = 'shop-detail';
+    detail.textContent = item.detail;
+    copy.append(name, detail);
+    const action = document.createElement('button');
+    action.type = 'button';
+    action.className = 'shop-action';
+    action.textContent = owned ? (equipped ? '外す' : '装備') : `購入 ${item.cost}`;
+    action.setAttribute('aria-label', owned
+      ? `${item.name}を${equipped ? '外す' : '装備する'}`
+      : `${item.name}をコイン${item.cost}枚で購入する`);
+    action.addEventListener('click', () => {
+      if (!ownedCosmetics.has(item.id)) {
+        if (coinBalance < item.cost) {
+          sound.se.ui();
+          showToast(`コインがあと ${item.cost - coinBalance} 枚必要`, 2400);
+          return;
+        }
+        coinBalance -= item.cost;
+        ownedCosmetics.add(item.id);
+        equipCosmetic(item);
+        saveCoinState();
+        showToast(`${item.name}を手に入れた<br>そのまま装備しました`, 2800);
+        sound.se.post();
+      } else if (equippedCosmetics.has(item.id)) {
+        equippedCosmetics.delete(item.id);
+        sound.se.ui();
+      } else {
+        equipCosmetic(item);
+        sound.se.ui();
+      }
+      applyCosmetics();
+      renderShop();
+    });
+    row.append(swatch, copy, action);
+    shopItemsEl.appendChild(row);
+  }
+};
+const openShopPanel = () => {
+  renderShop();
+  sound.se.ui();
+  openModal(shopPanel, shopCloseBtn);
+};
+const closeShopPanel = () => closeModal(shopPanel);
+if (shopCloseBtn) shopCloseBtn.addEventListener('click', closeShopPanel);
+if (shopPanel) {
+  shopPanel.addEventListener('click', (e) => {
+    if (e.target === shopPanel) closeShopPanel();
+  });
+}
+addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeShopPanel();
+});
+
 // ---------- 移動 ----------
 const marker = new THREE.Mesh(new THREE.RingGeometry(0.09, 0.12, 32), new THREE.MeshBasicMaterial({ color: 0xf7a8c4, transparent: true, opacity: 0 }));
 marker.rotation.x = -Math.PI / 2;
@@ -2145,7 +2568,7 @@ let downPos = null;
 const clampToIsland = (v) => {
   const l = Math.hypot(v.x, v.z);
   if (l > WALK_R) {
-    // 島の外で歩けるのは桟橋の上と月見の岬だけ。外れた点は一番近い歩ける場所へ寄せる
+    // 島外の桟橋・登り道・夜市橋・各浮島から外れた点は、一番近い歩ける場所へ寄せる。
     const s = v.x * PIER_AX + v.z * PIER_AZ;
     const q = -v.x * PIER_AZ + v.z * PIER_AX;
     const dd = Math.hypot(v.x - DECK_POS.x, v.z - DECK_POS.z);
@@ -2154,7 +2577,11 @@ const clampToIsland = (v) => {
     const s2 = v.x * C_AX + v.z * C_AZ;
     const q2 = -v.x * C_AZ + v.z * C_AX;
     const onCourse = s2 >= C_S0 && s2 <= C_S1 && Math.abs(q2) <= (s2 < 10 ? 1.0 : C_HALF);
-    if (!onPier && !onCourse && dd > DECK_WALK_R) {
+    const s3 = v.x * M_AX + v.z * M_AZ;
+    const q3 = -v.x * M_AZ + v.z * M_AX;
+    const md = Math.hypot(v.x - MARKET_POS.x, v.z - MARKET_POS.z);
+    const onMarketBridge = s3 >= MARKET_BRIDGE_S0 && s3 <= MARKET_BRIDGE_S1 && Math.abs(q3) <= MARKET_BRIDGE_HALF_W;
+    if (!onPier && !onCourse && !onMarketBridge && dd > DECK_WALK_R && md > MARKET_WALK_R) {
       const cand = [[v.x * (WALK_R / l), v.z * (WALK_R / l)]];
       const cs = THREE.MathUtils.clamp(s, PIER_S0, DECK_S);
       const cq = THREE.MathUtils.clamp(q, -PIER_HALF_W, PIER_HALF_W);
@@ -2163,9 +2590,16 @@ const clampToIsland = (v) => {
       const cw2 = cs2 < 10 ? 1.0 : C_HALF;
       const cq2 = THREE.MathUtils.clamp(q2, -cw2, cw2);
       cand.push([C_AX * cs2 - C_AZ * cq2, C_AZ * cs2 + C_AX * cq2]);
+      const cs3 = THREE.MathUtils.clamp(s3, MARKET_BRIDGE_S0, MARKET_BRIDGE_S1);
+      const cq3 = THREE.MathUtils.clamp(q3, -MARKET_BRIDGE_HALF_W, MARKET_BRIDGE_HALF_W);
+      cand.push([M_AX * cs3 - M_AZ * cq3, M_AZ * cs3 + M_AX * cq3]);
       if (dd > 1e-4) {
         const k = DECK_WALK_R / dd;
         cand.push([DECK_POS.x + (v.x - DECK_POS.x) * k, DECK_POS.z + (v.z - DECK_POS.z) * k]);
+      }
+      if (md > 1e-4) {
+        const k = MARKET_WALK_R / md;
+        cand.push([MARKET_POS.x + (v.x - MARKET_POS.x) * k, MARKET_POS.z + (v.z - MARKET_POS.z) * k]);
       }
       let bx = cand[0][0], bz = cand[0][1], bd = Infinity;
       for (const c2 of cand) {
@@ -2259,7 +2693,6 @@ if (jumpBtn) {
 }
 
 // ---------- アスレチック用の操作パッド（タッチ端末のみ・登り道エリアで出現） ----------
-const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || new URLSearchParams(location.search).has('pad'); // ?pad でPCでも確認できる
 const padEl = document.getElementById('pad');
 const padKnob = document.getElementById('pad-knob');
 const padVec = { x: 0, y: 0 }; // -1..1（画面基準。yは下が正）
@@ -2316,6 +2749,53 @@ const hintEl = document.getElementById('hint');
 const titleEl = document.getElementById('title-overlay');
 setTimeout(() => titleEl && titleEl.classList.add('hide'), 3000);
 
+// ---------- モーダル共通制御（背景を沈め、キーボードの居場所をカード内に保つ） ----------
+const modalEls = [...document.querySelectorAll('[data-modal]')];
+let modalReturnFocus = null;
+const syncModalState = () => {
+  const hasOpenModal = modalEls.some((el) => el.classList.contains('show'));
+  document.body.classList.toggle('modal-open', hasOpenModal);
+  if (!hasOpenModal && modalReturnFocus?.isConnected && !IS_TOUCH) {
+    modalReturnFocus.focus();
+    modalReturnFocus = null;
+  }
+};
+const openModal = (el, focusEl) => {
+  if (!el) return;
+  if (!el.classList.contains('show') && document.activeElement instanceof HTMLElement) {
+    modalReturnFocus = document.activeElement;
+  }
+  el.classList.add('show');
+  el.setAttribute('aria-hidden', 'false');
+  el.inert = false;
+  syncModalState();
+  if (!IS_TOUCH && focusEl) requestAnimationFrame(() => focusEl.focus());
+};
+const closeModal = (el) => {
+  if (!el) return;
+  el.classList.remove('show');
+  el.setAttribute('aria-hidden', 'true');
+  el.inert = true;
+  syncModalState();
+};
+addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const modal = modalEls.find((el) => el.classList.contains('show'));
+  if (!modal) return;
+  const focusable = [...modal.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+    .filter((el) => el.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+});
+
 // ---------- 初回導入シーケンス ----------
 const INTRO_KEY = 'vibe.island.intro.v1';
 const introIsFirstVisit = !localStorage.getItem(INTRO_KEY);
@@ -2340,8 +2820,8 @@ const INTRO_STEPS = [
     btn: 'つぎへ',
   },
   {
-    head: '衝動のかけら',
-    body: '島のどこかに七つ。桜の大樹の光をたよりに集めてみて。<br>クリックで移動 ／ Spaceで二段ジャンプ',
+    head: 'かけらと星屑コイン',
+    body: '七つのかけらは大樹の祠へ。金色のコインは西の夜市へ。<br>クリックで移動 ／ Spaceで二段ジャンプ',
     btn: '島へ',
   },
 ];
@@ -2445,6 +2925,15 @@ const takePhoto = () => {
     c2.fillText('☆ 流星群の夜', cv.width - pad, pad * 1.4);
     c2.shadowBlur = 0;
   }
+  if (lastShotKey === 'music-stage') {
+    c2.textAlign = 'right';
+    c2.fillStyle = '#f48fb8';
+    c2.shadowColor = 'rgba(0,0,0,0.82)';
+    c2.shadowBlur = 10;
+    c2.font = `700 ${Math.round(Math.min(pad * 0.5, cv.width * 0.032))}px "Shippori Mincho B1", serif`;
+    c2.fillText('SAKUYA LIVE STAGE', cv.width - pad, pad * 1.4);
+    c2.shadowBlur = 0;
+  }
   lastShotKey = '';
   photoUrl = cv.toDataURL('image/png');
   if (photoImg) photoImg.src = photoUrl;
@@ -2452,7 +2941,7 @@ const takePhoto = () => {
     flashEl.classList.add('on');
     setTimeout(() => flashEl.classList.remove('on'), 170);
   }
-  setTimeout(() => photoModal && photoModal.classList.add('show'), 220);
+  setTimeout(() => openModal(photoModal, photoClose), 220);
 };
 const photoBtn = document.getElementById('photo');
 if (photoBtn) {
@@ -2476,12 +2965,12 @@ if (photoTweet) {
   });
 }
 const photoClose = document.getElementById('photo-close');
-if (photoClose) photoClose.addEventListener('click', () => photoModal.classList.remove('show'));
+if (photoClose) photoClose.addEventListener('click', () => closeModal(photoModal));
 const photoClose2 = document.getElementById('photo-close2');
-if (photoClose2) photoClose2.addEventListener('click', () => photoModal.classList.remove('show'));
+if (photoClose2) photoClose2.addEventListener('click', () => closeModal(photoModal));
 if (photoModal) {
   photoModal.addEventListener('click', (e) => {
-    if (e.target === photoModal) photoModal.classList.remove('show');
+    if (e.target === photoModal) closeModal(photoModal);
   });
 }
 
@@ -2489,6 +2978,7 @@ if (photoModal) {
 const BOARD_URL = ['localhost', '127.0.0.1'].includes(location.hostname)
   ? 'http://127.0.0.1:8787/board'
   : 'https://vibe-presence.nubonba.workers.dev/board';
+const LOCAL_SERVICES_ENABLED = new URLSearchParams(location.search).get('presence') === 'local';
 const boardBtn = document.getElementById('board');
 const boardPanel = document.getElementById('board-panel');
 const boardListEl = document.getElementById('board-list');
@@ -2554,7 +3044,11 @@ const renderBoardPosts = (posts) => {
 let boardLoading = false;
 const openBoard = async () => {
   if (!boardPanel.classList.contains('show')) sound.se.ui();
-  boardPanel.classList.add('show');
+  openModal(boardPanel, boardInput);
+  if (['localhost', '127.0.0.1'].includes(location.hostname) && !LOCAL_SERVICES_ENABLED) {
+    boardEmpty('帳は本番の島でひらきます');
+    return;
+  }
   if (boardLoading) return;
   boardLoading = true;
   try {
@@ -2567,7 +3061,7 @@ const openBoard = async () => {
     boardLoading = false;
   }
 };
-const closeBoard = () => boardPanel && boardPanel.classList.remove('show');
+const closeBoard = () => closeModal(boardPanel);
 
 const sendBoardPost = async () => {
   const text = (boardInput.value || '').trim();
@@ -2653,7 +3147,7 @@ const PANEL_DATA = {
     color: '#f48fb8',
     title: 'MUSIC｜Sakuya - 咲耶',
     sub: 'バーチャルシンガー',
-    body: '桜の名を持つ歌い手。月蝕綺譚の主題歌をはじめ、物語と地続きの歌をうたう。<br>ステージの奥では、MVが静かに流れています。<br>「音を灯す」と、この島が歌に呼応します。',
+    body: '桜の名を持つ歌い手。月蝕綺譚の主題歌をはじめ、物語と地続きの歌をうたう。<br>ステージの奥ではMVが流れ、中央の撮影印に立つと咲耶と並ぶ一枚を残せます。<br>「音を灯す」と、この島が歌に呼応します。',
     actions: [
       { label: '♪ 音を灯す', music: true },
       { label: '主題歌の物語へ', url: 'https://vibe.co.jp/luna-occulta' },
@@ -2663,7 +3157,7 @@ const PANEL_DATA = {
     color: '#d9b36a',
     title: '島の案内',
     sub: 'GUIDE',
-    body: '夜空に浮かぶ、Studio VIBEの小さな島。<br>緋の鳥居はGAME館。月蝕綺譚の紹介動画が流れています。<br>青いスクリーンはANIME館。オリジナルアニメを上映中。<br>桜のステージはMUSIC館。咲耶のMVが観られます。<br>島のどこかに衝動のかけらが七つ。二段ジャンプで岩や木の上にも乗れます。<br>📷で記念撮影。出会った旅人の頭上には、その子の二つ名が見えます。<br>光の桟橋を渡った先は、月見の岬。月と島を背にした一枚が撮れます。<br>浮灯籠を跳んで登った先は、天空の星見台。',
+    body: '夜空に浮かぶ、Studio VIBEの小さな島。<br>緋の鳥居はGAME館。月蝕綺譚の紹介動画が流れています。<br>青いスクリーンはANIME館。オリジナルアニメを上映中。<br>桜のステージはMUSIC館。ステージへ上がると、咲耶のMVと一緒に撮影できます。<br>島のどこかに衝動のかけらが七つ。二段ジャンプで岩や木の上にも乗れます。<br>金色のコインは毎晩ふたたび現れ、西の星屑夜市で装具と交換できます。<br>光の桟橋を渡った先は月見の岬。浮灯籠を跳んだ先は天空の星見台。',
     actions: [],
   },
 };
@@ -2675,7 +3169,7 @@ const openPanel = (key) => {
   const d = PANEL_DATA[key];
   if (!d || !panelEl) return;
   panelCard.style.setProperty('--acc', d.color);
-  panelBody.innerHTML = `<h2>${d.title}</h2><div class="sub">${d.sub}</div><p>${d.body}</p><div class="actions"></div>`;
+  panelBody.innerHTML = `<h2 id="panel-title">${d.title}</h2><div class="sub">${d.sub}</div><p>${d.body}</p><div class="actions"></div>`;
   sound.se.ui();
   const row = panelBody.querySelector('.actions');
   for (const a of d.actions) {
@@ -2695,9 +3189,9 @@ const openPanel = (key) => {
     });
     row.appendChild(b);
   }
-  panelEl.classList.add('show');
+  openModal(panelEl, panelCloseBtn);
 };
-const closePanel = () => panelEl && panelEl.classList.remove('show');
+const closePanel = () => closeModal(panelEl);
 const panelCloseBtn = document.getElementById('panel-close');
 if (panelCloseBtn) panelCloseBtn.addEventListener('click', closePanel);
 if (panelEl) {
@@ -2742,6 +3236,14 @@ if (hintEl) {
     }
     if (currentNear.key === 'hoshimi') {
       startSpotShot(HOSHIMI_SHOT);
+      return;
+    }
+    if (currentNear.key === 'music-stage') {
+      startSpotShot(MUSIC_SHOT);
+      return;
+    }
+    if (currentNear.key === 'market') {
+      openShopPanel();
       return;
     }
     if (currentNear.key === 'lele') {
@@ -2857,9 +3359,9 @@ const openMintPanel = () => {
     if (mintNotReadyEl) mintNotReadyEl.style.display = 'none';
     loadTurnstile();
   }
-  mintPanelEl.classList.add('show');
+  openModal(mintPanelEl, mintPanelCloseBtn);
 };
-const closeMintPanel = () => mintPanelEl && mintPanelEl.classList.remove('show');
+const closeMintPanel = () => closeModal(mintPanelEl);
 if (mintPanelCloseBtn) mintPanelCloseBtn.addEventListener('click', closeMintPanel);
 if (mintPanelEl) {
   mintPanelEl.addEventListener('click', (e) => {
@@ -2894,6 +3396,7 @@ if (mintSubmitBtn) {
     const address = (mintAddressInput?.value || '').trim();
     if (!ADDRESS_RE.test(address)) {
       showMintError('アドレスの形式が正しくありません');
+      mintAddressInput?.focus();
       return;
     }
     if (!turnstileToken) {
@@ -2931,26 +3434,14 @@ if (mintSubmitBtn) {
 // ---------- エモート（頭上の吹き出し。自分にも、すれ違った旅人にも見える） ----------
 const EMOTES = ['♪', '💗', '✨', '🌙'];
 const emoteTexes = EMOTES.map((ch) => canvasTex(256, 256, (ctx, w, h) => {
-  // 名前ラベルと同じダーク調の丸吹き出し（白箱は世界のUIから浮く）。高解像度でボケ防止
-  ctx.fillStyle = 'rgba(10, 10, 18, 0.68)';
-  ctx.strokeStyle = 'rgba(244, 242, 236, 0.4)';
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(w / 2, h / 2 - 24, 88, 0, 7);
-  ctx.fill();
-  ctx.stroke();
-  // 小さなしっぽ
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 14, h / 2 + 58);
-  ctx.lineTo(w / 2 + 14, h / 2 + 58);
-  ctx.lineTo(w / 2, h / 2 + 90);
-  ctx.closePath();
-  ctx.fill();
-  ctx.font = '92px "Zen Maru Gothic", sans-serif';
+  // 枠なし＝絵文字だけ（吹き出しは浮いて見える・本人FB）。夜空で沈まないよう淡い影のみ
+  ctx.font = '160px "Zen Maru Gothic", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(10, 10, 18, 0.6)';
+  ctx.shadowBlur = 18;
   ctx.fillStyle = '#f4f2ec';
-  ctx.fillText(ch, w / 2, h / 2 - 20);
+  ctx.fillText(ch, w / 2, h / 2);
 }));
 const emoteAnims = new Map(); // group -> { sprite, t, life, aspect, disposable }
 const showEmoteOn = (group, k) => {
@@ -3007,6 +3498,7 @@ const presence = initPresence({
     yaw: tarte.group.rotation.y,
     w: Math.min(1, speedSmooth / 2.0),
     j: py - terrainH(tarte.group.position.x, tarte.group.position.z),
+    a: equippedCosmeticMask,
   }),
   onCount: (n) => {
     if (visitorsEl) visitorsEl.textContent = n > 1 ? `● いま島に ${n}人` : '○ いま島に ひとり';
@@ -3027,6 +3519,7 @@ const leleSpeak = () => {
     'この先は光の桟橋。月見の岬へ続いてるよ',
     '緋い鳥居の奥で「月蝕綺譚」が見られるんだ',
     '七つのかけらを集めると、いいことがあるよ',
+    '西の光橋の先は星屑夜市。コインで装具を選べるよ',
     '旅人の帳に、ひとこと残していってね'
   );
   showSpeechOn(lele.group, lines[leleLineIdx++ % lines.length]);
@@ -3064,7 +3557,8 @@ if (emoteBtn && emoteRow) {
 }
 
 // ---------- animation ----------
-const clock = new THREE.Clock();
+const clock = new THREE.Timer();
+clock.connect(document);
 let walkPhase = 0;
 let speedSmooth = 0;
 let spotPoseT = 0;
@@ -3085,8 +3579,9 @@ const lerpAngle = (a, b, t) => {
 
 function animate() {
   if (!window.__pumping) requestAnimationFrame(animate);
+  clock.update();
   const dt = Math.min(clock.getDelta(), 0.05);
-  const t = clock.elapsedTime;
+  const t = clock.getElapsed();
   const pos = tarte.group.position;
 
   // resizeイベントを取りこぼしても描画領域がズレたまま固まらないよう、毎秒実寸を照合
@@ -3243,6 +3738,7 @@ function animate() {
   prevYaw = tarte.group.rotation.y;
 
   tarte.update(dt, t, w, walkPhase, yawVel);
+  cosmeticRig.update(dt, t);
   presence.update(dt, t);
 
   // 吹き出しのアニメ（ぽんっと出て、ふわっと消える）
@@ -3301,18 +3797,28 @@ function animate() {
     camera.position.copy(controls.target).add(off);
   }
 
-  // ゾーン判定（三館＋中央のスタジオ碑＋案内板）→ 解説パネルへの入口
+  // リーリーは館の入口と近いため、会話の近接判定を最優先にする。
   let near = null;
+  if (Math.hypot(pos.x - LELE_POS.x, pos.z - LELE_POS.z) < 1.5) near = LELE_NEAR;
+  // MUSIC館の中では、ステージに立った時だけ撮影を館案内より優先する。
+  if (!near && py >= musicStageTop - 0.08 && Math.hypot(pos.x - MUSIC_STAGE_POS.x, pos.z - MUSIC_STAGE_POS.z) < 1.08) near = MUSIC_STAGE_NEAR;
+  if (!near && Math.hypot(pos.x - MARKET_SHOP_POS.x, pos.z - MARKET_SHOP_POS.z) < 1.42) near = MARKET_NEAR;
+  // ゾーン判定（三館＋中央のスタジオ碑＋案内板）→ 解説パネルへの入口
   for (const z of ZONES) {
-    if (pos.distanceTo(z.pos) < 3.05) near = z;
+    if (!near && pos.distanceTo(z.pos) < 3.05) near = z;
   }
   if (!near && shrineVisible && pos.distanceTo(shrinePos) < 1.2) near = MINT_NEAR;
   if (!near && pos.distanceTo(infoPos) < 1.6) near = INFO_NEAR;
   if (!near && Math.hypot(pos.x, pos.z) < 2.05) near = STUDIO_NEAR;
   if (!near && Math.hypot(pos.x - DECK_POS.x, pos.z - DECK_POS.z) < DECK_WALK_R + 0.15) near = MISAKI_NEAR;
   if (!near && Math.hypot(pos.x - HOSHI_POS.x, pos.z - HOSHI_POS.z) < HOSHI_WALK_R + 0.2) near = HOSHIMI_NEAR;
-  if (!near && Math.hypot(pos.x - LELE_POS.x, pos.z - LELE_POS.z) < 1.5) near = LELE_NEAR;
   currentNear = near;
+  // 動画は各館の静止画を先に見せ、近づいた時だけ読み込む。モバイルはさらに近接時まで待つ。
+  const videoActivationDistance = IS_TOUCH ? 4.4 : 6.0;
+  for (const slot of deferredVideos) {
+    const zone = ZONES.find((z) => z.key === slot.zone);
+    if (zone && pos.distanceTo(zone.pos) < videoActivationDistance) activateDeferredVideo(slot);
+  }
   // 足元リング: 常時ゆっくり脈動し、円の中にいるあいだは強く発光する
   for (const zrs of zoneRings) {
     const on = near === zrs.zone;
@@ -3364,6 +3870,25 @@ function animate() {
       } else {
         showToast(`衝動のかけらを見つけた（${collected.size}/7）`, 2200);
       }
+    }
+  }
+  // コインは残高だけを持ち越し、配置は日付が変わると再び現れる。
+  for (const coin of coins) {
+    if (!coin.visible) continue;
+    coin.position.y = coin.userData.baseY + Math.sin(t * 2.1 + coin.userData.ph) * 0.065;
+    coin.rotation.y += dt * (coin.userData.value > 1 ? 2.8 : 2.2);
+    coin.userData.halo.material.opacity = 0.22 + 0.12 * (0.5 + 0.5 * Math.sin(t * 2.8 + coin.userData.ph));
+    const closeXZ = Math.hypot(pos.x - coin.position.x, pos.z - coin.position.z) < 0.68;
+    const closeY = Math.abs((pos.y + 0.45) - coin.position.y) < 0.78;
+    if (closeXZ && closeY) {
+      coin.visible = false;
+      collectedCoins.add(coin.userData.id);
+      coinBalance = Math.min(9999, coinBalance + coin.userData.value);
+      saveCoinState();
+      updateCoinHud();
+      sound.se.coin();
+      spawnBurst(coin.position.x, coin.position.z, 0xf0c869, coin.userData.floorY + 0.03);
+      showToast(`星屑コイン +${coin.userData.value}<br>お財布 ${coinBalance}`, 1900);
     }
   }
   for (let i = bursts.length - 1; i >= 0; i--) {
@@ -3501,7 +4026,15 @@ function animate() {
     pt.rotation.x += dt * 1.1;
     pt.rotation.y += dt * 0.8;
   }
-  for (const l of labels) l.lookAt(camera.position);
+  for (const l of labels) {
+    l.lookAt(camera.position);
+    if (l.userData.fadeNear) {
+      const dx = l.position.x - tarte.group.position.x;
+      const dz = l.position.z - tarte.group.position.z;
+      const distance = Math.hypot(dx, dz);
+      l.material.opacity = THREE.MathUtils.smoothstep(distance, l.userData.fadeNear * 0.55, l.userData.fadeNear);
+    }
+  }
   for (const f of floaties) {
     f.mesh.position.y = f.y0 + Math.sin(t * 1.1 + f.ph) * 0.05;
     f.mesh.rotation.y = f.baseRot + Math.sin(t * 0.6 + f.ph) * 0.3;
@@ -3544,8 +4077,28 @@ function animate() {
       camDesiredDist = THREE.MathUtils.clamp(camDist, controls.minDistance, controls.maxDistance);
     }
     if (blocked) {
-      camDist = Math.max(0.6, hits[0].distance * 0.9);
-      camera.position.copy(controls.target).addScaledVector(camDir, camDist);
+      let safeDist = Math.max(0.6, hits[0].distance * 0.9);
+      let safeDir = camDir;
+
+      // 木の幹などがすぐ背後にある時は、アバターへ極端に寄る前に横へ回り込む。
+      // 小さい角度から試すことで、普段の構図をできるだけ保つ。
+      if (safeDist < Math.min(2.2, camDist * 0.55)) {
+        for (const yaw of [-1.05, 1.05, -1.32, 1.32]) {
+          const candidateDir = camDir.clone().applyAxisAngle(THREE.Object3D.DEFAULT_UP, yaw);
+          raycaster.set(controls.target, candidateDir);
+          raycaster.far = camDist;
+          const sideHits = raycaster.intersectObjects(camColliders, false);
+          const candidateDist = sideHits.length ? Math.max(0.6, sideHits[0].distance * 0.9) : camDist;
+          if (candidateDist > safeDist) {
+            safeDist = candidateDist;
+            safeDir = candidateDir;
+          }
+          if (!sideHits.length) break;
+        }
+        raycaster.far = Infinity;
+      }
+      camDist = safeDist;
+      camera.position.copy(controls.target).addScaledVector(safeDir, camDist);
     } else if (!misakiShot && camDist < camDesiredDist - 0.01) {
       camDist = Math.min(camDesiredDist, camDist + (camDesiredDist - camDist) * Math.min(1, dt * 2.2));
       camera.position.copy(controls.target).addScaledVector(camDir, camDist);
@@ -3639,7 +4192,86 @@ animate();
 
 // 内部状態フック（他のデバッグフックと同様 localhost 限定・本番では生やさない）
 if (['localhost', '127.0.0.1'].includes(location.hostname)) {
-  window.__poc = { tarte: tarte.group, target, camera, controls, toggleMusic, shards, collected, DECK_POS, obstacles, PLATFORMS, get near() { return currentNear; }, get py() { return py; }, get grounded() { return grounded; } };
+  window.__poc = {
+    tarte: tarte.group,
+    target,
+    camera,
+    controls,
+    toggleMusic,
+    shards,
+    collected,
+    coins,
+    DECK_POS,
+    MARKET_POS,
+    MARKET_SHOP_POS,
+    MUSIC_STAGE_POS,
+    obstacles,
+    PLATFORMS,
+    openShop: openShopPanel,
+    grantCoins(n = 20) {
+      coinBalance = Math.min(9999, coinBalance + Math.max(0, Math.floor(Number(n) || 0)));
+      saveCoinState();
+      updateCoinHud();
+      renderShop();
+      return coinBalance;
+    },
+    equip(id) {
+      const item = COSMETIC_ITEMS.find((entry) => entry.id === id);
+      if (!item) return equippedCosmeticMask;
+      ownedCosmetics.add(item.id);
+      equipCosmetic(item);
+      applyCosmetics();
+      renderShop();
+      return equippedCosmeticMask;
+    },
+    get coinBalance() { return coinBalance; },
+    get cosmeticMask() { return equippedCosmeticMask; },
+    get near() { return currentNear; },
+    get py() { return py; },
+    get grounded() { return grounded; },
+  };
+}
+
+// 監査用の再現URL（localhost限定）。例: ?qa=market&qaCoins=20 / ?qa=music&qaEquip=starlight-aura
+if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+  const qa = new URLSearchParams(location.search);
+  const qaScene = qa.get('qa');
+  if (qaScene) {
+    if (titleEl) titleEl.style.display = 'none';
+    closeIntro();
+  }
+  if (qaScene === 'market') {
+    window.__tp(MARKET_SHOP_POS.x + 0.45, MARKET_SHOP_POS.z, MARKET_POS.x - 1, MARKET_POS.z);
+  } else if (qaScene === 'market-bridge') {
+    const entry = marketXZ(7.05, 0);
+    window.__tp(entry.x, entry.z, MARKET_POS.x, MARKET_POS.z);
+  } else if (['game', 'anime', 'music-approach'].includes(qaScene)) {
+    const zoneKey = qaScene === 'music-approach' ? 'music' : qaScene;
+    const zone = ZONES.find((entry) => entry.key === zoneKey);
+    const approach = zone.pos.clone().setLength(3.65);
+    window.__tp(approach.x, approach.z, zone.pos.x, zone.pos.z);
+  } else if (qaScene === 'pier') {
+    const entry = pierXZ(7.05, 0);
+    window.__tp(entry.x, entry.z, DECK_POS.x, DECK_POS.z);
+  } else if (qaScene === 'course') {
+    const entry = courseXZ(7.05, 0);
+    window.__tp(entry.x, entry.z, HOSHI_POS.x, HOSHI_POS.z);
+  } else if (qaScene === 'misaki') {
+    window.__tp(DECK_POS.x, DECK_POS.z, 0, 0);
+  } else if (qaScene === 'hoshimi') {
+    window.__tp(HOSHI_POS.x, HOSHI_POS.z, 0, 0);
+  } else if (qaScene === 'info') {
+    window.__tp(infoPos.x * 0.48, infoPos.z * 0.48, infoPos.x, infoPos.z);
+  } else if (qaScene === 'music') {
+    const screen = zoneLocalToWorld(MUSIC_ZONE, 0, -1.6);
+    window.__tp(MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z, screen.x, screen.z);
+  } else if (qaScene === 'coin') {
+    const coin = coins.find((entry) => entry.visible);
+    if (coin) window.__tp(coin.position.x, coin.position.z);
+  }
+  if (qa.has('qaCoins')) window.__poc.grantCoins(qa.get('qaCoins'));
+  if (qa.has('qaEquip')) window.__poc.equip(qa.get('qaEquip'));
+  if (qa.get('qaShop') === '1') setTimeout(openShopPanel, 250);
 }
 
 addEventListener('resize', applySize);
@@ -3650,4 +4282,3 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('scroll', applySize);
 }
 applySize(); // 初期表示から実測基準で
-
