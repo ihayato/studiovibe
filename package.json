@@ -16,6 +16,8 @@
     "@sanity/client": "^7.16.0",
     "@sanity/image-url": "^2.0.3",
     "swiper": "^11.0.0",
+    "three": "^0.185.1",
+    "viem": "^2.54.6",
     "vite": "^5.0.0"
   }
 }

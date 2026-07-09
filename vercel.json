@@ -32,6 +32,10 @@
     ],
     "rewrites": [
         {
+            "source": "/island",
+            "destination": "/poc/island/index.html"
+        },
+        {
             "source": "/sakuya/",
             "destination": "https://sakuya-site.vercel.app/"
         },

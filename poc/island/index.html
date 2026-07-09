@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STUDIO VIBE | VIBES INTO WORLDS. ― 衝動を、世界に。</title>
+  <meta name="description" content="夜空に浮かぶ小さな島を歩く、Studio VIBEのバーチャルスタジオ。ゲーム・アニメ・音楽の三館、月見の岬、浮灯籠の登り道、旅人の帳。" />
+  <!-- OGP（og:imageは絶対URL必須。公開URLが vibe.co.jp 直下でなくなる場合はここを直す） -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="STUDIO VIBE" />
+  <meta property="og:title" content="STUDIO VIBE | VIBES INTO WORLDS." />
+  <meta property="og:description" content="夜空に浮かぶ小さな島を歩く、Studio VIBEのバーチャルスタジオ。ゲーム・アニメ・音楽の三館、フォトスポット、旅人の帳。" />
+  <meta property="og:url" content="https://vibe.co.jp/island" />
+  <meta property="og:image" content="https://vibe.co.jp/ogp_island.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #07070b;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #title-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: rgba(7, 7, 11, 0.55);
+      color: #f4f2ec;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+      user-select: none;
+    }
+
+    #title-overlay.hide {
+      opacity: 0;
+    }
+
+    #title-overlay .en {
+      font: 700 42px Futura, "Avenir Next", sans-serif;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+    }
+
+    #title-overlay .tagline {
+      font: 700 15px Futura, "Avenir Next", sans-serif;
+      letter-spacing: 0.24em;
+      color: #7be0ff;
+    }
+
+    #title-overlay .jp {
+      font: 700 12px "Shippori Mincho B1", serif;
+      letter-spacing: 0.4em;
+      opacity: 0.8;
+    }
+
+    #title-overlay .beta {
+      margin-top: 14px;
+      display: inline-block;
+      padding: 4px 14px;
+      border: 1px solid rgba(240, 200, 105, 0.6);
+      border-radius: 999px;
+      font: 700 10px Futura, "Avenir Next", sans-serif;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      color: #f0c869;
+    }
+
+    #hint {
+      position: fixed;
+      left: 50%;
+      bottom: 64px;
+      white-space: nowrap;
+      max-width: 92vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform: translateX(-50%) translateY(16px);
+      padding: 10px 22px;
+      border: 1px solid rgba(123, 224, 255, 0.4);
+      border-radius: 999px;
+      background: rgba(10, 10, 18, 0.75);
+      color: #f4f2ec;
+      font: 14px/1.5 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    #hint.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+      animation: hint-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), hint-glow 2.4s ease-in-out 0.45s infinite alternate;
+    }
+
+    @keyframes hint-pop {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(26px) scale(0.82);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+    }
+
+    @keyframes hint-glow {
+      0% {
+        filter: drop-shadow(0 0 6px rgba(244, 143, 184, 0.25));
+      }
+
+      100% {
+        filter: drop-shadow(0 0 16px rgba(244, 143, 184, 0.6));
+      }
+    }
+
+    #hint:hover {
+      border-color: rgba(123, 224, 255, 0.9);
+      background: rgba(16, 16, 28, 0.9);
+    }
+
+    #hint b {
+      font-family: "Shippori Mincho B1", serif;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      margin-right: 6px;
+    }
+
+    #hint .go {
+      margin-left: 10px;
+      color: #7be0ff;
+      font-weight: 700;
+    }
+
+    /* 一句だけの短縮表示のときは左マージンを消して真ん中に */
+    #hint .go:first-child {
+      margin-left: 0;
+    }
+
+    #visitors {
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      padding: 7px 14px;
+      border: 1px solid rgba(123, 224, 255, 0.35);
+      border-radius: 999px;
+      background: rgba(10, 10, 18, 0.7);
+      color: #f4f2ec;
+      font: 11px/1.4 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.12em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    #shards {
+      position: fixed;
+      right: 16px;
+      top: 16px;
+      padding: 8px 16px;
+      border: 1px solid rgba(244, 143, 184, 0.4);
+      border-radius: 999px;
+      background: rgba(10, 10, 18, 0.7);
+      color: #f4f2ec;
+      font: 12px/1.4 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.12em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* ピル飾り枠（背景は画像のfill一本。CSS背景を重ねると黒がはみ出すため透明化） */
+    #hint,
+    #shards,
+    #visitors {
+      background: transparent;
+      border: 0 solid transparent;
+      border-radius: 0;
+      border-image: url('./ui/pill.webp') 93 150 fill / 17px 30px stretch;
+      padding: 10px 34px;
+    }
+
+    #hint:hover {
+      background: transparent;
+      border-color: transparent;
+      filter: brightness(1.25);
+    }
+
+    #shard-icon {
+      height: 14px;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      top: 18%;
+      width: max-content;
+      max-width: 92vw;
+      transform: translateX(-50%) translateY(-10px);
+      padding: 14px 28px;
+      border: 1px solid rgba(244, 143, 184, 0.7);
+      border-radius: 12px;
+      background: rgba(16, 12, 22, 0.9);
+      color: #ffe0ee;
+      font: 700 13px/1.8 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.12em;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 8, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 20;
+    }
+
+    #panel.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #panel .card {
+      --acc: #7be0ff;
+      width: min(480px, 86vw);
+      background: transparent;
+      border: 0 solid transparent;
+      border-image: url('./ui/panel_frame.webp') 120 fill / 44px stretch;
+      padding: 40px 42px 34px;
+      color: #f4f2ec;
+      font: 13px/2 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      position: relative;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.04em;
+    }
+
+    #panel h2 {
+      font: 700 19px "Shippori Mincho B1", serif;
+      letter-spacing: 0.08em;
+      margin: 0 0 4px;
+      color: var(--acc);
+    }
+
+    #panel .sub {
+      font-size: 11px;
+      opacity: 0.75;
+      letter-spacing: 0.16em;
+      margin-bottom: 14px;
+    }
+
+    #panel p {
+      margin: 0 0 18px;
+    }
+
+    #panel .corp {
+      display: block;
+      margin-top: 10px;
+      font-size: 11px;
+      opacity: 0.7;
+      line-height: 1.9;
+    }
+
+    #panel .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #panel .btn {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--acc);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: background 0.2s ease;
+    }
+
+    #panel .btn:hover {
+      background: rgba(123, 224, 255, 0.14);
+    }
+
+    #panel-close {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #f4f2ec;
+      font-size: 22px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    #panel-close:hover {
+      opacity: 1;
+    }
+
+    #mint-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 8, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 20;
+    }
+
+    #mint-panel.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #mint-panel .card {
+      --acc: #d9a94c;
+      width: min(420px, 86vw);
+      background: transparent;
+      border: 0 solid transparent;
+      border-image: url('./ui/panel_frame.webp') 120 fill / 44px stretch;
+      padding: 40px 42px 34px;
+      color: #f4f2ec;
+      font: 13px/2 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      position: relative;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.04em;
+    }
+
+    #mint-panel h2 {
+      font: 700 19px "Shippori Mincho B1", serif;
+      letter-spacing: 0.08em;
+      margin: 0 0 4px;
+      color: var(--acc);
+    }
+
+    #mint-panel .sub {
+      font-size: 11px;
+      opacity: 0.75;
+      letter-spacing: 0.16em;
+      margin-bottom: 14px;
+      color: var(--acc);
+    }
+
+    #mint-panel p {
+      margin: 0 0 18px;
+    }
+
+    #mint-panel label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      opacity: 0.75;
+      margin-bottom: 8px;
+    }
+
+    #mint-panel input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(217, 169, 76, 0.4);
+      border-radius: 8px;
+      color: #f4f2ec;
+      font: 13px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.04em;
+      outline: none;
+    }
+
+    #mint-panel input[type="text"]:focus {
+      border-color: var(--acc);
+    }
+
+    #mint-panel #mint-turnstile {
+      margin-top: 14px;
+    }
+
+    #mint-panel .btn {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--acc);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: background 0.2s ease;
+    }
+
+    #mint-panel .btn:hover {
+      background: rgba(217, 169, 76, 0.14);
+    }
+
+    #mint-panel .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #mint-panel-close {
+      position: absolute;
+      top: 10px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #f4f2ec;
+      font-size: 22px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    #mint-panel-close:hover {
+      opacity: 1;
+    }
+
+    #mint-wallet-btn {
+      display: block;
+      margin-top: 8px;
+      background: none;
+      border: none;
+      padding: 0;
+      color: #d9a94c;
+      font: 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.04em;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    #mint-wallet-btn:hover {
+      opacity: 1;
+    }
+
+    #mint-wallet-btn:disabled {
+      cursor: default;
+      opacity: 0.5;
+      text-decoration: none;
+    }
+
+    #mint-error {
+      min-height: 1.6em;
+      margin: 12px 0 0;
+      color: #f4879e;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    #mint-submit {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    #mint-result-text {
+      color: var(--acc);
+      font: 700 17px "Shippori Mincho B1", serif;
+      letter-spacing: 0.1em;
+    }
+
+    #jump {
+      position: fixed;
+      right: 22px;
+      bottom: 74px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba(10, 10, 18, 0.72);
+      background-image: url('./ui/btn_jump.webp');
+      background-position: center;
+      background-size: cover;
+      color: #f4f2ec;
+      font: 700 11px/1 Futura, "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, background 0.2s ease;
+    }
+
+    #jump:hover {
+      background-color: rgba(20, 22, 36, 0.9);
+    }
+
+    #jump:active {
+      transform: scale(0.9);
+    }
+
+    #photo {
+      position: fixed;
+      right: 22px;
+      bottom: 152px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba(10, 10, 18, 0.72);
+      background-image: url('./ui/btn_photo.webp');
+      background-position: center;
+      background-size: cover;
+      color: #f4f2ec;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, background 0.2s ease;
+    }
+
+    #photo:hover {
+      background-color: rgba(30, 20, 32, 0.9);
+    }
+
+    #photo:active {
+      transform: scale(0.9);
+    }
+
+    #flash {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s ease;
+      z-index: 30;
+    }
+
+    #flash.on {
+      opacity: 0.85;
+    }
+
+    #photo-modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 8, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 25;
+    }
+
+    #photo-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #photo-modal .card {
+      width: min(560px, 90vw);
+      background: rgba(13, 11, 20, 0.96);
+      border: 1px solid rgba(244, 143, 184, 0.6);
+      border-radius: 14px;
+      padding: 22px;
+      position: relative;
+      color: #f4f2ec;
+      font: 12px/1.8 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      text-align: center;
+    }
+
+    #photo-img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    #photo-modal .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    #photo-modal .btn {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 143, 184, 0.7);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+    }
+
+    #photo-modal .btn:hover {
+      background: rgba(244, 143, 184, 0.15);
+    }
+
+    #photo-modal .tip {
+      opacity: 0.65;
+      font-size: 11px;
+    }
+
+    #photo-close {
+      position: absolute;
+      top: 8px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #f4f2ec;
+      font-size: 22px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    /* サウンドトグル（既定OFF） */
+    #sound {
+      position: fixed;
+      left: 22px;
+      bottom: 74px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba(10, 10, 18, 0.72);
+      background-image: url('./ui/btn_sound.webp');
+      background-position: center;
+      background-size: cover;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, background 0.2s ease;
+    }
+
+    #sound:hover {
+      background-color: rgba(16, 26, 36, 0.9);
+    }
+
+    #sound:active {
+      transform: scale(0.9);
+    }
+
+    #sound.off {
+      filter: grayscale(0.85) brightness(0.75);
+    }
+
+    #sound.off::after {
+      content: '';
+      position: absolute;
+      width: 36px;
+      height: 3px;
+      border-radius: 3px;
+      background: rgba(244, 242, 236, 0.8);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+      transform: rotate(-45deg);
+    }
+
+    /* もどるボタン（アトラクションにいる間だけ現れる） */
+    #home {
+      position: fixed;
+      left: 22px;
+      bottom: 152px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba(10, 10, 18, 0.72);
+      background-image: url('./ui/btn_home.webp');
+      background-position: center;
+      background-size: cover;
+      color: #f4f2ec;
+      font: 700 11px/1 Futura, "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.08s ease;
+    }
+
+    #home.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #home:active {
+      transform: scale(0.9);
+    }
+
+    /* 旅人の帳（島の掲示板HUD） */
+    #board {
+      position: fixed;
+      right: 22px;
+      bottom: 230px;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba(10, 10, 18, 0.72);
+      background-image: url('./ui/btn_board.webp');
+      background-position: center;
+      background-size: cover;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, background 0.2s ease;
+    }
+
+    #board:hover {
+      background-color: rgba(32, 26, 16, 0.9);
+    }
+
+    #board:active {
+      transform: scale(0.9);
+    }
+
+    #board-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 8, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 25;
+    }
+
+    #board-panel.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #board-panel .card {
+      width: min(480px, 92vw);
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(13, 11, 20, 0.96);
+      border: 1px solid rgba(240, 200, 105, 0.55);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      color: #f4f2ec;
+      font: 12px/1.8 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+    }
+
+    #board-panel h2 {
+      margin: 0 0 2px;
+      text-align: center;
+      font: 700 19px "Shippori Mincho B1", serif;
+      letter-spacing: 0.24em;
+      color: #f0c869;
+    }
+
+    #board-panel .sub {
+      text-align: center;
+      opacity: 0.6;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    #board-list {
+      overflow-y: auto;
+      min-height: 120px;
+      max-height: 46vh;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+      margin-bottom: 12px;
+    }
+
+    .board-post {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .board-post .who {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .board-post .who .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .board-post .who .when {
+      margin-left: auto;
+      opacity: 0.6;
+    }
+
+    .board-post .txt {
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    #board-empty {
+      text-align: center;
+      opacity: 0.55;
+      padding: 28px 0;
+    }
+
+    #board-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    #board-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      color: #f4f2ec;
+      font: 13px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      padding: 10px 14px;
+      outline: none;
+    }
+
+    #board-input:focus {
+      border-color: rgba(240, 200, 105, 0.6);
+    }
+
+    #board-send {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 200, 105, 0.7);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      flex: none;
+    }
+
+    #board-send:hover {
+      background: rgba(240, 200, 105, 0.15);
+    }
+
+    #board-send:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    #board-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      opacity: 0.55;
+      margin-top: 6px;
+    }
+
+    #board-close {
+      position: absolute;
+      top: 8px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #f4f2ec;
+      font-size: 22px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    /* 導入カード表示中はボタンとヒントを引っ込める */
+    body.intro-open #jump,
+    body.intro-open #photo,
+    body.intro-open #board,
+    body.intro-open #sound,
+    body.intro-open #hint {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #intro {
+      position: fixed;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%) translateY(16px);
+      width: min(420px, 88vw);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 22;
+    }
+
+    #intro.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    #intro .intro-card {
+      background: transparent;
+      border: 0 solid transparent;
+      border-image: url('./ui/panel_frame.webp') 120 fill / 36px stretch;
+      padding: 26px 30px 20px;
+      color: #f4f2ec;
+      cursor: pointer;
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5);
+    }
+
+    #intro .intro-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    #intro .intro-dots .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(244, 143, 184, 0.25);
+    }
+
+    #intro .intro-dots .dot.on {
+      background: #f48fb8;
+    }
+
+    #intro .intro-head {
+      font: 700 13px "Shippori Mincho B1", serif;
+      letter-spacing: 0.16em;
+      color: #f48fb8;
+      margin-bottom: 8px;
+    }
+
+    #intro .intro-body {
+      font: 12px/1.9 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      opacity: 0.9;
+      margin: 0 0 14px;
+    }
+
+    #intro .intro-foot {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    #intro .btn {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 143, 184, 0.7);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 12px "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+    }
+
+    #intro .btn:hover {
+      background: rgba(244, 143, 184, 0.15);
+    }
+
+    /* PCでは全体にひと回り大きく */
+    @media (min-width: 900px) {
+      #visitors,
+      #shards {
+        font-size: 13px;
+        padding: 12px 40px;
+        border-image-width: 20px 36px;
+      }
+
+      #hint {
+        font-size: 16px;
+        padding: 15px 46px;
+        border-image-width: 23px 42px;
+        bottom: 76px;
+      }
+
+      #shard-icon {
+        height: 17px;
+      }
+
+      #jump {
+        width: 84px;
+        height: 84px;
+        font-size: 13px;
+        bottom: 84px;
+      }
+
+      #photo {
+        width: 84px;
+        height: 84px;
+        bottom: 190px;
+      }
+
+      #board {
+        width: 84px;
+        height: 84px;
+        bottom: 292px;
+        font-size: 30px;
+      }
+
+      #sound {
+        width: 84px;
+        height: 84px;
+        bottom: 84px;
+      }
+
+      #home {
+        width: 84px;
+        height: 84px;
+        bottom: 190px;
+        font-size: 13px;
+      }
+
+      #intro {
+        width: min(460px, 88vw);
+      }
+
+      #intro .intro-head {
+        font-size: 15px;
+      }
+
+      #intro .intro-body {
+        font-size: 13px;
+      }
+    }
+
+    /* スマホ幅では解説パネル・導入カードをさらに詰める */
+    @media (max-width: 480px) {
+      #panel .card,
+      #mint-panel .card {
+        width: 94vw;
+        padding: 30px 24px 26px;
+        border-image-width: 32px;
+        font-size: 12px;
+        line-height: 1.9;
+      }
+
+      #panel h2,
+      #mint-panel h2 {
+        font-size: 16px;
+      }
+
+      #intro .intro-card {
+        border-image-width: 30px;
+        padding: 22px 22px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="title-overlay">
+    <div class="en">STUDIO VIBE</div>
+    <div class="tagline">VIBES INTO WORLDS.</div>
+    <div class="jp">― 衝動を、世界に。</div>
+    <div class="beta">OPEN BETA</div>
+  </div>
+  <div id="hint"></div>
+  <div id="visitors">○ いま島に ひとり</div>
+  <div id="shards"><img id="shard-icon" src="./ui/shard.webp" alt=""
+      onerror="this.replaceWith(document.createTextNode('◇ '))" /><span id="shards-text">かけら 0/7</span></div>
+  <div id="toast"></div>
+  <div id="panel">
+    <div class="card" id="panel-card">
+      <button id="panel-close">×</button>
+      <div id="panel-body"></div>
+    </div>
+  </div>
+  <div id="mint-panel">
+    <div class="card" id="mint-panel-card">
+      <button id="mint-panel-close">×</button>
+      <div class="sub">FREE MINT</div>
+      <h2>渡島記念札</h2>
+      <p>七つのかけらを集めた旅人へ。大樹の下で、渡島の証をお授けします。<br>受け取りは無料。ガス代は島が持ちます。</p>
+
+      <div id="mint-form">
+        <label for="mint-address">受け取りアドレス</label>
+        <input id="mint-address" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="0x…" />
+        <button type="button" id="mint-wallet-btn">ウォレットから読み込む</button>
+        <div id="mint-turnstile"></div>
+        <p id="mint-error" role="alert"></p>
+        <button type="button" id="mint-submit" class="btn">受け取る</button>
+      </div>
+
+      <div id="mint-result" style="display:none;">
+        <p id="mint-result-text"></p>
+        <a id="mint-scan-link" class="btn" target="_blank" rel="noopener noreferrer">Basescanで見る</a>
+      </div>
+
+      <div id="mint-notready" style="display:none;">
+        <p>授与所は準備中です。</p>
+      </div>
+    </div>
+  </div>
+  <div id="intro">
+    <div class="intro-card" id="intro-card">
+      <div class="intro-dots" id="intro-dots">
+        <span class="dot" data-i="0"></span><span class="dot" data-i="1"></span><span class="dot" data-i="2"></span>
+      </div>
+      <div class="intro-head" id="intro-head"></div>
+      <div class="intro-body" id="intro-body"></div>
+      <div class="intro-foot">
+        <button class="btn" id="intro-next"></button>
+      </div>
+    </div>
+  </div>
+  <button id="jump">JUMP</button>
+  <button id="photo" aria-label="記念撮影"></button>
+  <button id="board" aria-label="旅人の帳"></button>
+  <button id="sound" class="off" aria-label="サウンド"></button>
+  <button id="home" aria-label="広場へもどる">もどる</button>
+  <div id="board-panel">
+    <div class="card">
+      <button id="board-close">×</button>
+      <h2>旅人の帳</h2>
+      <div class="sub">島に残すひとこと</div>
+      <div id="board-list"></div>
+      <div id="board-form">
+        <input id="board-input" type="text" maxlength="80" placeholder="旅のひとこと" />
+        <button id="board-send">記す</button>
+      </div>
+      <div id="board-meta"><span id="board-name"></span><span id="board-count">0/80</span></div>
+    </div>
+  </div>
+  <div id="flash"></div>
+  <div id="photo-modal">
+    <div class="card">
+      <button id="photo-close">×</button>
+      <img id="photo-img" alt="記念写真" />
+      <div class="actions">
+        <button class="btn" id="photo-save">画像を保存</button>
+        <button class="btn" id="photo-tweet">Xでポスト</button>
+      </div>
+      <div class="tip">保存した画像をポストに添付してシェアしてね</div>
+    </div>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>
