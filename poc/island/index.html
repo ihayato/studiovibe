@@ -49,6 +49,46 @@
       -webkit-user-select: text;
     }
 
+    /* スマホの横向きは崩れるため案内で止める（縦向き専用）。
+       判定=横向き×タッチ端末×低い画面。iPad横持ちやPCの横長ウィンドウは対象外 */
+    #rotate-guard {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 98;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: #07070b;
+      color: #f4f2ec;
+      text-align: center;
+      font: 13px/1.9 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+    }
+
+    #rotate-guard .icon {
+      font-size: 40px;
+      transform: rotate(90deg);
+      animation: rotate-nudge 1.6s ease-in-out infinite;
+    }
+
+    @keyframes rotate-nudge {
+      0%, 100% { transform: rotate(90deg); }
+      50% { transform: rotate(0deg); }
+    }
+
+    #rotate-guard .head {
+      font: 700 16px "Shippori Mincho B1", serif;
+      letter-spacing: 0.24em;
+      color: #f0c869;
+    }
+
+    @media (orientation: landscape) and (pointer: coarse) and (max-height: 520px) {
+      #rotate-guard {
+        display: flex;
+      }
+    }
+
     /* 起動失敗時の案内（真っ白/真っ黒のまま放置しない） */
     #boot-error {
       position: fixed;
@@ -1276,6 +1316,7 @@
   <button id="sound" class="off" aria-label="サウンド"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
   <button id="home" aria-label="広場へもどる">もどる</button>
   <div id="pad" aria-hidden="true"><div id="pad-knob"></div></div>
+  <div id="rotate-guard"><div class="icon">📱</div><div class="head">タテ向きでどうぞ</div><div>この島は縦画面専用です</div></div>
   <div id="board-panel">
     <div class="card">
       <button id="board-close">×</button>
