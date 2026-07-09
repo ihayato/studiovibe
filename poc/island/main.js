@@ -39,11 +39,23 @@ scene.fog = new THREE.Fog(0x232c4a, 15, 46); // 青紫の月霧
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 160);
 camera.position.set(2.4, 2.2, 6.8);
 
-// 画面実寸への追従（リスナー登録は末尾・毎秒の照合はanimate内。モバイルのresize取りこぼし対策）
+// 画面実寸への追従（リスナー登録は末尾・毎秒の照合はanimate内）。
+// iOSはwindow.innerHeightが古い値のまま固まることがあるため、visualViewportの実測を唯一の正とし、
+// bodyのサイズ（--app-w/--app-h。HUDのアンカーもbody基準）とレンダラーを両方これで決める
+const viewSize = () => {
+  const vv = window.visualViewport;
+  return {
+    w: Math.round(vv ? vv.width : window.innerWidth),
+    h: Math.round(vv ? vv.height : window.innerHeight),
+  };
+};
 const applySize = () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  const { w, h } = viewSize();
+  document.documentElement.style.setProperty('--app-w', w + 'px');
+  document.documentElement.style.setProperty('--app-h', h + 'px');
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(w, h);
 };
 let sizeCheckT = 0;
 
@@ -2869,8 +2881,10 @@ function animate() {
   sizeCheckT -= dt;
   if (sizeCheckT <= 0) {
     sizeCheckT = 1;
+    const { w, h } = viewSize();
     const el = renderer.domElement;
-    if (el.clientWidth !== window.innerWidth || el.clientHeight !== window.innerHeight) applySize();
+    const appH = document.documentElement.style.getPropertyValue('--app-h');
+    if (el.clientWidth !== w || el.clientHeight !== h || appH !== h + 'px') applySize();
   }
 
   // 操作パッド（アナログ）: 倒した向きへカメラ基準で歩く。倒し具合で速さが変わる
@@ -3393,5 +3407,11 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
 }
 
 addEventListener('resize', applySize);
+addEventListener('orientationchange', () => setTimeout(applySize, 250));
 // iOSはキーボードやURLバーの伸縮をvisualViewport側でしか通知しないことがある
-if (window.visualViewport) window.visualViewport.addEventListener('resize', applySize);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', applySize);
+  window.visualViewport.addEventListener('scroll', applySize);
+}
+applySize(); // 初期表示から実測基準で
+

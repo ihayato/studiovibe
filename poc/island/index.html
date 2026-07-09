@@ -32,10 +32,17 @@
 
     /* iOSのエッジスワイプ等でページごと横に引きずられて戻らなくなるのを防ぐ。
        画面は常に固定し、スクロールはパネル内部だけに許す。
-       長押しのテキスト選択・コールアウトもゲーム画面では全面禁止（入力欄のみ許可） */
+       長押しのテキスト選択・コールアウトもゲーム画面では全面禁止（入力欄のみ許可）。
+       サイズは--app-w/--app-h（JSがvisualViewport実測で毎秒更新）を正とし、
+       transformを与えることでfixed配下のHUDもviewportでなくbody基準に固定する
+       （iOSでレイアウトビューポートが古い値のまま固まる不具合への恒久対策） */
     body {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: var(--app-w, 100%);
+      height: var(--app-h, 100%);
+      transform: translateZ(0);
       touch-action: none;
       user-select: none;
       -webkit-user-select: none;
