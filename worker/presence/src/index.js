@@ -108,6 +108,10 @@ export class Room {
         entry.state.w = fin(m.w, 0, 1);
         entry.state.j = fin(m.j, 0, 20);
         this.broadcast({ t: 'p', id, x: entry.state.x, z: entry.state.z, yaw: entry.state.yaw, w: entry.state.w, j: entry.state.j }, id);
+      } else if (m.t === 'e' && entry.state) {
+        // エモート（頭上の吹き出し）。種類番号だけ中継する
+        const k = Math.max(0, Math.floor(Number(m.k) || 0)) % 8;
+        this.broadcast({ t: 'e', id, k }, id);
       }
     });
 

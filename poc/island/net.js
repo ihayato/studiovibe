@@ -99,7 +99,7 @@ class RemotePeer {
 }
 
 // ---------- 接続本体 ----------
-export function initPresence({ scene, terrainH, identity, getState, onCount, onFull }) {
+export function initPresence({ scene, terrainH, identity, getState, onCount, onFull, onEmote }) {
   const peers = new Map();
   let ws = null;
   let sendTimer = null;
@@ -143,6 +143,9 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
       } else if (m.t === 'p') {
         const p = peers.get(m.id);
         if (p) p.setTarget(m);
+      } else if (m.t === 'e') {
+        const p = peers.get(m.id);
+        if (p && onEmote) onEmote(p, Math.max(0, Math.floor(Number(m.k) || 0)) % 8);
       } else if (m.t === 'bye') {
         const p = peers.get(m.id);
         if (p) { p.dispose(); peers.delete(m.id); notify(); }
@@ -178,5 +181,10 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
       for (const p of peers.values()) p.update(dt, t);
     },
     count: () => peers.size + 1,
+    sendEmote(k) {
+      try {
+        if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ t: 'e', k }));
+      } catch {}
+    },
   };
 }

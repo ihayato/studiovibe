@@ -609,10 +609,28 @@ const cloudLayers = [];
   });
 }
 
+// ---------- 月相と暦（実時間で月が満ち欠けし、特別な夜がある） ----------
+// 既知の新月(2000-01-06 18:14 UTC)からの朔望月で位相を出す。0=新月・0.5=満月
+const MOON_PHASE = (() => {
+  const synodic = 29.530588853 * 86400000;
+  const epoch = Date.UTC(2000, 0, 6, 18, 14);
+  return (((Date.now() - epoch) % synodic) + synodic) % synodic / synodic;
+})();
+// ?night=full/new/meteor で今夜を試せる（検証・プレビュー用）
+const NIGHT_OVERRIDE = new URLSearchParams(location.search).get('night');
+const FULL_MOON_NIGHT = NIGHT_OVERRIDE ? NIGHT_OVERRIDE === 'full' : Math.abs(MOON_PHASE - 0.5) < 0.034; // 満月±約1日
+const NEW_MOON_NIGHT = NIGHT_OVERRIDE ? NIGHT_OVERRIDE === 'new' : (MOON_PHASE < 0.034 || MOON_PHASE > 0.966); // 新月±約1日
+const MOON_ILLUM = FULL_MOON_NIGHT ? 1 : NEW_MOON_NIGHT ? 0.02 : (1 - Math.cos(MOON_PHASE * Math.PI * 2)) / 2; // 照らされ具合 0..1
+// 流星群の夜: JSTの日付シードで決定的に決まる（全員が同じ夜に見る）。約6日に1晩
+const METEOR_NIGHT = NIGHT_OVERRIDE ? NIGHT_OVERRIDE === 'meteor' : (() => {
+  const day = Math.floor((Date.now() + 9 * 3600000) / 86400000);
+  return ((day * 2654435761) >>> 0) % 6 === 0;
+})();
+
 // 流れ星
 const shootingStars = [];
 {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 7; i++) { // 流星群の夜は同時に多く流れるためプールは多めに
     const m = new THREE.Mesh(
       new THREE.PlaneGeometry(2.4, 0.05),
       new THREE.MeshBasicMaterial({ color: 0xeaf4ff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
@@ -623,8 +641,18 @@ const shootingStars = [];
   }
 }
 let nextStarT = 3;
+const spawnShootingStar = () => {
+  const s = shootingStars.find((x) => x.life < 0);
+  if (!s) return;
+  const a = Math.random() * Math.PI * 2;
+  s.mesh.position.set(Math.cos(a) * (24 + Math.random() * 14), 13 + Math.random() * 9, Math.sin(a) * (24 + Math.random() * 14));
+  s.dir.set(-Math.cos(a) * 0.5 + (Math.random() - 0.5), -0.55, -Math.sin(a) * 0.5 + (Math.random() - 0.5)).normalize();
+  s.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), s.dir);
+  s.life = 0;
+};
 
 // 星
+let starMat = null;
 {
   const n = 700;
   const pos = new Float32Array(n * 3);
@@ -637,6 +665,7 @@ let nextStarT = 3;
   const m = new THREE.PointsMaterial({ color: 0xc4cce8, size: 0.2, transparent: true, opacity: 0.9, map: glowSpriteTex, depthWrite: false });
   m.fog = false;
   scene.add(new THREE.Points(g, m));
+  starMat = m; // 新月の夜に濃くするため参照を保持
 }
 
 // 月（クレーターつき・ハロー）
@@ -654,18 +683,43 @@ let nextStarT = 3;
       ctx.arc(x - r * 0.2, y - r * 0.2, r * 0.72, 0, 7);
       ctx.fill();
     }
+    // 月相の欠けをテクスチャに焼き込む（島を向くのはu=0.375付近・u大=見た目の右。実機較正済み）
+    const FRONT_L = 0.125 * w, FRONT_R = 0.625 * w;
+    const darkW = (FRONT_R - FRONT_L) * (1 - MOON_ILLUM);
+    if (darkW > 1) {
+      const waxing = MOON_PHASE < 0.5; // 満ちていく時は左側が欠けている
+      const x0 = waxing ? FRONT_L : FRONT_R - darkW;
+      const DARK = 'rgba(10,10,18,0.92)';
+      ctx.fillStyle = DARK;
+      ctx.fillRect(x0, 0, darkW, h);
+      const edgeX = waxing ? x0 + darkW : x0; // 明暗の境をふわっとさせる
+      const eg = ctx.createLinearGradient(edgeX - 10, 0, edgeX + 10, 0);
+      eg.addColorStop(0, waxing ? DARK : 'rgba(10,10,18,0)');
+      eg.addColorStop(1, waxing ? 'rgba(10,10,18,0)' : DARK);
+      ctx.fillStyle = eg;
+      ctx.fillRect(edgeX - 10, 0, 20, h);
+    }
   });
   const moonMat = new THREE.MeshBasicMaterial({ map: moonTex });
   moonMat.fog = false;
   const moon = new THREE.Mesh(new THREE.SphereGeometry(1.9, 32, 24), moonMat);
   moon.position.set(-14, 9.5, -18);
   scene.add(moon);
-  const haloMat = glowMat(0xf2ead8, 0.14);
+
+  const haloMat = glowMat(0xf2ead8, 0.14 * (0.25 + 0.75 * MOON_ILLUM));
   haloMat.fog = false;
   const halo = new THREE.Mesh(new THREE.CircleGeometry(3.4, 32), haloMat);
   halo.position.copy(moon.position);
   halo.lookAt(0, 2, 0);
   scene.add(halo);
+}
+
+// 夜ごとの表情: 満月=月光と桜がいちだんと明るい／新月=星が濃い
+if (FULL_MOON_NIGHT) key.intensity = 4.2;
+if (NEW_MOON_NIGHT) {
+  key.intensity = 2.9;
+  starMat.size = 0.3;
+  starMat.opacity = 1.0;
 }
 
 // 桜吹雪（ちゃんと花びらの形）
@@ -2024,7 +2078,12 @@ const HOSHIMI_NEAR = { key: 'hoshimi', title: '星見台', jp: '雲海と月を�
 let misakiShot = null;
 const startSpotShot = (def) => {
   if (misakiShot) return; // 演出中の再入禁止（連打でt=0リセットが続きソフトロックするのを防ぐ）
+  // 流星群の夜の星見台: シャッターに向けて流れ星を焚く
+  if (def.key === 'hoshimi' && METEOR_NIGHT) {
+    for (let i = 0; i < 4; i++) setTimeout(spawnShootingStar, 200 + i * 220);
+  }
   misakiShot = {
+    key: def.key,
     t: 0,
     fromPos: camera.position.clone(),
     fromTgt: controls.target.clone(),
@@ -2039,16 +2098,30 @@ const startSpotShot = (def) => {
 };
 // 月見の岬：柵の内側から、月・大樹・桟橋・鳥居を背にする定点
 const MISAKI_SHOT = {
+  key: 'misaki',
   toP: new THREE.Vector3(DECK_POS.x, 0, DECK_POS.z),
   toPos: new THREE.Vector3(DECK_POS.x + PIER_AX * 1.7 + PIER_AZ * 0.95, DECK_TOP + 0.7, DECK_POS.z + PIER_AZ * 1.7 - PIER_AX * 0.95),
   toTgt: new THREE.Vector3(DECK_POS.x + 0.16, DECK_TOP + 0.7, DECK_POS.z - 0.19),
 };
 // 星見台：柵がないので一歩引いた高みから、島と登り道を右に月を左に入れる定点
 const HOSHIMI_SHOT = {
+  key: 'hoshimi',
   toP: new THREE.Vector3(HOSHI_POS.x, 0, HOSHI_POS.z),
   toPos: new THREE.Vector3(HOSHI_POS.x - 0.54, HOSHI_TOP + 0.85, HOSHI_POS.z + 2.54),
   toTgt: new THREE.Vector3(HOSHI_POS.x + 0.08, HOSHI_TOP + 0.55, HOSHI_POS.z - 0.39),
 };
+
+// ---------- 住人リーリー（桟橋の入り口の案内係） ----------
+const lele = createAvatar('lele', 0); // 正典の赤バンダナ
+const LELE_POS = new THREE.Vector3(3.4, 0, 5.4);
+const LELE_HOME_YAW = Math.atan2(-LELE_POS.x, -LELE_POS.z); // ふだんは広場の方を向く
+lele.group.position.set(LELE_POS.x, terrainH(LELE_POS.x, LELE_POS.z), LELE_POS.z);
+lele.group.rotation.y = LELE_HOME_YAW;
+lele.group.add(makeNameLabel('リーリー'));
+scene.add(lele.group);
+addObstacle(LELE_POS.x, LELE_POS.z, 0.3);
+const LELE_NEAR = { key: 'lele', title: 'リーリー', jp: '島の案内係', go: '🐼 リーリーとはなす' };
+let leleLineIdx = 0;
 
 // ---------- タルト ----------
 const identity = loadIdentity(); // 端末ごとの二つ名と甲羅色（初回にランダム抽選）
@@ -2308,6 +2381,15 @@ setTimeout(() => {
   if (introIsFirstVisit) openIntro();
 }, 3400);
 
+// 特別な夜の知らせ（毎回。今夜の空を見上げる理由になる）
+setTimeout(() => {
+  const nights = [];
+  if (FULL_MOON_NIGHT) nights.push('今夜は満月。桜がいちだんと明るい');
+  if (NEW_MOON_NIGHT) nights.push('今夜は新月。星がよく見える');
+  if (METEOR_NIGHT) nights.push('今夜は流星群。星見台へどうぞ');
+  if (nights.length) showToast('🌙 ' + nights.join('<br>'), 6000);
+}, 12000);
+
 // ベータのお知らせ（導入カードを見ない再訪者に、一度だけ）
 const BETA_NOTICE_KEY = 'vibe.island.beta.v1';
 setTimeout(() => {
@@ -2328,6 +2410,7 @@ const flashEl = document.getElementById('flash');
 const photoModal = document.getElementById('photo-modal');
 const photoImg = document.getElementById('photo-img');
 let photoUrl = '';
+let lastShotKey = ''; // 直前の撮影スポット（流星群の夜の星見台写真に銘を入れる）
 const takePhoto = () => {
   sound.se.shutter();
   renderer.render(scene, camera); // 最新フレームを確実に焼く
@@ -2352,6 +2435,17 @@ const takePhoto = () => {
   c2.fillStyle = '#7be0ff';
   c2.font = `700 ${Math.round(Math.min(pad * 0.5, cv.width * 0.031))}px Futura, "Avenir Next", sans-serif`;
   c2.fillText('VIBES INTO WORLDS.', cv.width - pad, cv.height - pad * 0.95);
+  // 流星群の夜に星見台で撮った一枚だけの銘（写真右上にスタンプ風）
+  if (lastShotKey === 'hoshimi' && METEOR_NIGHT) {
+    c2.textAlign = 'right';
+    c2.fillStyle = '#f0c869';
+    c2.shadowColor = 'rgba(0,0,0,0.8)';
+    c2.shadowBlur = 10;
+    c2.font = `700 ${Math.round(Math.min(pad * 0.5, cv.width * 0.032))}px "Shippori Mincho B1", serif`;
+    c2.fillText('☆ 流星群の夜', cv.width - pad, pad * 1.4);
+    c2.shadowBlur = 0;
+  }
+  lastShotKey = '';
   photoUrl = cv.toDataURL('image/png');
   if (photoImg) photoImg.src = photoUrl;
   if (flashEl) {
@@ -2650,6 +2744,10 @@ if (hintEl) {
       startSpotShot(HOSHIMI_SHOT);
       return;
     }
+    if (currentNear.key === 'lele') {
+      leleSpeak();
+      return;
+    }
     openPanel(currentNear.key);
   });
 }
@@ -2830,12 +2928,79 @@ if (mintSubmitBtn) {
   });
 }
 
+// ---------- エモート（頭上の吹き出し。自分にも、すれ違った旅人にも見える） ----------
+const EMOTES = ['♪', '💗', '✨', '🌙'];
+const emoteTexes = EMOTES.map((ch) => canvasTex(128, 128, (ctx, w, h) => {
+  // 白い吹き出し＋しっぽ
+  ctx.fillStyle = 'rgba(250,248,244,0.96)';
+  ctx.strokeStyle = 'rgba(30,24,36,0.85)';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.roundRect(10, 6, w - 20, h - 40, 26);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(w / 2 - 12, h - 36);
+  ctx.lineTo(w / 2 + 12, h - 36);
+  ctx.lineTo(w / 2, h - 12);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '58px "Zen Maru Gothic", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#3a2c46';
+  ctx.fillText(ch, w / 2, h / 2 - 14);
+}));
+const emoteAnims = new Map(); // group -> { sprite, t, life, aspect, disposable }
+const showEmoteOn = (group, k) => {
+  const old = emoteAnims.get(group);
+  if (old) group.remove(old.sprite);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: emoteTexes[k % EMOTES.length], transparent: true, depthWrite: false }));
+  sprite.position.y = 1.72;
+  sprite.scale.set(0.01, 0.01, 1);
+  group.add(sprite);
+  emoteAnims.set(group, { sprite, t: 0, life: 2.0, sx: 0.62, sy: 0.62, disposable: false });
+};
+// テキストの吹き出し（リーリーの会話など。テクスチャは使い捨てなので消える時に破棄）
+const showSpeechOn = (group, text) => {
+  const old = emoteAnims.get(group);
+  if (old) group.remove(old.sprite);
+  const tex = canvasTex(512, 128, (ctx, w, h) => {
+    ctx.fillStyle = 'rgba(250,248,244,0.96)';
+    ctx.strokeStyle = 'rgba(30,24,36,0.85)';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.roundRect(8, 6, w - 16, h - 38, 22);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 12, h - 34);
+    ctx.lineTo(w / 2 + 12, h - 34);
+    ctx.lineTo(w / 2, h - 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = '700 30px "Zen Maru Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#3a2c46';
+    ctx.fillText(text, w / 2, (h - 32) / 2 + 4, w - 44);
+  });
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
+  sprite.position.y = 1.78;
+  sprite.scale.set(0.01, 0.01, 1);
+  group.add(sprite);
+  emoteAnims.set(group, { sprite, t: 0, life: 4.2, sx: 1.5, sy: 0.375, disposable: true });
+};
+
 // ---------- プレゼンス（島にいる他の訪問者） ----------
 const visitorsEl = document.getElementById('visitors');
 const presence = initPresence({
   scene,
   terrainH,
   identity,
+  onEmote: (peer, k) => showEmoteOn(peer.g, k),
   getState: () => ({
     x: tarte.group.position.x,
     z: tarte.group.position.z,
@@ -2850,6 +3015,53 @@ const presence = initPresence({
     showToast(`いま島は満員（${Number(max) || 3}人）みたい<br>ほかの旅人が帰ったらまた会えるよ`, 6000);
   },
 });
+
+// リーリーの語り（特別な夜はそれを真っ先に教えてくれる）
+const leleSpeak = () => {
+  const lines = [];
+  if (METEOR_NIGHT) lines.push('今夜は流星群！星見台へ行ってみて');
+  if (FULL_MOON_NIGHT) lines.push('今夜は満月。桜がすごいことになってる');
+  if (NEW_MOON_NIGHT) lines.push('今夜は新月。星がいちばんきれいな夜');
+  lines.push(
+    'ようこそ、夜の島へ。ぼくはリーリー',
+    'この先は光の桟橋。月見の岬へ続いてるよ',
+    '緋い鳥居の奥で「月蝕綺譚」が見られるんだ',
+    '七つのかけらを集めると、いいことがあるよ',
+    '旅人の帳に、ひとこと残していってね'
+  );
+  showSpeechOn(lele.group, lines[leleLineIdx++ % lines.length]);
+  sound.se.ui();
+};
+
+// ---------- エモートUI（ボタン→ピッカー→送信） ----------
+const emoteBtn = document.getElementById('emote');
+const emoteRow = document.getElementById('emote-row');
+let lastEmoteAt = 0;
+if (emoteBtn && emoteRow) {
+  EMOTES.forEach((ch, k) => {
+    const b = document.createElement('button');
+    b.className = 'emote-opt';
+    b.textContent = ch;
+    b.addEventListener('pointerdown', (e) => e.stopPropagation());
+    b.addEventListener('click', () => {
+      emoteRow.classList.remove('show');
+      const now = performance.now();
+      if (now - lastEmoteAt < 600) return; // 連打はふわっと無視
+      lastEmoteAt = now;
+      showEmoteOn(tarte.group, k);
+      presence.sendEmote(k);
+      sound.se.emote();
+    });
+    emoteRow.appendChild(b);
+  });
+  emoteBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+  emoteBtn.addEventListener('click', () => {
+    emoteRow.classList.toggle('show');
+    sound.se.ui();
+  });
+  // 島のどこかをタップしたらピッカーは畳む
+  renderer.domElement.addEventListener('pointerdown', () => emoteRow.classList.remove('show'));
+}
 
 // ---------- animation ----------
 const clock = new THREE.Clock();
@@ -3033,6 +3245,33 @@ function animate() {
   tarte.update(dt, t, w, walkPhase, yawVel);
   presence.update(dt, t);
 
+  // 吹き出しのアニメ（ぽんっと出て、ふわっと消える）
+  for (const [g, a] of emoteAnims) {
+    a.t += dt;
+    const pop = Math.min(1, a.t / 0.18) * (1.2 - 0.2 * Math.min(1, a.t / 0.18));
+    a.sprite.scale.set(a.sx * pop, a.sy * pop, 1);
+    a.sprite.position.y = (a.sy < a.sx ? 1.78 : 1.72) + a.t * 0.06;
+    const fadeAt = a.life - 0.5;
+    a.sprite.material.opacity = a.t < fadeAt ? 1 : Math.max(0, 1 - (a.t - fadeAt) / 0.5);
+    if (a.t > a.life) {
+      g.remove(a.sprite);
+      if (a.disposable) {
+        a.sprite.material.map.dispose();
+        a.sprite.material.dispose();
+      }
+      emoteAnims.delete(g);
+    }
+  }
+
+  // リーリーの佇まい（近くに旅人が来るとそちらを向く）
+  {
+    const ldx = pos.x - LELE_POS.x, ldz = pos.z - LELE_POS.z;
+    const ld = Math.hypot(ldx, ldz);
+    const targetYaw = ld < 3 ? Math.atan2(ldx, ldz) : LELE_HOME_YAW;
+    lele.group.rotation.y = lerpAngle(lele.group.rotation.y, targetYaw, Math.min(1, dt * 3));
+    lele.update(dt, t, 0, 0, 0);
+  }
+
   // 足場の高さにはカメラも滑らかについていく（浮灯籠を登るほどタルトが画面上端に張り付くのを防ぐ）
   if (grounded) camGroundTargetY = py;
   {
@@ -3072,6 +3311,7 @@ function animate() {
   if (!near && Math.hypot(pos.x, pos.z) < 2.05) near = STUDIO_NEAR;
   if (!near && Math.hypot(pos.x - DECK_POS.x, pos.z - DECK_POS.z) < DECK_WALK_R + 0.15) near = MISAKI_NEAR;
   if (!near && Math.hypot(pos.x - HOSHI_POS.x, pos.z - HOSHI_POS.z) < HOSHI_WALK_R + 0.2) near = HOSHIMI_NEAR;
+  if (!near && Math.hypot(pos.x - LELE_POS.x, pos.z - LELE_POS.z) < 1.5) near = LELE_NEAR;
   currentNear = near;
   // 足元リング: 常時ゆっくり脈動し、円の中にいるあいだは強く発光する
   for (const zrs of zoneRings) {
@@ -3200,15 +3440,9 @@ function animate() {
   // 流れ星
   nextStarT -= dt;
   if (nextStarT <= 0) {
-    const s = shootingStars.find((x) => x.life < 0);
-    if (s) {
-      const a = Math.random() * Math.PI * 2;
-      s.mesh.position.set(Math.cos(a) * (24 + Math.random() * 14), 13 + Math.random() * 9, Math.sin(a) * (24 + Math.random() * 14));
-      s.dir.set(-Math.cos(a) * 0.5 + (Math.random() - 0.5), -0.55, -Math.sin(a) * 0.5 + (Math.random() - 0.5)).normalize();
-      s.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), s.dir);
-      s.life = 0;
-    }
-    nextStarT = 4 + Math.random() * 5;
+    spawnShootingStar();
+    // 流星群の夜はひっきりなしに流れる
+    nextStarT = METEOR_NIGHT ? 0.3 + Math.random() * 0.7 : 4 + Math.random() * 5;
   }
   for (const s of shootingStars) {
     if (s.life < 0) continue;
@@ -3240,8 +3474,9 @@ function animate() {
   // 花冠の呼吸（周期4秒・±15%）＋音楽レベルで加算発光
   {
     const breathe = Math.sin(t * (Math.PI / 2)) * 0.15;
-    sakuraTree.userData.crownMat.emissiveIntensity = 0.35 * (1 + breathe) + musicLevel * 0.4;
-    blossomLight.intensity = 2.2 * (1 + breathe * 0.6) + musicLevel * 1.6;
+    const moonGlow = FULL_MOON_NIGHT ? 1.4 : 1; // 満月の夜は桜がいちだんと明るい
+    sakuraTree.userData.crownMat.emissiveIntensity = (0.35 * (1 + breathe) + musicLevel * 0.4) * moonGlow;
+    blossomLight.intensity = (2.2 * (1 + breathe * 0.6) + musicLevel * 1.6) * moonGlow;
   }
 
   // 花びらの分光ストリーム（大樹の花冠→各館へ流れ、道の色に染まっていく）
@@ -3285,6 +3520,7 @@ function animate() {
     mp.z = misakiShot.fromP.z + (misakiShot.toP.z - misakiShot.fromP.z) * k;
     tarte.group.rotation.y = lerpAngle(tarte.group.rotation.y, Math.atan2(misakiShot.toPos.x - mp.x, misakiShot.toPos.z - mp.z), Math.min(1, dt * 6));
     if (misakiShot.t >= 1.15) {
+      lastShotKey = misakiShot.key || '';
       misakiShot = null;
       takePhoto();
     }

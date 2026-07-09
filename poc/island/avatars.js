@@ -1,6 +1,7 @@
 // アバターレジストリ — 島に立てるCNPキャラの台帳。
 // 新キャラは create(variant) を実装してここに1行足すだけで、通信・表示側はそのまま動く。
 import { createTarte, SHELLS } from './tarte.js';
+import { createLele, BANDANAS } from './lele.js';
 
 export const AVATARS = {
   tarte: {
@@ -8,7 +9,11 @@ export const AVATARS = {
     variants: SHELLS.length, // 甲羅の色バリアント数
     create: (v) => createTarte({ shell: v }),
   },
-  // 将来: 他のCNPキャラをここに登録（例 leelee: { label:'リーリー', variants:…, create:… }）
+  lele: {
+    label: 'リーリー',
+    variants: BANDANAS.length, // バンダナの色バリアント数
+    create: (v) => createLele({ bandana: v }),
+  },
 };
 
 export function createAvatar(char, variant) {

@@ -845,6 +845,66 @@
       transform: scale(0.9);
     }
 
+    /* エモート（頭上の吹き出し）ボタンとピッカー */
+    #emote {
+      position: fixed;
+      left: 22px;
+      bottom: 74px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(244, 143, 184, 0.5);
+      background: rgba(10, 10, 18, 0.72);
+      font: 22px/1 "Zen Maru Gothic", sans-serif;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease;
+    }
+
+    #emote:active {
+      transform: scale(0.9);
+    }
+
+    #emote-row {
+      position: fixed;
+      left: 22px;
+      bottom: 136px;
+      display: none;
+      gap: 8px;
+      z-index: 6;
+    }
+
+    #emote-row.show {
+      display: flex;
+    }
+
+    .emote-opt {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(244, 143, 184, 0.6);
+      background: rgba(16, 12, 22, 0.9);
+      font: 22px/1 "Zen Maru Gothic", sans-serif;
+      color: #f4f2ec;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    body.pad-on #emote {
+      left: 152px;
+      bottom: 88px;
+    }
+
+    body.pad-on #emote-row {
+      left: 152px;
+      bottom: 150px;
+    }
+
     /* アスレチック用の操作パッド（タッチ端末×登り道エリアのみ出現） */
     #pad {
       position: fixed;
@@ -1323,6 +1383,8 @@
   <button id="sound" class="off" aria-label="サウンド"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
   <button id="home" aria-label="広場へもどる">もどる</button>
   <div id="pad" aria-hidden="true"><div id="pad-knob"></div></div>
+  <button id="emote" aria-label="エモート">💬</button>
+  <div id="emote-row"></div>
   <div id="rotate-guard"><div class="icon">📱</div><div class="head">タテ向きでどうぞ</div><div>この島は縦画面専用です</div></div>
   <div id="board-panel">
     <div class="card">

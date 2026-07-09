@@ -132,6 +132,7 @@ export function createSound() {
       tone(880, { glide: 440, dur: 0.22, peak: 0.1 });
       tone(587, { glide: 1174, dur: 0.34, peak: 0.12, delay: 0.12 });
     },
+    emote: () => tone(784, { glide: 1046, dur: 0.14, peak: 0.12 }),
   };
 
   return {
