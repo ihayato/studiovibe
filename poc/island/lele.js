@@ -78,8 +78,36 @@ export function createLele(opts = {}) {
   const faceOpen = canvasTex(1024, 512, (c, w, h) => drawLeleFace(c, w, h, false));
   const faceClosed = canvasTex(1024, 512, (c, w, h) => drawLeleFace(c, w, h, true));
 
+  // 胴テクスチャ＝三角布を球面に直描き（板ポリは横から浮いて見えるため。体の丸みに完全に沿う）
+  const bandHex = '#' + band.color.toString(16).padStart(6, '0');
+  const torsoTex = canvasTex(1024, 512, (ctx, w, h) => {
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(0, 0, w, h);
+    const cx = w * 0.25; // 球の正面はu=0.25（顔と同じ）
+    const topY = h * 0.24, tipY = h * 0.62, hw = w * 0.115;
+    ctx.fillStyle = bandHex;
+    ctx.strokeStyle = '#16141a';
+    ctx.lineWidth = 9;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx - hw, topY);
+    ctx.lineTo(cx + hw, topY);
+    ctx.lineTo(cx, tipY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    // 布の折り目（参照画の濃い赤の陰）
+    ctx.strokeStyle = 'rgba(90, 20, 28, 0.55)';
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(cx - hw * 0.55, topY + 14);
+    ctx.lineTo(cx - hw * 0.12, topY + (tipY - topY) * 0.42);
+    ctx.stroke();
+  });
+
   const M = {
     face: toon(0xffffff, faceOpen),
+    torso: toon(0xffffff, torsoTex),
     white: toon(0xf6f6f4),
     black: toon(0x2b2830),
     pad: toon(0x4a4650),
@@ -111,7 +139,7 @@ export function createLele(opts = {}) {
   // 胴（白・おなかも白）
   const body = new THREE.Group();
   group.add(body);
-  const torso = mesh(new THREE.SphereGeometry(0.27, 48, 36), M.white, 0, 0.34, 0);
+  const torso = mesh(new THREE.SphereGeometry(0.27, 48, 36), M.torso, 0, 0.34, 0);
   torso.scale.set(1, 0.95, 0.85);
   body.add(torso);
   const tail = mesh(new THREE.SphereGeometry(0.06, 16, 12), M.white, 0, 0.22, -0.22);
@@ -154,17 +182,7 @@ export function createLele(opts = {}) {
   neck.scale.set(1, 1, 0.85);
   neck.userData.noOutline = true; // 胴に食い込む帯はハル輪郭が白地に筋を引く
   body.add(neck);
-  // 三角布＝平らな三角形の板を胸の面に沿わせて浮かせる（立体コーンは胴が突き抜ける）
-  const tri = new THREE.Shape();
-  tri.moveTo(-0.185, 0);
-  tri.lineTo(0.185, 0);
-  tri.lineTo(0, -0.3);
-  tri.closePath();
-  const kerMat = new THREE.MeshToonMaterial({ color: band.color, gradientMap: M.bandana.gradientMap, side: THREE.DoubleSide });
-  const kerchief = mesh(new THREE.ShapeGeometry(tri), kerMat, 0, 0.52, 0.245);
-  kerchief.rotation.x = -0.12; // 上端を体側へ＝胸の傾きに沿わせる（胴の最大膨らみz≈0.23より常に前）
-  kerchief.userData.noOutline = true; // 薄板のハル輪郭は破綻するため付けない
-  body.add(kerchief);
+  // 三角布は胴テクスチャ(torsoTex)に直描き＝立体を足さない
 
   addOutlines(group);
 
