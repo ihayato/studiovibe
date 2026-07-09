@@ -4,6 +4,8 @@ import { resolve } from 'path'
 export default defineConfig({
     build: {
         target: 'es2022', // 島(main.js)のトップレベルawaitのため
+        // HUDボタン等の小さなUI画像(9〜13KB)をdata URIで埋め込み、モバイル回線での読み込み失敗を根絶する
+        assetsInlineLimit: 16384,
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'index.html'),
