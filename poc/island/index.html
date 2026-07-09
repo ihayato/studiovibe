@@ -780,9 +780,13 @@
       border: 1px solid rgba(240, 200, 105, 0.6);
     }
 
-    /* パッド表示中は「もどる」を上へ逃がす */
+    /* パッド表示中は「もどる」とヒントピルを操作段の上へ逃がす */
     body.pad-on #home {
       bottom: 216px;
+    }
+
+    body.pad-on #hint {
+      bottom: 304px; /* 右列ボタン群（帳/📷/JUMP）よりも上 */
     }
 
     /* 旅人の帳（島の掲示板HUD） */
@@ -1106,6 +1110,10 @@
         width: 52px;
         height: 52px;
         top: 76px;
+      }
+
+      body.pad-on #hint {
+        bottom: 392px;
       }
 
       #home {
