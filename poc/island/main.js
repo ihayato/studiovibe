@@ -2930,27 +2930,27 @@ if (mintSubmitBtn) {
 
 // ---------- エモート（頭上の吹き出し。自分にも、すれ違った旅人にも見える） ----------
 const EMOTES = ['♪', '💗', '✨', '🌙'];
-const emoteTexes = EMOTES.map((ch) => canvasTex(128, 128, (ctx, w, h) => {
-  // 白い吹き出し＋しっぽ
-  ctx.fillStyle = 'rgba(250,248,244,0.96)';
-  ctx.strokeStyle = 'rgba(30,24,36,0.85)';
-  ctx.lineWidth = 5;
+const emoteTexes = EMOTES.map((ch) => canvasTex(256, 256, (ctx, w, h) => {
+  // 名前ラベルと同じダーク調の丸吹き出し（白箱は世界のUIから浮く）。高解像度でボケ防止
+  ctx.fillStyle = 'rgba(10, 10, 18, 0.68)';
+  ctx.strokeStyle = 'rgba(244, 242, 236, 0.4)';
+  ctx.lineWidth = 4;
   ctx.beginPath();
-  ctx.roundRect(10, 6, w - 20, h - 40, 26);
+  ctx.arc(w / 2, h / 2 - 24, 88, 0, 7);
   ctx.fill();
   ctx.stroke();
+  // 小さなしっぽ
   ctx.beginPath();
-  ctx.moveTo(w / 2 - 12, h - 36);
-  ctx.lineTo(w / 2 + 12, h - 36);
-  ctx.lineTo(w / 2, h - 12);
+  ctx.moveTo(w / 2 - 14, h / 2 + 58);
+  ctx.lineTo(w / 2 + 14, h / 2 + 58);
+  ctx.lineTo(w / 2, h / 2 + 90);
   ctx.closePath();
   ctx.fill();
-  ctx.stroke();
-  ctx.font = '58px "Zen Maru Gothic", sans-serif';
+  ctx.font = '92px "Zen Maru Gothic", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#3a2c46';
-  ctx.fillText(ch, w / 2, h / 2 - 14);
+  ctx.fillStyle = '#f4f2ec';
+  ctx.fillText(ch, w / 2, h / 2 - 20);
 }));
 const emoteAnims = new Map(); // group -> { sprite, t, life, aspect, disposable }
 const showEmoteOn = (group, k) => {
@@ -2960,18 +2960,19 @@ const showEmoteOn = (group, k) => {
   sprite.position.y = 1.72;
   sprite.scale.set(0.01, 0.01, 1);
   group.add(sprite);
-  emoteAnims.set(group, { sprite, t: 0, life: 2.0, sx: 0.62, sy: 0.62, disposable: false });
+  emoteAnims.set(group, { sprite, t: 0, life: 2.0, sx: 0.42, sy: 0.42, disposable: false });
 };
 // テキストの吹き出し（リーリーの会話など。テクスチャは使い捨てなので消える時に破棄）
 const showSpeechOn = (group, text) => {
   const old = emoteAnims.get(group);
   if (old) group.remove(old.sprite);
   const tex = canvasTex(512, 128, (ctx, w, h) => {
-    ctx.fillStyle = 'rgba(250,248,244,0.96)';
-    ctx.strokeStyle = 'rgba(30,24,36,0.85)';
-    ctx.lineWidth = 5;
+    // エモートと同じダーク調で統一
+    ctx.fillStyle = 'rgba(10, 10, 18, 0.68)';
+    ctx.strokeStyle = 'rgba(244, 242, 236, 0.4)';
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.roundRect(8, 6, w - 16, h - 38, 22);
+    ctx.roundRect(8, 6, w - 16, h - 38, 42);
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
@@ -2980,11 +2981,10 @@ const showSpeechOn = (group, text) => {
     ctx.lineTo(w / 2, h - 10);
     ctx.closePath();
     ctx.fill();
-    ctx.stroke();
     ctx.font = '700 30px "Zen Maru Gothic", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#3a2c46';
+    ctx.fillStyle = '#f4f2ec';
     ctx.fillText(text, w / 2, (h - 32) / 2 + 4, w - 44);
   });
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
