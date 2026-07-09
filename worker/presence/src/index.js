@@ -270,7 +270,7 @@ export class Board {
     const text = String(m.text || '').replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
     const name = String(m.name || '旅人').slice(0, 12);
     const v = Math.max(0, Math.floor(Number(m.v) || 0)) % 32;
-    if (!text || text.length > 80) return json({ error: 'bad' }, 400);
+    if (!text || text.length > 20) return json({ error: 'bad' }, 400); // 一言の帳＝20字まで
     if (hasNg(text) || hasNg(name) || looksLikeUrl(text) || looksLikeUrl(name) || longDigits(text) || longDigits(name)) {
       return json({ error: 'ng' }, 400);
     }

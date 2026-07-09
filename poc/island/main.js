@@ -2470,7 +2470,7 @@ const sendBoardPost = async () => {
       return;
     }
     boardInput.value = '';
-    if (boardCountEl) boardCountEl.textContent = '0/80';
+    if (boardCountEl) boardCountEl.textContent = '0/20';
     sound.se.post();
     await openBoard(); // 最新を読み直す
   } catch {
@@ -2496,7 +2496,7 @@ addEventListener('keydown', (e) => {
 });
 if (boardInput) {
   boardInput.addEventListener('input', () => {
-    if (boardCountEl) boardCountEl.textContent = `${boardInput.value.length}/80`;
+    if (boardCountEl) boardCountEl.textContent = `${boardInput.value.length}/20`;
   });
   boardInput.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') e.stopPropagation(); // 入力中のWASD/Spaceで歩き出さないように（ESCは閉じるへ通す）
