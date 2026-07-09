@@ -56,7 +56,15 @@ controls.maxDistance = 15;
 controls.maxPolarAngle = 1.5;
 controls.enablePan = false;
 let lastManualOrbit = -10;
-controls.addEventListener('start', () => (lastManualOrbit = clock ? clock.elapsedTime : 0));
+let orbiting = false; // ユーザーがカメラ操作中か（望みの距離の更新に使う）
+let camDesiredDist = camera.position.distanceTo(controls.target); // カメラの「望みの距離」（遮蔽で寄せられても、晴れたらここへ戻す）
+controls.addEventListener('start', () => {
+  lastManualOrbit = clock ? clock.elapsedTime : 0;
+  orbiting = true;
+});
+controls.addEventListener('end', () => {
+  orbiting = false;
+});
 
 // ---------- lights ----------
 scene.add(new THREE.HemisphereLight(0x8ea2d8, 0x3d4a66, 0.55)); // 月夜の環境光
@@ -1555,6 +1563,7 @@ const goHome = () => {
   tarte.group.rotation.y = Math.PI;
   controls.target.set(0, 0.6, 3.2);
   camera.position.set(2.4, 2.6, 7.4);
+  camDesiredDist = camera.position.distanceTo(controls.target);
   camGroundY = camGroundTargetY = py; // カメラの接地面追従もここへ揃える（後からぬるっと滑らない）
   prevPos.copy(pos);
   spawnBurst(0, 3.2, 0xf48fb8);
@@ -3269,17 +3278,27 @@ function animate() {
 
   controls.update();
 
-  // カメラの建物めり込み対策（注視点→カメラのレイで遮蔽物より手前に寄せる）
+  // カメラの建物めり込み対策（注視点→カメラのレイで遮蔽物より手前に寄せる）。
+  // 寄せは一時的なもの: 「望みの距離」を別に覚えておき、遮蔽が晴れたらそっと戻す
+  // （戻さないと寄せがラチェット式に蓄積して、回しているだけでどんどんズームしてしまう）
   {
     const camDir = new THREE.Vector3().subVectors(camera.position, controls.target);
-    const camDist = camDir.length();
-    raycaster.set(controls.target, camDir.clone().normalize());
+    let camDist = camDir.length();
+    camDir.normalize();
+    raycaster.set(controls.target, camDir);
     raycaster.far = camDist;
     const hits = raycaster.intersectObjects(camColliders, false);
     raycaster.far = Infinity;
-    if (hits.length) {
-      const d = Math.max(0.6, hits[0].distance * 0.9);
-      camera.position.copy(controls.target).addScaledVector(camDir.normalize(), d);
+    const blocked = hits.length > 0;
+    if (orbiting && !blocked && !misakiShot) {
+      camDesiredDist = THREE.MathUtils.clamp(camDist, controls.minDistance, controls.maxDistance);
+    }
+    if (blocked) {
+      camDist = Math.max(0.6, hits[0].distance * 0.9);
+      camera.position.copy(controls.target).addScaledVector(camDir, camDist);
+    } else if (!misakiShot && camDist < camDesiredDist - 0.01) {
+      camDist = Math.min(camDesiredDist, camDist + (camDesiredDist - camDist) * Math.min(1, dt * 2.2));
+      camera.position.copy(controls.target).addScaledVector(camDir, camDist);
     }
   }
 
@@ -3353,6 +3372,7 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
     grounded = true;
     camGroundY = camGroundTargetY = py;
     controls.target.set(v.x, py + 0.6, v.z);
+    camDesiredDist = 4.7;
     if (fx !== undefined) {
       // 注視点fx,fzを正面に見る位置へカメラを回す
       const back = new THREE.Vector3(v.x - fx, 0, v.z - fz).normalize().multiplyScalar(4.2);

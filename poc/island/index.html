@@ -31,11 +31,55 @@
     }
 
     /* iOSのエッジスワイプ等でページごと横に引きずられて戻らなくなるのを防ぐ。
-       画面は常に固定し、スクロールはパネル内部だけに許す */
+       画面は常に固定し、スクロールはパネル内部だけに許す。
+       長押しのテキスト選択・コールアウトもゲーム画面では全面禁止（入力欄のみ許可） */
     body {
       position: fixed;
       inset: 0;
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input,
+    textarea {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* 起動失敗時の案内（真っ白/真っ黒のまま放置しない） */
+    #boot-error {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 24px;
+      background: #07070b;
+      color: #f4f2ec;
+      text-align: center;
+      font: 13px/1.9 "Zen Maru Gothic", "Hiragino Sans", sans-serif;
+    }
+
+    #boot-error .head {
+      font: 700 17px "Shippori Mincho B1", serif;
+      letter-spacing: 0.2em;
+      color: #f0c869;
+    }
+
+    #boot-error button {
+      padding: 10px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 200, 105, 0.7);
+      background: transparent;
+      color: #f4f2ec;
+      font: 700 13px "Zen Maru Gothic", sans-serif;
+      cursor: pointer;
     }
 
     canvas {
@@ -1258,6 +1302,32 @@
       <div class="tip">保存した画像をポストに添付してシェアしてね</div>
     </div>
   </div>
+  <script>
+    // 起動見張り: 一定時間たってもcanvasが生えなければ案内を出す（古いWebView・アプリ内ブラウザ対策）。
+    // moduleが読めない環境でも動くよう、ここは古い書き方で書く。
+    (function () {
+      var shown = false;
+      function bootFail() {
+        if (shown || document.querySelector('canvas')) return;
+        shown = true;
+        var d = document.createElement('div');
+        d.id = 'boot-error';
+        d.innerHTML = '<div class="head">島をひらけませんでした</div>' +
+          '<div>最新の Chrome / Safari でひらき直してみてください。<br>アプリの中のブラウザで見ている場合は、<br>メニューから「ブラウザで開く」を選ぶとひらけます。</div>' +
+          '<button onclick="location.reload()">もういちど</button>';
+        document.body.appendChild(d);
+        // 遅れて起動に成功したら案内を引っ込める
+        var iv = setInterval(function () {
+          if (document.querySelector('canvas')) {
+            d.remove();
+            clearInterval(iv);
+          }
+        }, 1000);
+      }
+      window.addEventListener('error', function () { setTimeout(bootFail, 200); });
+      setTimeout(bootFail, 9000);
+    })();
+  </script>
   <script type="module" src="./main.js"></script>
 </body>
 
