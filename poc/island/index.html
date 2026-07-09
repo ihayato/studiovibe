@@ -745,6 +745,52 @@
       transform: scale(0.9);
     }
 
+    /* アスレチック用の操作パッド（タッチ端末×登り道エリアのみ出現） */
+    #pad {
+      position: fixed;
+      left: 16px;
+      bottom: 72px;
+      width: 124px;
+      height: 124px;
+      border-radius: 50%;
+      background: rgba(10, 10, 18, 0.45);
+      border: 1px solid rgba(240, 200, 105, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 5;
+    }
+
+    #pad.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #pad-knob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 54px;
+      height: 54px;
+      margin: -27px 0 0 -27px;
+      border-radius: 50%;
+      background: rgba(240, 200, 105, 0.22);
+      border: 1px solid rgba(240, 200, 105, 0.6);
+    }
+
+    /* パッド表示中は左下の同居ボタンを整理（鈴は退避・もどるは上へ） */
+    body.pad-on #sound {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.pad-on #home {
+      bottom: 216px;
+    }
+
     /* 旅人の帳（島の掲示板HUD） */
     #board {
       position: fixed;
@@ -1173,6 +1219,7 @@
   <button id="board" aria-label="旅人の帳"></button>
   <button id="sound" class="off" aria-label="サウンド"></button>
   <button id="home" aria-label="広場へもどる">もどる</button>
+  <div id="pad" aria-hidden="true"><div id="pad-knob"></div></div>
   <div id="board-panel">
     <div class="card">
       <button id="board-close">×</button>

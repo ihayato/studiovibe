@@ -2164,6 +2164,54 @@ if (jumpBtn) {
   });
 }
 
+// ---------- アスレチック用の操作パッド（タッチ端末のみ・登り道エリアで出現） ----------
+const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || new URLSearchParams(location.search).has('pad'); // ?pad でPCでも確認できる
+const padEl = document.getElementById('pad');
+const padKnob = document.getElementById('pad-knob');
+const padVec = { x: 0, y: 0 }; // -1..1（画面基準。yは下が正）
+if (padEl && padKnob) {
+  const PAD_R = 44;
+  let padPointer = null;
+  const setKnob = (dx, dy) => {
+    padKnob.style.transform = `translate(${dx}px, ${dy}px)`;
+  };
+  const updateFromEvent = (e) => {
+    const r = padEl.getBoundingClientRect();
+    let dx = e.clientX - (r.left + r.width / 2);
+    let dy = e.clientY - (r.top + r.height / 2);
+    const d = Math.hypot(dx, dy);
+    if (d > PAD_R) {
+      dx *= PAD_R / d;
+      dy *= PAD_R / d;
+    }
+    setKnob(dx, dy);
+    padVec.x = dx / PAD_R;
+    padVec.y = dy / PAD_R;
+  };
+  padEl.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    padPointer = e.pointerId;
+    try { padEl.setPointerCapture(e.pointerId); } catch {}
+    updateFromEvent(e);
+  });
+  padEl.addEventListener('pointermove', (e) => {
+    if (e.pointerId === padPointer) updateFromEvent(e);
+  });
+  const padEnd = (e) => {
+    if (e.pointerId !== padPointer) return;
+    padPointer = null;
+    padVec.x = 0;
+    padVec.y = 0;
+    setKnob(0, 0);
+    // 離したらその場でぴたっと止まる（足場の縁で止まれるように）
+    target.copy(tarte.group.position);
+    moving = false;
+  };
+  padEl.addEventListener('pointerup', padEnd);
+  padEl.addEventListener('pointercancel', padEnd);
+}
+
 // ---------- HUD ----------
 const hintEl = document.getElementById('hint');
 const titleEl = document.getElementById('title-overlay');
@@ -2811,6 +2859,22 @@ function animate() {
     if (el.clientWidth !== window.innerWidth || el.clientHeight !== window.innerHeight) applySize();
   }
 
+  // 操作パッド（アナログ）: 倒した向きへカメラ基準で歩く。倒し具合で速さが変わる
+  if (padVec.x || padVec.y) {
+    const mag = Math.min(1, Math.hypot(padVec.x, padVec.y));
+    const fwd = new THREE.Vector3();
+    camera.getWorldDirection(fwd);
+    fwd.y = 0;
+    fwd.normalize();
+    const right = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0));
+    const dir = fwd.multiplyScalar(-padVec.y).add(right.multiplyScalar(padVec.x)).normalize();
+    target.copy(pos).addScaledVector(dir, 0.25 + 0.65 * mag);
+    clampToIsland(target);
+    resolveCollisions(target);
+    moving = true;
+    marker.material.opacity = 0;
+  }
+
   const kx = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
   const kz = (keys.s ? 1 : 0) - (keys.w ? 1 : 0);
   if (kx || kz) {
@@ -2927,6 +2991,10 @@ function animate() {
     sound.update(dt, { duck: musicOn });
     // 島の外（桟橋・岬・登り道・星見台）にいる間だけ「もどる」を出す
     if (homeBtn) homeBtn.classList.toggle('show', Math.hypot(pos.x, pos.z) > WALK_R + 0.3);
+    // タッチ端末では、登り道エリアにいる間だけ操作パッドを出す
+    const showPad = IS_TOUCH && onTrail;
+    if (padEl) padEl.classList.toggle('show', showPad);
+    document.body.classList.toggle('pad-on', showPad);
   }
 
   // 撮影スポットでは片手をあげてポーズ
