@@ -23,12 +23,12 @@ try {
 } catch {}
 
 const loader = new THREE.TextureLoader();
-const [logoTexture, lakeTexture] = await Promise.all([
-  loader.loadAsync('/meikyou/meikyou-logo.jpg'),
+const [lakeTexture, mirrorFaceTexture] = await Promise.all([
   loader.loadAsync('/meikyou/mirror-lake.jpg'),
+  loader.loadAsync('/meikyou/meikyou-mirror-face.jpg'),
 ]);
-logoTexture.colorSpace = THREE.SRGBColorSpace;
 lakeTexture.colorSpace = THREE.SRGBColorSpace;
+mirrorFaceTexture.colorSpace = THREE.SRGBColorSpace;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -263,15 +263,15 @@ centralBacking.position.set(0, 1.58, 0);
 centralBacking.scale.y = 1.3;
 centralMirror.add(centralBacking);
 const centralSurfaceMaterial = new THREE.MeshBasicMaterial({
-  map: logoTexture,
-  color: 0x92a9ad,
+  map: mirrorFaceTexture,
+  color: 0xffffff,
   transparent: true,
   opacity: 0.34,
   side: THREE.DoubleSide,
   depthWrite: false,
 });
-const centralSurface = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 0.95), centralSurfaceMaterial);
-centralSurface.position.set(0, 1.58, 0.005);
+const centralSurface = new THREE.Mesh(new THREE.CircleGeometry(1.035, 72), centralSurfaceMaterial);
+centralSurface.position.set(0, 1.58, 0.008);
 centralSurface.scale.y = 1.3;
 centralSurface.userData.noOutline = true;
 centralMirror.add(centralSurface);
