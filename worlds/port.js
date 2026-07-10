@@ -33,6 +33,8 @@ const runtime = createWorldRuntime({
   exposure: 1.12,
   presenceLabel: (count) => `いま港に ${count === 1 ? 'ひとり' : `${count}人`}`,
   fullMessage: '世界港は満員です。ソロで航路を選べます',
+  soundtrack: '/audio/bgm_island.m4a',
+  soundtrackVolume: 0.3,
 });
 
 const { scene } = runtime;

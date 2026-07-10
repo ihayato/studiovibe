@@ -46,8 +46,11 @@ const runtime = createWorldRuntime({
   cameraPosition: [1.4, 3.35, 13.1],
   cameraTarget: [0, 0.82, 7.4],
   exposure: 1.08,
+  playerRadius: 0.38,
   presenceLabel: (count) => `いま町に ${count === 1 ? 'ひとり' : `${count}人`}`,
   fullMessage: '犯科町は満員です。ソロで捜査できます',
+  soundtrack: '/audio/bgm_ukidoro.m4a',
+  soundtrackVolume: 0.28,
   loadingMinMs: 580,
 });
 
@@ -270,7 +273,7 @@ const makeBuilding = ({ x, z, width, depth, height, wall, roof, sign = null }) =
   }
   addOutlines(group, { color: 0x253438, min: 0.006, max: 0.016 });
   scene.add(group);
-  runtime.addObstacle(x, z, Math.max(width, depth) * 0.48);
+  runtime.addBoxObstacle(x, z, width + 0.22, depth + 0.22, 0, 0.16);
   buildingRefs.push(group);
   return group;
 };
@@ -313,6 +316,8 @@ for (const side of [-1, 1]) {
 }
 addOutlines(bridge, { color: 0x334142, min: 0.004, max: 0.011 });
 scene.add(bridge);
+runtime.addBoxObstacle(7.45, -2.28, 1.16, 9.44);
+runtime.addBoxObstacle(7.45, 5.3, 1.16, 2.8);
 
 const lilyPads = [];
 for (let i = 0; i < 9; i++) {
@@ -379,10 +384,11 @@ const makeStall = (x, z, color, goodsColor) => {
   }
   addOutlines(stall, { color: 0x3a4040, min: 0.004, max: 0.011 });
   scene.add(stall);
+  runtime.addBoxObstacle(x, z, 1.32, 0.82, 0, 0.04);
   return stall;
 };
-makeStall(2.55, -2.0, 0x4d8790, 0xd66f88);
-makeStall(-2.5, 1.6, 0xd17d98, 0x75a97a);
+makeStall(1.82, -2.0, 0x4d8790, 0xd66f88);
+makeStall(-1.82, 1.72, 0xd17d98, 0x75a97a);
 
 for (const [x, z] of [[-6.1, 2.1], [6.05, -6.1], [-5.9, -2.0], [5.9, 6.2]]) {
   const stack = new THREE.Group();
@@ -395,6 +401,7 @@ for (const [x, z] of [[-6.1, 2.1], [6.05, -6.1], [-5.9, -2.0], [5.9, 6.2]]) {
   }
   addOutlines(stack, { color: 0x4a4842, min: 0.004, max: 0.01 });
   scene.add(stack);
+  runtime.addBoxObstacle(x + 0.17, z + 0.04, 0.82, 0.58, 0, 0.02);
 }
 
 const gate = new THREE.Group();
@@ -484,11 +491,14 @@ const makeCharacter = (texture, { x, z, width, height, name, en }) => {
 
 const anne = makeCharacter(anneTexture, { x: -1.85, z: 5.45, width: 1.35, height: 2.65, name: 'あんね', en: 'ANNE' });
 const yui = makeCharacter(yuiTexture, { x: 2.0, z: -5.7, width: 1.25, height: 2.55, name: '結', en: 'YUI' });
-const dango = makeCharacter(dangoTexture, { x: -2.65, z: 3.75, width: 1.22, height: 2.4, name: '団子屋さん', en: 'DANGO' });
-const kuon = makeCharacter(kuonTexture, { x: 3.0, z: 5.2, width: 1.35, height: 2.55, name: '久遠', en: 'KUON' });
+const dango = makeCharacter(dangoTexture, { x: -2.24, z: 3.75, width: 1.22, height: 2.4, name: '団子屋さん', en: 'DANGO' });
+const kuon = makeCharacter(kuonTexture, { x: 2.28, z: 5.2, width: 1.35, height: 2.55, name: '久遠', en: 'KUON' });
+runtime.addObstacle(anne.position.x, anne.position.z, 0.28);
+runtime.addObstacle(yui.position.x, yui.position.z, 0.27);
+runtime.addObstacle(dango.position.x, dango.position.z, 0.26);
 
 const board = new THREE.Group();
-board.position.set(-2.7, 0.22, -1.75);
+board.position.set(-1.3, 0.22, -1.75);
 for (const side of [-1, 1]) {
   const post = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.06, 1.55, 10), toon(0x74573c));
   post.position.set(side * 0.56, 0.78, 0);
@@ -507,7 +517,7 @@ boardLabel.position.set(0, 1.72, 0.06);
 board.add(boardLabel);
 addOutlines(board, { color: 0x3d403d, min: 0.006, max: 0.014 });
 scene.add(board);
-runtime.addObstacle(-2.7, -1.75, 0.58);
+runtime.addBoxObstacle(board.position.x, board.position.z, 1.62, 0.18, 0, 0.03);
 
 const missionPanel = document.getElementById('mission-panel');
 const casePanel = document.getElementById('case-panel');
@@ -568,6 +578,7 @@ const foundClues = (() => {
     return new Set();
   }
 })();
+runtime.addObstacle(kuon.position.x, kuon.position.z, 0.3, () => foundClues.size === 3);
 const clueDefs = [
   { id: 'dango', title: '甘い団子の串', detail: '団子屋の軒先から、青い足跡が続いている。', x: -1.55, z: 3.55, rotation: -0.4 },
   { id: 'well', title: '井戸端の青い毛', detail: '水をのぞいた跡。足跡は北へ曲がった。', x: 2.15, z: 1.45, rotation: 0.65 },
@@ -746,6 +757,12 @@ if (SEARCH.get('qa') === 'mission') {
 } else if (SEARCH.get('qa') === 'episodes') {
   runtime.teleport(-1.8, -1.75);
   setTimeout(() => openPanel(episodesPanel), 340);
+} else if (SEARCH.get('qa') === 'collision-view') {
+  const resolved = runtime.teleport(-2.65, -1.3);
+  document.body.dataset.collisionView = JSON.stringify({
+    x: Math.round(resolved.x * 100) / 100,
+    z: Math.round(resolved.z * 100) / 100,
+  });
 } else if (SEARCH.get('qa') === 'return') {
   runtime.teleport(-6.55, 5.6);
 }

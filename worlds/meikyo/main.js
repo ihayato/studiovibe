@@ -4,6 +4,7 @@ import { createAvatar, loadIdentity } from '../../poc/island/avatars.js';
 import { COSMETIC_ITEMS, cosmeticsToMask, createCosmeticRig } from '../../poc/island/cosmetics.js';
 import { initPresence, makeNameLabel } from '../../poc/island/net.js';
 import { addOutlines, canvasTex, toon } from '../../poc/island/toon.js';
+import { setupWorldSound } from '../shared/sound-control.js';
 import { playArrival, warpTo } from '../shared/warp.js';
 
 const PAGE_SEARCH = new URLSearchParams(location.search);
@@ -499,6 +500,11 @@ const showToast = (message, duration = 2200) => {
   toastEl.classList.add('is-visible');
   toastTimer = setTimeout(() => toastEl.classList.remove('is-visible'), duration);
 };
+const sound = setupWorldSound({
+  soundtrack: '/audio/bgm_island.m4a',
+  volume: 0.24,
+  showToast,
+});
 
 let audioContext = null;
 const chime = (frequency = 740, duration = 0.16) => {
@@ -777,6 +783,7 @@ jumpButton.addEventListener('pointerdown', (event) => {
 let currentNear = null;
 const hintAction = () => {
   if (!currentNear) return;
+  sound?.se.ui();
   if (currentNear.type === 'trial') {
     openTrial(currentNear.trial);
   } else if (currentNear.type === 'return') {
@@ -898,6 +905,7 @@ function animate(now) {
     verticalSpeed = 3.15;
     grounded = false;
     chime(420, 0.1);
+    sound?.se.jump();
   }
   jumpQueued = false;
   if (!grounded) {
@@ -907,6 +915,7 @@ function animate(now) {
       playerY = GROUND_Y;
       verticalSpeed = 0;
       grounded = true;
+      sound?.se.land();
     }
   }
   player.y = playerY;
@@ -916,6 +925,7 @@ function animate(now) {
   avatar.update(dt, elapsed, moving ? 1 : 0, walkPhase, yawVelocity);
   cosmeticRig.update(dt, elapsed);
   presence.update(dt, elapsed);
+  sound?.update(dt);
 
   const cameraDelta = new THREE.Vector3().subVectors(player, previousPosition);
   cameraDelta.y = 0;

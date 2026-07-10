@@ -4,6 +4,7 @@ import { createAvatar, loadIdentity } from '../../poc/island/avatars.js';
 import { COSMETIC_ITEMS, cosmeticsToMask, createCosmeticRig } from '../../poc/island/cosmetics.js';
 import { initPresence, makeNameLabel } from '../../poc/island/net.js';
 import { addOutlines, canvasTex, toon } from '../../poc/island/toon.js';
+import { setupWorldSound } from './sound-control.js';
 import { playArrival } from './warp.js';
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1']);
@@ -89,6 +90,8 @@ export function createWorldRuntime({
   exposure = 1.05,
   presenceLabel = (count) => `いま島に ${count === 1 ? 'ひとり' : `${count}人`}`,
   fullMessage = 'この島は満員です。ソロで散策できます',
+  soundtrack = null,
+  soundtrackVolume = 0.3,
   loadingMinMs = 460,
   arrivalMinMs = 1120,
   terrainH = () => groundY,
@@ -165,8 +168,23 @@ export function createWorldRuntime({
   const interactables = [];
   const frameCallbacks = [];
   const billboards = [];
-  const addObstacle = (x, z, radius) => {
-    obstacles.push({ x, z, r: radius });
+  const addObstacle = (x, z, radius, enabled = () => true) => {
+    obstacles.push({ kind: 'circle', x, z, r: radius, enabled });
+    return obstacles[obstacles.length - 1];
+  };
+  const addBoxObstacle = (x, z, width, depth, rotation = 0, padding = 0, enabled = () => true) => {
+    obstacles.push({
+      kind: 'box',
+      x,
+      z,
+      hx: Math.max(0.01, width / 2),
+      hz: Math.max(0.01, depth / 2),
+      rotation,
+      padding: Math.max(0, padding),
+      cos: Math.cos(rotation),
+      sin: Math.sin(rotation),
+      enabled,
+    });
     return obstacles[obstacles.length - 1];
   };
   const addInteractable = (item) => {
@@ -200,20 +218,87 @@ export function createWorldRuntime({
       point.z *= walkRadius / length;
     }
   };
+  const obstacleContainsPoint = (point, obstacle, epsilon = 0.002) => {
+    if (!obstacle.enabled()) return false;
+    const dx = point.x - obstacle.x;
+    const dz = point.z - obstacle.z;
+    if (obstacle.kind === 'box') {
+      const localX = obstacle.cos * dx + obstacle.sin * dz;
+      const localZ = -obstacle.sin * dx + obstacle.cos * dz;
+      return Math.abs(localX) < obstacle.hx + playerRadius + obstacle.padding - epsilon
+        && Math.abs(localZ) < obstacle.hz + playerRadius + obstacle.padding - epsilon;
+    }
+    return Math.hypot(dx, dz) < obstacle.r + playerRadius - epsilon;
+  };
+  const candidateScore = (candidate, origin, currentObstacle) => {
+    if (obstacleContainsPoint(candidate, currentObstacle)) return Infinity;
+    const overlaps = obstacles.reduce((count, obstacle) => (
+      obstacle !== currentObstacle && obstacleContainsPoint(candidate, obstacle) ? count + 1 : count
+    ), 0);
+    return Math.hypot(candidate.x - origin.x, candidate.z - origin.z) + overlaps * 100;
+  };
+  const resolveObstacle = (point, obstacle) => {
+    if (!obstacleContainsPoint(point, obstacle, 0)) return false;
+    const origin = point.clone();
+    const candidates = [];
+    if (obstacle.kind === 'box') {
+      const dx = point.x - obstacle.x;
+      const dz = point.z - obstacle.z;
+      const localX = obstacle.cos * dx + obstacle.sin * dz;
+      const localZ = -obstacle.sin * dx + obstacle.cos * dz;
+      const limitX = obstacle.hx + playerRadius + obstacle.padding;
+      const limitZ = obstacle.hz + playerRadius + obstacle.padding;
+      const clampedX = THREE.MathUtils.clamp(localX, -limitX, limitX);
+      const clampedZ = THREE.MathUtils.clamp(localZ, -limitZ, limitZ);
+      for (const [resolvedX, resolvedZ] of [
+        [limitX, clampedZ], [-limitX, clampedZ], [clampedX, limitZ], [clampedX, -limitZ],
+      ]) {
+        candidates.push(new THREE.Vector3(
+          obstacle.x + obstacle.cos * resolvedX - obstacle.sin * resolvedZ,
+          point.y,
+          obstacle.z + obstacle.sin * resolvedX + obstacle.cos * resolvedZ,
+        ));
+      }
+    } else {
+      const minimum = obstacle.r + playerRadius;
+      const primary = new THREE.Vector2(point.x - obstacle.x, point.z - obstacle.z);
+      if (primary.lengthSq() < 0.0001) primary.set(-obstacle.x, -obstacle.z);
+      if (primary.lengthSq() < 0.0001) primary.set(1, 0);
+      primary.normalize();
+      const directions = [primary];
+      for (let index = 0; index < 8; index++) {
+        const angle = (index / 8) * Math.PI * 2;
+        directions.push(new THREE.Vector2(Math.cos(angle), Math.sin(angle)));
+      }
+      for (const direction of directions) {
+        candidates.push(new THREE.Vector3(
+          obstacle.x + direction.x * minimum,
+          point.y,
+          obstacle.z + direction.y * minimum,
+        ));
+      }
+    }
+    let best = null;
+    let bestScore = Infinity;
+    for (const candidate of candidates) {
+      clampWalkable(candidate);
+      const score = candidateScore(candidate, origin, obstacle);
+      if (score < bestScore) {
+        best = candidate;
+        bestScore = score;
+      }
+    }
+    if (!best) return false;
+    point.copy(best);
+    return true;
+  };
   const resolveMove = (point) => {
-    for (let pass = 0; pass < 4; pass++) {
+    clampWalkable(point);
+    for (let pass = 0; pass < 8; pass++) {
       let changed = false;
       for (const obstacle of obstacles) {
-        const dx = point.x - obstacle.x;
-        const dz = point.z - obstacle.z;
-        const distance = Math.hypot(dx, dz);
-        const minimum = obstacle.r + playerRadius;
-        if (distance >= minimum) continue;
-        const nx = distance > 0.0001 ? dx / distance : 1;
-        const nz = distance > 0.0001 ? dz / distance : 0;
-        point.x = obstacle.x + nx * minimum;
-        point.z = obstacle.z + nz * minimum;
-        changed = true;
+        if (!obstacle.enabled()) continue;
+        if (resolveObstacle(point, obstacle)) changed = true;
       }
       if (!changed) break;
     }
@@ -241,6 +326,8 @@ export function createWorldRuntime({
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), duration);
   };
+
+  const sound = setupWorldSound({ soundtrack, volume: soundtrackVolume, showToast });
 
   const isModalOpen = () => Boolean(document.querySelector('[data-world-modal]:not([hidden])'));
   const playerTarget = avatar.group.position.clone();
@@ -367,6 +454,7 @@ export function createWorldRuntime({
   };
   const interact = () => {
     if (!currentNear || isModalOpen()) return;
+    sound?.se.ui();
     currentNear.action?.(currentNear, api);
   };
   hint?.addEventListener('click', interact);
@@ -440,6 +528,7 @@ export function createWorldRuntime({
     if (jumpQueued && grounded && !modalOpen) {
       verticalSpeed = 3.2;
       grounded = false;
+      sound?.se.jump();
     }
     jumpQueued = false;
     if (!grounded) {
@@ -449,6 +538,7 @@ export function createWorldRuntime({
         playerY = floorY;
         verticalSpeed = 0;
         grounded = true;
+        sound?.se.land();
       }
     } else {
       playerY = floorY;
@@ -461,6 +551,7 @@ export function createWorldRuntime({
     avatar.update(dt, elapsed, moving ? 1 : 0, walkPhase, yawVelocity);
     cosmeticRig.update(dt, elapsed);
     presence.update(dt, elapsed);
+    sound?.update(dt);
 
     const cameraDelta = new THREE.Vector3().subVectors(avatar.group.position, previousPosition);
     cameraDelta.y = 0;
@@ -511,6 +602,34 @@ export function createWorldRuntime({
     return { id: item.id, reachable, nearest: Math.round(nearest * 100) / 100, radius: item.radius };
   });
 
+  const auditObstacles = () => {
+    const active = obstacles.filter((obstacle) => obstacle.enabled());
+    const failures = [];
+    let probes = 0;
+    active.forEach((obstacle, obstacleIndex) => {
+      const localProbes = obstacle.kind === 'box'
+        ? [[0, 0], [obstacle.hx * 0.72, 0], [-obstacle.hx * 0.72, 0], [0, obstacle.hz * 0.72], [0, -obstacle.hz * 0.72]]
+        : [[0, 0], [obstacle.r * 0.62, 0], [-obstacle.r * 0.62, 0], [0, obstacle.r * 0.62], [0, -obstacle.r * 0.62]];
+      for (const [localX, localZ] of localProbes) {
+        probes++;
+        const point = obstacle.kind === 'box'
+          ? new THREE.Vector3(
+            obstacle.x + obstacle.cos * localX - obstacle.sin * localZ,
+            groundY,
+            obstacle.z + obstacle.sin * localX + obstacle.cos * localZ,
+          )
+          : new THREE.Vector3(obstacle.x + localX, groundY, obstacle.z + localZ);
+        const resolved = resolveMove(point);
+        const blockedBy = [];
+        active.forEach((candidate, candidateIndex) => {
+          if (obstacleContainsPoint(resolved, candidate)) blockedBy.push(candidateIndex);
+        });
+        if (blockedBy.length) failures.push({ obstacle: obstacleIndex, blockedBy });
+      }
+    });
+    return { obstacles: active.length, probes, failures };
+  };
+
   const api = {
     scene,
     camera,
@@ -521,21 +640,28 @@ export function createWorldRuntime({
     identity,
     groundY,
     walkRadius,
+    playerRadius,
     obstacles,
     interactables,
     addObstacle,
+    addBoxObstacle,
     addInteractable,
     addFrame,
     addBillboard,
     resolveMove,
     showToast,
     auditInteractables,
+    auditObstacles,
+    sound,
     get near() { return currentNear; },
     start() {
       if (running) return;
       running = true;
-      if (LOCAL_HOSTS.has(location.hostname) && SEARCH.get('qa') === 'audit') {
+      if (LOCAL_HOSTS.has(location.hostname) && (SEARCH.get('qa') === 'audit' || SEARCH.has('qaAudit'))) {
         document.body.dataset.worldAudit = JSON.stringify(auditInteractables());
+      }
+      if (LOCAL_HOSTS.has(location.hostname) && (['audit', 'collision'].includes(SEARCH.get('qa')) || SEARCH.has('qaCollision'))) {
+        document.body.dataset.collisionAudit = JSON.stringify(auditObstacles());
       }
       requestAnimationFrame(animate);
     },

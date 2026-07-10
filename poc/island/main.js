@@ -1830,20 +1830,35 @@ if (animeScreenMesh) registerDeferredVideo(animeScreenMesh.material, '/video/her
 // ---------- サウンド（BGM+SE・既定OFF） ----------
 const sound = createSound();
 const soundBtn = document.getElementById('sound');
-const renderSoundBtn = () => soundBtn && soundBtn.classList.toggle('off', !sound.on);
+const renderSoundBtn = () => {
+  if (!soundBtn) return;
+  soundBtn.classList.toggle('off', !sound.on);
+  soundBtn.setAttribute('aria-pressed', String(sound.on));
+  soundBtn.setAttribute('aria-label', sound.on ? 'サウンドを停止' : 'サウンドを再生');
+  soundBtn.title = sound.on ? 'サウンドを停止' : 'サウンドを再生';
+};
 if (soundBtn) {
   soundBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
-  soundBtn.addEventListener('click', () => {
-    sound.toggle();
+  soundBtn.addEventListener('click', async () => {
+    await sound.toggle().catch(() => {});
     renderSoundBtn();
   });
 }
 renderSoundBtn();
 // 前回ONだった端末は、最初の操作で音を起こす（自動再生制限のため）
-addEventListener('pointerdown', () => {
-  sound.resumeIfSaved();
-  renderSoundBtn();
-}, { once: true });
+let soundResumeAttempted = false;
+const resumeSavedSound = (event) => {
+  const fromSoundButton = event.composedPath?.().includes(soundBtn)
+    || event.target === soundBtn
+    || (event.target instanceof Node && soundBtn?.contains(event.target));
+  if (soundResumeAttempted || fromSoundButton) return;
+  soundResumeAttempted = true;
+  removeEventListener('pointerdown', resumeSavedSound, true);
+  removeEventListener('keydown', resumeSavedSound, true);
+  sound.resumeIfSaved().finally(renderSoundBtn);
+};
+addEventListener('pointerdown', resumeSavedSound, true);
+addEventListener('keydown', resumeSavedSound, true);
 
 // ---------- もどるボタン（アトラクションから中央広場へ） ----------
 const homeBtn = document.getElementById('home');

@@ -38,6 +38,8 @@ const runtime = createWorldRuntime({
   exposure: 1.05,
   presenceLabel: (count) => `いま社に ${count === 1 ? 'ひとり' : `${count}人`}`,
   fullMessage: '月蝕の社は満員です。ソロで夜道を巡れます',
+  soundtrack: '/audio/op_title.m4a',
+  soundtrackVolume: 0.22,
   loadingMinMs: 620,
 });
 

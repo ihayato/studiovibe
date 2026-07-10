@@ -54,7 +54,16 @@
   <div id="touch-controls" aria-hidden="true">
     <div id="joystick"><span></span></div>
   </div>
-  <button id="jump" class="round-control" type="button">JUMP</button>
+  <div class="world-controls" aria-label="ワールド操作">
+    <button id="sound" class="round-control sound-control is-off" type="button" aria-label="BGMを再生" aria-pressed="false" title="BGMを再生">
+      <span class="sound-control__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="round-control__label">BGM</span>
+    </button>
+    <button id="jump" class="round-control jump-control" type="button" aria-label="ジャンプ">
+      <span class="round-control__glyph" aria-hidden="true">↑</span>
+      <span class="round-control__label">JUMP</span>
+    </button>
+  </div>
 
   <div id="lesson-panel" class="modal" hidden>
     <section class="lesson-dialog" role="dialog" aria-modal="true" aria-labelledby="lesson-title">

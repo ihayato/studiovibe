@@ -189,11 +189,24 @@ canvas {
   transform: translate(-50%, -50%);
 }
 
-.round-control {
+.world-controls {
   position: fixed;
   z-index: 35;
   right: calc(var(--safe-right) + 22px);
   bottom: calc(var(--safe-bottom) + 26px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.round-control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1px;
   width: 68px;
   height: 68px;
   border: 1px solid rgba(255, 255, 255, .44);
@@ -203,12 +216,83 @@ canvas {
   color: #fff;
   backdrop-filter: blur(14px);
   font-family: Inter, sans-serif;
-  font-size: 10px;
   font-weight: 700;
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
+}
+
+.jump-control {
+  border-color: var(--world-accent);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .24), inset 0 0 0 3px rgba(255, 255, 255, .055);
+}
+
+.sound-control { width: 52px; height: 52px; }
+
+.round-control__glyph {
+  height: 24px;
+  color: var(--world-accent);
+  font-size: 25px;
+  line-height: 22px;
+}
+
+.round-control__label {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.sound-control__bars {
+  position: relative;
+  width: 22px;
+  height: 17px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  color: var(--world-accent);
+}
+
+.sound-control__bars i {
+  width: 3px;
+  height: 7px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: sound-level 850ms ease-in-out infinite alternate;
+}
+
+.sound-control__bars i:nth-child(2) { height: 15px; animation-delay: -420ms; }
+.sound-control__bars i:nth-child(3) { height: 11px; animation-delay: -210ms; }
+
+.sound-control.is-off .sound-control__bars { color: rgba(255, 255, 255, .58); }
+.sound-control.is-off .sound-control__bars i { height: 6px; animation: none; }
+.sound-control.is-off .sound-control__bars i:nth-child(2) { height: 10px; }
+.sound-control.is-off::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 13px;
+  width: 26px;
+  height: 1px;
+  background: rgba(255, 255, 255, .84);
+  transform: rotate(-45deg);
+  transform-origin: center;
+}
+
+@media (hover: hover) {
+  .round-control:hover {
+    border-color: #fff;
+    background: rgba(8, 13, 16, .88);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, .3), inset 0 0 0 3px rgba(255, 255, 255, .08);
+  }
 }
 
 .round-control:active { transform: scale(.95); }
+
+@keyframes sound-level {
+  from { transform: scaleY(.45); }
+  to { transform: scaleY(1); }
+}
 
 #touch-controls { display: none; }
 .force-touch #touch-controls { display: block; }
@@ -370,8 +454,8 @@ canvas {
 
 @media (hover: none), (pointer: coarse) {
   #touch-controls { display: block; }
-  #hint { bottom: calc(var(--safe-bottom) + 34px); }
-  .round-control { bottom: calc(var(--safe-bottom) + 32px); }
+  #hint { bottom: calc(var(--safe-bottom) + 132px); }
+  .world-controls { bottom: calc(var(--safe-bottom) + 20px); }
 }
 
 @media (max-width: 620px) {
@@ -386,9 +470,11 @@ canvas {
   .world-mark strong { font-size: 19px; }
   .world-counter { min-width: 102px; height: 41px; padding-inline: 12px; }
   #objective { top: calc(var(--safe-top) + 70px); }
-  #hint { width: calc(100vw - 154px); min-width: 188px; padding-inline: 12px; font-size: 12px; }
+  #hint { bottom: calc(var(--safe-bottom) + 126px); width: calc(100vw - 28px); min-width: 0; padding-inline: 12px; font-size: 12px; }
   #joystick { left: calc(var(--safe-left) + 14px); width: 96px; height: 96px; }
-  .round-control { right: calc(var(--safe-right) + 14px); width: 62px; height: 62px; }
+  .world-controls { right: calc(var(--safe-right) + 14px); bottom: calc(var(--safe-bottom) + 18px); gap: 8px; }
+  .jump-control { width: 62px; height: 62px; }
+  .sound-control { width: 50px; height: 50px; }
   .world-modal { padding: calc(var(--safe-top) + 12px) calc(var(--safe-right) + 12px) calc(var(--safe-bottom) + 12px) calc(var(--safe-left) + 12px); }
   .world-sheet { padding: 42px 22px 24px; }
   .world-actions { grid-template-columns: 1fr; }
@@ -400,4 +486,5 @@ canvas {
     transition-duration: 1ms !important;
     animation-duration: 1ms !important;
   }
+  .sound-control__bars i { animation: none !important; }
 }

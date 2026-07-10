@@ -11,15 +11,25 @@ const TRACKS = {
 const BGM_LEVEL = 0.4;
 const SE_LEVEL = 0.5;
 
-export function createSound() {
+export function createSound({
+  tracks = TRACKS,
+  initialZone = 'island',
+  storageKey = LS_KEY,
+  bgmLevel = BGM_LEVEL,
+  seLevel = SE_LEVEL,
+} = {}) {
+  const trackMap = Object.fromEntries(
+    Object.entries(tracks).filter(([, url]) => typeof url === 'string' && url.length > 0),
+  );
+  const trackNames = Object.keys(trackMap);
   let on = false;
   let saved = '0';
-  try { saved = localStorage.getItem(LS_KEY) || '0'; } catch {}
+  try { saved = localStorage.getItem(storageKey) || '0'; } catch {}
 
   let ctx = null;
   let master = null, seGain = null, bgmGain = null;
   const bgm = {}; // name -> { gain } | { pending: true }
-  let zone = 'island';
+  let zone = trackMap[initialZone] ? initialZone : trackNames[0] || initialZone;
 
   const ensureCtx = async () => {
     if (!ctx) {
@@ -27,13 +37,13 @@ export function createSound() {
       master = ctx.createGain();
       master.connect(ctx.destination);
       seGain = ctx.createGain();
-      seGain.gain.value = SE_LEVEL;
+      seGain.gain.value = seLevel;
       seGain.connect(master);
       bgmGain = ctx.createGain();
-      bgmGain.gain.value = BGM_LEVEL;
+      bgmGain.gain.value = bgmLevel;
       bgmGain.connect(master);
     }
-    if (ctx.state === 'suspended') await ctx.resume().catch(() => {});
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
   };
 
   // ループBGMを読み込んで即再生開始（ゲイン0）。素材が無い環境では静かに諦める
@@ -41,7 +51,7 @@ export function createSound() {
     if (bgm[name]) return;
     bgm[name] = { pending: true };
     try {
-      const res = await fetch(TRACKS[name]);
+      const res = await fetch(trackMap[name]);
       if (!res.ok) throw new Error('http ' + res.status);
       const buf = await ctx.decodeAudioData(await res.arrayBuffer());
       const gain = ctx.createGain();
@@ -60,11 +70,18 @@ export function createSound() {
 
   const setOn = async (v) => {
     on = v;
-    try { localStorage.setItem(LS_KEY, v ? '1' : '0'); } catch {}
+    saved = v ? '1' : '0';
+    try { localStorage.setItem(storageKey, saved); } catch {}
     if (v) {
-      await ensureCtx();
-      loadTrack('island');
-      loadTrack('ukidoro');
+      try {
+        await ensureCtx();
+        for (const name of trackNames) loadTrack(name);
+      } catch (error) {
+        on = false;
+        saved = '0';
+        try { localStorage.setItem(storageKey, '0'); } catch {}
+        throw error;
+      }
     } else if (ctx) {
       ctx.suspend().catch(() => {});
     }
@@ -141,9 +158,9 @@ export function createSound() {
 
   return {
     get on() { return on; },
-    toggle() { setOn(!on); },
+    toggle() { return setOn(!on); },
     // 前回ONだった端末では、最初の操作でそっと音を起こす（自動再生制限対応）
-    resumeIfSaved() { if (!on && saved === '1') setOn(true); },
+    resumeIfSaved() { return !on && saved === '1' ? setOn(true) : Promise.resolve(); },
     setZone(z) { zone = z; },
     // duck=true（主題歌が灯っている間）はBGMを絞る
     update(dt, { duck = false } = {}) {
