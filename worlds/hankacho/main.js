@@ -25,14 +25,13 @@ try {
   ]);
 } catch {}
 
-const [kvTexture, logoTexture, anneTexture, yuiTexture, kuonTexture, dangoTexture, episodeTexture] = await Promise.all([
+const [kvTexture, logoTexture, anneTexture, yuiTexture, kuonTexture, dangoTexture] = await Promise.all([
   loadTexture('/worlds/hankacho/main-kv.jpg'),
   loadTexture('/worlds/hankacho/logo-ninja-hankacho-trim.webp'),
   loadTexture('/worlds/hankacho/anne.webp'),
   loadTexture('/worlds/hankacho/yui.webp'),
   loadTexture('/worlds/hankacho/kuon.webp'),
   loadTexture('/worlds/hankacho/dangoyasan.webp'),
-  loadTexture('/worlds/hankacho/ep05-happiness.webp'),
 ]);
 
 const runtime = createWorldRuntime({
@@ -675,27 +674,52 @@ runtime.addObstacle(anne.position.x, anne.position.z, 0.28);
 runtime.addObstacle(yui.position.x, yui.position.z, 0.27);
 runtime.addObstacle(dango.position.x, dango.position.z, 0.26);
 
-const board = new THREE.Group();
-board.position.set(-1.3, 0.22, -1.75);
-for (const side of [-1, 1]) {
-  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.06, 1.55, 10), toon(0x74573c));
-  post.position.set(side * 0.56, 0.78, 0);
-  board.add(post);
-}
-const boardFace = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.92, 0.08), toon(0xeadcb8));
-boardFace.position.y = 1.05;
-board.add(boardFace);
-const boardEpisode = makeImagePlane(episodeTexture, 1.4, 0.78, { transparent: false });
-boardEpisode.position.set(0, 1.05, 0.055);
-board.add(boardEpisode);
-const boardLabel = makeWorldLabel('NOW SHOWING', '上映札', {
-  color: '#287d88', paper: 'rgba(246, 233, 199, .96)', border: 'rgba(90,68,42,.34)', scale: [1.08, 0.3],
+const characterPanel = new THREE.Group();
+characterPanel.position.set(-1.3, 0.22, -1.75);
+const characterPanelShadow = new THREE.Mesh(
+  new THREE.CircleGeometry(0.82, 36),
+  new THREE.MeshBasicMaterial({ color: 0x24434a, transparent: true, opacity: 0.2, depthWrite: false }),
+);
+characterPanelShadow.rotation.x = -Math.PI / 2;
+characterPanelShadow.position.y = 0.012;
+characterPanelShadow.scale.y = 0.38;
+characterPanel.add(characterPanelShadow);
+const characterPanelBase = new THREE.Mesh(
+  new THREE.BoxGeometry(1.5, 0.12, 0.36),
+  toon(0x71543c),
+);
+characterPanelBase.position.y = 0.07;
+characterPanelBase.castShadow = characterPanelBase.receiveShadow = true;
+characterPanel.add(characterPanelBase);
+const characterPanelLip = new THREE.Mesh(
+  new THREE.BoxGeometry(1.38, 0.05, 0.3),
+  toon(0xd1b47b),
+);
+characterPanelLip.position.y = 0.145;
+characterPanel.add(characterPanelLip);
+
+const characterCutouts = new THREE.Group();
+const addCharacterCutout = (texture, { x, z, width, height }) => {
+  const outline = makeImagePlane(texture, width * 1.045, height * 1.045);
+  outline.material.color.set(0x203034);
+  outline.material.opacity = 0.78;
+  outline.position.set(x, 0.17 + height / 2, z - 0.012);
+  characterCutouts.add(outline);
+  const art = makeImagePlane(texture, width, height);
+  art.position.set(x, 0.17 + height / 2, z);
+  characterCutouts.add(art);
+};
+addCharacterCutout(anneTexture, { x: -0.34, z: 0.015, width: 0.9, height: 1.78 });
+addCharacterCutout(dangoTexture, { x: 0.38, z: 0.035, width: 0.84, height: 1.72 });
+characterPanel.add(characterCutouts);
+addOutlines(characterPanelBase, { color: 0x343733, min: 0.006, max: 0.013 });
+scene.add(characterPanel);
+runtime.addBoxObstacle(characterPanel.position.x, characterPanel.position.z, 1.58, 0.48, 0, 0.03);
+runtime.addFrame(() => {
+  const dx = runtime.camera.position.x - characterPanel.position.x;
+  const dz = runtime.camera.position.z - characterPanel.position.z;
+  characterPanel.rotation.y = Math.atan2(dx, dz);
 });
-boardLabel.position.set(0, 1.72, 0.06);
-board.add(boardLabel);
-addOutlines(board, { color: 0x3d403d, min: 0.006, max: 0.014 });
-scene.add(board);
-runtime.addBoxObstacle(board.position.x, board.position.z, 1.62, 0.18, 0, 0.03);
 
 const missionPanel = document.getElementById('mission-panel');
 const casePanel = document.getElementById('case-panel');
@@ -740,9 +764,9 @@ runtime.addInteractable({
 });
 runtime.addInteractable({
   id: 'episodes',
-  position: board.position,
+  position: characterPanel.position,
   radius: 1.35,
-  label: '上映札をひらく',
+  label: '犯科町の物語を見る',
   action: () => openPanel(episodesPanel),
 });
 
@@ -928,6 +952,8 @@ if (SEARCH.get('qa') === 'mission') {
 } else if (SEARCH.get('qa') === 'episodes') {
   runtime.teleport(-1.8, -1.75);
   setTimeout(() => openPanel(episodesPanel), 340);
+} else if (SEARCH.get('qa') === 'standee') {
+  runtime.teleport(-1.3, -0.45);
 } else if (SEARCH.get('qa') === 'collision-view') {
   const resolved = runtime.teleport(-2.65, -1.3);
   document.body.dataset.collisionView = JSON.stringify({
