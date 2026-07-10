@@ -13,8 +13,21 @@
 </head>
 <body>
   <div id="loading" role="status" aria-live="polite">
-    <img src="/meikyou/meikyou-logo.jpg" alt="明鏡">
-    <span>鏡面を結んでいます</span>
+    <div class="loading-mirror" aria-hidden="true">
+      <div class="loading-mirror__frame">
+        <span class="loading-mirror__face"></span>
+        <span class="loading-mirror__shine"></span>
+      </div>
+      <span class="loading-mirror__base"></span>
+      <i class="loading-mirror__fragment loading-mirror__fragment--one"></i>
+      <i class="loading-mirror__fragment loading-mirror__fragment--two"></i>
+      <i class="loading-mirror__fragment loading-mirror__fragment--three"></i>
+    </div>
+    <div class="loading-copy">
+      <span class="loading-copy__en">MEIKYO</span>
+      <strong>明鏡島</strong>
+      <span class="loading-copy__status">鏡面を結んでいます</span>
+    </div>
   </div>
 
   <header class="world-hud" aria-label="ワールド情報">

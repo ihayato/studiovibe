@@ -6,9 +6,12 @@ import { initPresence, makeNameLabel } from '../../poc/island/net.js';
 import { addOutlines, canvasTex, toon } from '../../poc/island/toon.js';
 import { playArrival, studioWorldHref, warpTo } from '../shared/warp.js';
 
-playArrival('meikyo');
+const PAGE_SEARCH = new URLSearchParams(location.search);
+const LOADING_STARTED_AT = performance.now();
+const arrivalTransit = playArrival('meikyo');
+const KEEP_LOADING_FOR_QA = ['localhost', '127.0.0.1'].includes(location.hostname) && PAGE_SEARCH.get('qa') === 'loading';
 
-const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || new URLSearchParams(location.search).has('pad');
+const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || PAGE_SEARCH.has('pad');
 document.body.classList.toggle('force-touch', IS_TOUCH);
 
 try {
@@ -953,7 +956,12 @@ function animate(now) {
 
   if (firstFrame) {
     firstFrame = false;
-    requestAnimationFrame(() => document.getElementById('loading').classList.add('is-done'));
+    if (!KEEP_LOADING_FOR_QA) {
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const minimumMs = arrivalTransit ? (reducedMotion ? 820 : 1250) : (reducedMotion ? 0 : 450);
+      const delay = Math.max(0, minimumMs - (performance.now() - LOADING_STARTED_AT));
+      setTimeout(() => requestAnimationFrame(() => document.getElementById('loading')?.classList.add('is-done')), delay);
+    }
   }
 }
 requestAnimationFrame(animate);
