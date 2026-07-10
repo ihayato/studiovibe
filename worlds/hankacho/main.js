@@ -25,11 +25,12 @@ try {
   ]);
 } catch {}
 
-const [kvTexture, logoTexture, anneTexture, yuiTexture, kuonTexture, dangoTexture] = await Promise.all([
+const [kvTexture, logoTexture, anneTexture, yuiTexture, shionTexture, kuonTexture, dangoTexture] = await Promise.all([
   loadTexture('/worlds/hankacho/main-kv.jpg'),
   loadTexture('/worlds/hankacho/logo-ninja-hankacho-trim.webp'),
   loadTexture('/worlds/hankacho/anne.webp'),
   loadTexture('/worlds/hankacho/yui.webp'),
+  loadTexture('/worlds/hankacho/shion.webp'),
   loadTexture('/worlds/hankacho/kuon.webp'),
   loadTexture('/worlds/hankacho/dangoyasan.webp'),
 ]);
@@ -707,8 +708,8 @@ const addCharacterCutout = (texture, { x, z, width, height }) => {
   art.position.set(x, 0.17 + height / 2, z);
   characterCutouts.add(art);
 };
-addCharacterCutout(anneTexture, { x: -0.34, z: 0.015, width: 0.9, height: 1.78 });
-addCharacterCutout(yuiTexture, { x: 0.38, z: 0.035, width: 0.84, height: 1.72 });
+addCharacterCutout(yuiTexture, { x: -0.34, z: 0.015, width: 0.86, height: 1.74 });
+addCharacterCutout(shionTexture, { x: 0.37, z: 0.035, width: 0.87, height: 1.76 });
 characterPanel.add(characterCutouts);
 addOutlines(characterPanelBase, { color: 0x343733, min: 0.006, max: 0.013 });
 scene.add(characterPanel);
