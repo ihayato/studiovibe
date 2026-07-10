@@ -25,13 +25,14 @@ try {
   ]);
 } catch {}
 
-const [kvTexture, logoTexture, anneTexture, yuiTexture, kuonTexture, dangoTexture] = await Promise.all([
+const [kvTexture, logoTexture, anneTexture, yuiTexture, kuonTexture, dangoTexture, episodeTexture] = await Promise.all([
   loadTexture('/worlds/hankacho/main-kv.jpg'),
   loadTexture('/worlds/hankacho/logo-ninja-hankacho-trim.webp'),
   loadTexture('/worlds/hankacho/anne.webp'),
   loadTexture('/worlds/hankacho/yui.webp'),
   loadTexture('/worlds/hankacho/kuon.webp'),
   loadTexture('/worlds/hankacho/dangoyasan.webp'),
+  loadTexture('/worlds/hankacho/ep05-happiness.webp'),
 ]);
 
 const runtime = createWorldRuntime({
@@ -62,9 +63,44 @@ sun.shadow.camera.top = 13;
 sun.shadow.camera.bottom = -13;
 scene.add(sun);
 
+const waterUniforms = {
+  uTime: { value: 0 },
+  uDeep: { value: new THREE.Color(0x347f8e) },
+  uLight: { value: new THREE.Color(0x75c5ce) },
+};
 const water = new THREE.Mesh(
-  new THREE.CircleGeometry(58, 128),
-  new THREE.MeshStandardMaterial({ color: 0x4d9cac, roughness: 0.34, metalness: 0.18 }),
+  new THREE.PlaneGeometry(116, 116, 44, 44),
+  new THREE.ShaderMaterial({
+    uniforms: waterUniforms,
+    side: THREE.DoubleSide,
+    vertexShader: `
+      uniform float uTime;
+      varying float vWave;
+      varying vec2 vUv2;
+      void main() {
+        vec3 p = position;
+        float wave = sin(p.x * .34 + uTime * .5) * .07;
+        wave += sin(p.y * .52 - uTime * .38) * .045;
+        p.z += wave;
+        vWave = wave;
+        vUv2 = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform float uTime;
+      uniform vec3 uDeep;
+      uniform vec3 uLight;
+      varying float vWave;
+      varying vec2 vUv2;
+      void main() {
+        float ripple = .5 + .5 * sin((vUv2.x - vUv2.y) * 74.0 + uTime * .44);
+        float glint = smoothstep(.94, 1.0, ripple) * .1;
+        vec3 color = mix(uDeep, uLight, .38 + vWave * 2.1 + vUv2.y * .08);
+        gl_FragColor = vec4(color + glint, 1.0);
+      }
+    `,
+  }),
 );
 water.rotation.x = -Math.PI / 2;
 water.position.y = -0.32;
@@ -85,10 +121,64 @@ rim.rotation.x = Math.PI / 2;
 rim.position.y = 0.225;
 scene.add(rim);
 
+for (let i = 0; i < 40; i++) {
+  const angle = (i / 40) * Math.PI * 2;
+  const stone = new THREE.Mesh(
+    new THREE.BoxGeometry(0.75 + (i % 3) * 0.08, 0.32 + (i % 2) * 0.06, 0.4),
+    toon(i % 2 ? 0x748b89 : 0x829795),
+  );
+  stone.position.set(Math.cos(angle) * 10.62, 0.02, Math.sin(angle) * 10.62);
+  stone.rotation.y = -angle;
+  stone.rotation.z = (i % 3 - 1) * 0.035;
+  stone.castShadow = true;
+  scene.add(stone);
+}
+
+const distantTown = [];
+for (let i = 0; i < 11; i++) {
+  const angle = Math.PI * 1.08 + (i / 10) * Math.PI * 0.84;
+  const radius = 15.5 + (i % 3) * 1.3;
+  const group = new THREE.Group();
+  group.position.set(Math.cos(angle) * radius, -0.1, Math.sin(angle) * radius);
+  group.rotation.y = -angle + Math.PI / 2;
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(2.1 + (i % 3) * 0.55, 1.8 + (i % 4) * 0.45, 1.8),
+    new THREE.MeshStandardMaterial({ color: i % 2 ? 0x7c9693 : 0x8da19b, roughness: 0.92 }),
+  );
+  body.position.y = 0.9 + (i % 4) * 0.22;
+  group.add(body);
+  const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(1.75 + (i % 3) * 0.3, 0.55, 4),
+    new THREE.MeshStandardMaterial({ color: 0x355a61, roughness: 0.78 }),
+  );
+  roof.position.y = body.position.y * 2 + 0.18;
+  roof.rotation.y = Math.PI / 4;
+  group.add(roof);
+  scene.add(group);
+  distantTown.push(group);
+}
+
 const backdrop = makeImagePlane(kvTexture, 15.7, 7.8, { transparent: false });
 backdrop.position.set(0, 7.1, -25);
 backdrop.material.color.set(0xd9e9e6);
 scene.add(backdrop);
+
+const cloudRefs = [];
+for (let i = 0; i < 7; i++) {
+  const cloud = new THREE.Group();
+  cloud.position.set(-15 + i * 5.1, 7.4 + (i % 3) * 0.7, -16 - (i % 2) * 5.2);
+  for (let puff = 0; puff < 4; puff++) {
+    const mesh = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.7 + (puff % 3) * 0.22, 1),
+      new THREE.MeshStandardMaterial({ color: 0xeaf4ef, transparent: true, opacity: 0.68, roughness: 1, depthWrite: false }),
+    );
+    mesh.position.set((puff - 1.5) * 0.68, Math.abs(puff - 1.5) * -0.12, (puff % 2) * 0.2);
+    mesh.scale.y = 0.58;
+    cloud.add(mesh);
+  }
+  scene.add(cloud);
+  cloudRefs.push({ cloud, baseX: cloud.position.x, phase: i * 1.4 });
+}
 
 const street = new THREE.Mesh(
   new THREE.PlaneGeometry(3.35, 18.5),
@@ -112,20 +202,52 @@ const buildingLabels = [];
 const makeBuilding = ({ x, z, width, depth, height, wall, roof, sign = null }) => {
   const group = new THREE.Group();
   group.position.set(x, 0.22, z);
+  const foundation = new THREE.Mesh(new THREE.BoxGeometry(width + 0.18, 0.16, depth + 0.16), toon(0x7f7668));
+  foundation.position.y = 0.08;
+  foundation.receiveShadow = true;
+  group.add(foundation);
   const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), toon(wall));
-  body.position.y = height / 2;
+  body.position.y = height / 2 + 0.16;
   body.castShadow = body.receiveShadow = true;
   group.add(body);
+  for (const px of [-1, 1]) {
+    for (const pz of [-1, 1]) {
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.075, height + 0.05, 0.075), toon(0x5b493c));
+      beam.position.set(px * (width / 2 - 0.04), height / 2 + 0.17, pz * (depth / 2 - 0.04));
+      group.add(beam);
+    }
+  }
+  const eave = new THREE.Mesh(new THREE.BoxGeometry(width * 1.16, 0.12, depth * 1.18), toon(roof));
+  eave.position.y = height + 0.2;
+  eave.castShadow = true;
+  group.add(eave);
   const roofMesh = new THREE.Mesh(new THREE.ConeGeometry(Math.max(width, depth) * 0.72, 0.62, 4), toon(roof));
-  roofMesh.position.y = height + 0.24;
+  roofMesh.position.y = height + 0.48;
   roofMesh.rotation.y = Math.PI / 4;
   roofMesh.scale.z = depth / width;
   roofMesh.castShadow = true;
   group.add(roofMesh);
+  const ridge = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.13, depth * 1.08), toon(0x263c42));
+  ridge.position.y = height + 0.82;
+  group.add(ridge);
+  const front = x < 0 ? 1 : -1;
   const door = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.88, 0.035), toon(0x594333));
-  door.position.set(x < 0 ? width / 2 + 0.019 : -width / 2 - 0.019, 0.44, 0);
+  door.position.set(front * (width / 2 + 0.019), 0.6, 0);
   door.rotation.y = Math.PI / 2;
   group.add(door);
+  for (const windowZ of [-depth * 0.28, depth * 0.28]) {
+    const window = new THREE.Mesh(
+      new THREE.BoxGeometry(0.035, 0.58, 0.62),
+      new THREE.MeshStandardMaterial({ color: 0xf0dfa8, emissive: 0x8b6b2f, emissiveIntensity: 0.16, roughness: 0.72 }),
+    );
+    window.position.set(front * (width / 2 + 0.023), 1.35, windowZ);
+    group.add(window);
+    for (const offset of [-0.18, 0, 0.18]) {
+      const slat = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.61, 0.028), toon(0x66503e));
+      slat.position.set(front * (width / 2 + 0.045), 1.35, windowZ + offset);
+      group.add(slat);
+    }
+  }
   if (sign) {
     const label = makeWorldLabel(sign.en, sign.jp, {
       color: sign.color || '#2b7580', paper: 'rgba(245, 235, 207, .94)', border: 'rgba(72,57,38,.28)', scale: [1.42, 0.4],
@@ -133,6 +255,18 @@ const makeBuilding = ({ x, z, width, depth, height, wall, roof, sign = null }) =
     label.position.set(x < 0 ? width / 2 + 0.08 : -width / 2 - 0.08, height + 0.7, 0);
     group.add(label);
     buildingLabels.push({ label, position: new THREE.Vector3(x, 0.22, z) });
+    const noren = new THREE.Group();
+    noren.position.set(front * (width / 2 + 0.06), 1.24, 0);
+    noren.rotation.y = Math.PI / 2;
+    for (let panel = -1; panel <= 1; panel++) {
+      const cloth = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.28, 0.62),
+        new THREE.MeshStandardMaterial({ color: sign.en === 'DANGO' ? 0xd56b88 : 0x426d73, roughness: 0.92, side: THREE.DoubleSide }),
+      );
+      cloth.position.x = panel * 0.29;
+      noren.add(cloth);
+    }
+    group.add(noren);
   }
   addOutlines(group, { color: 0x253438, min: 0.006, max: 0.016 });
   scene.add(group);
@@ -147,6 +281,121 @@ makeBuilding({ x: -4.6, z: 0.2, width: 3.25, depth: 2.8, height: 2.45, wall: 0xd
 makeBuilding({ x: 4.65, z: -0.35, width: 3.15, depth: 2.8, height: 2.1, wall: 0xd9c2a6, roof: 0x554e56 });
 makeBuilding({ x: -4.55, z: -4.1, width: 3.1, depth: 2.6, height: 2.1, wall: 0xcbd4c6, roof: 0x3a5d64 });
 makeBuilding({ x: 4.55, z: -4.2, width: 3.35, depth: 2.7, height: 2.35, wall: 0xcaa888, roof: 0x4a464c, sign: { en: 'SMITHY', jp: '鍛冶場', color: '#b55743' } });
+
+const canal = new THREE.Mesh(
+  new THREE.PlaneGeometry(1.12, 13.7),
+  new THREE.MeshStandardMaterial({ color: 0x438f9e, roughness: 0.24, metalness: 0.16, emissive: 0x1f5964, emissiveIntensity: 0.12 }),
+);
+canal.rotation.x = -Math.PI / 2;
+canal.position.set(7.45, 0.245, -0.15);
+scene.add(canal);
+for (const side of [-1, 1]) {
+  const bank = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.2, 14.0), toon(side > 0 ? 0x697f7e : 0x768987));
+  bank.position.set(7.45 + side * 0.7, 0.3, -0.15);
+  bank.castShadow = bank.receiveShadow = true;
+  scene.add(bank);
+}
+const bridge = new THREE.Group();
+bridge.position.set(7.45, 0.34, 3.2);
+const bridgeDeck = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.12, 1.1), toon(0x8a6848));
+bridgeDeck.castShadow = true;
+bridge.add(bridgeDeck);
+for (const side of [-1, 1]) {
+  for (const x of [-0.82, 0, 0.82]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.52, 8), toon(0x5d4937));
+    post.position.set(x, 0.3, side * 0.48);
+    bridge.add(post);
+  }
+  const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.72, 8), toon(0x5d4937));
+  rail.rotation.z = Math.PI / 2;
+  rail.position.set(0, 0.52, side * 0.48);
+  bridge.add(rail);
+}
+addOutlines(bridge, { color: 0x334142, min: 0.004, max: 0.011 });
+scene.add(bridge);
+
+const lilyPads = [];
+for (let i = 0; i < 9; i++) {
+  const pad = new THREE.Mesh(
+    new THREE.CircleGeometry(0.12 + (i % 3) * 0.035, 18, 0.22, Math.PI * 1.82),
+    new THREE.MeshStandardMaterial({ color: i % 2 ? 0x5f8b70 : 0x6b9977, roughness: 0.82, side: THREE.DoubleSide }),
+  );
+  pad.rotation.x = -Math.PI / 2;
+  pad.position.set(7.45 + (i % 2 ? -0.22 : 0.2), 0.258, 5.5 - i * 1.34);
+  pad.userData.phase = i * 0.8;
+  scene.add(pad);
+  lilyPads.push(pad);
+}
+
+const streetLanterns = [];
+for (const [row, z] of [3.25, -0.9, -4.65].entries()) {
+  const rope = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.014, 0.014, 4.8, 8),
+    new THREE.MeshStandardMaterial({ color: 0x6d5b48, roughness: 0.82 }),
+  );
+  rope.rotation.z = Math.PI / 2;
+  rope.position.set(0, 3.02, z);
+  scene.add(rope);
+  for (let i = 0; i < 5; i++) {
+    const lantern = new THREE.Group();
+    lantern.position.set(-1.72 + i * 0.86, 2.72 - Math.abs(i - 2) * 0.055, z);
+    const paper = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.11, 0.11, 0.29, 12),
+      new THREE.MeshBasicMaterial({ color: row % 2 ? 0xffd09b : 0xf19ab1 }),
+    );
+    lantern.add(paper);
+    for (const y of [-0.16, 0.16]) {
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.035, 12), toon(0x5b4238));
+      cap.position.y = y;
+      lantern.add(cap);
+    }
+    scene.add(lantern);
+    streetLanterns.push({ group: lantern, phase: row * 1.3 + i * 0.55 });
+  }
+}
+
+const makeStall = (x, z, color, goodsColor) => {
+  const stall = new THREE.Group();
+  stall.position.set(x, 0.22, z);
+  const table = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.12, 0.65), toon(0x866143));
+  table.position.y = 0.72;
+  stall.add(table);
+  for (const side of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 1.55, 8), toon(0x684c37));
+    post.position.set(side * 0.5, 0.78, -0.23);
+    stall.add(post);
+  }
+  const awning = new THREE.Mesh(
+    new THREE.BoxGeometry(1.38, 0.08, 0.88),
+    new THREE.MeshStandardMaterial({ color, roughness: 0.88 }),
+  );
+  awning.position.y = 1.52;
+  awning.rotation.x = -0.08;
+  stall.add(awning);
+  for (let i = 0; i < 7; i++) {
+    const goods = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), toon(i % 2 ? goodsColor : 0xf3d38c));
+    goods.position.set(-0.4 + (i % 4) * 0.26, 0.83 + Math.floor(i / 4) * 0.09, -0.04);
+    stall.add(goods);
+  }
+  addOutlines(stall, { color: 0x3a4040, min: 0.004, max: 0.011 });
+  scene.add(stall);
+  return stall;
+};
+makeStall(2.55, -2.0, 0x4d8790, 0xd66f88);
+makeStall(-2.5, 1.6, 0xd17d98, 0x75a97a);
+
+for (const [x, z] of [[-6.1, 2.1], [6.05, -6.1], [-5.9, -2.0], [5.9, 6.2]]) {
+  const stack = new THREE.Group();
+  stack.position.set(x, 0.22, z);
+  for (let i = 0; i < 3; i++) {
+    const crate = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.38, 0.42), toon(i % 2 ? 0x8f704f : 0xa28058));
+    crate.position.set((i % 2) * 0.34, 0.19 + Math.floor(i / 2) * 0.38, (i % 2) * 0.08);
+    crate.rotation.y = i * 0.22;
+    stack.add(crate);
+  }
+  addOutlines(stack, { color: 0x4a4842, min: 0.004, max: 0.01 });
+  scene.add(stack);
+}
 
 const gate = new THREE.Group();
 gate.position.set(0, 0.22, -7.2);
@@ -207,8 +456,21 @@ makeSakura(-2.7, -6.2, 0.88);
 
 const characterRefs = [];
 const makeCharacter = (texture, { x, z, width, height, name, en }) => {
+  const shadow = new THREE.Mesh(
+    new THREE.CircleGeometry(Math.max(0.34, width * 0.34), 36),
+    new THREE.MeshBasicMaterial({ color: 0x24434a, transparent: true, opacity: 0.2, depthWrite: false }),
+  );
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.set(x, 0.247, z);
+  scene.add(shadow);
+  const stand = new THREE.Mesh(
+    new THREE.CylinderGeometry(width * 0.25, width * 0.31, 0.08, 28),
+    new THREE.MeshStandardMaterial({ color: 0x5b8b8f, roughness: 0.48, metalness: 0.28 }),
+  );
+  stand.position.set(x, 0.27, z);
+  scene.add(stand);
   const character = makeImagePlane(texture, width, height);
-  character.position.set(x, 0.22 + height / 2, z);
+  character.position.set(x, 0.29 + height / 2, z);
   runtime.addBillboard(character);
   scene.add(character);
   const label = makeWorldLabel(en, name, {
@@ -216,7 +478,7 @@ const makeCharacter = (texture, { x, z, width, height, name, en }) => {
   });
   label.position.set(x, 0.5 + height, z);
   scene.add(label);
-  characterRefs.push({ character, label });
+  characterRefs.push({ character, label, shadow, stand });
   return character;
 };
 
@@ -232,13 +494,16 @@ for (const side of [-1, 1]) {
   post.position.set(side * 0.56, 0.78, 0);
   board.add(post);
 }
-const boardFace = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.78, 0.08), toon(0xeadcb8));
+const boardFace = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.92, 0.08), toon(0xeadcb8));
 boardFace.position.y = 1.05;
 board.add(boardFace);
+const boardEpisode = makeImagePlane(episodeTexture, 1.4, 0.78, { transparent: false });
+boardEpisode.position.set(0, 1.05, 0.055);
+board.add(boardEpisode);
 const boardLabel = makeWorldLabel('NOW SHOWING', '上映札', {
-  color: '#287d88', paper: 'rgba(246, 233, 199, .96)', border: 'rgba(90,68,42,.34)', scale: [1.18, 0.33],
+  color: '#287d88', paper: 'rgba(246, 233, 199, .96)', border: 'rgba(90,68,42,.34)', scale: [1.08, 0.3],
 });
-boardLabel.position.set(0, 1.08, 0.06);
+boardLabel.position.set(0, 1.72, 0.06);
 board.add(boardLabel);
 addOutlines(board, { color: 0x3d403d, min: 0.006, max: 0.014 });
 scene.add(board);
@@ -318,6 +583,13 @@ const updateProgress = () => {
   else if (foundClues.size < 3) objective.textContent = `青い足跡を調べる　${foundClues.size}/3`;
   else objective.textContent = '桜の近くにいる久遠を見つける';
   clueRefs.forEach((ref) => { ref.group.visible = !foundClues.has(ref.def.id); });
+  const kuonRef = characterRefs.find((ref) => ref.character === kuon);
+  if (kuonRef) {
+    const visible = foundClues.size === 3;
+    kuonRef.character.visible = visible;
+    kuonRef.shadow.visible = visible;
+    kuonRef.stand.visible = visible;
+  }
 };
 
 const makePaw = () => {
@@ -374,6 +646,7 @@ runtime.addInteractable({
   position: kuon.position,
   radius: 1.55,
   priority: 3,
+  enabled: () => foundClues.size === 3,
   label: () => foundClues.size === 3 ? '久遠を見つけた' : '久遠の様子を見る',
   action: () => {
     if (foundClues.size < 3) {
@@ -426,7 +699,19 @@ runtime.addInteractable({
 });
 
 runtime.addFrame(({ elapsed, near }) => {
-  water.rotation.z = elapsed * 0.005;
+  waterUniforms.uTime.value = elapsed;
+  lilyPads.forEach((pad) => {
+    pad.rotation.z = Math.sin(elapsed * 0.3 + pad.userData.phase) * 0.16;
+    pad.position.y = 0.258 + Math.sin(elapsed * 0.85 + pad.userData.phase) * 0.012;
+  });
+  streetLanterns.forEach(({ group, phase }) => {
+    group.rotation.z = Math.sin(elapsed * 1.15 + phase) * 0.055;
+    group.position.y += (Math.sin(elapsed * 1.15 + phase) * 0.018 - (group.userData.lastBob || 0));
+    group.userData.lastBob = Math.sin(elapsed * 1.15 + phase) * 0.018;
+  });
+  cloudRefs.forEach(({ cloud, baseX, phase }) => {
+    cloud.position.x = baseX + Math.sin(elapsed * 0.08 + phase) * 1.8;
+  });
   clueRefs.forEach((ref, index) => {
     ref.ring.material.opacity = 0.2 + Math.sin(elapsed * 2.1 + index) * 0.1;
     ref.group.position.y = 0.27 + Math.sin(elapsed * 1.6 + index) * 0.018;
