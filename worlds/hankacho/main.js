@@ -473,33 +473,6 @@ for (let i = 0; i < 9; i++) {
   lilyPads.push(pad);
 }
 
-const streetLanterns = [];
-for (const [row, z] of [3.25, -0.9, -4.65].entries()) {
-  const rope = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.014, 0.014, 4.8, 8),
-    new THREE.MeshStandardMaterial({ color: 0x6d5b48, roughness: 0.82 }),
-  );
-  rope.rotation.z = Math.PI / 2;
-  rope.position.set(0, 3.02, z);
-  scene.add(rope);
-  for (let i = 0; i < 5; i++) {
-    const lantern = new THREE.Group();
-    lantern.position.set(-1.72 + i * 0.86, 2.72 - Math.abs(i - 2) * 0.055, z);
-    const paper = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.11, 0.11, 0.29, 12),
-      new THREE.MeshBasicMaterial({ color: row % 2 ? 0xffd09b : 0xf19ab1 }),
-    );
-    lantern.add(paper);
-    for (const y of [-0.16, 0.16]) {
-      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.035, 12), toon(0x5b4238));
-      cap.position.y = y;
-      lantern.add(cap);
-    }
-    scene.add(lantern);
-    streetLanterns.push({ group: lantern, phase: row * 1.3 + i * 0.55 });
-  }
-}
-
 const dangoStickMaterial = toon(0x8b633d);
 const dangoMaterials = [toon(0xe992a9), toon(0xf1e7c9), toon(0x82a66d)];
 const makeDangoSkewer = () => {
@@ -917,11 +890,6 @@ runtime.addFrame(({ elapsed, near }) => {
   lilyPads.forEach((pad) => {
     pad.rotation.z = Math.sin(elapsed * 0.3 + pad.userData.phase) * 0.16;
     pad.position.y = 0.258 + Math.sin(elapsed * 0.85 + pad.userData.phase) * 0.012;
-  });
-  streetLanterns.forEach(({ group, phase }) => {
-    group.rotation.z = Math.sin(elapsed * 1.15 + phase) * 0.055;
-    group.position.y += (Math.sin(elapsed * 1.15 + phase) * 0.018 - (group.userData.lastBob || 0));
-    group.userData.lastBob = Math.sin(elapsed * 1.15 + phase) * 0.018;
   });
   cloudRefs.forEach(({ cloud, baseX, phase }) => {
     cloud.position.x = baseX + Math.sin(elapsed * 0.08 + phase) * 1.8;
