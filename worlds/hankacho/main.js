@@ -183,107 +183,248 @@ for (let i = 0; i < 7; i++) {
   cloudRefs.push({ cloud, baseX: cloud.position.x, phase: i * 1.4 });
 }
 
-const street = new THREE.Mesh(
-  new THREE.PlaneGeometry(3.35, 18.5),
-  new THREE.MeshStandardMaterial({ color: 0xb49f83, roughness: 1, metalness: 0 }),
+const street = new THREE.Group();
+const streetBed = new THREE.Mesh(
+  new THREE.PlaneGeometry(4.55, 19.15),
+  new THREE.MeshStandardMaterial({ color: 0x766f63, roughness: 1, metalness: 0 }),
 );
-street.rotation.x = -Math.PI / 2;
-street.position.set(0, 0.238, -0.25);
-street.receiveShadow = true;
-scene.add(street);
-for (let i = 0; i < 16; i++) {
-  const line = new THREE.Mesh(
-    new THREE.BoxGeometry(2.9, 0.025, 0.035),
-    new THREE.MeshBasicMaterial({ color: i % 2 ? 0x967f66 : 0xc4b093, transparent: true, opacity: 0.52 }),
-  );
-  line.position.set(0, 0.255, 7.4 - i * 1.03);
-  scene.add(line);
+streetBed.rotation.x = -Math.PI / 2;
+streetBed.position.set(0, 0.239, -0.2);
+streetBed.receiveShadow = true;
+street.add(streetBed);
+
+const stonePalette = [0x9f9b8f, 0x8f9187, 0xaaa596, 0x7f857f, 0x989487];
+const stoneMaterials = stonePalette.map((color) => new THREE.MeshStandardMaterial({ color, roughness: 0.98, metalness: 0 }));
+for (let row = 0; row < 19; row++) {
+  for (let column = -1; column <= 1; column++) {
+    const seed = row * 7 + column * 3;
+    const width = 1.16 + Math.sin(seed * 2.31) * 0.09;
+    const depth = 0.78 + Math.cos(seed * 1.73) * 0.07;
+    const stone = new THREE.Mesh(
+      new THREE.BoxGeometry(width, 0.045, depth),
+      stoneMaterials[(row * 3 + column + 8) % stoneMaterials.length],
+    );
+    stone.position.set(
+      column * 1.28 + Math.sin(seed * 1.19) * 0.045,
+      0.263,
+      8.35 - row * 0.95 + Math.cos(seed * 1.41) * 0.04,
+    );
+    stone.rotation.y = Math.sin(seed * 0.83) * 0.035;
+    stone.receiveShadow = true;
+    street.add(stone);
+  }
 }
+
+for (const x of [-0.73, 0.73]) {
+  const rut = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.16, 18.7),
+    new THREE.MeshBasicMaterial({ color: 0x655f53, transparent: true, opacity: 0.12, depthWrite: false }),
+  );
+  rut.rotation.x = -Math.PI / 2;
+  rut.position.set(x, 0.289, -0.18);
+  street.add(rut);
+}
+
+for (const side of [-1, 1]) {
+  const gutterStone = new THREE.Mesh(
+    new THREE.BoxGeometry(0.42, 0.12, 19.0),
+    new THREE.MeshStandardMaterial({ color: 0x6f7770, roughness: 0.94, metalness: 0 }),
+  );
+  gutterStone.position.set(side * 2.48, 0.23, -0.2);
+  gutterStone.receiveShadow = true;
+  street.add(gutterStone);
+  const gutterWater = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.19, 18.75),
+    new THREE.MeshStandardMaterial({ color: 0x4f8e96, roughness: 0.32, metalness: 0.12, emissive: 0x1e5961, emissiveIntensity: 0.08 }),
+  );
+  gutterWater.rotation.x = -Math.PI / 2;
+  gutterWater.position.set(side * 2.48, 0.298, -0.2);
+  street.add(gutterWater);
+  for (let index = 0; index < 19; index++) {
+    const curb = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.82), toon(index % 2 ? 0x7f857b : 0x898d82));
+    curb.position.set(side * 2.22, 0.3, 8.32 - index * 0.95);
+    curb.receiveShadow = true;
+    street.add(curb);
+  }
+}
+
+for (const z of [4.3, 0.15, -4.15]) {
+  for (const side of [-1, 1]) {
+    const bridge = new THREE.Group();
+    for (let plank = -2; plank <= 2; plank++) {
+      const board = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.075, 0.13), toon(plank % 2 ? 0x775a3d : 0x856647));
+      board.position.set(side * 2.58, 0.36, z + plank * 0.14);
+      board.castShadow = board.receiveShadow = true;
+      bridge.add(board);
+    }
+    street.add(bridge);
+  }
+}
+scene.add(street);
 
 const buildingRefs = [];
 const buildingLabels = [];
+const timberMaterial = toon(0x574334);
+const darkTimberMaterial = toon(0x40362f);
+const shojiMaterial = new THREE.MeshStandardMaterial({
+  color: 0xeee2bd,
+  emissive: 0x8d733d,
+  emissiveIntensity: 0.12,
+  roughness: 0.9,
+});
+
+const addLatticePanel = (group, { x, y, z, span, height, front }) => {
+  const backing = new THREE.Mesh(new THREE.BoxGeometry(0.035, height, span), shojiMaterial);
+  backing.position.set(x, y, z);
+  group.add(backing);
+  const faceX = x + front * 0.025;
+  for (let index = -2; index <= 2; index++) {
+    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.03, height + 0.035, 0.025), darkTimberMaterial);
+    slat.position.set(faceX, y, z + index * span * 0.18);
+    group.add(slat);
+  }
+  for (let index = -1; index <= 1; index++) {
+    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.027, span + 0.035), darkTimberMaterial);
+    slat.position.set(faceX, y + index * height * 0.27, z);
+    group.add(slat);
+  }
+};
+
+const addMachiyaRoof = (group, { width, depth, height, color }) => {
+  const baseY = height + 0.25;
+  const span = width / 2 + 0.25;
+  const rise = Math.min(0.72, width * 0.21);
+  const slopeLength = Math.hypot(span, rise);
+  const angle = Math.atan2(rise, span);
+  const roofMaterial = new THREE.MeshStandardMaterial({ color, roughness: 0.78, metalness: 0.08 });
+  const tileMaterial = new THREE.MeshStandardMaterial({ color: 0x303f42, roughness: 0.7, metalness: 0.12 });
+  for (const side of [-1, 1]) {
+    const panel = new THREE.Mesh(new THREE.BoxGeometry(slopeLength, 0.11, depth + 0.5), roofMaterial);
+    panel.position.set(side * span * 0.5, baseY + rise * 0.5, 0);
+    panel.rotation.z = -side * angle;
+    panel.castShadow = panel.receiveShadow = true;
+    group.add(panel);
+    for (let row = 1; row <= 5; row++) {
+      const progress = row / 6;
+      const tile = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, depth + 0.54, 7), tileMaterial);
+      tile.rotation.x = Math.PI / 2;
+      tile.position.set(side * span * progress, baseY + rise * (1 - progress) + 0.075, 0);
+      group.add(tile);
+    }
+    const fascia = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.17, depth + 0.58), darkTimberMaterial);
+    fascia.position.set(side * span, baseY, 0);
+    fascia.castShadow = true;
+    group.add(fascia);
+  }
+  const ridge = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, depth + 0.62, 10), tileMaterial);
+  ridge.rotation.x = Math.PI / 2;
+  ridge.position.set(0, baseY + rise + 0.08, 0);
+  ridge.castShadow = true;
+  group.add(ridge);
+};
+
 const makeBuilding = ({ x, z, width, depth, height, wall, roof, sign = null }) => {
   const group = new THREE.Group();
   group.position.set(x, 0.22, z);
-  const foundation = new THREE.Mesh(new THREE.BoxGeometry(width + 0.18, 0.16, depth + 0.16), toon(0x7f7668));
-  foundation.position.y = 0.08;
+  const front = x < 0 ? 1 : -1;
+  const frontX = front * (width / 2 + 0.025);
+  const foundation = new THREE.Mesh(new THREE.BoxGeometry(width + 0.22, 0.2, depth + 0.22), toon(0x73736b));
+  foundation.position.y = 0.1;
   foundation.receiveShadow = true;
   group.add(foundation);
   const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), toon(wall));
-  body.position.y = height / 2 + 0.16;
+  body.position.y = height / 2 + 0.2;
   body.castShadow = body.receiveShadow = true;
   group.add(body);
+  addMachiyaRoof(group, { width, depth, height, color: roof });
+  const eave = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.13, depth + 0.34), darkTimberMaterial);
+  eave.position.set(front * (width / 2 + 0.22), height - 0.08, 0);
+  eave.castShadow = true;
+  group.add(eave);
+  addOutlines(group, { color: 0x263438, min: 0.004, max: 0.011 });
+
   for (const px of [-1, 1]) {
     for (const pz of [-1, 1]) {
-      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.075, height + 0.05, 0.075), toon(0x5b493c));
-      beam.position.set(px * (width / 2 - 0.04), height / 2 + 0.17, pz * (depth / 2 - 0.04));
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.085, height + 0.08, 0.085), timberMaterial);
+      beam.position.set(px * (width / 2 - 0.045), height / 2 + 0.2, pz * (depth / 2 - 0.045));
       group.add(beam);
     }
   }
-  const eave = new THREE.Mesh(new THREE.BoxGeometry(width * 1.16, 0.12, depth * 1.18), toon(roof));
-  eave.position.y = height + 0.2;
-  eave.castShadow = true;
-  group.add(eave);
-  const roofMesh = new THREE.Mesh(new THREE.ConeGeometry(Math.max(width, depth) * 0.72, 0.62, 4), toon(roof));
-  roofMesh.position.y = height + 0.48;
-  roofMesh.rotation.y = Math.PI / 4;
-  roofMesh.scale.z = depth / width;
-  roofMesh.castShadow = true;
-  group.add(roofMesh);
-  const ridge = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.13, depth * 1.08), toon(0x263c42));
-  ridge.position.y = height + 0.82;
-  group.add(ridge);
-  const front = x < 0 ? 1 : -1;
-  const door = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.88, 0.035), toon(0x594333));
-  door.position.set(front * (width / 2 + 0.019), 0.6, 0);
-  door.rotation.y = Math.PI / 2;
+  for (const beamY of [0.31, 1.22, height - 0.18]) {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.09, depth + 0.045), timberMaterial);
+    beam.position.set(frontX + front * 0.025, beamY, 0);
+    group.add(beam);
+  }
+  for (const beamZ of [-depth / 2 + 0.08, -depth / 6, depth / 6, depth / 2 - 0.08]) {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(0.07, Math.min(1.08, height - 0.42), 0.065), timberMaterial);
+    beam.position.set(frontX + front * 0.03, 0.75, beamZ);
+    group.add(beam);
+  }
+
+  const engawa = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.13, depth * 0.92), toon(0x806044));
+  engawa.position.set(front * (width / 2 + 0.23), 0.28, 0);
+  engawa.castShadow = engawa.receiveShadow = true;
+  group.add(engawa);
+  for (let plank = -2; plank <= 2; plank++) {
+    const seam = new THREE.Mesh(new THREE.BoxGeometry(0.57, 0.018, 0.018), darkTimberMaterial);
+    seam.position.set(front * (width / 2 + 0.24), 0.352, plank * depth * 0.17);
+    group.add(seam);
+  }
+
+  const lowerSpan = depth * 0.27;
+  addLatticePanel(group, { x: frontX + front * 0.045, y: 0.78, z: -depth * 0.31, span: lowerSpan, height: 0.78, front });
+  addLatticePanel(group, { x: frontX + front * 0.045, y: 0.78, z: depth * 0.31, span: lowerSpan, height: 0.78, front });
+  const door = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.94, Math.min(0.48, depth * 0.2)), toon(0x4f3c31));
+  door.position.set(frontX + front * 0.055, 0.76, 0);
   group.add(door);
-  for (const windowZ of [-depth * 0.28, depth * 0.28]) {
-    const window = new THREE.Mesh(
-      new THREE.BoxGeometry(0.035, 0.58, 0.62),
-      new THREE.MeshStandardMaterial({ color: 0xf0dfa8, emissive: 0x8b6b2f, emissiveIntensity: 0.16, roughness: 0.72 }),
-    );
-    window.position.set(front * (width / 2 + 0.023), 1.35, windowZ);
-    group.add(window);
-    for (const offset of [-0.18, 0, 0.18]) {
-      const slat = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.61, 0.028), toon(0x66503e));
-      slat.position.set(front * (width / 2 + 0.045), 1.35, windowZ + offset);
-      group.add(slat);
-    }
+  const doorPull = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 8), toon(0xc8a85f));
+  doorPull.position.set(frontX + front * 0.085, 0.76, depth * 0.07);
+  group.add(doorPull);
+
+  if (height >= 2.08) {
+    addLatticePanel(group, { x: frontX + front * 0.04, y: height - 0.48, z: -depth * 0.25, span: depth * 0.34, height: 0.52, front });
+    addLatticePanel(group, { x: frontX + front * 0.04, y: height - 0.48, z: depth * 0.25, span: depth * 0.34, height: 0.52, front });
   }
   if (sign) {
     const label = makeWorldLabel(sign.en, sign.jp, {
-      color: sign.color || '#2b7580', paper: 'rgba(245, 235, 207, .94)', border: 'rgba(72,57,38,.28)', scale: [1.42, 0.4],
+      color: sign.color || '#2b7580', paper: 'rgba(245, 235, 207, .94)', border: 'rgba(72,57,38,.28)', scale: [1, 0.28],
     });
-    label.position.set(x < 0 ? width / 2 + 0.08 : -width / 2 - 0.08, height + 0.7, 0);
+    label.position.set(front * (width / 2 + 0.42), height + 0.77, 0);
     group.add(label);
     buildingLabels.push({ label, position: new THREE.Vector3(x, 0.22, z) });
     const noren = new THREE.Group();
-    noren.position.set(front * (width / 2 + 0.06), 1.24, 0);
-    noren.rotation.y = Math.PI / 2;
+    noren.position.set(front * (width / 2 + 0.1), 1.3, 0);
+    noren.rotation.y = front > 0 ? Math.PI / 2 : -Math.PI / 2;
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 1.08, 8), toon(0x5f4936));
+    rod.rotation.z = Math.PI / 2;
+    rod.position.y = 0.33;
+    noren.add(rod);
     for (let panel = -1; panel <= 1; panel++) {
       const cloth = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.28, 0.62),
+        new THREE.PlaneGeometry(0.32, 0.58),
         new THREE.MeshStandardMaterial({ color: sign.en === 'DANGO' ? 0xd56b88 : 0x426d73, roughness: 0.92, side: THREE.DoubleSide }),
       );
-      cloth.position.x = panel * 0.29;
+      cloth.position.x = panel * 0.33;
       noren.add(cloth);
     }
     group.add(noren);
+    const hangingSign = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.72, 0.34), toon(0x765636));
+    hangingSign.position.set(front * (width / 2 + 0.43), 1.72, -depth * 0.38);
+    hangingSign.castShadow = true;
+    group.add(hangingSign);
   }
-  addOutlines(group, { color: 0x253438, min: 0.006, max: 0.016 });
   scene.add(group);
   runtime.addBoxObstacle(x, z, width + 0.22, depth + 0.22, 0, 0.16);
   buildingRefs.push(group);
   return group;
 };
 
-makeBuilding({ x: -4.45, z: 4.3, width: 3.1, depth: 2.5, height: 2.0, wall: 0xd8c8aa, roof: 0x355b63, sign: { en: 'DANGO', jp: '団子屋' } });
-makeBuilding({ x: 4.5, z: 4.2, width: 3.0, depth: 2.4, height: 2.25, wall: 0xc7d5cb, roof: 0x365961 });
-makeBuilding({ x: -4.6, z: 0.2, width: 3.25, depth: 2.8, height: 2.45, wall: 0xd4d0bd, roof: 0x3f4e56 });
-makeBuilding({ x: 4.65, z: -0.35, width: 3.15, depth: 2.8, height: 2.1, wall: 0xd9c2a6, roof: 0x554e56 });
-makeBuilding({ x: -4.55, z: -4.1, width: 3.1, depth: 2.6, height: 2.1, wall: 0xcbd4c6, roof: 0x3a5d64 });
-makeBuilding({ x: 4.55, z: -4.2, width: 3.35, depth: 2.7, height: 2.35, wall: 0xcaa888, roof: 0x4a464c, sign: { en: 'SMITHY', jp: '鍛冶場', color: '#b55743' } });
+makeBuilding({ x: -4.45, z: 4.3, width: 3.1, depth: 2.5, height: 2.0, wall: 0xe0d6bd, roof: 0x3b484a, sign: { en: 'DANGO', jp: '団子屋', color: '#a64f68' } });
+makeBuilding({ x: 4.5, z: 4.2, width: 3.0, depth: 2.4, height: 2.25, wall: 0xd9d5c3, roof: 0x465154, sign: { en: 'KIMONO', jp: '呉服屋', color: '#376f78' } });
+makeBuilding({ x: -4.6, z: 0.2, width: 3.25, depth: 2.8, height: 2.45, wall: 0xe3ddcb, roof: 0x374346, sign: { en: 'TEA', jp: '茶舗', color: '#526e4e' } });
+makeBuilding({ x: 4.65, z: -0.35, width: 3.15, depth: 2.8, height: 2.1, wall: 0xd8cbb5, roof: 0x4a4b4f, sign: { en: 'BOOKS', jp: '本屋', color: '#596a86' } });
+makeBuilding({ x: -4.55, z: -4.1, width: 3.1, depth: 2.6, height: 2.1, wall: 0xd7d8ca, roof: 0x3d4b4d, sign: { en: 'LANTERN', jp: '提灯屋', color: '#9b5a55' } });
+makeBuilding({ x: 4.55, z: -4.2, width: 3.35, depth: 2.7, height: 2.35, wall: 0xd1bea4, roof: 0x44474b, sign: { en: 'SMITHY', jp: '鍛冶場', color: '#a54f42' } });
 
 const canal = new THREE.Mesh(
   new THREE.PlaneGeometry(1.12, 13.7),
@@ -359,36 +500,69 @@ for (const [row, z] of [3.25, -0.9, -4.65].entries()) {
   }
 }
 
-const makeStall = (x, z, color, goodsColor) => {
+const dangoStickMaterial = toon(0x8b633d);
+const dangoMaterials = [toon(0xe992a9), toon(0xf1e7c9), toon(0x82a66d)];
+const makeDangoSkewer = () => {
+  const skewer = new THREE.Group();
+  const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.75, 7), dangoStickMaterial);
+  stick.position.y = 1.04;
+  skewer.add(stick);
+  [1.25, 1.08, 0.91].forEach((y, index) => {
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.082, 14, 10), dangoMaterials[index]);
+    ball.position.y = y;
+    ball.scale.y = 0.94;
+    skewer.add(ball);
+  });
+  return skewer;
+};
+
+const makeStall = (x, z, color) => {
   const stall = new THREE.Group();
   stall.position.set(x, 0.22, z);
-  const table = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.12, 0.65), toon(0x866143));
+  const table = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.13, 0.72), toon(0x806044));
   table.position.y = 0.72;
   stall.add(table);
   for (const side of [-1, 1]) {
     const post = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 1.55, 8), toon(0x684c37));
-    post.position.set(side * 0.5, 0.78, -0.23);
+    post.position.set(side * 0.55, 0.78, -0.27);
     stall.add(post);
   }
+  const lowerBrace = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.07, 0.08), toon(0x684c37));
+  lowerBrace.position.set(0, 0.28, -0.27);
+  stall.add(lowerBrace);
   const awning = new THREE.Mesh(
-    new THREE.BoxGeometry(1.38, 0.08, 0.88),
+    new THREE.BoxGeometry(1.48, 0.08, 0.94),
     new THREE.MeshStandardMaterial({ color, roughness: 0.88 }),
   );
   awning.position.y = 1.52;
   awning.rotation.x = -0.08;
   stall.add(awning);
-  for (let i = 0; i < 7; i++) {
-    const goods = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), toon(i % 2 ? goodsColor : 0xf3d38c));
-    goods.position.set(-0.4 + (i % 4) * 0.26, 0.83 + Math.floor(i / 4) * 0.09, -0.04);
-    stall.add(goods);
+  for (let stripe = -2; stripe <= 2; stripe++) {
+    if (stripe % 2 === 0) continue;
+    const cloth = new THREE.Mesh(
+      new THREE.BoxGeometry(0.24, 0.012, 0.96),
+      new THREE.MeshStandardMaterial({ color: 0xf0dfbd, roughness: 0.94 }),
+    );
+    cloth.position.set(stripe * 0.245, 1.565, 0);
+    cloth.rotation.x = -0.08;
+    stall.add(cloth);
+  }
+  const tray = new THREE.Mesh(new THREE.BoxGeometry(1.03, 0.055, 0.34), toon(0x4d4035));
+  tray.position.set(0, 0.81, 0.02);
+  stall.add(tray);
+  for (let index = 0; index < 5; index++) {
+    const skewer = makeDangoSkewer();
+    skewer.position.set(-0.4 + index * 0.2, 0, 0.02 + Math.abs(index - 2) * 0.012);
+    skewer.rotation.z = (index - 2) * 0.025;
+    stall.add(skewer);
   }
   addOutlines(stall, { color: 0x3a4040, min: 0.004, max: 0.011 });
   scene.add(stall);
   runtime.addBoxObstacle(x, z, 1.32, 0.82, 0, 0.04);
   return stall;
 };
-makeStall(1.82, -2.0, 0x4d8790, 0xd66f88);
-makeStall(-1.82, 1.72, 0xd17d98, 0x75a97a);
+makeStall(1.82, -2.0, 0x4d8790);
+makeStall(-1.82, 1.72, 0xd17d98);
 
 for (const [x, z] of [[-6.1, 2.1], [6.05, -6.1], [-5.9, -2.0], [5.9, 6.2]]) {
   const stack = new THREE.Group();
@@ -407,19 +581,50 @@ for (const [x, z] of [[-6.1, 2.1], [6.05, -6.1], [-5.9, -2.0], [5.9, 6.2]]) {
 const gate = new THREE.Group();
 gate.position.set(0, 0.22, -7.2);
 for (const side of [-1, 1]) {
-  const post = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.75, 0.24), toon(0x324b50));
-  post.position.set(side * 1.75, 1.38, 0);
+  const foot = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.22, 0.48), toon(0x77776d));
+  foot.position.set(side * 1.92, 0.11, 0);
+  gate.add(foot);
+  const post = new THREE.Mesh(new THREE.BoxGeometry(0.24, 3.35, 0.3), toon(0x34494b));
+  post.position.set(side * 1.92, 1.74, 0);
   post.castShadow = true;
   gate.add(post);
-  runtime.addObstacle(side * 1.75, -7.2, 0.18);
+  runtime.addObstacle(side * 1.92, -7.2, 0.23);
 }
-const gateTop = new THREE.Mesh(new THREE.BoxGeometry(4.25, 0.25, 0.28), toon(0x2b4449));
-gateTop.position.y = 2.67;
+const gateTop = new THREE.Mesh(new THREE.BoxGeometry(4.65, 0.26, 0.34), toon(0x263e42));
+gateTop.position.y = 3.28;
 gate.add(gateTop);
-const gateLogo = makeImagePlane(logoTexture, 2.9, 0.86);
-gateLogo.position.set(0, 2.02, 0.08);
+for (const side of [-1, 1]) {
+  const roofPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(4.92, 0.11, 0.62),
+    new THREE.MeshStandardMaterial({ color: 0x354447, roughness: 0.75, metalness: 0.08 }),
+  );
+  roofPanel.position.set(0, 3.51, side * 0.22);
+  roofPanel.rotation.x = side * 0.34;
+  roofPanel.castShadow = true;
+  gate.add(roofPanel);
+}
+const gateRidge = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 4.98, 10), toon(0x26383b));
+gateRidge.rotation.z = Math.PI / 2;
+gateRidge.position.y = 3.67;
+gate.add(gateRidge);
+const gateBoard = new THREE.Mesh(new THREE.BoxGeometry(2.08, 1.4, 0.12), toon(0xeee5ce));
+gateBoard.position.set(0, 2.62, 0.03);
+gateBoard.castShadow = true;
+gate.add(gateBoard);
+for (const x of [-1.09, 1.09]) {
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.52, 0.16), toon(0x6b4e36));
+  frame.position.set(x, 2.62, 0.02);
+  gate.add(frame);
+}
+for (const y of [1.88, 3.36]) {
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(2.28, 0.1, 0.16), toon(0x6b4e36));
+  frame.position.set(0, y, 0.02);
+  gate.add(frame);
+}
+const gateLogo = makeImagePlane(logoTexture, 1.86, 1.24);
+gateLogo.position.set(0, 2.62, 0.102);
 gate.add(gateLogo);
-addOutlines(gate, { color: 0x203034, min: 0.007, max: 0.016 });
+addOutlines(gate, { color: 0x203034, min: 0.005, max: 0.013 });
 scene.add(gate);
 
 const well = new THREE.Group();
@@ -481,9 +686,9 @@ const makeCharacter = (texture, { x, z, width, height, name, en }) => {
   runtime.addBillboard(character);
   scene.add(character);
   const label = makeWorldLabel(en, name, {
-    color: '#287d88', paper: 'rgba(248, 239, 214, .93)', border: 'rgba(38,95,103,.28)', scale: [1.32, 0.37],
+    color: '#287d88', paper: 'rgba(248, 239, 214, .93)', border: 'rgba(38,95,103,.28)', scale: [0.98, 0.275],
   });
-  label.position.set(x, 0.5 + height, z);
+  label.position.set(x, 0.38 + height, z);
   scene.add(label);
   characterRefs.push({ character, label, shadow, stand });
   return character;
@@ -621,11 +826,9 @@ for (const def of clueDefs) {
   const group = new THREE.Group();
   group.position.set(def.x, 0.27, def.z);
   group.rotation.y = def.rotation;
-  for (let i = 0; i < 3; i++) {
-    const paw = makePaw();
-    paw.position.set((i - 1) * 0.22, i * 0.008, (i - 1) * 0.34);
-    group.add(paw);
-  }
+  const paw = makePaw();
+  paw.scale.setScalar(1.18);
+  group.add(paw);
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(0.42, 0.5, 40),
     new THREE.MeshBasicMaterial({ color: 0x4ec1d0, transparent: true, opacity: 0.24, side: THREE.DoubleSide }),
@@ -736,11 +939,11 @@ runtime.addFrame(({ elapsed, near }) => {
   for (const { character, label } of characterRefs) {
     const distance = Math.hypot(runtime.avatar.position.x - character.position.x, runtime.avatar.position.z - character.position.z);
     const reveal = character === kuon && foundClues.size < 3 ? 0 : 1;
-    label.material.opacity = reveal * (1 - THREE.MathUtils.smoothstep(distance, 3.2, 5.4));
+    label.material.opacity = reveal * (1 - THREE.MathUtils.smoothstep(distance, 1.5, 2.1));
   }
   for (const { label, position } of buildingLabels) {
     const distance = Math.hypot(runtime.avatar.position.x - position.x, runtime.avatar.position.z - position.z);
-    label.material.opacity = 1 - THREE.MathUtils.smoothstep(distance, 3.4, 5.6);
+    label.material.opacity = 1 - THREE.MathUtils.smoothstep(distance, 2.5, 3.8);
   }
   returnRing.material.opacity = (near?.id === 'return-hub' ? 0.82 : 0.4) + Math.sin(elapsed * 1.8) * 0.08;
 });
@@ -763,6 +966,12 @@ if (SEARCH.get('qa') === 'mission') {
     x: Math.round(resolved.x * 100) / 100,
     z: Math.round(resolved.z * 100) / 100,
   });
+} else if (SEARCH.get('qa') === 'gate') {
+  runtime.teleport(0, -5.45);
+} else if (SEARCH.get('qa') === 'dango') {
+  runtime.teleport(-0.35, 3.0);
+} else if (SEARCH.get('qa') === 'clue') {
+  runtime.teleport(-0.2, 4.45);
 } else if (SEARCH.get('qa') === 'return') {
   runtime.teleport(-6.55, 5.6);
 }
