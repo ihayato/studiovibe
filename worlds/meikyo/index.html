@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#dcebed">
+  <title>明鏡島 | Studio VIBE Worlds</title>
+  <meta name="description" content="マーケティング教材『明鏡』の核心を、三つの鏡で体験する小さな学びの島。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="loading" role="status" aria-live="polite">
+    <img src="/meikyou/meikyou-logo.jpg" alt="明鏡">
+    <span>鏡面を結んでいます</span>
+  </div>
+
+  <header class="world-hud" aria-label="ワールド情報">
+    <div class="world-mark">
+      <span class="world-mark__en">MEIKYO</span>
+      <strong>明鏡島</strong>
+      <span id="presence">いま島に ひとり</span>
+    </div>
+    <div class="mirror-count" aria-label="集めた鏡片">
+      <span class="mirror-count__glyph" aria-hidden="true">◇</span>
+      <span>鏡片</span>
+      <strong id="progress">0</strong><span>/3</span>
+    </div>
+  </header>
+
+  <div id="objective" aria-live="polite">
+    <span>中央の大鏡を澄ませよう</span>
+    <div class="objective-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+  </div>
+
+  <button id="hint" type="button" aria-label="近くの鏡をひらく"></button>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <div id="touch-controls" aria-hidden="true">
+    <div id="joystick"><span></span></div>
+  </div>
+  <button id="jump" class="round-control" type="button">JUMP</button>
+
+  <div id="lesson-panel" class="modal" hidden>
+    <section class="lesson-dialog" role="dialog" aria-modal="true" aria-labelledby="lesson-title">
+      <button id="lesson-close" class="icon-close" type="button" aria-label="試練を閉じる">×</button>
+      <span id="lesson-kicker" class="lesson-kicker"></span>
+      <h1 id="lesson-title"></h1>
+      <p id="lesson-copy" class="lesson-copy"></p>
+      <div id="lesson-options" class="lesson-options"></div>
+      <div id="lesson-feedback" class="lesson-feedback" role="status" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <div id="completion-panel" class="modal" hidden>
+    <section class="completion-dialog" role="dialog" aria-modal="true" aria-labelledby="completion-title">
+      <button id="completion-close" class="icon-close" type="button" aria-label="案内を閉じる">×</button>
+      <img src="/meikyou/meikyou-logo.jpg" alt="明鏡">
+      <span class="lesson-kicker">THE MIRROR IS CLEAR</span>
+      <h1 id="completion-title">鏡は、道を映す</h1>
+      <p>明鏡は、迷ったときに何度でも立ち返るためのマーケティング教材です。</p>
+      <dl>
+        <div><dt>25万字超</dt><dd>テキスト教材</dd></div>
+        <div><dt>7章・51日</dt><dd>学習ロードマップ</dd></div>
+        <div><dt>100点超</dt><dd>実践図解</dd></div>
+      </dl>
+      <div class="completion-actions">
+        <a href="https://ikedahayato.com/meikyou-official" target="_blank" rel="noopener noreferrer">明鏡を詳しく見る</a>
+        <button id="completion-stay" type="button">島を散策する</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

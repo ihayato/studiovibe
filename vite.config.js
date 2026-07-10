@@ -41,6 +41,7 @@ export default defineConfig({
                 lunaOccultaPrivacy: resolve(__dirname, 'luna-occulta/privacy.html'),
                 licenses: resolve(__dirname, 'licenses.html'),
                 island: resolve(__dirname, 'poc/island/index.html'),
+                meikyo: resolve(__dirname, 'worlds/meikyo/index.html'),
             },
         },
     },

@@ -7,6 +7,9 @@ import { SHELLS } from './tarte.js';
 import { initPresence, makeNameLabel } from './net.js';
 import { createSound } from './sound.js';
 import { COSMETIC_ITEMS, cosmeticsToMask, createCosmeticRig } from './cosmetics.js';
+import { playArrival, warpTo } from '../../worlds/shared/warp.js';
+
+playArrival('studio');
 
 const IS_TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || new URLSearchParams(location.search).has('pad'); // ?pad でPCでも確認できる
 
@@ -1584,6 +1587,145 @@ for (const z of ZONES) {
     addOutlines(rock);
     scene.add(rock);
   }
+}
+
+// ---------- 世界鏡：明鏡島へのワープゲート ----------
+// GAMEとANIMEの間にある空き方角へ置き、既存の三館の動線とは交差させない。
+const MEIKYOU_GATE_ANGLE = -Math.PI / 4;
+const MEIKYOU_GATE_R = 6.35;
+const MEIKYOU_GATE_POS = new THREE.Vector3(
+  Math.cos(MEIKYOU_GATE_ANGLE) * MEIKYOU_GATE_R,
+  0,
+  Math.sin(MEIKYOU_GATE_ANGLE) * MEIKYOU_GATE_R,
+);
+const MEIKYOU_NEAR = {
+  key: 'meikyou-gate',
+  title: '世界鏡',
+  jp: '明鏡島への入口',
+  go: '鏡をくぐって明鏡島へ',
+};
+const meikyouGateFx = { surface: null, inner: null, light: null };
+
+{
+  const gate = new THREE.Group();
+  const groundY = terrainH(MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z);
+  gate.position.set(MEIKYOU_GATE_POS.x, groundY, MEIKYOU_GATE_POS.z);
+  gate.rotation.y = Math.atan2(-MEIKYOU_GATE_POS.x, -MEIKYOU_GATE_POS.z);
+
+  const base = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.08, 1.22, 0.16, 40),
+    toon(0xc8d8de),
+  );
+  base.position.y = 0.08;
+  base.castShadow = base.receiveShadow = true;
+  gate.add(base);
+
+  const floorRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.62, 0.94, 56),
+    glowMat(0xbcecf0, 0.56),
+  );
+  floorRing.rotation.x = -Math.PI / 2;
+  floorRing.position.y = 0.17;
+  floorRing.userData.noOutline = true;
+  gate.add(floorRing);
+  const floorFill = new THREE.Mesh(
+    new THREE.CircleGeometry(0.62, 56),
+    glowMat(0xbcecf0, 0.04),
+  );
+  floorFill.rotation.x = -Math.PI / 2;
+  floorFill.position.y = 0.168;
+  floorFill.userData.noOutline = true;
+  gate.add(floorFill);
+  zoneRings.push({ ring: floorRing, fill: floorFill, zone: MEIKYOU_NEAR });
+
+  const frame = new THREE.Mesh(
+    new THREE.TorusGeometry(0.82, 0.075, 14, 72),
+    new THREE.MeshStandardMaterial({
+      color: 0xd9e3e6,
+      metalness: 0.92,
+      roughness: 0.16,
+      emissive: 0x7fbfc6,
+      emissiveIntensity: 0.18,
+    }),
+  );
+  frame.position.y = 1.12;
+  frame.scale.y = 1.24;
+  frame.castShadow = true;
+  gate.add(frame);
+  camColliders.push(frame);
+
+  const inner = new THREE.Mesh(
+    new THREE.TorusGeometry(0.69, 0.018, 8, 64),
+    glowMat(0xffffff, 0.78),
+  );
+  inner.position.set(0, 1.12, 0.015);
+  inner.scale.y = 1.24;
+  inner.userData.noOutline = true;
+  gate.add(inner);
+  meikyouGateFx.inner = inner;
+
+  const mirrorTex = canvasTex(512, 640, (ctx, w, h) => {
+    const grad = ctx.createRadialGradient(w * 0.48, h * 0.42, 8, w / 2, h / 2, w * 0.7);
+    grad.addColorStop(0, 'rgba(255,255,255,0.98)');
+    grad.addColorStop(0.45, 'rgba(198,231,235,0.9)');
+    grad.addColorStop(1, 'rgba(83,126,139,0.5)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.52)';
+    for (let y = 70; y < h; y += 54) {
+      ctx.lineWidth = 2 + (y % 3);
+      ctx.beginPath();
+      ctx.ellipse(w / 2, y, w * 0.42, 12, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(18,40,48,0.82)';
+    ctx.textAlign = 'center';
+    ctx.font = '800 108px "Shippori Mincho B1", serif';
+    ctx.fillText('明鏡', w / 2, h * 0.53);
+    ctx.font = '700 24px "Zen Maru Gothic", sans-serif';
+    ctx.fillText('MEIKYO ISLAND', w / 2, h * 0.61);
+  });
+  const surface = new THREE.Mesh(
+    new THREE.CircleGeometry(0.72, 64),
+    new THREE.MeshBasicMaterial({
+      map: mirrorTex,
+      color: 0xe9fbff,
+      transparent: true,
+      opacity: 0.78,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    }),
+  );
+  surface.position.set(0, 1.12, 0.005);
+  surface.scale.y = 1.24;
+  surface.userData.noOutline = true;
+  gate.add(surface);
+  meikyouGateFx.surface = surface;
+
+  for (const side of [-1, 1]) {
+    const shard = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.11, 0),
+      new THREE.MeshBasicMaterial({ color: side > 0 ? 0xffffff : 0x91d7df }),
+    );
+    shard.position.set(side * 0.96, 1.04 + side * 0.15, 0.02);
+    shard.rotation.z = side * 0.3;
+    shard.userData.noOutline = true;
+    gate.add(shard);
+  }
+
+  const light = new THREE.PointLight(0xc4f4f6, 1.3, 4.5, 2);
+  light.position.set(0, 1.1, 0.35);
+  gate.add(light);
+  meikyouGateFx.light = light;
+
+  addObstacle(MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z, 0.58, groundY + 2.18);
+  addOutlines(gate, { color: 0x18252a, min: 0.006, max: 0.014 });
+  scene.add(gate);
+
+  const label = makeLabel('NEW WORLD', '明鏡島', 0xdff9fb);
+  label.position.set(MEIKYOU_GATE_POS.x, groundY + 2.48, MEIKYOU_GATE_POS.z);
+  label.userData.fadeNear = 3.2;
+  scene.add(label);
 }
 
 // ---------- 島の案内板（高札風・三館の道と被らない南寄りの隙間に単独設置。ZONESには入れない） ----------
@@ -3246,6 +3388,16 @@ if (hintEl) {
       openShopPanel();
       return;
     }
+    if (currentNear.key === 'meikyou-gate') {
+      sound.se.warp();
+      warpTo({
+        href: '/worlds/meikyo/',
+        from: 'studio',
+        to: 'meikyo',
+        label: '明鏡島へ',
+      });
+      return;
+    }
     if (currentNear.key === 'lele') {
       leleSpeak();
       return;
@@ -3803,6 +3955,7 @@ function animate() {
   // MUSIC館の中では、ステージに立った時だけ撮影を館案内より優先する。
   if (!near && py >= musicStageTop - 0.08 && Math.hypot(pos.x - MUSIC_STAGE_POS.x, pos.z - MUSIC_STAGE_POS.z) < 1.08) near = MUSIC_STAGE_NEAR;
   if (!near && Math.hypot(pos.x - MARKET_SHOP_POS.x, pos.z - MARKET_SHOP_POS.z) < 1.42) near = MARKET_NEAR;
+  if (!near && Math.hypot(pos.x - MEIKYOU_GATE_POS.x, pos.z - MEIKYOU_GATE_POS.z) < 1.55) near = MEIKYOU_NEAR;
   // ゾーン判定（三館＋中央のスタジオ碑＋案内板）→ 解説パネルへの入口
   for (const z of ZONES) {
     if (!near && pos.distanceTo(z.pos) < 3.05) near = z;
@@ -3826,6 +3979,14 @@ function animate() {
     const fillTarget = on ? 0.16 : 0.05;
     zrs.ring.material.opacity += (ringTarget - zrs.ring.material.opacity) * Math.min(1, dt * 7);
     zrs.fill.material.opacity += (fillTarget - zrs.fill.material.opacity) * Math.min(1, dt * 7);
+  }
+  if (meikyouGateFx.surface) {
+    const activeGate = near === MEIKYOU_NEAR;
+    const pulse = 1 + Math.sin(t * 2.1) * (activeGate ? 0.035 : 0.014);
+    meikyouGateFx.surface.scale.set(pulse, 1.24 * pulse, 1);
+    meikyouGateFx.surface.material.opacity = (activeGate ? 0.9 : 0.7) + Math.sin(t * 1.7) * 0.05;
+    meikyouGateFx.inner.rotation.z = t * 0.11;
+    meikyouGateFx.light.intensity = (activeGate ? 1.8 : 1.15) + Math.sin(t * 2.1) * 0.18;
   }
   {
     const hk = near ? near.key : '';
@@ -4262,6 +4423,9 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
     window.__tp(HOSHI_POS.x, HOSHI_POS.z, 0, 0);
   } else if (qaScene === 'info') {
     window.__tp(infoPos.x * 0.48, infoPos.z * 0.48, infoPos.x, infoPos.z);
+  } else if (qaScene === 'meikyou-gate') {
+    const approach = MEIKYOU_GATE_POS.clone().setLength(MEIKYOU_GATE_R - 1.25);
+    window.__tp(approach.x, approach.z, MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z);
   } else if (qaScene === 'music') {
     const screen = zoneLocalToWorld(MUSIC_ZONE, 0, -1.6);
     window.__tp(MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z, screen.x, screen.z);

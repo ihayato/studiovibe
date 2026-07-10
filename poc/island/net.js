@@ -15,8 +15,10 @@ const WS_BASE = IS_LOCAL
   ? `ws://127.0.0.1:${LOCAL_PRESENCE_PORT}/ws`
   : 'wss://vibe-presence.nubonba.workers.dev/ws';
 // ?room=xxx で部屋を分けられる（検証・将来のシーン分け用）
-const ROOM = SEARCH.get('room');
-const WS_URL = ROOM ? `${WS_BASE}?room=${encodeURIComponent(ROOM)}` : WS_BASE;
+const buildWsUrl = (configuredRoom) => {
+  const room = configuredRoom || SEARCH.get('room');
+  return room ? `${WS_BASE}?room=${encodeURIComponent(room)}` : WS_BASE;
+};
 
 const SEND_MS = 100;
 const r3 = (n) => Math.round(n * 1000) / 1000;
@@ -111,8 +113,9 @@ class RemotePeer {
 }
 
 // ---------- 接続本体 ----------
-export function initPresence({ scene, terrainH, identity, getState, onCount, onFull, onEmote }) {
+export function initPresence({ scene, terrainH, identity, getState, onCount, onFull, onEmote, room = null }) {
   const peers = new Map();
+  const wsUrl = buildWsUrl(room);
   let ws = null;
   let sendTimer = null;
   let retries = 0;
@@ -133,7 +136,7 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
 
   const connect = () => {
     try {
-      ws = new WebSocket(WS_URL);
+      ws = new WebSocket(wsUrl);
     } catch {
       return;
     }

@@ -330,7 +330,7 @@ export class Board {
 
 // 部屋は許可リスト制。任意名でDO（＝レート制限カウンタと保存領域）を無限増殖させられないようにする。
 // 将来シーンを増やすときはここに足す。
-const ROOMS = new Set(['island']);
+const ROOMS = new Set(['island', 'meikyo']);
 
 export default {
   async fetch(req, env) {
