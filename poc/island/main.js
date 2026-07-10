@@ -233,7 +233,15 @@ const zoneRings = []; // 足元リング（近づくと強く光る）
 const musicRefs = { rim: null, spots: [] };
 let musicLevel = 0;
 // 中央広場から野外ステージへ歩いて上がれる、低い四段の入口。
+const MUSIC_STAGE_CENTER_Z = -0.35;
+const MUSIC_STAGE_TOP = 0.36;
 const MUSIC_STAGE_STEPS = [[1.32, 0.08, 0.82], [1.05, 0.16, 1.0], [0.8, 0.24, 1.15], [0.55, 0.32, 1.3]];
+// ステージ外周だけを塞ぎ、中央広場側（ローカル+Z）の階段幅は開ける。
+const MUSIC_STAGE_BARRIERS = [-145, -120, -95, -70, -43, 43, 70, 95, 120, 145, 180].map((degrees) => {
+  const angle = THREE.MathUtils.degToRad(degrees);
+  const radius = 1.52;
+  return [Math.sin(angle) * radius, MUSIC_STAGE_CENTER_Z + Math.cos(angle) * radius, 0.34];
+});
 const ZONE_R = 5.2 * R_SCALE;
 for (const z of ZONES) z.pos = new THREE.Vector3(Math.cos(z.angle) * ZONE_R, 0, Math.sin(z.angle) * ZONE_R);
 const MUSIC_ZONE = ZONES.find((z) => z.key === 'music');
@@ -1306,8 +1314,8 @@ for (const z of ZONES) {
     g.add(zoneLight);
   } else {
     // ---- MUSIC館：野外ステージ ----
-    const stage = new THREE.Mesh(new THREE.CylinderGeometry(1.55, 1.7, 0.36, 48), toon(0x241d2e));
-    stage.position.set(0, 0.18, -0.35);
+    const stage = new THREE.Mesh(new THREE.CylinderGeometry(1.55, 1.7, MUSIC_STAGE_TOP, 48), toon(0x241d2e));
+    stage.position.set(0, MUSIC_STAGE_TOP / 2, MUSIC_STAGE_CENTER_Z);
     stage.castShadow = true;
     g.add(stage);
     const stageStepMat = toon(0x30263e);
@@ -1319,11 +1327,11 @@ for (const z of ZONES) {
     }
     // ステージ幕（ストライプ）
     const curtain = new THREE.Mesh(new THREE.CylinderGeometry(1.57, 1.73, 0.3, 48, 1, true), toon(0xffffff, curtainTex));
-    curtain.position.set(0, 0.16, -0.35);
+    curtain.position.set(0, 0.16, MUSIC_STAGE_CENTER_Z);
     g.add(curtain);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.03, 10, 64), new THREE.MeshBasicMaterial({ color: z.color }));
     rim.rotation.x = Math.PI / 2;
-    rim.position.set(0, 0.37, -0.35);
+    rim.position.set(0, MUSIC_STAGE_TOP + 0.01, MUSIC_STAGE_CENTER_Z);
     rim.userData.noOutline = true;
     g.add(rim);
     musicRefs.rim = rim;
@@ -1462,18 +1470,19 @@ for (const z of ZONES) {
         [0.7, 1.5, 0.55, 0.26], [-0.7, 1.5, 0.55, 0.26],
       ],
       music: [
-        [0, -0.35, 1.8, 0.36],
-        ...MUSIC_STAGE_STEPS.map(([lz, topY, width]) => [0, lz, width / 2, topY, true]),
+        [0, MUSIC_STAGE_CENTER_Z, 1.58, MUSIC_STAGE_TOP, 'platform'],
+        ...MUSIC_STAGE_STEPS.map(([lz, topY, width]) => [0, lz, width / 2, topY, 'platform']),
+        ...MUSIC_STAGE_BARRIERS.map(([lx, lz, radius]) => [lx, lz, radius, MUSIC_STAGE_TOP, 'obstacle']),
         [1.7, 0.15, 0.38], [-1.7, 0.15, 0.38],
       ],
     }[z.key];
-    // topYLocal付きのエントリはベンチ座面／ステージ床＝乗れる足場として登録
-    for (const [lx, lz, orr, topYLocal, platformOnly] of OBS) {
+    // topYLocal付きは既定で「障害物兼足場」。stageだけ用途を分けて階段の開口を作る。
+    for (const [lx, lz, orr, topYLocal, collisionMode = 'both'] of OBS) {
       const w2 = worldOf(lx, lz);
       if (topYLocal != null) {
         const topY = terrainH(w2.x, w2.z) + topYLocal;
-        if (!platformOnly) addObstacle(w2.x, w2.z, orr, topY);
-        addPlatform(w2.x, w2.z, orr, topY);
+        if (collisionMode !== 'platform') addObstacle(w2.x, w2.z, orr, topY);
+        if (collisionMode !== 'obstacle') addPlatform(w2.x, w2.z, orr, topY);
       } else {
         addObstacle(w2.x, w2.z, orr);
       }
@@ -2422,6 +2431,8 @@ const MARKET_NEAR = { key: 'market', title: '星屑夜市', jp: '旅の装いを
 
 // ---------- 星屑コイン（日替わりで島に戻る通貨） ----------
 const COIN_STORAGE_KEY = 'vibe.island.coins.v1';
+const COIN_QA_MODE = ['localhost', '127.0.0.1'].includes(location.hostname)
+  && new URLSearchParams(location.search).get('qaCoins') === 'audit';
 const todayKey = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -2430,8 +2441,8 @@ const coinState = (() => {
   const date = todayKey();
   try {
     const raw = JSON.parse(localStorage.getItem(COIN_STORAGE_KEY) || 'null');
-    const balance = Math.max(0, Math.min(9999, Math.floor(Number(raw?.balance) || 0)));
-    const daily = raw?.date === date && Array.isArray(raw.collected) ? raw.collected.map(String) : [];
+    const balance = COIN_QA_MODE ? 0 : Math.max(0, Math.min(9999, Math.floor(Number(raw?.balance) || 0)));
+    const daily = !COIN_QA_MODE && raw?.date === date && Array.isArray(raw.collected) ? raw.collected.map(String) : [];
     return { balance, date, collected: new Set(daily) };
   } catch {
     return { balance: 0, date, collected: new Set() };
@@ -2440,6 +2451,7 @@ const coinState = (() => {
 let coinBalance = coinState.balance;
 const collectedCoins = coinState.collected;
 const saveCoinState = () => {
+  if (COIN_QA_MODE) return;
   try {
     localStorage.setItem(COIN_STORAGE_KEY, JSON.stringify({
       balance: coinBalance,
@@ -2507,6 +2519,38 @@ for (let i = 0; i < COIN_SPAWNS.length; i++) {
   scene.add(coin);
   coins.push(coin);
 }
+
+// 収集半径内を実コライダーで走査し、コインへ立って近づける点があるかを返す。
+const auditCoinCollisionAccess = () => coins.map((coin) => {
+  let standingPoint = null;
+  for (const radius of [0, 0.16, 0.32, 0.48, 0.62]) {
+    const sampleCount = radius === 0 ? 1 : 32;
+    for (let sample = 0; sample < sampleCount; sample++) {
+      const angle = (sample / sampleCount) * Math.PI * 2;
+      const x = coin.position.x + Math.cos(angle) * radius;
+      const z = coin.position.z + Math.sin(angle) * radius;
+      const standingY = supportY(x, z, 1e9);
+      if (standingY < -4) continue;
+      const probe = new THREE.Vector3(x, standingY, z);
+      const resolved = probe.clone();
+      resolveCollisions(resolved, standingY);
+      const collisionFree = Math.hypot(resolved.x - probe.x, resolved.z - probe.z) < 0.002;
+      const closeXZ = Math.hypot(x - coin.position.x, z - coin.position.z) < 0.68;
+      const closeY = Math.abs((standingY + 0.45) - coin.userData.baseY) < 0.78;
+      if (collisionFree && closeXZ && closeY) {
+        standingPoint = { x, y: standingY, z };
+        break;
+      }
+    }
+    if (standingPoint) break;
+  }
+  const round = (value) => Math.round(value * 1000) / 1000;
+  return {
+    id: coin.userData.id,
+    pass: Boolean(standingPoint),
+    standing: standingPoint ? [round(standingPoint.x), round(standingPoint.y), round(standingPoint.z)] : null,
+  };
+});
 
 // 撮影演出：タルトがスポット中央へ立ち、定点の構図へカメラが回り込んで一枚を撮る
 let misakiShot = null;
@@ -2793,7 +2837,7 @@ renderer.domElement.addEventListener('pointerup', (e) => {
   target.copy(point);
   target.y = 0;
   clampToIsland(target);
-  resolveCollisions(target);
+  resolveCollisions(target, py);
   moving = true;
   marker.position.set(target.x, supportY(target.x, target.z, 1e9) + 0.03, target.z);
   marker.material.opacity = 1.0;
@@ -3757,7 +3801,7 @@ function animate() {
     const dir = fwd.multiplyScalar(-padVec.y).add(right.multiplyScalar(padVec.x)).normalize();
     target.copy(pos).addScaledVector(dir, 0.25 + 0.65 * mag);
     clampToIsland(target);
-    resolveCollisions(target);
+    resolveCollisions(target, py);
     moving = true;
     marker.material.opacity = 0;
   }
@@ -3773,7 +3817,7 @@ function animate() {
     const dir = fwd.multiplyScalar(-kz).add(right.multiplyScalar(kx)).normalize();
     target.copy(pos).add(dir.multiplyScalar(0.9));
     clampToIsland(target);
-    resolveCollisions(target);
+    resolveCollisions(target, py);
     moving = true;
     marker.material.opacity = 0;
   }
@@ -4368,6 +4412,7 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
     MUSIC_STAGE_POS,
     obstacles,
     PLATFORMS,
+    auditCoins: auditCoinCollisionAccess,
     openShop: openShopPanel,
     grantCoins(n = 20) {
       coinBalance = Math.min(9999, coinBalance + Math.max(0, Math.floor(Number(n) || 0)));
@@ -4426,9 +4471,31 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
   } else if (qaScene === 'meikyou-gate') {
     const approach = MEIKYOU_GATE_POS.clone().setLength(MEIKYOU_GATE_R - 1.25);
     window.__tp(approach.x, approach.z, MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z);
+  } else if (qaScene === 'music-steps' || qaScene === 'music-coins') {
+    const approach = zoneLocalToWorld(MUSIC_ZONE, 0, 2.05);
+    window.__tp(approach.x, approach.z, MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z);
+    setTimeout(() => window.__walkTo(MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z), 250);
+    if (qaScene === 'music-coins') {
+      setTimeout(() => window.__walkTo(musicCoinL.x, musicCoinL.z), 1800);
+      setTimeout(() => window.__walkTo(musicCoinR.x, musicCoinR.z), 2900);
+    }
+    setTimeout(() => {
+      const onStage = py >= musicStageTop - 0.08
+        && Math.hypot(tarte.group.position.x - MUSIC_STAGE_POS.x, tarte.group.position.z - MUSIC_STAGE_POS.z) < 1.45;
+      const stageCoinsCollected = ['music-left', 'music-right'].every((id) => collectedCoins.has(id));
+      const result = { onStage, stageCoinsCollected: qaScene === 'music-coins' ? stageCoinsCollected : null, py };
+      document.documentElement.dataset.musicStageAudit = JSON.stringify(result);
+      console.info(`[music-stage-audit] ${JSON.stringify(result)}`);
+    }, qaScene === 'music-coins' ? 4400 : 2400);
   } else if (qaScene === 'music') {
     const screen = zoneLocalToWorld(MUSIC_ZONE, 0, -1.6);
     window.__tp(MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z, screen.x, screen.z);
+  } else if (qaScene === 'coin-audit') {
+    const report = auditCoinCollisionAccess();
+    const failed = report.filter((entry) => !entry.pass).map((entry) => entry.id);
+    const result = { passed: report.length - failed.length, total: report.length, failed, report };
+    document.documentElement.dataset.coinAudit = JSON.stringify(result);
+    console.info(`[coin-audit] ${JSON.stringify(result)}`);
   } else if (qaScene === 'coin') {
     const coin = coins.find((entry) => entry.visible);
     if (coin) window.__tp(coin.position.x, coin.position.z);
