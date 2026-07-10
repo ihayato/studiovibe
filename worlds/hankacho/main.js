@@ -667,11 +667,9 @@ const makeCharacter = (texture, { x, z, width, height, name, en }) => {
 };
 
 const anne = makeCharacter(anneTexture, { x: -1.85, z: 5.45, width: 1.35, height: 2.65, name: 'あんね', en: 'ANNE' });
-const yui = makeCharacter(yuiTexture, { x: 2.0, z: -5.7, width: 1.25, height: 2.55, name: '結', en: 'YUI' });
 const dango = makeCharacter(dangoTexture, { x: -2.24, z: 3.75, width: 1.22, height: 2.4, name: '団子屋さん', en: 'DANGO' });
 const kuon = makeCharacter(kuonTexture, { x: 2.28, z: 5.2, width: 1.35, height: 2.55, name: '久遠', en: 'KUON' });
 runtime.addObstacle(anne.position.x, anne.position.z, 0.28);
-runtime.addObstacle(yui.position.x, yui.position.z, 0.27);
 runtime.addObstacle(dango.position.x, dango.position.z, 0.26);
 
 const characterPanel = new THREE.Group();
@@ -710,7 +708,7 @@ const addCharacterCutout = (texture, { x, z, width, height }) => {
   characterCutouts.add(art);
 };
 addCharacterCutout(anneTexture, { x: -0.34, z: 0.015, width: 0.9, height: 1.78 });
-addCharacterCutout(dangoTexture, { x: 0.38, z: 0.035, width: 0.84, height: 1.72 });
+addCharacterCutout(yuiTexture, { x: 0.38, z: 0.035, width: 0.84, height: 1.72 });
 characterPanel.add(characterCutouts);
 addOutlines(characterPanelBase, { color: 0x343733, min: 0.006, max: 0.013 });
 scene.add(characterPanel);
@@ -874,14 +872,6 @@ runtime.addInteractable({
   label: '団子屋さんに聞く',
   action: () => runtime.showToast('「青いのなら、ついさっき井戸の方へ走っていったよ」', 3000),
 });
-runtime.addInteractable({
-  id: 'yui',
-  position: yui.position,
-  radius: 1.4,
-  label: '結に話しかける',
-  action: () => runtime.showToast('「鈴の音なら、桜の方から聞こえたよ」', 2800),
-});
-
 const returnGate = new THREE.Group();
 returnGate.position.set(-7.55, 0.22, 6.45);
 returnGate.rotation.y = Math.atan2(-returnGate.position.x, -returnGate.position.z);
