@@ -1598,28 +1598,28 @@ for (const z of ZONES) {
   }
 }
 
-// ---------- 世界鏡：明鏡島へのワープゲート ----------
+// ---------- 世界鏡：島々を結ぶ世界港へのワープゲート ----------
 // GAMEとANIMEの間にある空き方角へ置き、既存の三館の動線とは交差させない。
-const MEIKYOU_GATE_ANGLE = -Math.PI / 4;
-const MEIKYOU_GATE_R = 6.35;
-const MEIKYOU_GATE_POS = new THREE.Vector3(
-  Math.cos(MEIKYOU_GATE_ANGLE) * MEIKYOU_GATE_R,
+const WORLD_GATE_ANGLE = -Math.PI / 4;
+const WORLD_GATE_R = 6.35;
+const WORLD_GATE_POS = new THREE.Vector3(
+  Math.cos(WORLD_GATE_ANGLE) * WORLD_GATE_R,
   0,
-  Math.sin(MEIKYOU_GATE_ANGLE) * MEIKYOU_GATE_R,
+  Math.sin(WORLD_GATE_ANGLE) * WORLD_GATE_R,
 );
-const MEIKYOU_NEAR = {
-  key: 'meikyou-gate',
+const WORLD_GATE_NEAR = {
+  key: 'world-gate',
   title: '世界鏡',
-  jp: '明鏡島への入口',
-  go: '鏡をくぐって明鏡島へ',
+  jp: '島々を結ぶ世界港',
+  go: '鏡をくぐって世界港へ',
 };
-const meikyouGateFx = { surface: null, inner: null, light: null };
+const worldGateFx = { surface: null, inner: null, light: null };
 
 {
   const gate = new THREE.Group();
-  const groundY = terrainH(MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z);
-  gate.position.set(MEIKYOU_GATE_POS.x, groundY, MEIKYOU_GATE_POS.z);
-  gate.rotation.y = Math.atan2(-MEIKYOU_GATE_POS.x, -MEIKYOU_GATE_POS.z);
+  const groundY = terrainH(WORLD_GATE_POS.x, WORLD_GATE_POS.z);
+  gate.position.set(WORLD_GATE_POS.x, groundY, WORLD_GATE_POS.z);
+  gate.rotation.y = Math.atan2(-WORLD_GATE_POS.x, -WORLD_GATE_POS.z);
 
   const base = new THREE.Mesh(
     new THREE.CylinderGeometry(1.08, 1.22, 0.16, 40),
@@ -1645,7 +1645,7 @@ const meikyouGateFx = { surface: null, inner: null, light: null };
   floorFill.position.y = 0.168;
   floorFill.userData.noOutline = true;
   gate.add(floorFill);
-  zoneRings.push({ ring: floorRing, fill: floorFill, zone: MEIKYOU_NEAR });
+  zoneRings.push({ ring: floorRing, fill: floorFill, zone: WORLD_GATE_NEAR });
 
   const frame = new THREE.Mesh(
     new THREE.TorusGeometry(0.82, 0.075, 14, 72),
@@ -1671,7 +1671,7 @@ const meikyouGateFx = { surface: null, inner: null, light: null };
   inner.scale.y = 1.24;
   inner.userData.noOutline = true;
   gate.add(inner);
-  meikyouGateFx.inner = inner;
+  worldGateFx.inner = inner;
 
   const mirrorTex = canvasTex(512, 640, (ctx, w, h) => {
     const grad = ctx.createRadialGradient(w * 0.48, h * 0.42, 8, w / 2, h / 2, w * 0.7);
@@ -1690,9 +1690,9 @@ const meikyouGateFx = { surface: null, inner: null, light: null };
     ctx.fillStyle = 'rgba(18,40,48,0.82)';
     ctx.textAlign = 'center';
     ctx.font = '800 108px "Shippori Mincho B1", serif';
-    ctx.fillText('明鏡', w / 2, h * 0.53);
+    ctx.fillText('世界港', w / 2, h * 0.53);
     ctx.font = '700 24px "Zen Maru Gothic", sans-serif';
-    ctx.fillText('MEIKYO ISLAND', w / 2, h * 0.61);
+    ctx.fillText('WORLD PORT', w / 2, h * 0.61);
   });
   const surface = new THREE.Mesh(
     new THREE.CircleGeometry(0.72, 64),
@@ -1709,7 +1709,7 @@ const meikyouGateFx = { surface: null, inner: null, light: null };
   surface.scale.y = 1.24;
   surface.userData.noOutline = true;
   gate.add(surface);
-  meikyouGateFx.surface = surface;
+  worldGateFx.surface = surface;
 
   for (const side of [-1, 1]) {
     const shard = new THREE.Mesh(
@@ -1725,14 +1725,14 @@ const meikyouGateFx = { surface: null, inner: null, light: null };
   const light = new THREE.PointLight(0xc4f4f6, 1.3, 4.5, 2);
   light.position.set(0, 1.1, 0.35);
   gate.add(light);
-  meikyouGateFx.light = light;
+  worldGateFx.light = light;
 
-  addObstacle(MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z, 0.58, groundY + 2.18);
+  addObstacle(WORLD_GATE_POS.x, WORLD_GATE_POS.z, 0.58, groundY + 2.18);
   addOutlines(gate, { color: 0x18252a, min: 0.006, max: 0.014 });
   scene.add(gate);
 
-  const label = makeLabel('NEW WORLD', '明鏡島', 0xdff9fb);
-  label.position.set(MEIKYOU_GATE_POS.x, groundY + 2.48, MEIKYOU_GATE_POS.z);
+  const label = makeLabel('WORLD GATE', '世界港', 0xdff9fb);
+  label.position.set(WORLD_GATE_POS.x, groundY + 2.48, WORLD_GATE_POS.z);
   label.userData.fadeNear = 3.2;
   scene.add(label);
 }
@@ -3432,13 +3432,13 @@ if (hintEl) {
       openShopPanel();
       return;
     }
-    if (currentNear.key === 'meikyou-gate') {
+    if (currentNear.key === 'world-gate') {
       sound.se.warp();
       warpTo({
-        href: '/worlds/meikyo/',
+        href: '/worlds/',
         from: 'studio',
-        to: 'meikyo',
-        label: '明鏡島へ',
+        to: 'hub',
+        label: '世界港へ',
       });
       return;
     }
@@ -3999,7 +3999,7 @@ function animate() {
   // MUSIC館の中では、ステージに立った時だけ撮影を館案内より優先する。
   if (!near && py >= musicStageTop - 0.08 && Math.hypot(pos.x - MUSIC_STAGE_POS.x, pos.z - MUSIC_STAGE_POS.z) < 1.08) near = MUSIC_STAGE_NEAR;
   if (!near && Math.hypot(pos.x - MARKET_SHOP_POS.x, pos.z - MARKET_SHOP_POS.z) < 1.42) near = MARKET_NEAR;
-  if (!near && Math.hypot(pos.x - MEIKYOU_GATE_POS.x, pos.z - MEIKYOU_GATE_POS.z) < 1.55) near = MEIKYOU_NEAR;
+  if (!near && Math.hypot(pos.x - WORLD_GATE_POS.x, pos.z - WORLD_GATE_POS.z) < 1.55) near = WORLD_GATE_NEAR;
   // ゾーン判定（三館＋中央のスタジオ碑＋案内板）→ 解説パネルへの入口
   for (const z of ZONES) {
     if (!near && pos.distanceTo(z.pos) < 3.05) near = z;
@@ -4024,13 +4024,13 @@ function animate() {
     zrs.ring.material.opacity += (ringTarget - zrs.ring.material.opacity) * Math.min(1, dt * 7);
     zrs.fill.material.opacity += (fillTarget - zrs.fill.material.opacity) * Math.min(1, dt * 7);
   }
-  if (meikyouGateFx.surface) {
-    const activeGate = near === MEIKYOU_NEAR;
+  if (worldGateFx.surface) {
+    const activeGate = near === WORLD_GATE_NEAR;
     const pulse = 1 + Math.sin(t * 2.1) * (activeGate ? 0.035 : 0.014);
-    meikyouGateFx.surface.scale.set(pulse, 1.24 * pulse, 1);
-    meikyouGateFx.surface.material.opacity = (activeGate ? 0.9 : 0.7) + Math.sin(t * 1.7) * 0.05;
-    meikyouGateFx.inner.rotation.z = t * 0.11;
-    meikyouGateFx.light.intensity = (activeGate ? 1.8 : 1.15) + Math.sin(t * 2.1) * 0.18;
+    worldGateFx.surface.scale.set(pulse, 1.24 * pulse, 1);
+    worldGateFx.surface.material.opacity = (activeGate ? 0.9 : 0.7) + Math.sin(t * 1.7) * 0.05;
+    worldGateFx.inner.rotation.z = t * 0.11;
+    worldGateFx.light.intensity = (activeGate ? 1.8 : 1.15) + Math.sin(t * 2.1) * 0.18;
   }
   {
     const hk = near ? near.key : '';
@@ -4468,9 +4468,9 @@ if (['localhost', '127.0.0.1'].includes(location.hostname)) {
     window.__tp(HOSHI_POS.x, HOSHI_POS.z, 0, 0);
   } else if (qaScene === 'info') {
     window.__tp(infoPos.x * 0.48, infoPos.z * 0.48, infoPos.x, infoPos.z);
-  } else if (qaScene === 'meikyou-gate') {
-    const approach = MEIKYOU_GATE_POS.clone().setLength(MEIKYOU_GATE_R - 1.25);
-    window.__tp(approach.x, approach.z, MEIKYOU_GATE_POS.x, MEIKYOU_GATE_POS.z);
+  } else if (qaScene === 'world-gate' || qaScene === 'meikyou-gate') {
+    const approach = WORLD_GATE_POS.clone().setLength(WORLD_GATE_R - 1.25);
+    window.__tp(approach.x, approach.z, WORLD_GATE_POS.x, WORLD_GATE_POS.z);
   } else if (qaScene === 'music-steps' || qaScene === 'music-coins') {
     const approach = zoneLocalToWorld(MUSIC_ZONE, 0, 2.05);
     window.__tp(approach.x, approach.z, MUSIC_STAGE_POS.x, MUSIC_STAGE_POS.z);

@@ -4,7 +4,7 @@ import { createAvatar, loadIdentity } from '../../poc/island/avatars.js';
 import { COSMETIC_ITEMS, cosmeticsToMask, createCosmeticRig } from '../../poc/island/cosmetics.js';
 import { initPresence, makeNameLabel } from '../../poc/island/net.js';
 import { addOutlines, canvasTex, toon } from '../../poc/island/toon.js';
-import { playArrival, studioWorldHref, warpTo } from '../shared/warp.js';
+import { playArrival, warpTo } from '../shared/warp.js';
 
 const PAGE_SEARCH = new URLSearchParams(location.search);
 const LOADING_STARTED_AT = performance.now();
@@ -396,7 +396,7 @@ returnSurface.position.set(0, 1.05, 0.006);
 returnSurface.scale.y = 1.2;
 returnSurface.userData.noOutline = true;
 returnGate.add(returnSurface);
-const returnLabel = makeWorldLabel('RETURN GATE', 'Studio VIBE島', '#4f8378');
+const returnLabel = makeWorldLabel('WORLD PORT', '世界港', '#4f8378');
 returnLabel.position.set(0, 2.18, 0);
 returnGate.add(returnLabel);
 addOutlines(returnGate, { color: 0x20363a, min: 0.005, max: 0.014 });
@@ -781,7 +781,7 @@ const hintAction = () => {
     openTrial(currentNear.trial);
   } else if (currentNear.type === 'return') {
     chime(520, 0.22);
-    warpTo({ href: studioWorldHref(), from: 'meikyo', to: 'studio', label: 'Studio VIBE島へ' });
+    warpTo({ href: '/worlds/', from: 'meikyo', to: 'hub', label: '世界港へ' });
   } else if (currentNear.type === 'central') {
     if (completed.size === 3) completionPanel.hidden = false;
     else showToast(`大鏡はまだ曇っている　鏡片 ${completed.size}/3`);
@@ -834,7 +834,7 @@ const updateHint = (near) => {
   if (near.type === 'trial') {
     hintEl.textContent = completed.has(near.trial.id) ? `${near.trial.title}を振り返る` : `${near.trial.title}に向き合う`;
   } else if (near.type === 'return') {
-    hintEl.textContent = 'Studio VIBE島へ戻る';
+    hintEl.textContent = '世界港へ戻る';
   } else {
     hintEl.textContent = completed.size === 3 ? '澄んだ大鏡をひらく' : `大鏡を確かめる　${completed.size}/3`;
   }

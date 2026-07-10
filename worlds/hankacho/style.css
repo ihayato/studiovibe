@@ -1,0 +1,193 @@
+:root {
+  --world-accent: #55bdc8;
+  --world-panel: #17272c;
+  --world-line: rgba(255, 255, 255, .24);
+}
+
+body { background: #95c6cd; }
+
+.world-hud { color: #fff; }
+.world-mark { filter: drop-shadow(0 2px 6px rgba(21, 43, 49, .72)); }
+.world-mark__en { color: #fff1ac; }
+.world-counter { border-color: rgba(255, 255, 255, .5); background: rgba(20, 48, 54, .76); }
+.world-counter__glyph { color: #fff1ac; }
+#objective { background: rgba(20, 48, 54, .7); }
+#hint { border-color: rgba(255, 241, 172, .66); background: rgba(19, 45, 51, .91); }
+
+#loading {
+  gap: 20px;
+  background: #8cc3cb;
+}
+
+#loading::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: .18;
+  background: url('/worlds/hankacho/main-kv.jpg') center / cover no-repeat;
+  filter: saturate(.65) contrast(.8);
+}
+
+#loading::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: rgba(143, 199, 207, .74);
+}
+
+.scroll-loader {
+  position: relative;
+  width: 154px;
+  height: 196px;
+  filter: drop-shadow(0 18px 25px rgba(37, 72, 79, .2));
+}
+
+.scroll-loader__paper {
+  position: absolute;
+  top: 18px;
+  right: 10px;
+  bottom: 18px;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-inline: 1px solid #c7b886;
+  background: #f2e9cf;
+  color: #1d3338;
+  animation: scroll-open 1.8s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.scroll-loader__paper::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(35, 104, 116, .36);
+}
+
+.scroll-loader__paper b {
+  font: 800 70px/1 "Shippori Mincho B1", serif;
+  transform: rotate(-4deg);
+}
+
+.scroll-loader__paper i {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2c8190;
+  box-shadow: 0 0 0 4px rgba(44, 129, 144, .12);
+}
+
+.scroll-loader__paper i:nth-of-type(1) { top: 28px; left: 24px; }
+.scroll-loader__paper i:nth-of-type(2) { right: 25px; bottom: 34px; }
+.scroll-loader__paper i:nth-of-type(3) { right: 20px; top: 55px; background: #e47f9d; }
+
+.scroll-loader__roll {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  width: 100%;
+  height: 22px;
+  border: 1px solid #715c39;
+  border-radius: 11px;
+  background: #ad8952;
+  box-shadow: inset 0 6px 5px rgba(255, 255, 255, .18);
+}
+
+.scroll-loader__roll--top { top: 5px; }
+.scroll-loader__roll--bottom { bottom: 5px; }
+
+.loading-copy { display: grid; justify-items: center; color: #18343a; text-align: center; }
+.loading-copy span { color: #236b77; font: 700 9px/1.4 Inter, sans-serif; }
+.loading-copy strong { margin-top: 3px; font: 800 28px/1.4 "Shippori Mincho B1", serif; }
+.loading-copy small { margin-top: 7px; color: rgba(24,52,58,.65); font-size: 11px; font-weight: 700; }
+
+.mission-sheet,
+.case-sheet,
+.episodes-sheet {
+  color: #f4f0e7;
+  background: #183037;
+}
+
+.mission-sheet {
+  display: grid;
+  grid-template-columns: minmax(150px, .65fr) minmax(270px, 1.35fr);
+  align-items: center;
+  gap: 28px;
+  overflow: hidden;
+  background: linear-gradient(120deg, #183037, #1e4850 72%, #285e66);
+}
+
+.mission-sheet > img {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  align-self: end;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .28));
+}
+
+.anne-quote { color: #fff1ac !important; }
+
+.case-sheet { text-align: center; }
+.case-visual {
+  position: relative;
+  width: min(460px, 100%);
+  aspect-ratio: 16 / 9;
+  margin: -20px auto 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 5px;
+}
+.case-episode { width: 100%; height: 100%; object-fit: cover; }
+.case-kuon {
+  position: absolute;
+  right: 1%;
+  bottom: -15%;
+  width: 38%;
+  height: 110%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .34));
+}
+
+.episode-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.episode-list a {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, .05);
+  color: #fff;
+  text-decoration: none;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+
+.episode-list a:hover { border-color: #fff1ac; transform: translateY(-2px); }
+.episode-list img { width: 100%; aspect-ratio: 16 / 9; display: block; object-fit: cover; }
+.episode-list span { display: grid; gap: 2px; padding: 10px; font-size: 12px; font-weight: 700; }
+.episode-list b { color: #fff1ac; font: 700 9px/1.4 Inter, sans-serif; }
+
+@keyframes scroll-open {
+  from { clip-path: inset(44% 0 44% 0); }
+  to { clip-path: inset(0); }
+}
+
+@media (max-width: 620px) {
+  .mission-sheet { grid-template-columns: 100px 1fr; gap: 12px; padding-left: 12px; }
+  .mission-sheet h1 { font-size: 23px; }
+  .mission-sheet p { font-size: 12px; line-height: 1.75; }
+  .mission-sheet .world-actions { grid-column: 1 / -1; }
+  .episode-list { grid-template-columns: 1fr; }
+  .episode-list a { display: grid; grid-template-columns: 42% 1fr; align-items: center; }
+  .episode-list img { height: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-loader__paper { animation: none; }
+}

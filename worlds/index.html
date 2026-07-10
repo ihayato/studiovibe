@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10191d">
+  <title>世界港 | Studio VIBE Worlds</title>
+  <meta name="description" content="Studio VIBEの島々を結ぶワールドハブ。門を選び、それぞれの物語へ。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./shared/world-shell.css">
+  <link rel="stylesheet" href="./port.css">
+</head>
+<body>
+  <div id="loading" role="status" aria-live="polite">
+    <div class="port-loader" aria-hidden="true">
+      <span class="port-loader__ring"></span>
+      <span class="port-loader__needle"></span>
+      <i></i><i></i><i></i>
+    </div>
+    <div class="loading-copy">
+      <span>WORLD PORT</span>
+      <strong>世界港</strong>
+      <small>航路をひらいています</small>
+    </div>
+  </div>
+
+  <header class="world-hud" aria-label="ワールド情報">
+    <div class="world-mark">
+      <span class="world-mark__en">WORLD PORT</span>
+      <strong>世界港</strong>
+      <span id="presence">いま港に ひとり</span>
+    </div>
+    <div class="world-counter" aria-label="出航できる島の数">
+      <span class="world-counter__glyph" aria-hidden="true">⌁</span>
+      <span>航路</span><strong>3</strong>
+    </div>
+  </header>
+
+  <div id="objective">門の紋章に近づき、行き先を選ぶ</div>
+  <button id="hint" type="button" aria-label="近くの門をひらく"></button>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <div id="touch-controls" aria-hidden="true">
+    <div id="joystick"><span></span></div>
+  </div>
+  <button id="jump" class="round-control" type="button">JUMP</button>
+
+  <script type="module" src="./port.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+:root {
+  --world-accent: #75c8cf;
+  --world-panel: rgba(12, 20, 23, .95);
+}
+
+#loading {
+  gap: 22px;
+  background: #10191d;
+}
+
+#loading::before,
+#loading::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 50% auto auto 50%;
+  width: min(82vmin, 740px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(117, 200, 207, .1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#loading::after {
+  width: min(52vmin, 460px);
+  border-color: rgba(206, 169, 92, .12);
+}
+
+.port-loader {
+  position: relative;
+  width: 176px;
+  aspect-ratio: 1;
+}
+
+.port-loader__ring {
+  position: absolute;
+  inset: 18px;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, .44);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 12px rgba(117, 200, 207, .03), 0 0 32px rgba(117, 200, 207, .12);
+}
+
+.port-loader__ring::before,
+.port-loader__ring::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, .3);
+}
+
+.port-loader__ring::before { top: 50%; right: -18px; left: -18px; height: 1px; }
+.port-loader__ring::after { top: -18px; bottom: -18px; left: 50%; width: 1px; }
+
+.port-loader__needle {
+  position: absolute;
+  top: 28px;
+  left: calc(50% - 6px);
+  width: 12px;
+  height: 60px;
+  background: #cda959;
+  clip-path: polygon(50% 0, 100% 100%, 50% 78%, 0 100%);
+  transform-origin: 50% 60px;
+  animation: port-scan 2.8s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+
+.port-loader i {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.port-loader i:nth-of-type(1) { top: 4px; left: 82px; color: #76c8cf; }
+.port-loader i:nth-of-type(2) { right: 9px; bottom: 32px; color: #a52e3c; }
+.port-loader i:nth-of-type(3) { bottom: 32px; left: 9px; color: #e18ba7; }
+
+.loading-copy {
+  display: grid;
+  justify-items: center;
+  color: #f2eee5;
+  text-align: center;
+}
+
+.loading-copy span {
+  color: #75c8cf;
+  font: 700 9px/1.4 Inter, sans-serif;
+}
+
+.loading-copy strong {
+  margin-top: 3px;
+  font: 800 27px/1.4 "Shippori Mincho B1", serif;
+}
+
+.loading-copy small {
+  margin-top: 7px;
+  color: rgba(242, 238, 229, .58);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+@keyframes port-scan {
+  0% { transform: rotate(-32deg); }
+  48% { transform: rotate(142deg); }
+  100% { transform: rotate(328deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .port-loader__needle { animation: none; transform: rotate(32deg); }
+}

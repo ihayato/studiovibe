@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#97c8cf">
+  <title>ニンジャ犯科帳島 | Studio VIBE Worlds</title>
+  <meta name="description" content="青い足跡を追って小事件を解く、短編アニメ『ニンジャ犯科帳』の城下町ワールド。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/world-shell.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="loading" role="status" aria-live="polite">
+    <div class="scroll-loader" aria-hidden="true">
+      <span class="scroll-loader__roll scroll-loader__roll--top"></span>
+      <span class="scroll-loader__paper"><b>犯</b><i></i><i></i><i></i></span>
+      <span class="scroll-loader__roll scroll-loader__roll--bottom"></span>
+    </div>
+    <div class="loading-copy">
+      <span>NINJA HANKACHO</span>
+      <strong>犯科町</strong>
+      <small>本日の事件をめくっています</small>
+    </div>
+  </div>
+
+  <header class="world-hud" aria-label="ワールド情報">
+    <div class="world-mark">
+      <span class="world-mark__en">NINJA HANKACHO</span>
+      <strong>犯科町</strong>
+      <span id="presence">いま町に ひとり</span>
+    </div>
+    <div class="world-counter" aria-label="見つけた手がかり">
+      <span class="world-counter__glyph" aria-hidden="true">印</span>
+      <span>手がかり</span><strong id="clue-count">0</strong><span>/3</span>
+    </div>
+  </header>
+
+  <div id="objective">あんねから事件を聞く</div>
+  <button id="hint" type="button" aria-label="近くのものを調べる"></button>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <div id="touch-controls" aria-hidden="true">
+    <div id="joystick"><span></span></div>
+  </div>
+  <button id="jump" class="round-control" type="button">JUMP</button>
+
+  <div id="mission-panel" class="world-modal" data-world-modal hidden>
+    <section class="world-sheet mission-sheet" role="dialog" aria-modal="true" aria-labelledby="mission-title">
+      <button class="world-sheet__close" type="button" aria-label="依頼を閉じる">×</button>
+      <img src="/worlds/hankacho/anne.webp" alt="忍びのあんね">
+      <div>
+        <span class="world-sheet__kicker">TODAY'S CASE</span>
+        <h1 id="mission-title">幸せの青い猫</h1>
+        <p>久遠がまた団子屋さんの店先から消えたらしい。町に残った青い足跡を三つ調べて、本人を見つけてきて。</p>
+        <p class="anne-quote">「事件ってほどじゃないけど、放っておけないでしょ」</p>
+        <div class="world-actions">
+          <button class="is-primary" type="button" data-close>捜査を始める</button>
+          <a href="https://vibe.co.jp/hankacho/" target="_blank" rel="noopener noreferrer">公式サイトを見る</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="case-panel" class="world-modal" data-world-modal hidden>
+    <section class="world-sheet case-sheet" role="dialog" aria-modal="true" aria-labelledby="case-title">
+      <button class="world-sheet__close" type="button" aria-label="事件簿を閉じる">×</button>
+      <div class="case-visual">
+        <img class="case-episode" src="/worlds/hankacho/ep05-happiness.webp" alt="第5話 幸せの青い猫">
+        <img class="case-kuon" src="/worlds/hankacho/kuon.webp" alt="青い猫の久遠">
+      </div>
+      <span class="world-sheet__kicker">CASE CLOSED</span>
+      <h1 id="case-title">久遠、発見。</h1>
+      <p>青い足跡の先で、久遠はのんびり昼寝中。犯科町では大事件も小事件も、だいたい少し騒がしく、最後は日常へ戻っていく。</p>
+      <div class="world-actions">
+        <a class="is-primary" href="https://www.youtube.com/watch?v=heBXjoUd4zw" target="_blank" rel="noopener noreferrer">第5話を見る</a>
+        <button type="button" data-close>町を散策する</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="episodes-panel" class="world-modal" data-world-modal hidden>
+    <section class="world-sheet episodes-sheet" role="dialog" aria-modal="true" aria-labelledby="episodes-title">
+      <button class="world-sheet__close" type="button" aria-label="上映札を閉じる">×</button>
+      <span class="world-sheet__kicker">SHORT ANIMATION</span>
+      <h1 id="episodes-title">犯科町 上映札</h1>
+      <p>一話完結。町のあちこちで起きた騒動を、その場から見に行けます。</p>
+      <div class="episode-list">
+        <a href="https://www.youtube.com/watch?v=-7GqBPlL9J8" target="_blank" rel="noopener noreferrer">
+          <img src="/worlds/hankacho/ep03-youtube.webp" alt="第3話 こわいまんじゅう">
+          <span><b>第三話</b>こわいまんじゅう</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=heBXjoUd4zw" target="_blank" rel="noopener noreferrer">
+          <img src="/worlds/hankacho/ep05-happiness.webp" alt="第5話 幸せの青い猫">
+          <span><b>第五話</b>幸せの青い猫</span>
+        </a>
+        <a href="https://www.youtube.com/watch?v=t3zz903Yc9c" target="_blank" rel="noopener noreferrer">
+          <img src="/worlds/hankacho/ep08-smithy.webp" alt="第8話 鍛冶場より愛をこめて">
+          <span><b>第八話</b>鍛冶場より愛をこめて</span>
+        </a>
+      </div>
+      <div class="world-actions">
+        <a class="is-primary" href="https://vibe.co.jp/hankacho/" target="_blank" rel="noopener noreferrer">全話を見る</a>
+        <button type="button" data-close>町へ戻る</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
