@@ -50,10 +50,9 @@ controls.target.set(0, 0.75, 3.15);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.enablePan = false;
-controls.minDistance = 3;
-controls.maxDistance = 13;
-controls.minPolarAngle = 0.45;
-controls.maxPolarAngle = 1.42;
+controls.minDistance = 1.5;
+controls.maxDistance = 15;
+controls.maxPolarAngle = 1.5;
 
 const environmentTexture = canvasTex(512, 256, (ctx, width, height) => {
   const sky = ctx.createLinearGradient(0, 0, 0, height);
@@ -657,11 +656,6 @@ let walkPhase = 0;
 let previousYaw = avatar.group.rotation.y;
 const previousPosition = avatar.group.position.clone();
 const keyboard = new Set();
-let orbiting = false;
-let lastOrbitAt = -10;
-
-controls.addEventListener('start', () => { orbiting = true; lastOrbitAt = elapsed; });
-controls.addEventListener('end', () => { orbiting = false; });
 
 const clampWalkable = (point) => {
   const length = Math.hypot(point.x, point.z);
@@ -926,19 +920,6 @@ function animate(now) {
   controls.target.add(cameraDelta);
   previousPosition.copy(player);
   previousPosition.y = GROUND_Y;
-
-  if (moving && !orbiting && elapsed - lastOrbitAt > 1.2) {
-    const offset = new THREE.Vector3().subVectors(camera.position, controls.target);
-    const radius = Math.hypot(offset.x, offset.z);
-    const currentAngle = Math.atan2(offset.x, offset.z);
-    const desiredAngle = avatar.group.rotation.y + Math.PI;
-    let diff = ((desiredAngle - currentAngle + Math.PI) % (Math.PI * 2)) - Math.PI;
-    if (diff < -Math.PI) diff += Math.PI * 2;
-    const angle = currentAngle + diff * (1 - Math.pow(0.5, dt));
-    offset.x = Math.sin(angle) * radius;
-    offset.z = Math.cos(angle) * radius;
-    camera.position.copy(controls.target).add(offset);
-  }
 
   const near = findNear(player);
   updateHint(near);
