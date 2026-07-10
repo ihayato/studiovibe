@@ -861,7 +861,7 @@ function animate(now) {
 
   if (Math.hypot(inputX, inputZ) > 0.08) {
     cameraForward.subVectors(controls.target, camera.position).setY(0).normalize();
-    cameraRight.set(cameraForward.z, 0, -cameraForward.x);
+    cameraRight.crossVectors(cameraForward, THREE.Object3D.DEFAULT_UP);
     moveVector.addScaledVector(cameraRight, inputX).addScaledVector(cameraForward, -inputZ).normalize();
   } else if (clickMoving) {
     moveVector.subVectors(playerTarget, player).setY(0);
