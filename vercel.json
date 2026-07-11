@@ -28,6 +28,11 @@
             "source": "/sakuya",
             "destination": "/sakuya/",
             "permanent": false
+        },
+        {
+            "source": "/sagetsu/",
+            "destination": "/sagetsu",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -70,6 +75,14 @@
         {
             "source": "/luna-occulta/:path*",
             "destination": "https://cn-kitan-web.vercel.app/luna-occulta/:path*"
+        },
+        {
+            "source": "/sagetsu",
+            "destination": "https://sagetsu-web.vercel.app/sagetsu"
+        },
+        {
+            "source": "/sagetsu/:path*",
+            "destination": "https://sagetsu-web.vercel.app/sagetsu/:path*"
         },
         {
             "source": "/blog",
