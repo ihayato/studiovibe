@@ -38,7 +38,6 @@ export default defineConfig({
                 blog: resolve(__dirname, 'blog.html'),
                 blogPost: resolve(__dirname, 'blog-post.html'),
                 virtualOffice: resolve(__dirname, 'vertual-office.html'),
-                lunaOccultaPrivacy: resolve(__dirname, 'luna-occulta/privacy.html'),
                 licenses: resolve(__dirname, 'licenses.html'),
                 island: resolve(__dirname, 'poc/island/index.html'),
                 worldPort: resolve(__dirname, 'worlds/index.html'),
