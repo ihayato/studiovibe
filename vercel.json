@@ -33,6 +33,11 @@
             "source": "/sagetsu/",
             "destination": "/sagetsu",
             "permanent": false
+        },
+        {
+            "source": "/luna-catenata/",
+            "destination": "/luna-catenata",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -83,6 +88,14 @@
         {
             "source": "/sagetsu/:path*",
             "destination": "https://sagetsu-web.vercel.app/sagetsu/:path*"
+        },
+        {
+            "source": "/luna-catenata",
+            "destination": "https://sagetsu-web.vercel.app/luna-catenata"
+        },
+        {
+            "source": "/luna-catenata/:path*",
+            "destination": "https://sagetsu-web.vercel.app/luna-catenata/:path*"
         },
         {
             "source": "/blog",
