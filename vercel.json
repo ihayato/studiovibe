@@ -38,6 +38,11 @@
             "source": "/luna-catenata/",
             "destination": "/luna-catenata",
             "permanent": false
+        },
+        {
+            "source": "/ikkyo",
+            "destination": "/ikkyo/",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -104,6 +109,14 @@
         {
             "source": "/blog/:slug",
             "destination": "/blog-post.html"
+        },
+        {
+            "source": "/ikkyo/",
+            "destination": "https://ikkyo-web.vercel.app/"
+        },
+        {
+            "source": "/ikkyo/:path*",
+            "destination": "https://ikkyo-web.vercel.app/:path*"
         }
     ],
     "headers": [
