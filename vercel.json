@@ -32,6 +32,10 @@
     ],
     "rewrites": [
         {
+            "source": "/contract_202607",
+            "destination": "/api/contract-202607"
+        },
+        {
             "source": "/island",
             "destination": "/poc/island/"
         },
