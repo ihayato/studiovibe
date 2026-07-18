@@ -37,9 +37,36 @@ else
   fail=1
 fi
 
+# ---- vercel.json全経路の自動網羅チェック(2026-07-18追加) ----
+# 経緯: 手動列挙だけだと/sagetsu等のrewrite消失(2026-07-18発覚・約数日404)を
+# 取りこぼした。vercel.jsonのredirects/rewritesのsourceを機械列挙し、
+# 「404/接続不能でないこと」を検査する。:path*等のパラメータ付きsourceは
+# 基底の具体パスentryが別にあるためスキップ(BotID経路は上の専用checkが担う)。
+echo "---- vercel.json経路の網羅チェック"
+while IFS= read -r src; do
+  case "$src" in
+    *:*|*"("*) continue ;;
+  esac
+  code=$(curl -s -o /dev/null -m 20 -w '%{http_code}' "https://vibe.co.jp$src")
+  if [ "$code" = "404" ] || [ "$code" = "000" ]; then
+    echo "NG  経路消失? $src -> $code"
+    fail=1
+  else
+    echo "OK  $src ($code)"
+  fi
+done < <(node -e '
+  const v = require("./vercel.json");
+  const seen = new Set();
+  for (const r of [...(v.redirects || []), ...(v.rewrites || [])]) seen.add(r.source);
+  console.log([...seen].join("\n"));
+')
+
+# vercel.jsonに現れない静的頁(public/直下)の代表。増えたらここに足す
+check "Roblox紹介シート(静的)" "https://vibe.co.jp/20260715_sheet" 200
+
 if [ "$fail" = "0" ]; then
   echo "---- 全項目OK"
 else
-  echo "---- NGあり。vercel.jsonのrewrites(特に/149e9513-…のBotID経路)を確認"
+  echo "---- NGあり。vercel.jsonのrewrites/redirects消失(ブランチ分岐デプロイ)を疑う"
 fi
 exit $fail

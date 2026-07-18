@@ -28,6 +28,21 @@
             "source": "/sakuya",
             "destination": "/sakuya/",
             "permanent": false
+        },
+        {
+            "source": "/sagetsu/",
+            "destination": "/sagetsu",
+            "permanent": false
+        },
+        {
+            "source": "/luna-catenata/",
+            "destination": "/luna-catenata",
+            "permanent": false
+        },
+        {
+            "source": "/ikkyo",
+            "destination": "/ikkyo/",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -76,12 +91,36 @@
             "destination": "https://cn-kitan-web.vercel.app/luna-occulta/:path*"
         },
         {
+            "source": "/sagetsu",
+            "destination": "https://sagetsu-web.vercel.app/sagetsu"
+        },
+        {
+            "source": "/sagetsu/:path*",
+            "destination": "https://sagetsu-web.vercel.app/sagetsu/:path*"
+        },
+        {
+            "source": "/luna-catenata",
+            "destination": "https://sagetsu-web.vercel.app/luna-catenata"
+        },
+        {
+            "source": "/luna-catenata/:path*",
+            "destination": "https://sagetsu-web.vercel.app/luna-catenata/:path*"
+        },
+        {
             "source": "/blog",
             "destination": "/blog.html"
         },
         {
             "source": "/blog/:slug",
             "destination": "/blog-post.html"
+        },
+        {
+            "source": "/ikkyo/",
+            "destination": "https://ikkyo-web.vercel.app/"
+        },
+        {
+            "source": "/ikkyo/:path*",
+            "destination": "https://ikkyo-web.vercel.app/:path*"
         }
     ],
     "headers": [
