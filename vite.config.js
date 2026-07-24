@@ -38,6 +38,8 @@ export default defineConfig({
                 blog: resolve(__dirname, 'blog.html'),
                 blogPost: resolve(__dirname, 'blog-post.html'),
                 virtualOffice: resolve(__dirname, 'vertual-office.html'),
+                // 月蝕綺譚のプライバシーポリシー(ASC/Play Console提出URL=消すと審査URLが404)。
+                // 2026-07-24監査P0-3で千夜AI利用・引き継ぎ30日失効を反映した改定版
                 lunaOccultaPrivacy: resolve(__dirname, 'luna-occulta/privacy.html'),
                 licenses: resolve(__dirname, 'licenses.html'),
                 island: resolve(__dirname, 'poc/island/index.html'),
