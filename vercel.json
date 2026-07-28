@@ -59,6 +59,14 @@
             "destination": "/poc/island/"
         },
         {
+            "source": "/ochanoma-news",
+            "destination": "https://ochanoma-news-site.vercel.app/ochanoma-news"
+        },
+        {
+            "source": "/ochanoma-news/:path*",
+            "destination": "https://ochanoma-news-site.vercel.app/:path*"
+        },
+        {
             "source": "/sakuya/",
             "destination": "https://sakuya-site.vercel.app/"
         },
