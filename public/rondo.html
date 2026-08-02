@@ -345,6 +345,45 @@
   .fit-col.yes li::before{content:"✓";color:var(--ok);font-weight:700;flex:none}
   .fit-col.no li::before{content:"−";color:var(--note);font-weight:700;flex:none}
 
+  /* 適性診断 */
+  .sh-lede{text-align:center;color:var(--dim);margin:56px auto 24px;max-width:40em}
+  .shindan{max-width:640px;margin:0 auto;border-radius:var(--r-card);padding:32px 36px;
+    background:var(--glass);border:1px solid var(--hair);box-shadow:var(--shadow), var(--hi);
+    backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){ .shindan{background:rgba(255,255,255,.93)} }
+  @media(max-width:600px){ .shindan{padding:24px 20px} }
+  .sh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .sh-step{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--note)}
+  .sh-back{border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:12.5px;color:var(--note);padding:4px 8px;border-radius:6px}
+  .sh-back:hover{background:var(--hover);color:var(--ink)}
+  .sh-back:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sh-dots{display:flex;gap:6px}
+  .sh-dot{width:22px;height:4px;border-radius:2px;background:rgba(170,186,214,.5)}
+  .sh-dot.on{background:var(--accent)}
+  .sh-q{font-size:17px;font-weight:600;line-height:1.6;margin-bottom:18px}
+  .sh-choices{display:grid;gap:10px}
+  .sh-choice{display:block;width:100%;text-align:left;cursor:pointer;
+    border:1px solid var(--hair-strong);border-radius:var(--r-btn);background:rgba(255,255,255,.8);
+    padding:13px 16px;min-height:48px;font-family:var(--sans);font-size:14.5px;line-height:1.6;color:var(--ink);
+    transition:background 140ms ease-out,border-color 140ms ease-out}
+  .sh-choice:hover{background:#fff;border-color:var(--accent)}
+  .sh-choice:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .sh-verdict{text-align:center}
+  .sh-pill{display:inline-block;font-size:13px;font-weight:600;border-radius:999px;padding:4px 14px;margin-bottom:14px}
+  .sh-pill.a{color:var(--ok);background:var(--ok-soft)}
+  .sh-pill.b{color:var(--accent);background:var(--accent-soft)}
+  .sh-pill.c{color:var(--dim);background:rgba(123,131,143,.12)}
+  .sh-title{font-size:19px;font-weight:700;line-height:1.5;margin-bottom:12px}
+  .sh-body{font-size:14.5px;color:var(--dim);line-height:1.9;max-width:34em;margin:0 auto}
+  .sh-next{margin:16px auto 0;display:grid;gap:8px;font-size:13.5px;color:var(--dim);justify-content:center;text-align:left;list-style:none}
+  .sh-next li{display:flex;gap:10px}
+  .sh-next li::before{content:"→";color:var(--accent);font-weight:600;flex:none}
+  .sh-ctas{margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .sh-retry{border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;color:var(--note);text-decoration:underline;text-underline-offset:3px;padding:6px}
+  .sh-retry:hover{color:var(--ink)}
+  .sh-retry:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){ .sh-choice{transition:none} }
+
   /* 価格 */
   .price-sec{background:var(--glass-band);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
              backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
@@ -935,6 +974,22 @@
           </ul>
         </div>
       </div>
+
+      <p class="sh-lede" id="shindan">では、あなたはどちらでしょう。<br>4問・約30秒で判定できます。</p>
+      <div class="shindan">
+        <div id="sh-quiz">
+          <div class="sh-top">
+            <span class="sh-step" id="sh-step">1 / 4</span>
+            <span class="sh-dots" id="sh-dots" aria-hidden="true"></span>
+            <button type="button" class="sh-back" id="sh-back" style="visibility:hidden">← 前の質問へ</button>
+          </div>
+          <div aria-live="polite">
+            <p class="sh-q" id="sh-q"></p>
+            <div class="sh-choices" id="sh-choices"></div>
+          </div>
+        </div>
+        <div id="sh-result" class="sh-verdict" aria-live="polite" hidden></div>
+      </div>
     </div>
   </section>
 
@@ -1060,6 +1115,113 @@
 </footer>
 
 <script>
+(function(){
+  var QS = [
+    { q: 'いまの発信・商売に近いものは？', c: [
+      ['メールやLINEのリストがあり、配信している', 2],
+      ['発信はしているが、リスト配信はこれから', 1],
+      ['発信も商売も、これから始める', 0]
+    ]},
+    { q: 'Claude CodeやCodexなどの開発AIは？', c: [
+      ['ふだんから使っている', 2],
+      ['触ったことはある', 1],
+      ['使ったことがない', 0]
+    ]},
+    { q: 'rondoは完成品のアプリではなく、AIと育てる「設計図一式」です。どう感じますか？', c: [
+      ['むしろ楽しみ', 2],
+      ['AIに任せられるなら、大丈夫', 1],
+      ['不安。完成品のアプリがいい', 0]
+    ]},
+    { q: 'いまの配信ツール・SaaSについては？', c: [
+      ['月額と仕様の縛りから抜けたい', 2],
+      ['不満はあるが、乗り換えは面倒', 1],
+      ['特に困っていない', 0]
+    ]}
+  ];
+  var quiz = document.getElementById('sh-quiz');
+  if(!quiz) return;
+  var elQ = document.getElementById('sh-q');
+  var elC = document.getElementById('sh-choices');
+  var elStep = document.getElementById('sh-step');
+  var elDots = document.getElementById('sh-dots');
+  var elBack = document.getElementById('sh-back');
+  var elResult = document.getElementById('sh-result');
+  var answers = [];
+
+  function esc(s){ var d = document.createElement('span'); d.textContent = s; return d.innerHTML; }
+
+  function renderQ(){
+    var i = answers.length;
+    elStep.textContent = (i + 1) + ' / ' + QS.length;
+    elDots.innerHTML = QS.map(function(_, j){
+      return '<span class="sh-dot' + (j <= i ? ' on' : '') + '"></span>';
+    }).join('');
+    elBack.style.visibility = i === 0 ? 'hidden' : 'visible';
+    elQ.textContent = QS[i].q;
+    elC.innerHTML = '';
+    QS[i].c.forEach(function(ch, j){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sh-choice';
+      b.textContent = ch[0];
+      b.addEventListener('click', function(){
+        answers.push(j);
+        if(answers.length === QS.length){ renderResult(); } else { renderQ(); }
+      });
+      elC.appendChild(b);
+    });
+  }
+
+  function verdict(){
+    var score = answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0);
+    var wantsFinished = answers[2] === 2;   // Q3「不安。完成品のアプリがいい」
+    if(wantsFinished || score <= 2) return 'c';
+    // A判定はLP文面「リストがあり、開発AIが手元にある」と厳密に一致させる
+    if(answers[0] !== 0 || answers[1] !== 0 || score <= 5) return 'b';
+    return 'a';
+  }
+
+  function renderResult(){
+    var v = verdict();
+    var html = '';
+    if(v === 'a'){
+      html = '<span class="sh-pill a">向いています</span>'
+        + '<p class="sh-title">rondoは、あなたのための道具です。</p>'
+        + '<p class="sh-body">リストがあり、開発AIが手元にある。<br>それがrondoの想定読者そのものです。<br>発売と同時に始められるよう、10%オフを押さえておいてください。</p>'
+        + '<div class="sh-ctas"><a class="btn primary" href="#reserve">事前登録で10%オフを受け取る</a></div>';
+    } else if(v === 'b'){
+      var next = [];
+      if(answers[1] >= 1) next.push('まず、Claude Codeを日常に入れてください。rondoの導入も改造も、開発AIが担当します。');
+      if(answers[0] === 2) next.push('配る相手を作るのが先です。rondoは、リストがあってこそ生きます。');
+      if(!next.length) next.push('「向いている人」の条件は、あとひとつで揃います。上の一覧をもう一度見てください。');
+      html = '<span class="sh-pill b">もう一歩</span>'
+        + '<p class="sh-title">準備が整えば、使えます。</p>'
+        + '<p class="sh-body">いま買っても、育てる手が足りずに止まる可能性があります。<br>先に足場を作ってください。</p>'
+        + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
+        + '<div class="sh-ctas"><a class="btn ghost" href="#reserve">先に10%オフだけ押さえる</a></div>'
+        + '<p class="sh-body" style="margin-top:10px;font-size:12.5px;color:var(--note)">事前登録は無料です。<br>必要なのはメールアドレスだけです。</p>';
+    } else {
+      html = '<span class="sh-pill c">今は向いていません</span>'
+        + '<p class="sh-title">正直に言います。今は買わない方がいいです。</p>'
+        + '<p class="sh-body">rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、大手配信スタンド型SaaS（MyASP、Lステップなど）の方が合っています。<br>開発AIが日常になったら、また診断しに来てください。</p>';
+    }
+    html += '<div class="sh-ctas"><button type="button" class="sh-retry" id="sh-retry">もう一度診断する</button></div>';
+    quiz.hidden = true;
+    elResult.innerHTML = html;
+    elResult.hidden = false;
+    document.getElementById('sh-retry').addEventListener('click', function(){
+      answers = [];
+      elResult.hidden = true;
+      quiz.hidden = false;
+      renderQ();
+    });
+  }
+
+  elBack.addEventListener('click', function(){
+    if(answers.length){ answers.pop(); renderQ(); }
+  });
+  renderQ();
+})();
 (function(){
   var box = document.getElementById('hero-car');
   if(!box) return;
