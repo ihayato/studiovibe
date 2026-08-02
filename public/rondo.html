@@ -8,6 +8,7 @@
 <meta property="og:title" content="Rondo | AIとともに運用。自分で所有・カスタマイズする次世代マーケティングOS">
 <meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、Claude Codeで作り込む買い切り¥4,980。">
 <meta property="og:type" content="website">
+<link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/rondo-assets/rondo-icon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/rondo-assets/rondo-icon-180.png">
@@ -183,6 +184,21 @@
   .cal-ev{font-size:9px;font-weight:600;line-height:1.7;border-radius:4px;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
   .cal-ev.done{color:var(--note);background:rgba(123,131,143,.14)}
   .cal-ev.sked{color:var(--accent);background:var(--accent-soft)}
+  /* ヒートマップスライド(実LPへの重ね描きの縮小再現。熱色はheat.jsオーバーレイの実写色) */
+  .hm-page{position:relative;background:#fff;border:1px solid var(--hair);border-radius:10px;padding:16px 14px;overflow:hidden}
+  .hm-mast{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .hm-logo{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700}
+  .hm-logo i{width:12px;height:12px;border-radius:4px;background:var(--ink);display:inline-block}
+  .hm-mini{font-size:9px;color:var(--note)}
+  .hm-line{height:9px;border-radius:5px;background:#E3E7EF;margin:7px auto 0}
+  .hm-cta{display:block;width:max-content;margin:13px auto 2px;background:var(--ink);color:#fff;
+    font-size:10.5px;font-weight:600;border-radius:999px;padding:6px 16px}
+  .hm-blob{position:absolute;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle, rgba(214,69,27,.5) 0%, rgba(232,98,44,.32) 42%, rgba(255,171,64,.16) 66%, transparent 76%)}
+  .hm-bar{display:flex;align-items:center;gap:9px;justify-content:center;width:max-content;max-width:100%;
+    margin:12px auto 0;background:#17181C;border-radius:999px;padding:6px 14px;font-size:10.5px;color:rgba(255,255,255,.72);white-space:nowrap}
+  .hm-bar .on{background:#fff;color:#17181C;border-radius:999px;padding:2px 9px;font-weight:600}
+  .hm-bar .sep{width:1px;height:11px;background:rgba(255,255,255,.25);flex:none}
   .car-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
   .car-tab{font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--dim);cursor:pointer;
            background:rgba(255,255,255,.55);border:1px solid var(--hair);border-radius:999px;
@@ -518,6 +534,31 @@
                 </div>
               </div>
 
+              <div class="car-slide" id="car-ph" role="tabpanel" aria-label="ヒートマップの画面イメージ">
+                <div class="sh-head">ヒートマップ <span class="sub">販売LP・実LPに重ね描き</span></div>
+                <div class="hm-page">
+                  <div class="hm-mast">
+                    <span class="hm-logo"><i></i>Rondo</span>
+                    <span class="hm-mini">事前登録で10%オフ</span>
+                  </div>
+                  <div class="hm-line" style="width:72%"></div>
+                  <div class="hm-line" style="width:58%"></div>
+                  <div class="hm-line" style="width:40%;height:6px;background:#EDF0F6;margin-top:10px"></div>
+                  <span class="hm-cta">事前登録で10%オフを受け取る</span>
+                  <div class="hm-line" style="width:30%;height:6px;background:#EDF0F6"></div>
+                  <div style="border-top:1px solid #EDF0F6;margin-top:14px;padding-top:4px">
+                    <div class="hm-line" style="width:52%"></div>
+                    <div class="hm-line" style="width:64%;height:6px;background:#EDF0F6"></div>
+                    <div class="hm-line" style="width:57%;height:6px;background:#EDF0F6"></div>
+                  </div>
+                  <i class="hm-blob" style="width:110px;height:110px;left:50%;top:96px;transform:translateX(-50%)"></i>
+                  <i class="hm-blob" style="width:64px;height:64px;left:20%;top:26px"></i>
+                  <i class="hm-blob" style="width:44px;height:44px;right:8%;top:4px"></i>
+                  <i class="hm-blob" style="width:54px;height:54px;left:34%;bottom:-2px"></i>
+                </div>
+                <div class="hm-bar"><span class="on">クリック</span><span>スクロール到達</span><span>アテンション</span><span class="sep"></span><span>PC</span></div>
+              </div>
+
               <div class="car-slide" id="car-p1" role="tabpanel" aria-label="配信カレンダーの画面イメージ">
                 <div class="sh-head">カレンダー <span class="sub">2026年8月</span></div>
                 <div class="crm-kpis">
@@ -603,6 +644,7 @@
         </div>
         <div class="car-tabs" role="tablist" aria-label="表示する管理画面">
           <button class="car-tab" type="button" role="tab" aria-selected="true" aria-controls="car-p0">ファネル分析</button>
+          <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-ph">ヒートマップ</button>
           <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p1">カレンダー</button>
           <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p2">顧客</button>
           <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p3">LP分析</button>
