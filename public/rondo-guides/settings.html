@@ -67,7 +67,7 @@
         <div class="progress-card">
           <div class="progress-top">
             <span class="progress-label">導入後の設定</span>
-            <span class="progress-value">0 / 6</span>
+            <span class="progress-value">0 / 7</span>
           </div>
           <div
             class="progress-track"
@@ -86,6 +86,7 @@
           <a href="#mail">講座を決める</a>
           <a href="#safety">安全設定を確認する</a>
           <a href="#optional">任意機能を選ぶ</a>
+          <a href="#channels">チャネルをつなぐ</a>
           <a href="#review">変更を確認する</a>
           <a href="#routine">運用を任せる</a>
         </nav>
@@ -265,9 +266,53 @@
           </div>
         </section>
 
-        <section class="step" id="review" aria-labelledby="review-title">
+        <section class="step" id="channels" aria-labelledby="channels-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">05</span>
+            <div>
+              <span class="step-kicker">発信チャネル</span>
+              <h2 id="channels-title">LINEやSNSの実績をつなぐ</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            メールとLINEは標準装備です。YouTube、note、Substack、Xの実績は「受け口」が用意済みで、集めて送る仕組みをAIに作らせます。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>LINEをつなぐ依頼文</span>
+                <button class="copy-button" type="button" aria-label="LINE接続依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>RondoにLINE公式アカウントを接続してください。SETUP.mdのLINEの章に沿って進め、私がやること（アカウント開設、管理画面での確認、キーの入力）は1つずつ画面を開いて案内してください。設定と検証はあなたが行い、接続後は友だち追加からあいさつ配信が届くまで一緒に確認してください。</code></pre>
+            </div>
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>YouTubeやnoteをつなぐ依頼文</span>
+                <button class="copy-button" type="button" aria-label="SNS接続依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>私のYouTubeの実績をRondoのダッシュボードに表示したいです。SETUP.mdの「チャネル接続」の章を読み、公式APIで実績を集めてRondoの受け口へ毎日自動で送る仕組みを作ってください。必要なAPIキーの取得は画面を開いて案内し、キーはチャットへ表示しないでください。規約違反になる取得方法は使わないでください。完成したら、管理画面のチャネルビューに数字が出ることを一緒に確認してください。</code></pre>
+            </div>
+            <div class="callout">
+              <strong>note、Substack、Xも同じ頼み方でつながります</strong>
+              <p>依頼文の「YouTube」を差し替えるだけです。1チャネルずつ、実績が表示されるのを確認してから次へ進みます。</p>
+            </div>
+            <div class="callout safe">
+              <strong>つながらなくても配信は止まりません</strong>
+              <p>チャネル接続は「見える化」の追加です。失敗してもメールとLINEの配信には影響しない設計なので、安心して試せます。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-channels" type="checkbox">
+              <span class="task-copy">
+                <strong>つなぐチャネルを決め、表示を確認した</strong>
+                <span>使わないチャネルは「未接続」表示のままで問題ありません。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="review" aria-labelledby="review-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">06</span>
             <div>
               <span class="step-kicker">変更の確認</span>
               <h2 id="review-title">AIの変更報告を確認する</h2>
@@ -304,7 +349,7 @@
 
         <section class="step" id="routine" aria-labelledby="routine-title">
           <div class="step-head">
-            <span class="step-no" aria-hidden="true">06</span>
+            <span class="step-no" aria-hidden="true">07</span>
             <div>
               <span class="step-kicker">日々の運用</span>
               <h2 id="routine-title">日々の運用も会話で頼む</h2>
