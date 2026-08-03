@@ -288,6 +288,28 @@
   .flip ul.feat li::before{content:"✓";color:var(--ok);font-weight:700;flex:none}
   .flip ul.feat b{color:var(--ink);font-weight:600}
 
+  /* 置き換え図解（配信スタンド2本 → Rondoに統合） */
+  .swap{display:grid;grid-template-columns:1fr 72px 1.05fr;gap:20px;align-items:center;max-width:980px;margin:0 auto}
+  @media(max-width:860px){ .swap{grid-template-columns:1fr;gap:14px} }
+  .swap-old{display:grid;gap:14px;min-width:0}
+  .swap-tool{background:rgba(255,255,255,.42);border:1px dashed var(--hair-strong);border-radius:14px;padding:16px 18px;min-width:0}
+  .st-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-weight:600;font-size:14.5px;margin-bottom:10px}
+  .st-head .st-sub{font-size:11.5px;color:var(--note);font-weight:400}
+  .st-chips{display:flex;flex-wrap:wrap;gap:6px}
+  .st-chips span{font-size:12px;color:var(--dim);border:1px solid var(--hair);background:rgba(255,255,255,.6);border-radius:999px;padding:3px 10px;white-space:nowrap}
+  .swap-arrow{display:grid;place-items:center;gap:6px;color:var(--accent);font-weight:600;font-size:12.5px;text-align:center}
+  .swap-arrow .ar{font-family:var(--mono);font-size:26px;line-height:1;font-weight:500}
+  @media(max-width:860px){ .swap-arrow{padding:2px 0} .swap-arrow .ar{transform:rotate(90deg)} }
+  .swap-rondo{border-radius:var(--r-shot);overflow:hidden;min-width:0}
+  .swap-r-body{padding:18px 20px;display:grid;gap:12px}
+  .swap-r-row{display:flex;gap:10px;align-items:baseline;font-size:14px;min-width:0}
+  .swap-r-row::before{content:"✓";color:var(--ok);font-weight:700;flex:none}
+  .swap-r-row .nm{font-weight:600;color:var(--ink);white-space:nowrap}
+  .swap-r-row .d{font-size:12.5px;color:var(--note);min-width:0}
+  @media(max-width:520px){ .swap-r-row{flex-wrap:wrap} .swap-r-row .d{flex-basis:100%;padding-left:24px} }
+  .swap-r-plus{border-top:1px solid var(--hair);padding-top:12px;font-size:12.5px;color:var(--dim);display:flex;gap:10px;align-items:baseline}
+  .swap-r-plus::before{content:"＋";color:var(--accent);font-weight:600;flex:none}
+
   /* かゆいところ台帳（1枚のガラス台帳） */
   .itch-list{max-width:920px;margin:0 auto;border-radius:var(--r-card);padding:8px 32px}
   @media(max-width:760px){ .itch-list{padding:4px 20px} }
@@ -303,7 +325,6 @@
   .itch-a b{color:var(--ink);font-weight:600}
 
   /* CRMのパネルモック */
-  .itch-gallery{max-width:560px;margin:40px auto 0}
   .crm-kpis{display:flex;flex-wrap:wrap;gap:8px}
   .crm-kpi{display:flex;align-items:baseline;gap:8px;background:rgba(255,255,255,.55);border:1px solid var(--hair);border-radius:999px;padding:4px 14px;font-size:12px;color:var(--dim)}
   .crm-kpi .mono{font-size:13px;font-weight:600;color:var(--ink)}
@@ -785,39 +806,48 @@
     <div class="wrap">
       <h2 style="text-align:center">いまの配信スタンドの仕事は、<br>そのまま引き受けます。</h2>
       <p class="lede" style="text-align:center;margin:0 auto 40px">乗り換えたら機能が欠けた、では話になりません。<br>Rondoはイケハヤ自身が長年使った配信スタンドから移行するために作ったので、大手配信スタンド型SaaS（MyASP、Lステップなど）でできる基本業務は、最初からひと通りそろっています。</p>
-      <div class="fit">
-        <div class="fit-col yes">
-          <h3>メール配信スタンドでやっていたこと</h3>
-          <ul>
-            <li>登録フォームとダブルオプトイン</li>
-            <li>ステップメール配信。628通を実運用中</li>
-            <li>一斉配信と予約配信</li>
-            <li>顧客ステータス別の出し分け。コア/常連/見込み/休眠</li>
-            <li>読者管理・配信停止・バウンスの自動処理</li>
-            <li>開封・クリックの計測と件名A/B</li>
-            <li>到達率のケア。ウォームアップ・休眠整理・苦情率の監視</li>
-          </ul>
+      <div class="swap">
+        <div class="swap-old">
+          <div class="swap-tool">
+            <div class="st-head">メール配信スタンド <span class="st-sub">でやっていたこと</span></div>
+            <div class="st-chips">
+              <span>登録フォーム</span>
+              <span>ダブルオプトイン</span>
+              <span>ステップメール 628通</span>
+              <span>一斉・予約配信</span>
+              <span>ステータス別出し分け</span>
+              <span>配信停止・バウンス処理</span>
+              <span>開封・クリック計測</span>
+              <span>件名A/B</span>
+              <span>到達率ケア</span>
+            </div>
+          </div>
+          <div class="swap-tool">
+            <div class="st-head">LINE配信ツール <span class="st-sub">でやっていたこと</span></div>
+            <div class="st-chips">
+              <span>友だち追加からのステップ配信</span>
+              <span>一斉・予約配信</span>
+              <span>診断レベル別出し分け</span>
+              <span>キーワード自動応答</span>
+              <span>リッチメニュー</span>
+              <span>分岐する診断シナリオ</span>
+              <span>友だち台帳・名寄せ</span>
+            </div>
+          </div>
         </div>
-        <div class="fit-col yes">
-          <h3>LINE配信ツールでやっていたこと</h3>
-          <ul>
-            <li>友だち追加からのLINEステップ配信</li>
-            <li>一斉配信と予約配信。セグメント・診断レベル別の出し分け</li>
-            <li>キーワード自動応答とリッチメニュー</li>
-            <li>回答で分岐する診断シナリオ</li>
-            <li>友だち台帳。メール読者との名寄せまで</li>
-          </ul>
-        </div>
+        <div class="swap-arrow"><span class="ar">→</span>まとめて</div>
+        <figure class="swap-rondo shot" style="margin:0">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin</span></div>
+          <div class="swap-r-body">
+            <div class="swap-r-row"><span class="nm">メール配信エンジン</span><span class="d">ステップ628通を実運用中</span></div>
+            <div class="swap-r-row"><span class="nm">LINEステップエンジン</span><span class="d">診断・出し分けまで込み</span></div>
+            <div class="swap-r-row"><span class="nm">顧客台帳と4セグメント</span><span class="d">メール・LINEを名寄せ</span></div>
+            <div class="swap-r-row"><span class="nm">1つのダッシュボード</span><span class="d">計測・A/B・到達率ケアも集約</span></div>
+            <div class="swap-r-plus">Stripe APIをつなげば、決済・サブスク管理まで統合できます。<br>購入した人だけへのフォローアップやアップセル配信も、この台帳が受け止めます。</div>
+          </div>
+        </figure>
       </div>
-      <div class="fit-col yes" style="max-width:900px;margin:24px auto 0">
-        <h3>さらに、決済ともつながります</h3>
-        <ul>
-          <li>Stripe APIとつなげば、決済やサブスクの管理までRondoに統合できます</li>
-          <li>商品を買った人だけにフォローアップの便を送る、アップセルの便を送る、といった出し分けは、購入台帳と顧客セグメントの機構がそのまま受け止めます</li>
-          <li>接続の実装は、例によってClaude Codeに頼むだけ。イケハヤの運用では現在、購入データをCSV取込で接続しています</li>
-        </ul>
-      </div>
-      <p class="gallery-note" style="margin-top:24px">ここに無い機能が必要なら、Claude Codeに「作って」と言えば足せます。<br>それがOSである理由です。</p>
+      <p class="gallery-note" style="margin-top:28px">ここに無い機能が必要なら、Claude Codeに「作って」と言えば足せます。<br>それがOSである理由です。</p>
     </div>
   </section>
 
@@ -825,94 +855,58 @@
   <section id="itch" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">マーケターのかゆいところに、<br>手が届く。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 48px">SaaSを何本契約しても届かなかった場所に、手を入れました。<br>実務で毎日困っていることから作ったので、答えが具体的です。<br>しかも足りなければ、Claude Codeがその日のうちに作り足せます。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 48px">SaaSを何本契約しても届かなかった場所に、手を入れました。<br>実務で毎日困っていることから作ったので、答えが具体的です。</p>
 
       <div class="itch-list">
         <div class="itch-row">
           <div class="itch-q">メールとLINEとDiscordに同じ人がいるのに、別人として数えている</div>
           <div class="itch-a">
             <div class="name">顧客の名寄せ</div>
-            <p>メール・LINE・Discord・購入履歴を<b>同一人物として自動で束ねます</b>。<br>顧客は「リスト」ではなく「人」の単位になり、1人ずつ時系列で追えます。</p>
+            <p>メール・LINE・Discord・購入履歴を<b>同一人物として自動で束ね</b>、「人」の単位で時系列に追えます。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">誰が熱心な顧客なのか、感覚でしか語れない</div>
           <div class="itch-a">
             <div class="name">顧客スコアと4セグメント</div>
-            <p>購入・反応・接続・新しさで自動採点し、<b>コア/常連/見込み/休眠</b>に仕分けます。<br>Apple端末が自動で水増しする「開封率」を、あえて数えない設計です。</p>
+            <p>購入・反応・接続・新しさで自動採点し、<b>コア/常連/見込み/休眠</b>に仕分けます。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">全員に同じ配信を送るしかない</div>
           <div class="itch-a">
             <div class="name">セグメント配信</div>
-            <p>LINE友だちに<b>AI活用レベル診断</b>を受けてもらい、結果を保存。<br>初心者には基礎を、上級者には突っ込んだ話を、<b>同じ日の同じ時刻に別内容で</b>出し分けます。</p>
+            <p><b>AI活用レベル診断</b>の結果を保存し、初心者と上級者へ<b>同じ日の同じ時刻に別内容で</b>出し分けます。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">LPから購入まで、どこで人が落ちているのか分からない</div>
           <div class="itch-a">
             <div class="name">ファネル分析</div>
-            <p>流入元→LP訪問→教材クリック→注文→売上を、<b>同じ定義の数字で一気通貫</b>。<br>ダッシュボードと分析画面で数字が食い違わないよう、計算は1つの頭脳に集約しています。</p>
+            <p>流入元→LP訪問→教材クリック→注文→売上を、<b>同じ定義の数字で一気通貫</b>。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">コンテンツの自動配信基盤が夜中に壊れても、朝まで誰も気づかない</div>
           <div class="itch-a">
             <div class="name">自動の見張り番</div>
-            <p>定時ジョブの健康監視、障害の自動記録、毎朝の送達テスト、バウンス率と苦情率の健康診断、データベースの日次バックアップ。<br><b>異常はDiscordに即通知</b>されます。</p>
+            <p>定時ジョブの監視・障害記録・毎朝の送達テスト・日次バックアップ。<br><b>異常はDiscordに即通知</b>されます。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">Google Analyticsを見ても、次の一手が分からない</div>
           <div class="itch-a">
             <div class="name">局面検知レコメンド</div>
-            <p>立ち上げ・成長・運用のどの局面かをデータから判定し、<b>「今やるべきこと」だけ</b>を提示します。<br>平時は「✓ 対応が必要なことはありません」。<br>それが正常です。</p>
+            <p>立ち上げ・成長・運用の局面をデータから判定し、<b>「今やるべきこと」だけ</b>を提示します。</p>
           </div>
         </div>
         <div class="itch-row">
           <div class="itch-q">メールの到達率が静かに下がっていく</div>
           <div class="itch-a">
             <div class="name">休眠整理</div>
-            <p>90日反応のない読者は自動で配信対象から外し、戻ってきたら即再開。<br><b>「届く」という資産</b>を仕組みで守ります。</p>
+            <p>90日反応のない読者は自動で外し、戻れば即再開。<br><b>「届く」という資産</b>を仕組みで守ります。</p>
           </div>
         </div>
-      </div>
-
-      <div class="itch-gallery">
-        <figure>
-          <div class="shot" role="img" aria-label="Rondoの顧客ビューのイメージ。セグメント別の人数と、顧客ごとのスコアが並ぶ。">
-            <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — 顧客</span></div>
-            <div class="shot-body">
-              <div class="crm-kpis">
-                <span class="crm-kpi">顧客 <span class="mono">3,328</span></span>
-                <span class="crm-kpi">コア <span class="mono">214</span></span>
-                <span class="crm-kpi">常連 <span class="mono">892</span></span>
-                <span class="crm-kpi">見込み <span class="mono">1,306</span></span>
-                <span class="crm-kpi">休眠 <span class="mono">916</span></span>
-              </div>
-              <div class="crm-table">
-                <div class="crm-line">
-                  <div class="crm-who"><span class="id">sato***@gmail.com</span><span class="ch">メール · LINE · 購入 3件</span></div>
-                  <span class="crm-score">スコア <b>86</b></span><span class="pill sked">コア</span>
-                </div>
-                <div class="crm-line">
-                  <div class="crm-who"><span class="id">tana***@icloud.com</span><span class="ch">メール · 購入 1件</span></div>
-                  <span class="crm-score">スコア <b>64</b></span><span class="pill ok">常連</span>
-                </div>
-                <div class="crm-line">
-                  <div class="crm-who"><span class="id">LINE: はると</span><span class="ch">LINE · 診断 Lv3</span></div>
-                  <span class="crm-score">スコア <b>41</b></span><span class="pill wait">見込み</span>
-                </div>
-                <div class="crm-line">
-                  <div class="crm-who"><span class="id">yama***@yahoo.co.jp</span><span class="ch">メール · 購入 2件</span></div>
-                  <span class="crm-score">スコア <b>12</b></span><span class="pill mute">休眠</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <figcaption class="shot-cap">顧客ビューのイメージ。<br>数値はサンプルです。</figcaption>
-        </figure>
       </div>
     </div>
   </section>
@@ -921,7 +915,7 @@
   <section id="funnel-view" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">どの流入が売上になったか、<br>一本の道で見える。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">どこで人が落ちているかは、感覚ではなく図で確かめます。<br>ファネル分析は、流入元→LP訪問→教材クリック→注文→売上をひとつの図でつなぎ、LP訪問のバーは流入元ごとに色分け。<br>どの発信が売上まで届いたのかが、そのまま見えます。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">どこで人が落ちているかは、感覚ではなく図で確かめます。<br>流入元→LP訪問→教材クリック→注文→売上を、ひとつの図でつなぎます。</p>
       <figure class="fa-wide shot">
         <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — ファネル分析</span></div>
         <img src="/rondo-assets/funnel-desktop.png" alt="Rondoのファネル分析の実画面。売上・注文CVR・LP訪問などのKPIカードの下に、流入元ごとに色分けされたLP訪問バーから教材クリック、注文、売上へと細くなっていくファネル図。その下に導線別のクリック・注文・売上の表。" width="2880" height="1960" loading="lazy">
