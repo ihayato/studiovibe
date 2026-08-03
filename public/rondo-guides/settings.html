@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="ja" data-guide="settings">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F5F6F8">
+  <meta name="description" content="AIとの会話でRondoの原稿、安全設定、任意連携、運用方法を整えるユーザーガイド。">
+  <title>導入後の設定ガイド | Rondo</title>
+  <link rel="canonical" href="https://vibe.co.jp/rondo-guides/settings.html">
+  <meta property="og:title" content="導入後の設定ガイド | Rondo">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
+  <meta property="og:site_name" content="Studio VIBE">
+  <script src="https://rondo.nubonba.workers.dev/heat.js" data-page="rondo-guide-settings" defer></script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/guide.css">
+  <script src="assets/guide.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+  <p id="guide-status" class="sr-only" role="status" aria-live="polite"></p>
+
+  <header class="site-head">
+    <div class="head-inner">
+      <a class="brand" href="setup.html" aria-label="Rondo ガイド">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>Rondo guides</span>
+      </a>
+      <nav class="guide-nav" aria-label="ガイド">
+        <a href="setup.html">初回セットアップ</a>
+        <a href="settings.html" aria-current="page">導入後の設定</a>
+        <a href="/rondo">Rondoとは</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">セットアップ後・AIと一緒に</p>
+          <h1 id="page-title">設定も、AIとの会話で進める。</h1>
+          <p class="lead">
+            セットアップ後もコマンドは必要ありません。あなたは「どう届けたいか」を話し、
+            AIが設定変更、検査、反映まで担当します。
+          </p>
+          <a class="start-link" href="#ask-ai">設定の依頼文をコピーする <span aria-hidden="true">↓</span></a>
+          <div class="promise" aria-label="このガイドで決めること">
+            <span>講座と原稿</span>
+            <span>配信ペース</span>
+            <span>安全上限</span>
+            <span>任意の連携</span>
+          </div>
+        </div>
+        <div class="orbit" aria-hidden="true">
+          <span class="orbit-ring"></span>
+          <span class="orbit-ring"></span>
+          <span class="orbit-ring"></span>
+          <span class="orbit-dot"></span>
+          <span class="orbit-core"><span><strong>R</strong>AI OPERATE</span></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="設定進捗">
+        <div class="progress-card">
+          <div class="progress-top">
+            <span class="progress-label">導入後の設定</span>
+            <span class="progress-value">0 / 6</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="導入後の設定進捗"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div class="progress-bar"></div>
+          </div>
+          <p class="progress-note">チェック状態はこのブラウザに保存されます。</p>
+        </div>
+        <nav class="toc" aria-label="このページの目次">
+          <a href="#ask-ai">AIへ依頼する</a>
+          <a href="#mail">講座を決める</a>
+          <a href="#safety">安全設定を確認する</a>
+          <a href="#optional">任意機能を選ぶ</a>
+          <a href="#review">変更を確認する</a>
+          <a href="#routine">運用を任せる</a>
+        </nav>
+      </aside>
+
+      <div class="guide-content">
+        <section class="intro" aria-label="役割分担">
+          <div class="intro-item">
+            <b>あなたが決めること</b>
+            <span>誰へ、何を、どのペースで届けるか</span>
+          </div>
+          <div class="intro-item">
+            <b>AIがすること</b>
+            <span>設定変更、原稿反映、検査、公開作業</span>
+          </div>
+          <div class="intro-item">
+            <b>大事なルール</b>
+            <span>一斉配信の予約だけは自分で承認する</span>
+          </div>
+        </section>
+
+        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">01</span>
+            <div>
+              <span class="step-kicker">まずこれだけ</span>
+              <h2 id="ask-ai-title">この依頼文をAIへ渡す</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            初回セットアップを担当したAIへ続けて渡すか、Rondoのフォルダを開いた新しい作業AIへ渡します。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block">
+              <div class="prompt-head">
+                <span>AIへの導入後設定依頼文</span>
+                <button class="copy-button" type="button" aria-label="導入後設定依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>セットアップ済みのRondoを、私の事業に合わせて設定してください。
+
+最初にSETUP.mdとAI_CONSTITUTION.mdを全文読み、現在の設定と稼働状態を確認してください。
+
+進め方のルール：
+- コマンドはすべてあなたが実行し、私には打たせないでください
+- 私には技術設定ではなく、読者、商品、届けたい内容、配信ペースについて質問してください
+- 質問は一度に詰め込まず、判断しやすい選択肢とおすすめを添えて1つずつ聞いてください
+- 外部サービスへのログインが必要なら該当画面を開き、私がログインした後はブラウザ操作機能で設定を進めてください
+- Google Cloud Consoleの設定や、Cloudflare／ResendのDNS設定を私に手動設定させないでください
+- 変更前に、読者から何がどう見えるようになるかを説明してください
+- 原稿と設定は正本ファイルから変更し、検査と照合まであなたが行ってください
+- 既存データへ影響する変更の前にはバックアップを取り、戻し方も用意してください
+- 配信停止台帳を変更したり、本番の一斉配信を予約したりしないでください
+- 解除リンク、法定フッター、バウンスと苦情による自動停止を維持してください
+- 計測では入力値、URLのクエリ、画面に表示された文章を収集しないでください
+- 外部サービスの設定変更、本番公開、料金が発生する操作は、実行直前に私の確認を取ってください
+- 秘密値はチャットへ表示させず、安全な入力欄へ私が直接入力できるようにしてください
+- 最後に、変更内容、検査結果、公開状態、未設定の任意機能、戻し方、次に私が確認する画面をまとめてください
+
+まず、現在の状態を調べて、最初の質問を1つしてください。</code></pre>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-ask-ai" type="checkbox">
+              <span class="task-copy">
+                <strong>設定依頼文をRondoの作業AIへ渡した</strong>
+                <span>AIから現在の状態と最初の質問が返れば開始です。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="mail" aria-labelledby="mail-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">02</span>
+            <div>
+              <span class="step-kicker">講座づくり</span>
+              <h2 id="mail-title">講座の中身を会話で決める</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            ファイル名や設定項目はAIが扱います。あなたは、読者へ何を届けたいかだけを伝えます。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>AIと決めること</h3>
+              <ul>
+                <li>誰の、どんな悩みを解決する講座か</li>
+                <li>読了後にどうなってほしいか</li>
+                <li>何通で、何日おきに届けるか</li>
+                <li>発行者名と問い合わせ先</li>
+                <li>既存原稿を使うか、AIと下書きを作るか</li>
+              </ul>
+            </div>
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>原稿づくりだけ頼む場合</span>
+                <button class="copy-button" type="button" aria-label="原稿づくり依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>読者像と商品の内容を質問しながら、最初の3通の構成案を作ってください。まだ配信へ反映せず、件名、各通の役割、読者に取ってほしい行動を先に見せてください。</code></pre>
+            </div>
+            <div class="callout safe">
+              <strong>最初は3通で十分</strong>
+              <p>登録から解除までを確認してから増やせます。最初から長い講座を完成させる必要はありません。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-mail" type="checkbox">
+              <span class="task-copy">
+                <strong>講座名、読者、最初の原稿を決めた</strong>
+                <span>AIが反映する前に、読者目線で内容を読みます。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="safety" aria-labelledby="safety-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">03</span>
+            <div>
+              <span class="step-kicker">安全設定</span>
+              <h2 id="safety-title">安全設定はAIに説明してもらう</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            数字を自分で設定するのではなく、現在の読者数と予定からAIに安全な値を提案してもらいます。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>安全設定の確認依頼文</span>
+                <button class="copy-button" type="button" aria-label="安全設定確認依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>現在の配信上限と緊急停止の状態を確認してください。読者規模と予定している配信ペースに対して安全か、各上限が何を防ぐのかを専門用語なしで説明してください。変更が必要なら、変更前後と影響を示して承認を求めてください。</code></pre>
+            </div>
+            <div class="callout warn">
+              <strong>「止まったから上限を上げる」はしない</strong>
+              <p>配信が止まった場合は、AIに監査画面と失敗理由を調べてもらい、原因が分かってから判断します。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-safety" type="checkbox">
+              <span class="task-copy">
+                <strong>安全上限と緊急停止の意味を確認した</strong>
+                <span>自分で止める場所もAIに画面で示してもらいます。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="optional" aria-labelledby="optional-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">04</span>
+            <div>
+              <span class="step-kicker">任意の連携</span>
+              <h2 id="optional-title">必要な連携だけ選ぶ</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            メールだけで運用を始められます。LINE、購入者特典、障害通知は、必要になったものだけAIへ追加依頼します。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>任意機能の相談文</span>
+                <button class="copy-button" type="button" aria-label="任意機能相談文をコピー">コピー</button>
+              </div>
+              <pre><code>LINE、購入者特典、障害通知、バックアップについて、今の運用で「今すぐ必要」「後でよい」「不要」に分けて提案してください。追加費用、必要なアカウント、私が行うログイン、導入後に増える運用を比較してから、1つずつ確認してください。</code></pre>
+            </div>
+            <div class="callout">
+              <strong>購入者特典は最初から無効です</strong>
+              <p>使うと決めるまで公開されません。LINEも接続しない限り、メール運用へ影響しません。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-optional" type="checkbox">
+              <span class="task-copy">
+                <strong>使う機能と後回しにする機能を決めた</strong>
+                <span>「今回はメールだけ」も安全な選択です。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="review" aria-labelledby="review-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">05</span>
+            <div>
+              <span class="step-kicker">変更の確認</span>
+              <h2 id="review-title">AIの変更報告を確認する</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            「作業できました」だけでは完了にしません。読者から見える変化と、安全検査の結果を報告してもらいます。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>確認する内容</h3>
+              <ul>
+                <li>講座名、送信者名、件名、本文が意図どおりか</li>
+                <li>何日おきに何通届くか</li>
+                <li>解除リンクと問い合わせ先があるか</li>
+                <li>検査と原稿照合が成功しているか</li>
+                <li>外部サービスへ何を変更したか</li>
+                <li>一斉配信が勝手に予約されていないか</li>
+              </ul>
+            </div>
+            <div class="callout safe">
+              <strong>公開前にテストアドレスで再確認</strong>
+              <p>AIへテスト登録の画面を開いてもらい、変更後の3通を自分で読んでから一般公開します。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-review" type="checkbox">
+              <span class="task-copy">
+                <strong>変更内容と検査結果を確認した</strong>
+                <span>気になる文章は公開前にAIへ修正を依頼します。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="routine" aria-labelledby="routine-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">06</span>
+            <div>
+              <span class="step-kicker">日々の運用</span>
+              <h2 id="routine-title">日々の運用も会話で頼む</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            普段は管理画面を見て、気になることをそのままAIへ相談します。設定ファイルやデータベースを自分で触りません。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>定期点検の依頼文</span>
+                <button class="copy-button" type="button" aria-label="定期点検依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>Rondoの定期点検をしてください。管理画面と監査情報を確認し、配信失敗、停止、読者の急変、バックアップ、ドメイン認証で対応が必要なものだけを優先順に教えてください。変更はまだ行わず、対応案と影響を示して私の承認を待ってください。</code></pre>
+            </div>
+            <div class="subsection">
+              <h3>AIへそのまま頼める例</h3>
+              <ul>
+                <li>「今週、対応が必要なことある？」</li>
+                <li>「この原稿を次のステップメールにしたい」</li>
+                <li>「配信が止まった理由を調べて」</li>
+                <li>「バックアップが取れているか確認して」</li>
+                <li>「一斉配信の下書きを作って。まだ予約しないで」</li>
+              </ul>
+            </div>
+            <div class="callout warn">
+              <strong>一斉配信の最終予約は自分で承認する</strong>
+              <p>AIには下書き、対象人数、安全確認まで任せられます。実際に送る予約だけは内容と人数を見て判断します。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-routine" type="checkbox">
+              <span class="task-copy">
+                <strong>今後の相談方法と承認ルールを決めた</strong>
+                <span>運用担当のAIには毎回AI_CONSTITUTION.mdを守らせます。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="next-guide" aria-labelledby="next-title">
+          <div>
+            <h2 id="next-title">設定完了。難しい操作はAIへ。</h2>
+            <p>あなたは読者と内容に集中し、設定、検査、原因調査はRondoを開いた作業AIへ依頼できます。</p>
+          </div>
+          <a class="next-link" href="setup.html">初回ガイドを見直す</a>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <div class="foot-inner">
+      <span>Rondo user guide</span>
+      <span>技術手順は作業AIがSETUP.mdを読みます</span>
+    </div>
+  </footer>
+</body>
+</html>

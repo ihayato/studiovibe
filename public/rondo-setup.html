@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <meta property="og:url" content="https://vibe.co.jp/rondo-setup">
 <link rel="canonical" href="https://vibe.co.jp/rondo-setup">
-<script src="https://rondo.nubonba.workers.dev/heat.js" data-page="rondo-setup" defer></script>
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20260803-2" data-page="rondo-setup" defer></script>
 <style>
   :root{
     --bg:#E9EDF5;
@@ -152,21 +152,21 @@
 </head>
 <body>
 
-<header>
+<header data-rondo-click-sec="header">
   <div class="head-in">
-    <a class="logo" href="/rondo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo <span class="sub">導入の流れ</span></a>
+    <a class="logo" href="/rondo" data-rondo-label="ヘッダー Rondoへ戻る"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo <span class="sub">導入の流れ</span></a>
     <nav class="head-nav">
-      <a href="#services">必要なもの</a>
-      <a href="#flow">設定の流れ</a>
-      <a href="#custom">カスタマイズ</a>
+      <a href="#services" data-rondo-label="ヘッダー 必要なもの">必要なもの</a>
+      <a href="#flow" data-rondo-label="ヘッダー 設定の流れ">設定の流れ</a>
+      <a href="#custom" data-rondo-label="ヘッダー カスタマイズ">カスタマイズ</a>
     </nav>
-    <a class="btn primary head-cta" href="/rondo#reserve">事前登録で10%オフ</a>
+    <a class="btn primary head-cta" href="/rondo#reserve" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="reserve">事前登録で10%オフ</a>
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" data-sec="hero">
   <div class="wrap">
-    <p class="crumb"><a href="/rondo">Rondo</a> / 導入の流れ</p>
+    <p class="crumb"><a href="/rondo" data-rondo-label="パンくず Rondo">Rondo</a> / 導入の流れ</p>
     <h1>導入の流れを、<br>買う前にぜんぶ見せます。</h1>
     <p class="lede">Rondoはzipで届く「設計図一式」です。<br>導入はClaude Codeとの二人三脚で進み、あなたの作業はアカウント作成と承認が中心です。<br>このページでは、必要なサービス・設定の流れ・カスタマイズの方法をざっと紹介します。</p>
     <div class="notice">
@@ -176,7 +176,7 @@
   </div>
 </section>
 
-<section id="services" style="padding-top:56px">
+<section id="services" data-sec="services" style="padding-top:56px">
   <div class="wrap">
     <h2 style="text-align:center">必要なサービス</h2>
     <p class="lede" style="text-align:center;margin:16px auto 0">すべて自分名義のアカウントです。<br>Rondoのための新しい月額契約はありません。</p>
@@ -209,7 +209,7 @@
   </div>
 </section>
 
-<section id="flow" style="padding-top:56px">
+<section id="flow" data-sec="flow" style="padding-top:56px">
   <div class="wrap">
     <h2 style="text-align:center">設定の流れ</h2>
     <p class="lede" style="text-align:center;margin:16px auto 0">導入手順書（SETUP.md）は、AIに渡す前提で書かれた一本道です。<br>各ステップの札は、主にどちらが手を動かすかを示します。</p>
@@ -249,12 +249,13 @@
     </div>
     <div class="card flow-note">
       <b>あなたの作業は、各サービスのアカウント作成と、権限の承認が中心です。</b><br>
-      コマンドや設定ファイルの中身はAIが扱います。途中で詰まったら、その画面のままAIに「ここで止まった」と伝えれば、原因の切り分けから進めてくれます。
+      コマンドや設定ファイルの中身はAIが扱います。途中で詰まったら、その画面のままAIに「ここで止まった」と伝えれば、原因の切り分けから進めてくれます。<br>
+      実作業はチェックリスト式の<a href="/rondo-guides/setup.html">初回セットアップガイド</a>と<a href="/rondo-guides/settings.html">導入後の設定ガイド</a>に沿って進められます（公開中・購入前にも読めます）。
     </div>
   </div>
 </section>
 
-<section id="custom" style="padding-top:56px">
+<section id="custom" data-sec="custom" style="padding-top:56px">
   <div class="wrap">
     <h2 style="text-align:center">カスタマイズの方法</h2>
     <p class="lede" style="text-align:center;margin:16px auto 0">ソースコードごと手元にあるので、やりたいことは日本語で頼むだけです。<br>たとえば、こんな頼み方ができます。</p>
@@ -277,24 +278,24 @@
   </div>
 </section>
 
-<section class="last">
+<section class="last" data-sec="final">
   <div class="wrap">
     <h2>全体像がつかめたら。</h2>
     <p class="lede">発売前の事前登録で、10%オフでご案内します。</p>
     <div class="cta-row">
-      <a class="btn primary" href="/rondo#reserve">事前登録で10%オフを受け取る</a>
-      <a class="btn ghost" href="/rondo">Rondoの紹介ページへ戻る</a>
+      <a class="btn primary" href="/rondo#reserve" data-rondo-label="CTA 最終事前登録" data-rondo-cta="reserve">事前登録で10%オフを受け取る</a>
+      <a class="btn ghost" href="/rondo" data-rondo-label="最終 Rondoへ戻る">Rondoの紹介ページへ戻る</a>
     </div>
   </div>
 </section>
 
-<footer>
+<footer data-sec="footer">
   <div class="foot-in">
     <span class="logo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo</span>
     <nav class="foot-links">
-      <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
-      <a href="https://ikehaya.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>
-      <a href="/contact">お問い合わせ</a>
+      <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="フッター 特商法">特定商取引法に基づく表記</a>
+      <a href="https://ikehaya.com/privacy/" target="_blank" rel="noopener" data-rondo-label="フッター プライバシー">プライバシーポリシー</a>
+      <a href="/contact" data-rondo-label="フッター お問い合わせ">お問い合わせ</a>
     </nav>
     <span class="foot-copy">© 2026 Studio VIBE / Rondo</span>
   </div>

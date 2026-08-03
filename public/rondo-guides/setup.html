@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ja" data-guide="setup">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F5F6F8">
+  <meta name="description" content="AIと一緒にRondoの初回セットアップを完了し、最初の1通を確認するためのユーザーガイド。">
+  <title>初回セットアップガイド | Rondo</title>
+  <link rel="canonical" href="https://vibe.co.jp/rondo-guides/setup.html">
+  <meta property="og:title" content="初回セットアップガイド | Rondo">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
+  <meta property="og:site_name" content="Studio VIBE">
+  <script src="https://rondo.nubonba.workers.dev/heat.js" data-page="rondo-guide-setup" defer></script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/guide.css">
+  <script src="assets/guide.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+  <p id="guide-status" class="sr-only" role="status" aria-live="polite"></p>
+
+  <header class="site-head">
+    <div class="head-inner">
+      <a class="brand" href="setup.html" aria-label="Rondo 初回セットアップガイド">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>Rondo guides</span>
+      </a>
+      <nav class="guide-nav" aria-label="ガイド">
+        <a href="setup.html" aria-current="page">初回セットアップ</a>
+        <a href="settings.html">導入後の設定</a>
+        <a href="/rondo">Rondoとは</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">初回セットアップ・AIと一緒に</p>
+          <h1 id="page-title">AIに頼んで、<br>一緒に確認する。</h1>
+          <p class="lead">
+            難しい設定、コマンド入力、ログイン後の画面操作はAIに任せます。あなたがするのは、
+            必要なサービスへのログインと、最後のテスト登録だけです。
+          </p>
+          <a class="start-link" href="#ask-ai">AIへの依頼文をコピーする <span aria-hidden="true">↓</span></a>
+          <div class="promise" aria-label="このガイドの特徴">
+            <span>コマンドはAIが実行</span>
+            <span>画面操作もAI</span>
+            <span>ログインだけ自分</span>
+            <span>公開前に確認</span>
+          </div>
+        </div>
+        <div class="orbit" aria-hidden="true">
+          <span class="orbit-ring"></span>
+          <span class="orbit-ring"></span>
+          <span class="orbit-ring"></span>
+          <span class="orbit-dot"></span>
+          <span class="orbit-core"><span><strong>R</strong>AI SETUP</span></span>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="セットアップ進捗">
+        <div class="progress-card">
+          <div class="progress-top">
+            <span class="progress-label">初回セットアップ</span>
+            <span class="progress-value">0 / 5</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="セットアップの進捗"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div class="progress-bar"></div>
+          </div>
+          <p class="progress-note">チェック状態はこのブラウザに保存されます。</p>
+        </div>
+        <nav class="toc" aria-label="このページの目次">
+          <a href="#ask-ai">AIへ依頼する</a>
+          <a href="#answer">質問に答える</a>
+          <a href="#login">ログインだけ行う</a>
+          <a href="#approve">公開前に確認する</a>
+          <a href="#first-run">最初の1通を試す</a>
+        </nav>
+      </aside>
+
+      <div class="guide-content">
+        <section class="intro" aria-label="役割分担">
+          <div class="intro-item">
+            <b>AIがすること</b>
+            <span>ブラウザ操作、設定、検査、公開作業</span>
+          </div>
+          <div class="intro-item">
+            <b>あなたがすること</b>
+            <span>ログイン、必要事項への回答、最終確認</span>
+          </div>
+          <div class="intro-item">
+            <b>このページのゴール</b>
+            <span>自分のアドレスへ最初の1通が届く</span>
+          </div>
+        </section>
+
+        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">01</span>
+            <div>
+              <span class="step-kicker">まずこれだけ</span>
+              <h2 id="ask-ai-title">この依頼文をAIへ渡す</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            Rondoのフォルダを開いているClaude CodeやCodexなどの作業AIへ、下の文章をそのまま渡してください。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block">
+              <div class="prompt-head">
+                <span>AIへの初回セットアップ依頼文</span>
+                <button class="copy-button" type="button" aria-label="初回セットアップ依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>このRondoを初回セットアップしてください。
+
+最初にSETUP.mdとAI_CONSTITUTION.mdを全文読み、書かれている順序と安全ルールに従ってください。
+
+進め方のルール：
+- コマンドはすべてあなたが実行し、私には打たせないでください
+- まず現在の設定と不足項目を調べ、必要な質問を1つずつしてください
+- Cloudflare、Resend、Googleへのログインが必要になったら、該当画面を開いて私にログインを依頼してください
+- ログイン後は、Cloudflare、Resend、Google Cloud Consoleの設定画面をブラウザ操作機能であなたが操作し、私に手動設定させないでください
+- 特にGoogle Cloud ConsoleのOAuth設定と、Cloudflare／ResendのDNS設定は難しいため、必ずあなたが画面操作してください
+- パスワード、確認コード、APIキーなどの秘密値はチャットへ表示させず、安全な入力欄へ私が直接入力できるようにしてください
+- ドメインを持っていない場合はCloudflareでの取得を提案し、購入前に必ず私の確認を取ってください
+- 課金、ドメイン購入、DNS変更、本番公開など外部へ影響する操作は、実行直前に内容を説明して確認してください
+- 公開前検査に合格するまで本番公開しないでください
+- 最後に管理画面へのログイン、テスト登録、確認メール、最初の1通、解除リンクまで一緒に確認してください
+
+作業中は、いま何をしているかと、私が次にすることだけを短く案内してください。</code></pre>
+            </div>
+            <div class="callout safe">
+              <strong>依頼後はAIが進行役になります</strong>
+              <p>AIが調査し、必要な場面だけ質問します。コマンド入力や管理画面の手動設定を求められたら、この依頼文のルールをもう一度伝えてください。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="setup-ask-ai" type="checkbox">
+              <span class="task-copy">
+                <strong>依頼文をRondoの作業AIへ渡した</strong>
+                <span>AIがSETUP.mdを読んだことを確認します。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="answer" aria-labelledby="answer-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">02</span>
+            <div>
+              <span class="step-kicker">あなたが決めること</span>
+              <h2 id="answer-title">AIの質問に答える</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            技術用語を覚える必要はありません。あなたの事業について、分かる範囲で答えればAIが設定へ反映します。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>聞かれる内容</h3>
+              <ul>
+                <li>自分が管理するドメイン（持っていない場合はCloudflareで取得を推奨）</li>
+                <li>読者に表示する発行者名</li>
+                <li>送信元に使いたいメールアドレス</li>
+                <li>管理画面へ入るGoogleメール</li>
+                <li>登録フォームを置くサイトのURL</li>
+              </ul>
+            </div>
+            <div class="callout">
+              <strong>分からない項目は「おすすめを提案して」と答える</strong>
+              <p>AIに選択肢と違いを説明してもらい、決めてから先へ進めます。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="setup-answer" type="checkbox">
+              <span class="task-copy">
+                <strong>基本情報への回答を終えた</strong>
+                <span>秘密値は通常のチャット回答へ含めません。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="login" aria-labelledby="login-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">03</span>
+            <div>
+              <span class="step-kicker">ログインの受け渡し</span>
+              <h2 id="login-title">ログインだけ自分で行い、操作はAIへ戻す</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            AIが必要な画面を開きます。ログインと本人確認を終えたら、ブラウザを閉じずにAIへ操作を戻します。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>あなたが行う操作</h3>
+              <ul>
+                <li>Cloudflare、Resend、Googleへログインする</li>
+                <li>2段階認証や本人確認を完了する</li>
+                <li>AIが開いた安全な入力欄へ秘密値を直接入れる</li>
+                <li>ドメイン購入やDNS変更の内容を確認し、実行を承認する</li>
+              </ul>
+            </div>
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>ログイン後にAIへ渡す依頼文</span>
+                <button class="copy-button" type="button" aria-label="ログイン後のブラウザ操作依頼文をコピー">コピー</button>
+              </div>
+              <pre><code>ログインできました。ここから先の設定は、ブラウザ操作機能で進めてください。特にGoogle Cloud ConsoleのOAuth設定と、Cloudflare／ResendのDNS設定は、私に手動設定させず、あなたが画面操作してください。パスワード、2段階認証、CAPTCHA、決済、最終承認が必要な場面だけ止めて私を呼んでください。</code></pre>
+            </div>
+            <div class="callout safe">
+              <strong>GoogleとDNSは、ログイン後も自分で触らない</strong>
+              <p>Google Cloud ConsoleのOAuth設定やDNSレコードの登録は迷いやすく、入力ミスの影響も大きい作業です。AIのブラウザ操作へ任せ、変更内容の説明と承認だけを行います。</p>
+            </div>
+            <div class="callout warn">
+              <strong>AIへ渡さないもの</strong>
+              <p>パスワード、2段階認証コード、決済情報は自分で入力します。AIへ読み上げたり、チャットへ貼り付けたりしません。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="setup-login" type="checkbox">
+              <span class="task-copy">
+                <strong>必要なサービスへのログインを終えた</strong>
+                <span>ブラウザを閉じず、上の依頼文をAIへ渡します。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="approve" aria-labelledby="approve-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">04</span>
+            <div>
+              <span class="step-kicker">公開前の確認</span>
+              <h2 id="approve-title">AIの公開前報告を確認する</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            AIは設定と検査を終えたら、公開前に結果をまとめます。赤い項目が残っていないことを一緒に確認します。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>報告に含めてもらうこと</h3>
+              <ul>
+                <li>必要なアカウントと接続が揃っているか</li>
+                <li>公開前検査とテストがすべて成功したか</li>
+                <li>公開されるURLと送信元名</li>
+                <li>未設定の任意機能が何か</li>
+                <li>公開後にあなたが確認する順序</li>
+              </ul>
+            </div>
+            <div class="callout safe">
+              <strong>LINEや購入者特典は後回しで大丈夫</strong>
+              <p>最初はメールと管理画面だけで公開できます。任意機能は導入後の設定ガイドで追加します。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="setup-approve" type="checkbox">
+              <span class="task-copy">
+                <strong>検査結果と公開内容を確認し、公開を承認した</strong>
+                <span>分からない警告がある場合は、意味と影響をAIへ質問します。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="first-run" aria-labelledby="first-run-title">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">05</span>
+            <div>
+              <span class="step-kicker">最初の1通</span>
+              <h2 id="first-run-title">読者と同じ流れを1周する</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            AIに画面を開いてもらい、自分のメールアドレスで実際に登録します。ここだけは読者の体験として自分で確認します。
+          </p>
+          <div class="step-body">
+            <div class="subsection">
+              <h3>一緒に確認する順序</h3>
+              <ol>
+                <li>Googleで管理画面へログインする</li>
+                <li>登録フォームへ自分のメールアドレスを入れる</li>
+                <li>届いた確認メールのリンクを開く</li>
+                <li>最初の1通と解除リンクを確認する</li>
+                <li>管理画面へ読者数と配信履歴が反映されたかAIに確認してもらう</li>
+              </ol>
+            </div>
+            <div class="callout safe">
+              <strong>ここまで来たらセットアップ完了</strong>
+              <p>次は読者へ見せる文章や配信ペースを、AIと一緒に自分の事業へ合わせます。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="setup-first-run" type="checkbox">
+              <span class="task-copy">
+                <strong>確認メールから最初の1通まで確認した</strong>
+                <span>技術設定ではなく、読者として違和感がないかを見ます。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="next-guide" aria-labelledby="next-title">
+          <div>
+            <h2 id="next-title">次は、AIと中身を整える。</h2>
+            <p>講座名、原稿、安全上限、LINE、特典などを、会話しながら自分の運用へ合わせます。</p>
+          </div>
+          <a class="next-link" href="settings.html">導入後の設定ガイドへ</a>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-foot">
+    <div class="foot-inner">
+      <span>Rondo user guide</span>
+      <span>技術手順は作業AIがSETUP.mdを読みます</span>
+    </div>
+  </footer>
+</body>
+</html>
