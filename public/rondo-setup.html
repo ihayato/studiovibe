@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rondo 導入の流れ | 必要なサービス・設定・カスタマイズの全体像</title>
+<meta name="description" content="Rondoの導入フローを購入前に全部見せます。必要なサービス、設定の流れ8ステップ、カスタマイズの方法。人間の作業はアカウント作成と承認が中心で、残りはClaude Codeが進めます。">
+<meta property="og:title" content="Rondo 導入の流れ | 必要なサービス・設定・カスタマイズの全体像">
+<meta property="og:description" content="買う前に、導入の全体像を。必要なサービス・設定の流れ・カスタマイズ方法をざっと紹介します。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
+<meta property="og:site_name" content="Studio VIBE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/rondo-assets/rondo-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta property="og:url" content="https://vibe.co.jp/rondo-setup">
+<link rel="canonical" href="https://vibe.co.jp/rondo-setup">
+<script src="https://rondo.nubonba.workers.dev/heat.js" data-page="rondo-setup" defer></script>
+<style>
+  :root{
+    --bg:#E9EDF5;
+    --glass:rgba(255,255,255,.66);
+    --glass-strong:rgba(255,255,255,.80);
+    --hair:rgba(198,210,232,.65); --hair-strong:rgba(170,186,214,.75);
+    --hi:inset 0 1px 0 rgba(255,255,255,.85);
+    --shadow:0 18px 50px -20px rgba(58,80,140,.22), 0 4px 14px -10px rgba(58,80,140,.12);
+    --ink:#17181C; --dim:#525863; --note:#7B838F;
+    --hover:rgba(255,255,255,.55);
+    --accent:#2E5CE6; --accent-soft:rgba(46,92,230,.10);
+    --ok:#178A50; --ok-soft:rgba(23,138,80,.10);
+    --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --r-btn:10px; --r-card:18px;
+    --w:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(720px 480px at 12% -6%, rgba(46,92,230,.11), transparent 62%),
+      radial-gradient(900px 640px at 98% 14%, rgba(96,146,224,.13), transparent 60%),
+      var(--bg)}
+  a{color:var(--accent);text-decoration:none}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+  section{padding:88px 0;scroll-margin-top:72px}
+  h1{font-size:clamp(26px,4.3vw,36px);line-height:1.45;font-weight:700;letter-spacing:.01em}
+  h2{font-size:clamp(21px,3vw,27px);line-height:1.5;font-weight:700}
+  .lede{color:var(--dim);font-size:16px;max-width:640px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;
+       border-radius:var(--r-btn);font-family:var(--sans);font-size:15px;font-weight:600;
+       cursor:pointer;border:none;transition:transform 140ms ease-out,box-shadow 140ms ease-out,background 140ms}
+  .btn.primary{background:var(--ink);color:#fff;box-shadow:0 10px 26px -12px rgba(23,24,28,.55)}
+  .btn.primary:hover{transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--hair-strong)}
+  .btn.ghost:hover{background:rgba(255,255,255,.8);color:var(--ink)}
+  .btn:focus-visible, a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.60);
+         backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+         border-bottom:1px solid var(--hair)}
+  .head-in{display:flex;align-items:center;gap:28px;padding:14px 24px;max-width:var(--w);margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink)}
+  .logo-mark{width:28px;height:28px;display:block;flex:none}
+  .logo .sub{font-size:13px;font-weight:500;color:var(--note)}
+  .head-nav{display:flex;gap:4px;margin-left:auto}
+  .head-nav a{font-size:14px;font-weight:500;color:var(--dim);padding:8px 12px;border-radius:var(--r-btn);transition:background 140ms,color 140ms}
+  .head-nav a:hover{background:var(--hover);color:var(--ink)}
+  .head-cta{padding:10px 18px;min-height:44px;font-size:14px}
+  @media(max-width:720px){ .head-nav{display:none} .logo .sub{display:none} .head-cta{white-space:nowrap} }
+
+  .hero{padding:80px 0 8px}
+  .crumb{font-size:13px;font-weight:600;color:var(--note);margin-bottom:18px}
+  .crumb a{color:var(--note)}
+  .crumb a:hover{color:var(--ink)}
+  .hero .lede{margin-top:20px}
+
+  .card{background:var(--glass);border:1px solid var(--hair);border-radius:var(--r-card);
+        box-shadow:var(--shadow),var(--hi);
+        backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
+
+  /* 必要なもの */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  @media(max-width:900px){ .svc-grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:560px){ .svc-grid{grid-template-columns:1fr} }
+  .svc{padding:20px 22px}
+  .svc .name{font-weight:700;font-size:15px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .svc .tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}
+  .svc .tag.free{color:var(--ok);background:var(--ok-soft)}
+  .svc .tag.must{color:var(--accent);background:var(--accent-soft)}
+  .svc .tag.opt{color:var(--note);background:rgba(123,131,143,.12)}
+  .svc p{font-size:13.5px;color:var(--dim);margin-top:8px;line-height:1.7}
+
+  /* 流れ(タイムライン) */
+  .flow{max-width:760px;margin:44px auto 0;position:relative}
+  .flow::before{content:"";position:absolute;left:19px;top:8px;bottom:8px;width:2px;background:var(--hair-strong)}
+  .step{position:relative;padding:0 0 36px 64px}
+  .step:last-child{padding-bottom:0}
+  .step .no{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;
+    background:var(--glass-strong);border:1px solid var(--hair-strong);box-shadow:var(--shadow),var(--hi);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent)}
+  .step h3{font-size:16.5px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:7px}
+  .step .who{font-size:11px;font-weight:600;font-family:var(--mono);padding:2px 8px;border-radius:99px;flex:none}
+  .who.you{color:var(--accent);background:var(--accent-soft)}
+  .who.ai{color:var(--ok);background:var(--ok-soft)}
+  .step p{font-size:14px;color:var(--dim);margin-top:6px;max-width:600px}
+  .step p code{font-family:var(--mono);font-size:12.5px;background:rgba(255,255,255,.7);border:1px solid var(--hair);border-radius:6px;padding:1px 6px}
+  .flow-note{max-width:760px;margin:36px auto 0;padding:18px 22px;font-size:14px;color:var(--dim)}
+  .flow-note b{color:var(--ink)}
+
+  /* カスタマイズ */
+  .cus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  @media(max-width:900px){ .cus-grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:560px){ .cus-grid{grid-template-columns:1fr} }
+  .cus{padding:20px 22px}
+  .cus .say{font-size:14px;font-weight:600;line-height:1.7}
+  .cus .say::before{content:"「"} .cus .say::after{content:"」"}
+  .cus p{font-size:13px;color:var(--dim);margin-top:8px;line-height:1.7}
+  .guard{max-width:760px;margin:48px auto 0;padding:22px 26px}
+  .guard h3{font-size:15.5px;font-weight:700;margin-bottom:10px}
+  .guard ul{list-style:none}
+  .guard li{font-size:14px;color:var(--dim);padding:5px 0 5px 24px;position:relative}
+  .guard li::before{content:"✓";position:absolute;left:2px;color:var(--ok);font-weight:700}
+
+  /* CTA */
+  .last{text-align:center;padding-bottom:104px}
+  .last .lede{margin:16px auto 32px}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  footer{border-top:1px solid var(--hair);background:rgba(255,255,255,.45)}
+  .foot-in{max-width:var(--w);margin:0 auto;padding:28px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .foot-links{display:flex;gap:18px;flex-wrap:wrap;margin-left:auto}
+  .foot-links a{font-size:13px;color:var(--dim)}
+  .foot-links a:hover{color:var(--ink)}
+  .foot-copy{font-size:12.5px;color:var(--note);width:100%;text-align:left}
+  @media(min-width:721px){ .foot-copy{width:auto;margin-left:auto} .foot-links{margin-left:0} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <a class="logo" href="/rondo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo <span class="sub">導入の流れ</span></a>
+    <nav class="head-nav">
+      <a href="#services">必要なもの</a>
+      <a href="#flow">設定の流れ</a>
+      <a href="#custom">カスタマイズ</a>
+    </nav>
+    <a class="btn primary head-cta" href="/rondo#reserve">事前登録で10%オフ</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="crumb"><a href="/rondo">Rondo</a> / 導入の流れ</p>
+    <h1>導入の流れを、<br>買う前にぜんぶ見せます。</h1>
+    <p class="lede">Rondoはzipで届く「設計図一式」です。<br>導入はClaude Codeとの二人三脚で進み、あなたの作業はアカウント作成と承認が中心です。<br>このページでは、必要なサービス・設定の流れ・カスタマイズの方法をざっと紹介します。</p>
+  </div>
+</section>
+
+<section id="services" style="padding-top:56px">
+  <div class="wrap">
+    <h2 style="text-align:center">必要なサービス</h2>
+    <p class="lede" style="text-align:center;margin:16px auto 0">すべて自分名義のアカウントです。<br>Rondoのための新しい月額契約はありません。</p>
+    <div class="svc-grid">
+      <div class="card svc">
+        <div class="name">Cloudflare <span class="tag free">無料プランOK</span></div>
+        <p>Rondo本体が動く場所。データベースも配信の定時実行もここに乗ります。リストが育ったら月$5の有料プランで処理能力を上げられます。</p>
+      </div>
+      <div class="card svc">
+        <div class="name">Resend <span class="tag free">無料枠OK</span></div>
+        <p>メール送信サービス。小規模なら無料枠で足り、配信量が増えたら従量です。</p>
+      </div>
+      <div class="card svc">
+        <div class="name">独自ドメイン <span class="tag must">必須</span></div>
+        <p>メールの送信元に使います。Resendのドメイン検証に必要なので、1つ用意してください。すでにサイトをお持ちなら、そのドメインで大丈夫です。</p>
+      </div>
+      <div class="card svc">
+        <div class="name">Node.js 20以降 <span class="tag free">無料</span></div>
+        <p>手元のパソコンでテストとデプロイのコマンドを動かすのに使います。</p>
+      </div>
+      <div class="card svc">
+        <div class="name">Claude Code <span class="tag must">実質必須</span></div>
+        <p>導入と運用を任せる開発AI。モデルはFableクラス（Claude Fable 5、Kimi K3など）を強く推奨します。</p>
+      </div>
+      <div class="card svc">
+        <div class="name">LINE公式・Google <span class="tag opt">任意</span></div>
+        <p>LINE配信をするならLINE公式アカウント、管理画面へのログインにはGoogleアカウントを使います。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flow" style="padding-top:56px">
+  <div class="wrap">
+    <h2 style="text-align:center">設定の流れ</h2>
+    <p class="lede" style="text-align:center;margin:16px auto 0">導入手順書（SETUP.md）は、AIに渡す前提で書かれた一本道です。<br>各ステップの札は、主にどちらが手を動かすかを示します。</p>
+    <div class="flow">
+      <div class="step"><span class="no">1</span>
+        <h3>zipを展開して、AIにひとこと <span class="who you">あなた</span></h3>
+        <p>展開したフォルダでClaude Codeを開き、<code>SETUP.mdの通りにセットアップして</code>と言う。導入作業はここから始まります。</p>
+      </div>
+      <div class="step"><span class="no">2</span>
+        <h3>テストとデプロイ <span class="who ai">AIが代行</span></h3>
+        <p>テスト一式の確認、データベース作成、Cloudflareへの設置までAIが進めます。あなたはCloudflareへのログインを済ませるだけです。</p>
+      </div>
+      <div class="step"><span class="no">3</span>
+        <h3>メール送信のドメイン検証 <span class="who you">あなた</span> <span class="who ai">AIが値を用意</span></h3>
+        <p>Resendに登録し、ドメインのDNSレコードを追加します。追加する値はAIが用意するので、あなたはドメイン管理画面に貼り付けるだけです。</p>
+      </div>
+      <div class="step"><span class="no">4</span>
+        <h3>シークレットの登録 <span class="who ai">AIが代行</span></h3>
+        <p>APIキーなどの秘密情報を、コマンドで安全に登録します。値がチャットに残らない手順になっています。</p>
+      </div>
+      <div class="step"><span class="no">5</span>
+        <h3>管理画面のGoogleログイン設定 <span class="who you">ログインだけ</span> <span class="who ai">画面操作を代行</span></h3>
+        <p>いちばん迷いやすいGoogle Cloud Consoleの設定は、AIがブラウザ操作で代行します。あなたはGoogleにログインして、承認ボタンを押すだけ。パスワードにAIは触れません。</p>
+      </div>
+      <div class="step"><span class="no">6</span>
+        <h3>原稿とシナリオを自分のものに <span class="who you">あなた</span> <span class="who ai">AIと一緒に</span></h3>
+        <p>講座名・配信ペース・メール原稿・法定の発行者情報を自分のものに差し替えます。原稿はMarkdownなので、AIに下書きを頼むこともできます。</p>
+      </div>
+      <div class="step"><span class="no">7</span>
+        <h3>登録フォームを置いて、一周 <span class="who you">あなた</span></h3>
+        <p>自分のサイトにフォームを設置し、自分のメールで登録→確認メール→1通目まで一周して確かめます。ここまで通れば導入完了です。</p>
+      </div>
+      <div class="step"><span class="no">8</span>
+        <h3>「イケハヤAI、うちのマーケ診て」 <span class="who you">あなた</span></h3>
+        <p>ここからが運用です。同梱の診断AIが数字を読んで、いま何をすべきかを教えてくれます。</p>
+      </div>
+    </div>
+    <div class="card flow-note">
+      <b>あなたの作業は、各サービスのアカウント作成と、権限の承認が中心です。</b><br>
+      コマンドや設定ファイルの中身はAIが扱います。途中で詰まったら、その画面のままAIに「ここで止まった」と伝えれば、原因の切り分けから進めてくれます。
+    </div>
+  </div>
+</section>
+
+<section id="custom" style="padding-top:56px">
+  <div class="wrap">
+    <h2 style="text-align:center">カスタマイズの方法</h2>
+    <p class="lede" style="text-align:center;margin:16px auto 0">ソースコードごと手元にあるので、やりたいことは日本語で頼むだけです。<br>たとえば、こんな頼み方ができます。</p>
+    <div class="cus-grid">
+      <div class="card cus"><p class="say">ダッシュボードをダークモードにして</p><p>見た目は自由に変えられます。配色もレイアウトもあなたのものです。</p></div>
+      <div class="card cus"><p class="say">Stripeをつないで決済も管理したい</p><p>決済・サブスクの管理を統合する拡張も、AIに実装させられます。</p></div>
+      <div class="card cus"><p class="say">登録フォームをもう1つの商品用に増やして</p><p>講座やリストは追加できます。設計図なので、増築が前提です。</p></div>
+      <div class="card cus"><p class="say">配信を週2回のペースに変えて</p><p>配信ペース・時刻は設定ファイル1箇所です。</p></div>
+      <div class="card cus"><p class="say">この流入元がいくら売上になったか見たい</p><p>ファネル分析は流入元→売上まで一気通貫。見たい切り口の追加も頼めます。</p></div>
+      <div class="card cus"><p class="say">イケハヤAI、この施策どう思う？</p><p>迷ったら同梱の診断AIへ。数字を根拠に、やるべき順番を返します。</p></div>
+    </div>
+    <div class="card guard">
+      <h3>自由に改造しても、壊れにくい土台</h3>
+      <ul>
+        <li>全機能にユニットテスト。AIが変更するたびに機械で検証できます</li>
+        <li>原稿はgitが正本。配信データベースとの全一致を機械照合してから配信します</li>
+        <li>一斉送信の予約はAIに渡さない「AI憲法」と、誤送信を止める多層ガードつきです</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="last">
+  <div class="wrap">
+    <h2>全体像がつかめたら。</h2>
+    <p class="lede">発売前の事前登録で、10%オフでご案内します。</p>
+    <div class="cta-row">
+      <a class="btn primary" href="/rondo#reserve">事前登録で10%オフを受け取る</a>
+      <a class="btn ghost" href="/rondo">Rondoの紹介ページへ戻る</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <span class="logo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo</span>
+    <nav class="foot-links">
+      <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener">特定商取引法に基づく表記</a>
+      <a href="https://ikehaya.com/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>
+      <a href="/contact">お問い合わせ</a>
+    </nav>
+    <span class="foot-copy">© 2026 Studio VIBE / Rondo</span>
+  </div>
+</footer>
+
+</body>
+</html>
