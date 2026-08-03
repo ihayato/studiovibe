@@ -32,6 +32,7 @@
     --hover:rgba(255,255,255,.55);
     --accent:#2E5CE6; --accent-soft:rgba(46,92,230,.10);
     --ok:#178A50; --ok-soft:rgba(23,138,80,.10);
+    --warn:#9A6700; --warn-soft:rgba(154,103,0,.10);
     --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
     --mono:"IBM Plex Mono",Menlo,monospace;
     --r-btn:10px; --r-card:18px;
@@ -80,6 +81,12 @@
   .crumb a{color:var(--note)}
   .crumb a:hover{color:var(--ink)}
   .hero .lede{margin-top:20px}
+  .notice{margin-top:32px;padding:16px 20px;max-width:640px;border-radius:12px;
+    background:var(--warn-soft);border:1px solid rgba(154,103,0,.18);
+    box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .notice .ntag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--warn);margin-bottom:6px}
+  .notice p{font-size:14px;color:var(--warn);line-height:1.8}
+  .notice b{font-weight:700}
 
   .card{background:var(--glass);border:1px solid var(--hair);border-radius:var(--r-card);
         box-shadow:var(--shadow),var(--hi);
@@ -162,6 +169,10 @@
     <p class="crumb"><a href="/rondo">Rondo</a> / 導入の流れ</p>
     <h1>導入の流れを、<br>買う前にぜんぶ見せます。</h1>
     <p class="lede">Rondoはzipで届く「設計図一式」です。<br>導入はClaude Codeとの二人三脚で進み、あなたの作業はアカウント作成と承認が中心です。<br>このページでは、必要なサービス・設定の流れ・カスタマイズの方法をざっと紹介します。</p>
+    <div class="notice">
+      <span class="ntag">先にご確認ください</span>
+      <p><b>メールの送信元に使う「独自ドメイン」が必須です。</b><br>持っていない場合は、先にドメインを取得してからの導入になります。Rondo本体が動くCloudflareでそのまま取得するのがおすすめです。<br>すでにサイトをお持ちなら、そのドメインで大丈夫です。</p>
+    </div>
   </div>
 </section>
 
@@ -180,7 +191,7 @@
       </div>
       <div class="card svc">
         <div class="name">独自ドメイン <span class="tag must">必須</span></div>
-        <p>メールの送信元に使います。Resendのドメイン検証に必要なので、1つ用意してください。すでにサイトをお持ちなら、そのドメインで大丈夫です。</p>
+        <p>メールの送信元に使います。Resendのドメイン検証に必要なので、1つ用意してください。持っていない場合はCloudflareでの取得がおすすめ。すでにサイトをお持ちなら、そのドメインで大丈夫です。</p>
       </div>
       <div class="card svc">
         <div class="name">Node.js 20以降 <span class="tag free">無料</span></div>
@@ -221,7 +232,7 @@
       </div>
       <div class="step"><span class="no">5</span>
         <h3>管理画面のGoogleログイン設定 <span class="who you">ログインだけ</span> <span class="who ai">画面操作を代行</span></h3>
-        <p>いちばん迷いやすいGoogle Cloud Consoleの設定は、AIがブラウザ操作で代行します。あなたはGoogleにログインして、承認ボタンを押すだけ。パスワードにAIは触れません。</p>
+        <p>いちばん迷いやすいGoogle Cloud Consoleの設定は、Claude Codeのアプリ内ブラウザ（画面の右に開くブラウザ）でAIが画面操作を代行します。自力で管理画面と格闘する必要はありません。あなたはGoogleにログインして、承認ボタンを押すだけ。パスワードにAIは触れません。</p>
       </div>
       <div class="step"><span class="no">6</span>
         <h3>原稿とシナリオを自分のものに <span class="who you">あなた</span> <span class="who ai">AIと一緒に</span></h3>

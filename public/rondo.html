@@ -1018,12 +1018,13 @@
             <li>ノーコードで完結したい人。Rondoはコードが正本です</li>
             <li>完成品のアプリを期待する人。パッケージは「種」です</li>
             <li>開発AIを使う予定がない人</li>
+            <li>独自ドメインを持っていない人。メールの送信元に必須です（取得すれば使えます）</li>
             <li>サポート窓口つきのSaaSが安心な人</li>
           </ul>
         </div>
       </div>
 
-      <p class="sh-lede" id="shindan">では、あなたはどちらでしょう。<br>5問・約30秒で判定できます。</p>
+      <p class="sh-lede" id="shindan">では、あなたはどちらでしょう。<br>6問・約30秒で判定できます。</p>
       <div class="shindan">
         <div id="sh-quiz">
           <div class="sh-top">
@@ -1062,6 +1063,7 @@
         <ul>
           <li>Cloudflareアカウント。無料枠で動作します</li>
           <li>Resendアカウント。メール配信に使用、小規模なら無料枠内</li>
+          <li>独自ドメイン。メールの送信元に必須です。持っていない場合は先に取得が必要です</li>
           <li>Claude CodeやCodexなどの開発AI。運用と改造の担当者です</li>
           <li>LINE公式アカウント。LINE配信を使う場合のみ</li>
         </ul>
@@ -1185,6 +1187,12 @@
       ['Opus 5やGPT 5.6など、別のモデルが中心', 0],
       ['モデルは気にしたことがない', 0]
     ]},
+    // ドメインの問いも判定スコアに影響させない(必須の注意喚起の出し分けにだけ使う)
+    { q: 'メールの送信元に使う独自ドメインは？', c: [
+      ['持っている（運用中サイトのドメインでも可）', 0],
+      ['持っていない・これから取得する', 0],
+      ['よくわからない', 0]
+    ]},
     { q: 'Rondoは完成品のアプリではなく、AIと育てる「設計図一式」です。どう感じますか？', c: [
       ['むしろ楽しみ', 2],
       ['AIに任せられるなら、大丈夫', 1],
@@ -1232,7 +1240,7 @@
 
   function verdict(){
     var score = answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0);
-    var wantsFinished = answers[3] === 2;   // 設計図の問い「不安。完成品のアプリがいい」
+    var wantsFinished = answers[4] === 2;   // 設計図の問い「不安。完成品のアプリがいい」
     if(wantsFinished || score <= 2) return 'c';
     // A判定はLP文面「リストがあり、開発AIが手元にある」と厳密に一致させる
     if(answers[0] !== 0 || answers[1] !== 0 || score <= 5) return 'b';
@@ -1243,12 +1251,15 @@
     var v = verdict();
     var notFable = answers[2] !== 0; // モデルの問いでFableクラス以外
     var fableNote = '<p class="sh-note">Rondoは、Fableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）でのカスタマイズを前提に設計しています。<br>Opus 5やGPT 5.6では、カスタマイズが難しい可能性があります。</p>';
+    var noDomain = answers[3] !== 0; // ドメインの問いで「持っている」以外
+    var domainNote = '<p class="sh-note">Rondoは、メールの送信元に使う独自ドメインが必須です。<br>持っていない場合は、Rondo本体が動くCloudflareでそのまま取得するのがおすすめです（管理が一箇所にまとまります）。</p>';
     var html = '';
     if(v === 'a'){
       html = '<span class="sh-pill a">向いています</span>'
         + '<p class="sh-title">Rondoは、あなたのための道具です。</p>'
         + '<p class="sh-body">リストがあり、開発AIが手元にある。<br>それがRondoの想定読者そのものです。<br>発売と同時に始められるよう、10%オフを押さえておいてください。</p>'
         + (notFable ? fableNote : '')
+        + (noDomain ? domainNote : '')
         + '<div class="sh-ctas"><a class="btn primary" href="#reserve">事前登録で10%オフを受け取る</a></div>';
     } else if(v === 'b'){
       var next = [];
@@ -1260,6 +1271,7 @@
         + '<p class="sh-body">いま買っても、育てる手が足りずに止まる可能性があります。<br>先に足場を作ってください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
         + (notFable ? fableNote : '')
+        + (noDomain ? domainNote : '')
         + '<div class="sh-ctas"><a class="btn ghost" href="#reserve">先に10%オフだけ押さえる</a></div>'
         + '<p class="sh-body" style="margin-top:10px;font-size:12.5px;color:var(--note)">事前登録は無料です。<br>必要なのはメールアドレスだけです。</p>';
     } else {
