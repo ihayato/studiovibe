@@ -115,7 +115,13 @@
   .hero-sub{color:var(--dim);font-size:15.5px;max-width:620px;margin:0 auto 30px}
   .hero-sub .ph{display:inline-block}
   .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
-  .hero-note{font-size:12.5px;color:var(--note);margin-top:16px;line-height:2}
+  .hero-note{font-size:12.5px;color:var(--note);margin-top:14px;line-height:2}
+  .hero-caution{display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 10px;
+    margin-top:20px;background:var(--warn-soft);border:1px solid rgba(154,103,0,.18);border-radius:12px;
+    padding:9px 18px;font-size:13px;font-weight:600;color:var(--warn);max-width:100%}
+  .hero-caution .nb{display:inline-block}
+  .hero-caution a{color:var(--warn);text-decoration:underline;text-underline-offset:3px}
+  .hero-caution a:hover{opacity:.8}
 
   /* 輪舞オービット+大型ダッシュボード */
   .theater{position:relative;padding:0 0 96px;overflow:hidden}
@@ -616,12 +622,13 @@
     <div class="wrap">
       <span class="hero-pill">発売準備中・買い切り <span class="mono">¥4,980</span>・継続課金なし</span>
       <h1>AIとともに運用。<br>自分で所有・<span class="nb">カスタマイズする</span><br><span class="nb">次世代</span><span class="nb">マーケティングOS。</span></h1>
-      <p class="hero-sub"><span class="ph">ステップメール、LINE配信、SNS、</span><span class="ph">会員サイト、売上、</span><span class="ph">そして顧客台帳までを</span><span class="ph">1つのダッシュボードに統合。</span><br><span class="ph">月額SaaSではなく、買い切りで所有し、</span><span class="ph">カスタマイズする「あなたの資産」です。</span><br>管理画面は見て把握するためのもの。<br><span class="ph">中身の作り込みは、</span><span class="ph">Claude CodeやCodexが担当します。</span></p>
+      <p class="hero-sub"><span class="ph">ステップメール、LINE配信、SNS、</span><span class="ph">会員サイト、売上、</span><span class="ph">そして顧客台帳までを</span><span class="ph">1つのダッシュボードに統合。</span><br><span class="ph">月額SaaSではなく、買い切りで所有し、</span><span class="ph">カスタマイズする「あなたの資産」です。</span><br>管理画面は見て把握するためのもの。<br><span class="ph">中身の作り込みは、</span><span class="ph">あなたが使いこなす</span><span class="ph">FableクラスのAI</span><span class="ph">（Claude CodeやCodex）が担当します。</span></p>
       <div class="hero-ctas">
         <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="reserve">事前登録して10%オフを受け取る</a>
         <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
       </div>
-      <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。<br>サポート窓口のない、上級者向け製品です。</p>
+      <p class="hero-caution"><span class="hc-t">サポート窓口のない、<span class="nb">FableクラスのAIを使いこなす</span><span class="nb">上級者向け製品です。</span></span><a href="#shindan" data-rondo-label="ヒーロー 適性診断">30秒の適性診断で確かめる</a></p>
+      <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。</p>
     </div>
   </section>
 
@@ -854,6 +861,7 @@
   <div class="proof" data-sec="proof">
     <div class="proof-in">
       <span><b>イケハヤの実務</b>で本番稼働中</span>
+      <span><b>FableクラスAI</b>前提の上級者向けOS</span>
       <span>チャネルを<b>接続して増やせる</b>統合ダッシュボード</span>
       <span>顧客台帳 <b>3,328人</b>を名寄せ運用中</span>
       <span>ユニットテスト <b>498件</b></span>
@@ -925,7 +933,7 @@
           <p class="flip-kicker">逆転 その二</p>
           <h2>やりたいことは、<br>あなたのAIに日本語で頼むだけ。</h2>
           <div class="flip-body">
-            <p>Rondoの本質は、マーケティング戦略を統括管理する<b>閲覧・把握用のダッシュボード</b>です。<br>中身を変え、作り込んでいくのは、<b>あなたがいつも使っているClaude CodeやCodex</b>が担当します。</p>
+            <p>Rondoの本質は、マーケティング戦略を統括管理する<b>閲覧・把握用のダッシュボード</b>です。<br>中身を変え、作り込んでいくのは、<b>あなたがいつも使っているFableクラスのClaude CodeやCodex</b>が担当します。<br>逆に言えば、開発AIに指示を出せない人が使う道具ではありません。</p>
             <p>「1通目を書き換えて」「LINEに診断コンテンツを足して」と、いつものAIツールに日本語で頼んでください。<br><b>変更はすぐRondoに反映され</b>、ダッシュボードで状況を多角的に把握できます。<br>変更のたびに自動テストが走り、壊れていないことを機械的に確かめてから反映されるので、安心して任せられます。</p>
             <p><b>見た目を変えるのも自由自在</b>です。<br>ダークモードにしたり、ポップにしたり、キャラクターを追加したり。<br>それも、いつものAIに頼めばすぐです。</p>
           </div>
@@ -1344,7 +1352,7 @@
   <section class="last" data-sec="final" style="padding-top:24px">
     <div class="wrap">
       <h2>ソフトを買うのではなく、<br>マーケティング部門の設計図を買う。</h2>
-      <p class="lede">維持費ほぼゼロの土地に建てて、Claude Codeという専属エンジニアに任せる。<br>それがRondoです。</p>
+      <p class="lede">維持費ほぼゼロの土地に建てて、FableクラスのClaude Codeという専属エンジニアに任せる。<br>それがRondoです。</p>
       <a class="btn primary" href="#reserve" data-rondo-label="CTA 最終事前登録" data-rondo-cta="reserve">事前登録して10%オフを受け取る</a>
     </div>
   </section>
