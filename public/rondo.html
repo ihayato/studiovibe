@@ -546,7 +546,7 @@
           <a class="btn primary" href="#reserve">事前登録して10%オフを受け取る</a>
           <a class="btn ghost" href="#cover">できることを見る</a>
         </div>
-        <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。</p>
+        <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。<br>サポート窓口のない、上級者向け製品です。</p>
       </div>
       <figure class="flip-visual" id="hero-car">
         <div class="shot">
@@ -1036,7 +1036,8 @@
   <!-- 向く人・向かない人 -->
   <section style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center;margin-bottom:40px">正直に言うと、万人向けではありません。</h2>
+      <h2 style="text-align:center;margin-bottom:16px">正直に言うと、万人向けではありません。</h2>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは上級者向けの製品で、サポート窓口はありません。<br>導入も運用もトラブル対応も、あなたとあなたの開発AIの仕事です。<br>自分でカスタマイズできる自信がない人は、絶対に買わないでください。</p>
       <div class="fit">
         <div class="fit-col yes">
           <h3>Rondoが向いている人</h3>
@@ -1055,7 +1056,8 @@
             <li>完成品のアプリを期待する人。パッケージは「種」です</li>
             <li>開発AIを使う予定がない人</li>
             <li>独自ドメインを持っていない人。メールの送信元に必須です（取得すれば使えます）</li>
-            <li>サポート窓口つきのSaaSが安心な人</li>
+            <li>開発AIに月100ドル程度を投資できない人。Fableクラスの利用が最低ラインです</li>
+            <li>サポート窓口が必要な人。Rondoにサポートはありません。トラブル対応も自分とAIの仕事です</li>
           </ul>
         </div>
       </div>
@@ -1064,7 +1066,7 @@
       <div class="shindan">
         <div id="sh-quiz">
           <div class="sh-top">
-            <span class="sh-step" id="sh-step">1 / 4</span>
+            <span class="sh-step" id="sh-step">1 / 7</span>
             <span class="sh-dots" id="sh-dots" aria-hidden="true"></span>
             <button type="button" class="sh-back" id="sh-back" style="visibility:hidden">← 前の質問へ</button>
           </div>
@@ -1104,7 +1106,7 @@
           <li>LINE公式アカウント。LINE配信を使う場合のみ</li>
         </ul>
         <div class="reco"><b>開発AIのLLMモデルはFableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）を強く推奨します。</b><br>RondoはFableで開発し、運用しています。<br>それ以外のモデル（Opus 5, GPT 5.6など）では、導入やカスタマイズに失敗する可能性があるのでご注意ください。</div>
-        <div class="up">アップデート保証はありません。<br>メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
+        <div class="up">サポート窓口はありません。<br>導入・運用・トラブル対応は、あなたとあなたの開発AIで完結させる上級者向け製品です。<br>デジタル商品の性質上、購入後の返金には一切応じられません。<br>アップデート保証もありません。<br>メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
       </div>
     </div>
   </section>
@@ -1144,6 +1146,14 @@
         <details>
           <summary>プログラミングができなくても使えますか？</summary>
           <div class="a">コードを書くのはClaude CodeやCodexの仕事なので、あなたが書く必要はありません。<br>ただしノーコードツールではなく、開発AIに日本語で指示を出せることが前提です。<br>Claude Codeに「セットアップして」と頼めるなら大丈夫です。</div>
+        </details>
+        <details>
+          <summary data-rondo-label="FAQ サポート">サポートはありますか？</summary>
+          <div class="a">ありません。<br>導入も、運用も、トラブル対応も、あなたとあなたの開発AIの仕事です。<br>Rondoは上級者向けの製品です。自分でカスタマイズできる自信がない人は、買わないでください。<br>サポート窓口が必要なら、MyASPやLステップなどのSaaSが合っています。</div>
+        </details>
+        <details>
+          <summary data-rondo-label="FAQ 返金">返金はできますか？</summary>
+          <div class="a">できません。<br>ソースコード一式を納品するデジタル商品の性質上、購入後の返金・キャンセルには一切応じられません。<br>迷いがあるうちは、買わないでください。<br>上の適性診断で「向いています」が出てから、検討してください。</div>
         </details>
         <details>
           <summary>購入後は、どういう流れで使い始めるのですか？</summary>
@@ -1225,7 +1235,13 @@
       ['Opus 5やGPT 5.6など、別のモデルが中心', 0],
       ['モデルは気にしたことがない', 0]
     ]},
-    // ドメインの問いも判定スコアに影響させない(必須の注意喚起の出し分けにだけ使う)
+    // 投資の問いは判定スコアに入れない(最低ライン未満を弾くゲートにだけ使う)
+    { q: '開発AI（Claude Code等）への月の投資は？', c: [
+      ['月100ドル以上、すでに払っている', 0],
+      ['必要なら月100ドル払える', 0],
+      ['月100ドルは払えない・払いたくない', 0]
+    ]},
+    // ドメインの問いもスコアには入れない(「持っている」以外はC判定に落とすゲート)
     { q: 'メールの送信元に使う独自ドメインは？', c: [
       ['持っている（運用中サイトのドメインでも可）', 0],
       ['持っていない・これから取得する', 0],
@@ -1278,8 +1294,10 @@
 
   function verdict(){
     var score = answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0);
-    var wantsFinished = answers[4] === 2;   // 設計図の問い「不安。完成品のアプリがいい」
-    if(wantsFinished || score <= 2) return 'c';
+    var wantsFinished = answers[5] === 2;   // 設計図の問い「不安。完成品のアプリがいい」
+    var noBudget = answers[3] === 2;        // 投資の問い「月100ドルは払えない」=最低ライン未満
+    var noDomain = answers[4] !== 0;        // ドメインの問い「持っている」以外は必須要件を満たさない
+    if(wantsFinished || noBudget || noDomain || score <= 2) return 'c';
     // A判定はLP文面「リストがあり、開発AIが手元にある」と厳密に一致させる
     if(answers[0] !== 0 || answers[1] !== 0 || score <= 5) return 'b';
     return 'a';
@@ -1289,15 +1307,16 @@
     var v = verdict();
     var notFable = answers[2] !== 0; // モデルの問いでFableクラス以外
     var fableNote = '<p class="sh-note">Rondoは、Fableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）でのカスタマイズを前提に設計しています。<br>Opus 5やGPT 5.6では、カスタマイズが難しい可能性があります。</p>';
-    var noDomain = answers[3] !== 0; // ドメインの問いで「持っている」以外
-    var domainNote = '<p class="sh-note">Rondoは、メールの送信元に使う独自ドメインが必須です。<br>持っていない場合は、Rondo本体が動くCloudflareでそのまま取得するのがおすすめです（管理が一箇所にまとまります）。</p>';
+    var noBudget = answers[3] === 2;
+    var noDomain = answers[4] !== 0;
+    var wantsFinished = answers[5] === 2;
+    var score = answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0);
     var html = '';
     if(v === 'a'){
       html = '<span class="sh-pill a">向いています</span>'
         + '<p class="sh-title">Rondoは、あなたのための道具です。</p>'
         + '<p class="sh-body">リストがあり、開発AIが手元にある。<br>それがRondoの想定読者そのものです。<br>発売と同時に始められるよう、10%オフを押さえておいてください。</p>'
         + (notFable ? fableNote : '')
-        + (noDomain ? domainNote : '')
         + '<div class="sh-ctas"><a class="btn primary" href="#reserve">事前登録で10%オフを受け取る</a></div>';
     } else if(v === 'b'){
       var next = [];
@@ -1309,13 +1328,17 @@
         + '<p class="sh-body">いま買っても、育てる手が足りずに止まる可能性があります。<br>先に足場を作ってください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
         + (notFable ? fableNote : '')
-        + (noDomain ? domainNote : '')
         + '<div class="sh-ctas"><a class="btn ghost" href="#reserve">先に10%オフだけ押さえる</a></div>'
         + '<p class="sh-body" style="margin-top:10px;font-size:12.5px;color:var(--note)">事前登録は無料です。<br>必要なのはメールアドレスだけです。</p>';
     } else {
+      var reasons = [];
+      if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。<br>年1,000円台〜で取得できます。取得してから、また診断しに来てください。');
+      if(noBudget) reasons.push('Rondoの運用は、Fableクラスの開発AI（月100ドル程度）が最低ラインです。<br>この投資ができないうちは、導入しても止まります。');
+      if(wantsFinished || score <= 2) reasons.push('Rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、大手配信スタンド型SaaS（MyASP、Lステップなど）の方が合っています。<br>開発AIが日常になったら、また診断しに来てください。');
       html = '<span class="sh-pill c">今は向いていません</span>'
         + '<p class="sh-title">正直に言います。今は買わない方がいいです。</p>'
-        + '<p class="sh-body">Rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、大手配信スタンド型SaaS（MyASP、Lステップなど）の方が合っています。<br>開発AIが日常になったら、また診断しに来てください。</p>';
+        + '<p class="sh-body">Rondoは上級者向けの製品で、サポート窓口はありません。</p>'
+        + reasons.map(function(t){ return '<p class="sh-body">' + t + '</p>'; }).join('');
     }
     html += '<div class="sh-ctas"><button type="button" class="sh-retry" id="sh-retry">もう一度診断する</button></div>';
     quiz.hidden = true;
