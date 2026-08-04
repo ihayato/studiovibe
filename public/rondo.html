@@ -29,14 +29,16 @@
 <script src="https://rondo.nubonba.workers.dev/heat.js?v=20260803-2" data-page="rondo-lp" defer></script>
 <style>
   :root{
-    --bg:#E9EDF5;
-    --glass:rgba(255,255,255,.66);
-    --glass-strong:rgba(255,255,255,.80);
-    --glass-band:rgba(255,255,255,.52);
-    --hair:rgba(198,210,232,.65); --hair-strong:rgba(170,186,214,.75);
+    --bg:#F5F7FB;
+    --glass:rgba(255,255,255,.72);
+    --glass-strong:rgba(255,255,255,.86);
+    --glass-band:#FAFBFD;
+    --hair:#E3E7EF; --hair-strong:#D3D9E4;
     --hi:inset 0 1px 0 rgba(255,255,255,.85);
-    --shadow:0 18px 50px -20px rgba(58,80,140,.22), 0 4px 14px -10px rgba(58,80,140,.12);
-    --shadow-big:0 32px 80px -32px rgba(58,80,140,.30), 0 6px 18px -10px rgba(58,80,140,.14);
+    --orange:#E8622C;
+    --serif:Georgia,"Times New Roman",serif;
+    --shadow:0 18px 50px -20px rgba(58,80,140,.20), 0 4px 14px -10px rgba(58,80,140,.10);
+    --shadow-big:0 60px 120px -48px rgba(38,56,110,.35), 0 24px 56px -32px rgba(38,56,110,.22), 0 2px 8px -2px rgba(38,56,110,.10);
     --ink:#17181C; --dim:#525863; --note:#7B838F;
     --hover:rgba(255,255,255,.55);
     --accent:#2E5CE6; --accent-soft:rgba(46,92,230,.10);
@@ -54,9 +56,8 @@
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
   body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
     background:
-      radial-gradient(720px 480px at 12% -6%, rgba(46,92,230,.11), transparent 62%),
-      radial-gradient(900px 640px at 98% 14%, rgba(96,146,224,.13), transparent 60%),
-      radial-gradient(820px 600px at 46% 106%, rgba(46,92,230,.08), transparent 62%),
+      radial-gradient(760px 520px at 14% -8%, rgba(46,92,230,.07), transparent 62%),
+      radial-gradient(920px 660px at 96% 12%, rgba(96,146,224,.08), transparent 60%),
       var(--bg)}
   a{color:inherit;text-decoration:none}
   img,svg{max-width:100%;display:block}
@@ -68,13 +69,11 @@
   h3{font-size:18px;font-weight:600;line-height:1.5}
   p+p{margin-top:1em}
 
-  /* ガラス面（共通の器） */
+  /* 白の器（v14: ガラスは小面積限定へ。カードは白ベタ+ヘアライン+柔影） */
   .costcard,.loopcard,.fit-col,.env,.rsv,.manifest,.use-card,.faq-panel,.itch-list,.shot{
-    background:var(--glass);
+    background:#FFFFFF;
     border:1px solid var(--hair);
-    box-shadow:var(--shadow), var(--hi);
-    backdrop-filter:blur(20px) saturate(1.4);
-    -webkit-backdrop-filter:blur(20px) saturate(1.4)}
+    box-shadow:var(--shadow)}
   @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
     .costcard,.loopcard,.fit-col,.env,.rsv,.manifest,.use-card,.faq-panel,.itch-list,.shot,
     header,.proof,.price-sec,footer,.hero-pill{background:rgba(255,255,255,.93)}
@@ -97,7 +96,7 @@
          backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
          border-bottom:1px solid var(--hair)}
   .head-in{display:flex;align-items:center;gap:28px;padding:14px 24px;max-width:var(--w);margin:0 auto}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;font-family:var(--serif);letter-spacing:.01em}
   .logo-mark{width:28px;height:28px;display:block;flex:none}
   .head-nav{display:flex;gap:4px;margin-left:auto}
   .head-nav a{font-size:14px;font-weight:500;color:var(--dim);padding:8px 12px;border-radius:var(--r-btn);transition:background 140ms,color 140ms}
@@ -105,20 +104,103 @@
   .head-cta{padding:10px 18px;min-height:44px;font-size:14px}
   @media(max-width:720px){ .head-nav{display:none} }
 
-  /* ヒーロー */
-  .hero{padding:88px 0 72px}
-  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-  @media(max-width:900px){ .hero-grid{grid-template-columns:1fr;gap:48px} }
+  /* ヒーロー（v14: 中央寄せ+プロダクト・シアター） */
+  .hero{padding:80px 0 0;text-align:center}
   .hero-pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--dim);
-             border:1px solid var(--hair);border-radius:999px;padding:5px 14px;margin-bottom:24px;
-             background:rgba(255,255,255,.62);box-shadow:var(--hi);
-             backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+             border:1px solid var(--hair);border-radius:999px;padding:6px 15px;margin-bottom:26px;
+             background:#fff;box-shadow:var(--shadow)}
   .hero-pill .mono{color:var(--ink)}
-  h1{font-size:clamp(25px,4.3vw,34px);font-weight:700;line-height:1.4;letter-spacing:.01em;margin-bottom:20px}
+  h1{font-size:clamp(21px,5.6vw,42px);font-weight:700;line-height:1.42;letter-spacing:.01em;margin-bottom:20px}
   h1 .nb{display:inline-block}
-  .hero-sub{color:var(--dim);max-width:34em;margin-bottom:32px}
-  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-  .hero-note{font-size:13px;color:var(--note);margin-top:14px}
+  .hero-sub{color:var(--dim);font-size:15.5px;max-width:620px;margin:0 auto 30px}
+  .hero-sub .ph{display:inline-block}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+  .hero-note{font-size:12.5px;color:var(--note);margin-top:16px;line-height:2}
+
+  /* 輪舞オービット+大型ダッシュボード */
+  .theater{position:relative;padding:0 0 96px;overflow:hidden}
+  .th-stage{position:relative;max-width:1128px;margin:0 auto;padding:288px 24px 0}
+  .orbit{position:absolute;left:50%;top:0;transform:translateX(-50%);width:1400px;height:760px;pointer-events:none}
+  .orbit svg{width:100%;height:100%;display:block}
+  .orbit .ring{fill:none;stroke:rgba(46,92,230,.20);stroke-width:1}
+  .orbit .ring2{fill:none;stroke:rgba(46,92,230,.10);stroke-width:1;stroke-dasharray:2 6}
+  .sat{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+    background:var(--orange);box-shadow:0 0 0 4px rgba(232,98,44,.16);
+    offset-path:ellipse(640px 300px at 700px 380px);offset-rotate:0deg;
+    animation:orbitrun 44s linear infinite}
+  @keyframes orbitrun{from{offset-distance:0%}to{offset-distance:100%}}
+  .node{position:absolute;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:7px;
+    background:#fff;border:1px solid var(--hair);border-radius:999px;padding:6px 14px;
+    font-size:12.5px;font-weight:600;color:var(--dim);box-shadow:var(--shadow);white-space:nowrap}
+  .node i{width:7px;height:7px;border-radius:50%;flex:none}
+  @media (prefers-reduced-motion: reduce){ .sat{animation:none;offset-distance:12%} }
+  .th-shot{position:relative;z-index:2;background:#fff;border:1px solid var(--hair);border-radius:16px;
+    box-shadow:var(--shadow-big);overflow:hidden;text-align:left}
+  .th-bar{display:flex;align-items:center;gap:8px;background:#FAFBFD;border-bottom:1px solid var(--hair);padding:10px 16px}
+  .th-bar .dots{display:flex;gap:5px}
+  .th-bar .dots i{width:9px;height:9px;border-radius:50%;background:#D9DEE8}
+  .th-bar .url{font-family:var(--mono);font-size:11.5px;color:var(--note);background:#fff;
+    border:1px solid var(--hair);border-radius:7px;padding:3px 12px;margin-left:8px}
+  .th-app{display:grid;grid-template-columns:184px 1fr;min-height:520px}
+  .th-side{border-right:1px solid var(--hair);background:#FAFBFD;padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+  .th-proj{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink);
+    padding:8px 10px;border:1px solid var(--hair);border-radius:9px;background:#fff;margin-bottom:10px}
+  .th-proj i{width:16px;height:16px;border-radius:5px;background:#16181C;flex:none;position:relative}
+  .th-proj i::after{content:"";position:absolute;top:2px;right:2px;width:3px;height:3px;border-radius:50%;background:var(--orange)}
+  .th-proj .mono{margin-left:auto;color:var(--note)}
+  .side-tab{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--dim);
+    padding:7px 10px;border-radius:8px;border:none;background:none;cursor:pointer;font-family:var(--sans);
+    text-align:left;width:100%;transition:background 140ms ease-out,color 140ms ease-out}
+  .side-tab:hover{background:rgba(46,92,230,.06);color:var(--ink)}
+  .side-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .side-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .th-grp{font-size:10.5px;font-weight:600;color:var(--note);letter-spacing:.08em;padding:12px 10px 4px}
+  .th-chan{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--dim);padding:6px 10px}
+  .th-chan .n{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--note)}
+  .th-main{min-width:0}
+  .th-main .car-slide{padding:18px 22px;gap:14px}
+  .th-caption{font-size:12px;color:var(--note);text-align:center;margin-top:16px}
+  /* ダッシュボードスライド */
+  .th-head{display:flex;align-items:baseline;gap:12px}
+  .th-head .t{font-size:15.5px;font-weight:700;letter-spacing:.01em}
+  .th-head .date{font-family:var(--mono);font-size:11.5px;color:var(--note)}
+  .th-head .per{margin-left:auto;display:flex;gap:4px}
+  .th-head .per span{font-size:11px;font-weight:600;color:var(--dim);border:1px solid var(--hair);border-radius:7px;padding:3px 10px}
+  .th-head .per span.on{color:var(--accent);background:var(--accent-soft);border-color:rgba(46,92,230,.35)}
+  .th-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .th-kpi{border:1px solid var(--hair);border-radius:11px;padding:12px 14px;min-width:0}
+  .th-kpi .l{font-size:11px;font-weight:600;color:var(--note)}
+  .th-kpi .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:21px;font-weight:600;letter-spacing:-.01em;margin-top:2px}
+  .th-kpi .d{font-family:var(--mono);font-size:11px;margin-top:2px;color:var(--ok)}
+  .th-kpi .d.flat{color:var(--note)}
+  .th-grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:10px;min-width:0}
+  .th-card{border:1px solid var(--hair);border-radius:11px;padding:14px;min-width:0}
+  .th-card .t{font-size:12px;font-weight:600;color:var(--dim);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .th-card .t .mono{margin-left:auto;font-size:11px;color:var(--note);font-weight:500}
+  .th-ch{display:flex;align-items:flex-end;gap:3px;height:104px}
+  .th-ch i{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(to top, rgba(46,92,230,.65), rgba(46,92,230,.35))}
+  .th-ch i.hi{background:linear-gradient(to top, var(--orange), rgba(232,98,44,.55))}
+  .th-chx{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--note);margin-top:6px}
+  .th-table{width:100%;border-collapse:collapse;font-size:12px}
+  .th-table th{font-size:10.5px;font-weight:600;color:var(--note);text-align:left;padding:0 10px 8px;border-bottom:1px solid var(--hair);white-space:nowrap}
+  .th-table th.r,.th-table td.r{text-align:right}
+  .th-table td{padding:9px 10px;border-bottom:1px solid var(--hair);color:var(--ink)}
+  .th-table tr:last-child td{border-bottom:0}
+  .th-table td.r{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .th-chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .th-chip.mail{color:var(--accent);background:var(--accent-soft)}
+  .th-chip.line{color:var(--ok);background:var(--ok-soft)}
+  .th-chip.x{color:#fff;background:var(--ink)}
+  @media(max-width:900px){
+    .th-app{grid-template-columns:1fr}
+    .th-side{display:none}
+    .th-kpis{grid-template-columns:repeat(2,1fr)}
+    .th-grid2{grid-template-columns:1fr}
+    .orbit,.sat{display:none}
+    .th-stage{padding-top:40px}
+  }
+  @media(min-width:901px){ .th-stage .car-tabs{display:none !important} }
+  @media(max-width:520px){ .th-head .per{display:none} }
 
   /* ミニ計器盤(実物の写し) */
   .shot{border-radius:var(--r-shot);overflow:hidden;box-shadow:var(--shadow-big), var(--hi)}
@@ -216,8 +298,7 @@
   .car-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   /* 証拠チップ帯 */
-  .proof{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:var(--glass-band);
-         backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:18px 0}
+  .proof{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:var(--glass-band);padding:18px 0}
   .proof-in{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:center;max-width:var(--w);margin:0 auto;padding:0 24px}
   .proof-in span{font-family:var(--mono);font-size:12.5px;color:var(--dim);display:flex;align-items:center;gap:8px}
   .proof-in b{color:var(--ink);font-weight:600}
@@ -249,11 +330,10 @@
   .ledger-note{margin-top:16px;font-size:12.5px;color:var(--note);line-height:1.8}
 
   /* ターミナル(シグネチャー・墨面のまま) */
-  .term-sec{background:rgba(23,24,28,.94);color:#E9EAEE;border-radius:24px;padding:56px 48px;
+  .term-sec{background:#17181C;color:#E9EAEE;border-radius:24px;padding:56px 48px;
             display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;
-            box-shadow:0 40px 90px -36px rgba(23,24,28,.55);
-            backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-  @media(max-width:900px){ .term-sec{grid-template-columns:1fr;padding:36px 24px;gap:32px} }
+            box-shadow:0 40px 90px -36px rgba(23,24,28,.55);margin:112px 0}
+  @media(max-width:900px){ .term-sec{grid-template-columns:1fr;padding:36px 24px;gap:32px;margin:80px 0} }
   .term-sec .flip-kicker{color:#8FA8F2}
   .term-sec h2{color:#fff}
   .term-sec .flip-body{color:#A7ABB5}
@@ -395,8 +475,7 @@
   /* 適性診断 */
   .sh-lede{text-align:center;color:var(--dim);margin:56px auto 24px;max-width:40em}
   .shindan{max-width:640px;margin:0 auto;border-radius:var(--r-card);padding:32px 36px;
-    background:var(--glass);border:1px solid var(--hair);box-shadow:var(--shadow), var(--hi);
-    backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4)}
+    background:#FFFFFF;border:1px solid var(--hair);box-shadow:var(--shadow)}
   @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){ .shindan{background:rgba(255,255,255,.93)} }
   @media(max-width:600px){ .shindan{padding:24px 20px} }
   .sh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -434,8 +513,7 @@
   @media (prefers-reduced-motion: reduce){ .sh-choice{transition:none} }
 
   /* 価格 */
-  .price-sec{background:var(--glass-band);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-             backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  .price-sec{background:var(--glass-band);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
   .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;max-width:900px;margin:0 auto}
   @media(max-width:800px){ .price-grid{grid-template-columns:1fr;gap:40px} }
   .price-big{font-family:var(--mono);font-size:clamp(44px,7vw,64px);font-weight:600;line-height:1.2;letter-spacing:-.01em}
@@ -490,17 +568,15 @@
   .last .lede{margin:0 auto 32px}
 
   /* フッター */
-  footer{border-top:1px solid var(--hair);padding:40px 0 48px;background:var(--glass-band);
-         backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  footer{border-top:1px solid var(--hair);padding:40px 0 48px;background:var(--glass-band)}
   .foot-in{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;max-width:var(--w);margin:0 auto;padding:0 24px}
   .foot-in .logo{font-size:15px}
   .foot-links{display:flex;flex-wrap:wrap;gap:4px 20px;margin-left:auto;font-size:13px;color:var(--dim)}
   .foot-links a:hover{color:var(--ink)}
   .foot-copy{flex-basis:100%;font-size:12px;color:var(--note)}
   /* 導入に必要なもの */
-  .needs{max-width:820px;margin:40px auto 0;background:var(--glass);border:1px solid var(--hair);border-radius:var(--r-card);
-    box-shadow:var(--shadow),var(--hi);
-    backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);overflow:hidden}
+  .needs{max-width:820px;margin:40px auto 0;background:#FFFFFF;border:1px solid var(--hair);border-radius:var(--r-card);
+    box-shadow:var(--shadow);overflow:hidden}
   .need-row{display:grid;grid-template-columns:200px 130px 1fr;gap:14px;align-items:baseline;
     padding:14px 20px;border-bottom:1px solid var(--hair)}
   .need-row:last-of-type{border-bottom:none}
@@ -535,24 +611,96 @@
 
 <main id="top">
 
-  <!-- ヒーロー -->
+  <!-- ヒーロー（v14: プロダクト・シアター） -->
   <section class="hero" data-sec="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="hero-pill">発売準備中・買い切り <span class="mono">¥4,980</span>・継続課金なし</span>
-        <h1>AIとともに運用。<br>自分で所有・<span class="nb">カスタマイズする</span><br><span class="nb">次世代</span><span class="nb">マーケティングOS。</span></h1>
-        <p class="hero-sub">ステップメール、LINE配信、SNS、会員サイト、売上、そして顧客台帳までを1つのダッシュボードに統合。<br>月額SaaSではなく、買い切りで所有し、カスタマイズする「あなたの資産」です。<br>管理画面は見て把握するためのもの。<br>中身の作り込みは、Claude CodeやCodexが担当します。</p>
-        <div class="hero-ctas">
-          <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="reserve">事前登録して10%オフを受け取る</a>
-          <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
-        </div>
-        <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。<br>サポート窓口のない、上級者向け製品です。</p>
+    <div class="wrap">
+      <span class="hero-pill">発売準備中・買い切り <span class="mono">¥4,980</span>・継続課金なし</span>
+      <h1>AIとともに運用。<br>自分で所有・<span class="nb">カスタマイズする</span><br><span class="nb">次世代</span><span class="nb">マーケティングOS。</span></h1>
+      <p class="hero-sub"><span class="ph">ステップメール、LINE配信、SNS、</span><span class="ph">会員サイト、売上、</span><span class="ph">そして顧客台帳までを</span><span class="ph">1つのダッシュボードに統合。</span><br><span class="ph">月額SaaSではなく、買い切りで所有し、</span><span class="ph">カスタマイズする「あなたの資産」です。</span><br>管理画面は見て把握するためのもの。<br><span class="ph">中身の作り込みは、</span><span class="ph">Claude CodeやCodexが担当します。</span></p>
+      <div class="hero-ctas">
+        <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="reserve">事前登録して10%オフを受け取る</a>
+        <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
       </div>
-      <figure class="flip-visual" id="hero-car">
-        <div class="shot">
-          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">rondo.your-account.workers.dev/admin</span></div>
-          <div class="car-view">
+      <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。<br>サポート窓口のない、上級者向け製品です。</p>
+    </div>
+  </section>
+
+  <!-- 輪舞オービット+大型ダッシュボード -->
+  <section class="theater" data-sec="hero-theater" style="padding-top:0">
+    <figure class="th-stage" id="hero-car" style="margin:0">
+      <div class="orbit" aria-hidden="true">
+        <svg viewBox="0 0 1400 760">
+          <ellipse class="ring"  cx="700" cy="380" rx="640" ry="300"/>
+          <ellipse class="ring2" cx="700" cy="380" rx="560" ry="252"/>
+        </svg>
+        <span class="node" style="left:700px;top:80px"><i style="background:#2E5CE6"></i>メール</span>
+        <span class="node" style="left:400px;top:115px"><i style="background:#178A50"></i>LINE公式</span>
+        <span class="node" style="left:1000px;top:115px"><i style="background:#17181C"></i>X</span>
+        <span class="node" style="left:189px;top:199px"><i style="background:#C9372C"></i>YouTube</span>
+        <span class="node" style="left:1211px;top:199px"><i style="background:#2BA24C"></i>note</span>
+        <span class="node" style="left:146px;top:230px"><i style="background:#5865F2"></i>Discord</span>
+        <span class="node" style="left:1254px;top:230px"><i style="background:#E8590C"></i>Substack</span>
+        <span class="sat"></span>
+      </div>
+      <div class="th-shot">
+        <div class="th-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="url">rondo.your-account.workers.dev/admin</span>
+        </div>
+        <div class="th-app">
+          <aside class="th-side" role="tablist" aria-label="表示する管理画面">
+            <div class="th-proj"><i></i>イケハヤ事業 <span class="mono">▾</span></div>
+            <button class="side-tab" type="button" role="tab" aria-selected="true" aria-controls="car-pd" data-rondo-label="画面切替 ダッシュボード">ダッシュボード</button>
+            <button class="side-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p0" data-rondo-label="画面切替 ファネル">ファネル分析</button>
+            <button class="side-tab" type="button" role="tab" aria-selected="false" aria-controls="car-ph" data-rondo-label="画面切替 ヒートマップ">ヒートマップ</button>
+            <button class="side-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p1" data-rondo-label="画面切替 カレンダー">カレンダー</button>
+            <button class="side-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p2" data-rondo-label="画面切替 顧客">顧客</button>
+            <button class="side-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p3" data-rondo-label="画面切替 LP分析">LP分析</button>
+            <div class="th-grp">チャネル</div>
+            <div class="th-chan">メール<span class="n">12,840</span></div>
+            <div class="th-chan">LINE公式<span class="n">1,120</span></div>
+            <div class="th-chan">X<span class="n">493k</span></div>
+            <div class="th-chan">YouTube<span class="n">22.3k</span></div>
+          </aside>
+          <div class="th-main car-view">
             <div class="car-track" id="car-track">
+
+              <div class="car-slide" id="car-pd" role="tabpanel" aria-label="ダッシュボードの画面イメージ">
+                <div class="th-head">
+                  <span class="t">今日の全体像</span><span class="date">2026-08-04 MON</span>
+                  <div class="per"><span class="on">7日</span><span>30日</span><span>90日</span></div>
+                </div>
+                <div class="th-kpis">
+                  <div class="th-kpi"><div class="l">メール読者</div><div class="v">12,840</div><div class="d">+310 / 7日</div></div>
+                  <div class="th-kpi"><div class="l">LINE友だち</div><div class="v">1,120</div><div class="d">+46 / 7日</div></div>
+                  <div class="th-kpi"><div class="l">30日売上</div><div class="v">¥6.1M</div><div class="d">注文 236</div></div>
+                  <div class="th-kpi"><div class="l">予約済みの便</div><div class="v">14</div><div class="d flat">今週 6便</div></div>
+                </div>
+                <div class="th-grid2">
+                  <div class="th-card">
+                    <div class="t">読者の増減 <span class="mono">30日</span></div>
+                    <div class="th-ch">
+                      <i style="height:34%"></i><i style="height:41%"></i><i style="height:37%"></i><i style="height:52%"></i>
+                      <i style="height:44%"></i><i style="height:48%"></i><i style="height:58%"></i><i style="height:50%"></i>
+                      <i style="height:63%"></i><i style="height:55%"></i><i class="hi" style="height:96%"></i><i style="height:68%"></i>
+                      <i style="height:60%"></i><i style="height:72%"></i><i style="height:66%"></i><i style="height:78%"></i>
+                    </div>
+                    <div class="th-chx"><span>07-06</span><span>07-20</span><span>08-03</span></div>
+                  </div>
+                  <div class="th-card">
+                    <div class="t">直近の配信</div>
+                    <table class="th-table">
+                      <thead><tr><th>件名</th><th>チャネル</th><th class="r">CTR</th></tr></thead>
+                      <tbody>
+                        <tr><td>【入学式】ようこそ</td><td><span class="th-chip mail">メール</span></td><td class="r">8.1%</td></tr>
+                        <tr><td>第3講 AIに「外注」する練習</td><td><span class="th-chip line">LINE</span></td><td class="r">12.9%</td></tr>
+                        <tr><td>今週の番付レポート</td><td><span class="th-chip mail">メール</span></td><td class="r">5.6%</td></tr>
+                        <tr><td>新講座を公開しました</td><td><span class="th-chip x">X</span></td><td class="r">3.4%</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
 
               <div class="car-slide" id="car-p0" role="tabpanel" aria-label="ファネル分析の画面イメージ">
                 <div class="sh-head">ファネル分析 <span class="sub">直近30日</span></div>
@@ -689,16 +837,17 @@
             </div>
           </div>
         </div>
-        <div class="car-tabs" role="tablist" aria-label="表示する管理画面">
-          <button class="car-tab" type="button" role="tab" aria-selected="true" aria-controls="car-p0" data-rondo-label="画面切替 ファネル">ファネル分析</button>
-          <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-ph" data-rondo-label="画面切替 ヒートマップ">ヒートマップ</button>
-          <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p1" data-rondo-label="画面切替 カレンダー">カレンダー</button>
-          <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p2" data-rondo-label="画面切替 顧客">顧客</button>
-          <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p3" data-rondo-label="画面切替 LP分析">LP分析</button>
-        </div>
-        <figcaption class="shot-cap">管理画面イメージ。<br>数値はサンプルです。</figcaption>
-      </figure>
-    </div>
+      </div>
+      <div class="car-tabs" role="tablist" aria-label="表示する管理画面">
+        <button class="car-tab" type="button" role="tab" aria-selected="true" aria-controls="car-pd" data-rondo-label="画面切替 ダッシュボード">ダッシュボード</button>
+        <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p0" data-rondo-label="画面切替 ファネル">ファネル分析</button>
+        <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-ph" data-rondo-label="画面切替 ヒートマップ">ヒートマップ</button>
+        <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p1" data-rondo-label="画面切替 カレンダー">カレンダー</button>
+        <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p2" data-rondo-label="画面切替 顧客">顧客</button>
+        <button class="car-tab" type="button" role="tab" aria-selected="false" aria-controls="car-p3" data-rondo-label="画面切替 LP分析">LP分析</button>
+      </div>
+      <figcaption class="th-caption">管理画面イメージ。<br>数値はサンプルです。</figcaption>
+    </figure>
   </section>
 
   <!-- 証拠チップ帯 -->
@@ -749,7 +898,7 @@
         </div>
       </div>
 
-      <div class="flip rev term-wrap-outer" data-sec="ai">
+      <div class="term-sec" data-sec="ai">
         <div class="flip-visual">
           <div class="cc" role="img" aria-label="Claude Codeアプリでの指示と実行結果のイメージ。日本語で頼むと、編集からテスト、本番反映まで自動で進む。">
             <div class="cc-bar"><i></i><i></i><i></i><span class="t">Claude Code</span></div>
@@ -763,7 +912,7 @@
                 <p>承知しました。原稿を更新します。</p>
                 <div class="cc-steps">
                   <div class="cc-step"><span class="ck">✓</span><span>原稿を編集 <span class="path">contents/step/001.md</span></span></div>
-                  <div class="cc-step"><span class="ck">✓</span><span>自動テスト 259件 すべて合格</span></div>
+                  <div class="cc-step"><span class="ck">✓</span><span>自動テスト 498件 すべて合格</span></div>
                   <div class="cc-step"><span class="ck">✓</span><span>本番に反映</span></div>
                 </div>
                 <p>完了しました。次回の配信から新しい件名になります。</p>
@@ -951,7 +1100,7 @@
   <section id="proof-use" data-sec="proof-use" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">デモではなく、実物です。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは商品のために作られたものではありません。<br>イケハヤが自分の商売のために作り、いま毎日使っているマーケティング基盤そのものです。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは商品のために作られたものではありません。<br>イケハヤが自分の商売のために作り、<br>いま毎日使っているマーケティング基盤そのものです。</p>
       <div class="use">
         <div class="use-card">
           <div class="use-head">
@@ -996,7 +1145,7 @@
   <section id="manifest" data-sec="manifest">
     <div class="wrap">
       <h2 style="text-align:center">同梱物</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは完成品のアプリではなく、あなたの事業に合わせてAIと育てる「設計図一式」です。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは完成品のアプリではなく、<br>あなたの事業に合わせてAIと育てる「設計図一式」です。</p>
       <div class="manifest">
         <div class="mani-head"><span class="t">MANIFEST — Rondo v1</span><span class="s">すべてソースコード込み</span></div>
         <div class="mani-row"><span class="mani-no">1</span><span class="mani-name">メール配信エンジン</span><span class="mani-desc">Resend接続。ダブルオプトイン、二重送信ガード、リトライ打ち止めまで実装済み。</span><span class="mani-ok">✓</span></div>
@@ -1008,7 +1157,7 @@
         <div class="mani-row"><span class="mani-no">7</span><span class="mani-name">ファネル分析</span><span class="mani-desc">流入元→LP訪問→教材クリック→注文→売上を同じ定義で一気通貫。流入元の色分け図つき。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">8</span><span class="mani-name">改善エンジン</span><span class="mani-desc">件名A/Bの自動判定と勝者昇格、成績の還流、週次調律レポート。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">9</span><span class="mani-name">監査と自動見張り</span><span class="mani-desc">定時ジョブの健康監視、障害の自動記録、毎朝の送達テスト、日次バックアップ、休眠整理。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">テスト一式</span><span class="mani-desc">ユニットテスト259件と検証スクリプト。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
+        <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">テスト一式</span><span class="mani-desc">ユニットテスト498件と検証スクリプト。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">11</span><span class="mani-name">イケハヤAI（診断AI）</span><span class="mani-desc">イケハヤの判断基準23項目を焼き込んだClaude Codeスキル。管理画面の数字を読んで診断し、承認した処方は実装まで代行。</span><span class="mani-ok">✓</span></div>
         <div class="mani-foot">導入手順書（SETUP.md）つき。<br>AIに丸ごと渡せば、セットアップ自体も任せられる構成です。<br>進め方は<a href="/rondo-guides/setup" data-rondo-label="マニフェスト 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="マニフェスト 導入後設定ガイド">導入後の設定ガイド</a>として公開しています。</div>
       </div>
@@ -1062,7 +1211,7 @@
         </div>
       </div>
 
-      <p class="sh-lede" id="shindan">では、あなたはどちらでしょう。<br>6問・約30秒で判定できます。</p>
+      <p class="sh-lede" id="shindan">では、あなたはどちらでしょう。<br>7問・約30秒で判定できます。</p>
       <div class="shindan">
         <div id="sh-quiz">
           <div class="sh-top">
@@ -1115,7 +1264,7 @@
   <section id="reserve" data-sec="reserve">
     <div class="wrap">
       <h2 style="text-align:center">発売前の事前登録で、10%オフ。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoはいま発売準備中です。<br>事前登録いただいた方には、発売と同時に10%オフの購入リンクをメールでお送りします。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoはいま発売準備中です。<br>事前登録いただいた方には、<br>発売と同時に10%オフの購入リンクをメールでお送りします。</p>
       <div class="rsv">
         <div class="rsv-off"><span class="was">¥4,980</span><span class="now">¥4,482</span><span class="tag">10%オフ</span></div>
         <p class="rsv-sub">事前登録の方だけの発売時価格（税込）</p>
@@ -1177,7 +1326,7 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ 安全性">「AIが安全に触れる」の根拠は何ですか？</summary>
-          <div class="a">全機能にユニットテスト（259件）があり、配信原稿はgitと配信DBの全一致が機械検証されます。<br>データベースの変更は追記のみの規約で、障害は監査ページに自動記録されます。<br>さらに一斉送信のような取り返しのつかない操作は「AIは下書きまで、実行は人間」という憲法を同梱しています。<br>AIが壊したらすぐ分かる仕組みと、壊せない領域の線引きを最初から備えています。</div>
+          <div class="a">全機能にユニットテスト（498件）があり、配信原稿はgitと配信DBの全一致が機械検証されます。<br>データベースの変更は追記のみの規約で、障害は監査ページに自動記録されます。<br>さらに一斉送信のような取り返しのつかない操作は「AIは下書きまで、実行は人間」という憲法を同梱しています。<br>AIが壊したらすぐ分かる仕組みと、壊せない領域の線引きを最初から備えています。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ マーケ相談">マーケティングの相談もできますか？</summary>
@@ -1362,20 +1511,26 @@
   var box = document.getElementById('hero-car');
   if(!box) return;
   var track = document.getElementById('car-track');
-  var tabs = Array.prototype.slice.call(box.querySelectorAll('.car-tab'));
   var slides = Array.prototype.slice.call(box.querySelectorAll('.car-slide'));
+  var tabs = Array.prototype.slice.call(box.querySelectorAll('.side-tab, .car-tab'));
   var idx = 0, timer = null, stopped = false;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function show(k){
-    idx = (k + tabs.length) % tabs.length;
+    idx = (k + slides.length) % slides.length;
     track.style.transform = 'translateX(-' + (idx * 100) + '%)';
-    tabs.forEach(function(t, j){ t.setAttribute('aria-selected', j === idx ? 'true' : 'false'); });
+    var cur = slides[idx].id;
+    tabs.forEach(function(t){ t.setAttribute('aria-selected', t.getAttribute('aria-controls') === cur ? 'true' : 'false'); });
     slides.forEach(function(s, j){ s.setAttribute('aria-hidden', j === idx ? 'false' : 'true'); });
   }
   function halt(){ if(timer){ clearInterval(timer); timer = null; } }
   function play(){ if(still || stopped || timer) return; timer = setInterval(function(){ show(idx + 1); }, 5000); }
-  tabs.forEach(function(t, j){
-    t.addEventListener('click', function(){ stopped = true; halt(); show(j); });
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      stopped = true; halt();
+      var id = t.getAttribute('aria-controls');
+      var k = slides.findIndex(function(s){ return s.id === id; });
+      if(k >= 0) show(k);
+    });
   });
   box.addEventListener('mouseenter', halt);
   box.addEventListener('mouseleave', play);
