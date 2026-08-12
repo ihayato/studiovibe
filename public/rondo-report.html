@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rondo 不具合・エラー報告 | βテスターフェーズの報告窓口</title>
+<meta name="description" content="Rondo（βテスターフェーズ）の不具合・エラー報告フォーム。いただいた報告は開発にそのまま届き、以後の改善に反映します。">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://vibe.co.jp/rondo-report">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20260812" data-page="rondo-report" defer></script>
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --glass-strong:rgba(255,255,255,.86);
+    --hair:#E3E7EF; --hair-strong:#D3D9E4;
+    --hi:inset 0 1px 0 rgba(255,255,255,.85);
+    --shadow:0 18px 50px -20px rgba(58,80,140,.20), 0 4px 14px -10px rgba(58,80,140,.10);
+    --ink:#17181C; --dim:#525863; --note:#7B838F;
+    --accent:#2E5CE6; --accent-soft:rgba(46,92,230,.10);
+    --ok:#178A50; --ok-soft:rgba(23,138,80,.10);
+    --warn:#9A6700; --warn-soft:rgba(154,103,0,.10);
+    --bad:#C9372C; --bad-soft:rgba(201,55,44,.08);
+    --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --r-btn:10px; --r-card:18px;
+    --w:680px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(760px 520px at 14% -8%, rgba(46,92,230,.07), transparent 62%),
+      radial-gradient(920px 660px at 96% 12%, rgba(96,146,224,.08), transparent 60%),
+      var(--bg)}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--hair);background:rgba(255,255,255,.6)}
+  .head-in{display:flex;align-items:center;gap:10px;padding:14px 24px;max-width:1080px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink)}
+  .logo-mark{width:28px;height:28px;display:block}
+  .logo .sub{font-size:13px;font-weight:500;color:var(--note)}
+  .hero{padding:56px 0 8px}
+  h1{font-size:clamp(22px,3.8vw,28px);line-height:1.5;font-weight:700}
+  .lede{color:var(--dim);font-size:15px;margin-top:14px}
+  .beta-pill{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--warn);background:var(--warn-soft);padding:3px 10px;border-radius:99px;margin-bottom:14px}
+  section{padding:36px 0 64px}
+  .card{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);
+        box-shadow:var(--shadow),var(--hi);padding:28px 28px 32px}
+  @media(max-width:560px){ .card{padding:22px 16px 26px} }
+  label.t{display:block;font-weight:700;font-size:15px;margin-top:22px}
+  label.t:first-child{margin-top:0}
+  .hint{font-size:13px;color:var(--note);margin-top:2px}
+  input[type=email], input[type=text], select, textarea{
+    width:100%;margin-top:10px;padding:12px 14px;font-family:var(--sans);font-size:15px;color:var(--ink);
+    background:#fff;border:1px solid var(--hair-strong);border-radius:var(--r-btn);
+    transition:border-color 140ms, box-shadow 140ms}
+  input:focus, select:focus, textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  textarea{min-height:140px;resize:vertical;line-height:1.7}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23525863' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;
+       border-radius:var(--r-btn);font-family:var(--sans);font-size:15px;font-weight:600;
+       cursor:pointer;border:none;background:var(--ink);color:#fff;box-shadow:0 10px 26px -12px rgba(23,24,28,.55);
+       transition:transform 140ms ease-out}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:disabled{opacity:.55;cursor:default;transform:none}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .submit-row{margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .rp-err{font-size:14px;color:var(--bad);background:var(--bad-soft);border:1px solid rgba(201,55,44,.2);border-radius:10px;padding:10px 14px}
+  .done{display:none;margin-top:8px}
+  .done.show{display:block}
+  .done .st{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok);background:var(--ok-soft);padding:3px 10px;border-radius:99px;margin-bottom:10px}
+  footer{border-top:1px solid var(--hair);padding:20px 24px;text-align:center}
+  footer span{font-size:12.5px;color:var(--note)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <a class="logo" href="/rondo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo <span class="sub">不具合・エラー報告</span></a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <span class="beta-pill">βテスターフェーズ</span>
+      <h1>不具合・エラーの報告</h1>
+      <p class="lede">Rondoはいま、βテスター向けの先行販売期間です。<br>エラーや気になる点があれば、このフォームからお知らせください。<br>報告は開発にそのまま届き、以後の改善に反映します。<br>※報告への個別返信・個別サポートは行っていません。</p>
+    </div>
+
+    <section>
+      <form id="rp-form" class="card" novalidate>
+        <label class="t" for="rp-email">購入時のメールアドレス</label>
+        <input type="email" id="rp-email" inputmode="email" autocomplete="email" placeholder="you@example.com" required data-rondo-label="報告 メール入力">
+
+        <label class="t" for="rp-cat">分類</label>
+        <select id="rp-cat" data-rondo-label="報告 分類">
+          <option value="setup">セットアップ</option>
+          <option value="mail">メール配信</option>
+          <option value="line">LINE配信</option>
+          <option value="admin">管理画面</option>
+          <option value="other" selected>その他</option>
+        </select>
+
+        <label class="t" for="rp-body">報告内容</label>
+        <p class="hint">何をしたら、何が起きたか。エラーメッセージがあればそのまま貼り付けてください（10文字以上）。</p>
+        <textarea id="rp-body" required minlength="10" maxlength="4000" placeholder="例: SETUP.mdの手順3でdeploy:contentsを実行したら、次のエラーが出ました。..." data-rondo-label="報告 内容"></textarea>
+
+        <label class="t" for="rp-env">環境（任意）</label>
+        <p class="hint">OS・Nodeのバージョンなど。分かる範囲で大丈夫です。</p>
+        <input type="text" id="rp-env" maxlength="500" placeholder="例: Windows 11 / Node 24" data-rondo-label="報告 環境">
+
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="submit-row">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="light"></div>
+          <p class="rp-err" id="rp-err" hidden></p>
+          <button class="btn" type="submit" id="rp-btn" data-rondo-label="CTA 報告送信">報告を送る</button>
+        </div>
+      </form>
+
+      <div class="card done" id="rp-done">
+        <span class="st">送信完了</span>
+        <h1 style="font-size:20px">報告を受け取りました。ありがとうございます。</h1>
+        <p class="lede">いただいた内容は開発にそのまま届いています。<br>βフェーズのRondoは、こうした報告で良くなっていきます。</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><span>© 2026 Studio VIBE / Rondo</span></footer>
+
+<script>
+document.getElementById('rp-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  var form = this;
+  if(!form.checkValidity()){ form.reportValidity(); return; }
+  var btn = document.getElementById('rp-btn');
+  var err = document.getElementById('rp-err');
+  err.hidden = true;
+  var tk = (form.querySelector('[name="cf-turnstile-response"]') || {}).value || '';
+  if(!tk){ err.textContent = 'ボット確認の読み込みを待ってから、もう一度お試しください。'; err.hidden = false; return; }
+  btn.disabled = true; btn.textContent = '送信中…';
+  try{
+    var res = await fetch('/api/rondo-report', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('rp-email').value.trim(),
+        category: document.getElementById('rp-cat').value,
+        body: document.getElementById('rp-body').value.trim(),
+        env: document.getElementById('rp-env').value.trim(),
+        turnstileToken: tk,
+        website: form.querySelector('[name="website"]').value
+      })
+    });
+    var d = await res.json().catch(function(){ return {}; });
+    if(res.ok && d.ok){
+      form.style.display = 'none';
+      document.getElementById('rp-done').classList.add('show');
+      return;
+    }
+    err.textContent = d.error || '送信に失敗しました。時間をおいてお試しください。';
+    err.hidden = false;
+  }catch(_){
+    err.textContent = '送信に失敗しました。通信環境をご確認ください。';
+    err.hidden = false;
+  }
+  btn.disabled = false; btn.textContent = '報告を送る';
+  if(window.turnstile){ try{ window.turnstile.reset(); }catch(_){} }
+});
+</script>
+
+</body>
+</html>
