@@ -76,7 +76,7 @@
     box-shadow:var(--shadow)}
   @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
     .costcard,.loopcard,.fit-col,.env,.rsv,.manifest,.use-card,.faq-panel,.itch-list,.shot,
-    header,.proof,.price-sec,footer,.hero-pill{background:rgba(255,255,255,.93)}
+    header,.price-sec,footer,.hero-pill{background:rgba(255,255,255,.93)}
   }
 
   /* ボタン */
@@ -304,10 +304,6 @@
   .car-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
   /* 証拠チップ帯 */
-  .proof{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:var(--glass-band);padding:18px 0}
-  .proof-in{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:center;max-width:var(--w);margin:0 auto;padding:0 24px}
-  .proof-in span{font-family:var(--mono);font-size:12.5px;color:var(--dim);display:flex;align-items:center;gap:8px}
-  .proof-in b{color:var(--ink);font-weight:600}
 
   /* 逆転セクション */
   .flip{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
@@ -862,18 +858,6 @@
     </figure>
   </section>
 
-  <!-- 証拠チップ帯 -->
-  <div class="proof" data-sec="proof">
-    <div class="proof-in">
-      <span><b>イケハヤの実務</b>で本番稼働中</span>
-      <span><b>FableクラスAI</b>前提の上級者向けOS</span>
-      <span>チャネルを<b>接続して増やせる</b>統合ダッシュボード</span>
-      <span>顧客台帳 <b>3,328人</b>を名寄せ運用中</span>
-      <span>ユニットテスト <b>498件</b></span>
-      <span>原稿は <b>git ⇔ 配信DB</b> 全一致検証</span>
-    </div>
-  </div>
-
   <!-- 3つの逆転 -->
   <section id="flips" data-rondo-click-sec="flips">
     <div class="wrap">
@@ -921,7 +905,7 @@
         </div>
         <div>
           <p class="flip-kicker">実演</p>
-          <h2>頼むと、テストが通ってから<br>本番に反映。</h2>
+          <h2>頼むだけで、本番反映まで自動。<br>安全確認つき。</h2>
           <div class="flip-body">
             <p>変更のたびに自動テストが走り、<b>壊れていないことを機械的に確かめてから反映</b>されます。<br><b>見た目を変えるのも自由自在</b>です。</p>
           </div>
