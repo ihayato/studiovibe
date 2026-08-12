@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const { email, fableEnv, stepExperience, mediaUrls, domain, turnstileToken, website } = req.body || {};
+    const { email, fableEnv, stepExperience, mediaUrls, domain, selfSetup, turnstileToken, website } = req.body || {};
 
     // honeypot: botには合否だけ返して黙って捨てる(rondo側にも同じガードがあるがここで止める)
     if (website) {
@@ -70,6 +70,7 @@ export default async function handler(req, res) {
                 stepExperience: String(stepExperience || '').slice(0, 2000),
                 mediaUrls: (Array.isArray(mediaUrls) ? mediaUrls : []).slice(0, 10).map(u => String(u).slice(0, 300)),
                 domain: String(domain || '').slice(0, 200),
+                selfSetup: selfSetup === true,
                 source: 'vibe-lp',
             }),
         });
