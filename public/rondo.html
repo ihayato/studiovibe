@@ -312,6 +312,11 @@
   /* 逆転セクション */
   .flip{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
   .flip+.flip{margin-top:112px}
+  .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tri-card{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow),var(--hi);padding:26px 24px}
+  .tri-card h2{font-size:19px;line-height:1.55;margin:6px 0 10px}
+  .tri-card p:last-child{font-size:14px;color:var(--dim);line-height:1.8}
+  @media(max-width:900px){ .tri{grid-template-columns:1fr} }
   .flip.rev .flip-visual{order:-1}
   @media(max-width:900px){
     .flip{grid-template-columns:1fr;gap:32px}
@@ -873,36 +878,21 @@
   <section id="flips" data-rondo-click-sec="flips">
     <div class="wrap">
 
-      <div class="flip" data-sec="own">
-        <div>
+      <div class="tri">
+        <div class="tri-card">
           <p class="flip-kicker">逆転 その一</p>
           <h2>SaaSよりずっと自由に、<br>あなただけの基盤を。</h2>
-          <div class="flip-body">
-            <p>SaaSは便利ですが、決められた機能の枠からは出られません。<br><b>その不便が嫌で、イケハヤは自作しました</b>。</p>
-            <p>Rondoは正真正銘あなたのもの。<br>画面も、配信ルールも、レポートも、<b>気に入らないところは全部作り変えられます</b>。<br>毎月の利用料はなく、かかるのは配信量に応じた実費だけです。</p>
-          </div>
+          <p>Rondoは正真正銘あなたのもの。<br>気に入らないところは<b>全部作り変えられます</b>。<br>月額はなく、かかるのは配信の実費だけです。</p>
         </div>
-        <div class="flip-visual">
-          <div class="costcard">
-            <div class="t">かかるお金を、全部書くと</div>
-            <div class="s">例: 月額1万円の配信SaaSと比べた場合</div>
-            <div class="ledger">
-              <div class="ledger-col">
-                <div class="lh">月額SaaSを借りる</div>
-                <div class="lr"><span>基本料</span><span class="mono">月 ¥10,000</span></div>
-                <div class="lr"><span>5年つづけると</span><span class="mono bad">¥600,000</span></div>
-                <div class="lr"><span>仕様が合わないとき</span><span>我慢して使う</span></div>
-              </div>
-              <div class="ledger-col">
-                <div class="lh">Rondoを所有する</div>
-                <div class="lr"><span>Rondo本体</span><span class="mono">¥4,980 一度きり</span></div>
-                <div class="lr"><span>Cloudflare</span><span class="mono">¥0〜 無料枠</span></div>
-                <div class="lr"><span>Resend メール配信</span><span class="mono">¥0〜 従量</span></div>
-                <div class="lr"><span>Claude Code等</span><span>手持ちの契約を流用</span></div>
-              </div>
-            </div>
-            <div class="ledger-note">リストが育てば従量の実費は増えます。<br>それでも毎月の固定費ではなく、使ったぶんだけの実費です。</div>
-          </div>
+        <div class="tri-card">
+          <p class="flip-kicker">逆転 その二</p>
+          <h2>やりたいことは、<br>あなたのAIに日本語で頼むだけ。</h2>
+          <p>本質は<b>閲覧・把握用のダッシュボード</b>。<br>中身の作り込みは、あなたがいつも使っている<b>Claude CodeやCodex</b>の仕事です。</p>
+        </div>
+        <div class="tri-card">
+          <p class="flip-kicker">逆転 その三</p>
+          <h2>コンテンツを<br>自動投稿＆自動改善。</h2>
+          <p><b>件名A/Bの自動判定</b>、成績の還流、<b>週次の調律レポート</b>。<br>改善は感想ではなく、仕組みで回ります。</p>
         </div>
       </div>
 
@@ -930,44 +920,10 @@
           </div>
         </div>
         <div>
-          <p class="flip-kicker">逆転 その二</p>
-          <h2>やりたいことは、<br>あなたのAIに日本語で頼むだけ。</h2>
+          <p class="flip-kicker">実演</p>
+          <h2>頼むと、テストが通ってから<br>本番に反映。</h2>
           <div class="flip-body">
-            <p>Rondoの本質は、マーケティング戦略を統括管理する<b>閲覧・把握用のダッシュボード</b>です。<br>中身を変え、作り込んでいくのは、<b>あなたがいつも使っているFableクラスのClaude CodeやCodex</b>が担当します。</p>
-            <p>「1通目を書き換えて」「LINEに診断コンテンツを足して」と、日本語で頼んでください。<br>変更のたびに自動テストが走り、<b>壊れていないことを機械的に確かめてから本番に反映</b>されます。<br><b>見た目を変えるのも自由自在</b>です。</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flip" data-sec="improve">
-        <div>
-          <p class="flip-kicker">逆転 その三</p>
-          <h2>コンテンツを<br>自動投稿＆自動改善。</h2>
-          <div class="flip-body">
-            <p>Rondoはコンテンツを自動で分析し、<b>自動改善＆投稿するエンジン</b>を備えています。</p>
-          </div>
-          <ul class="feat">
-            <li><span><b>件名A/Bの自動判定</b>。勝者は昇格し、負けた件名は引退します。</span></li>
-            <li><span><b>投稿成績の還流</b>。反応の良い切り口が翌日の投稿選定に反映されます。</span></li>
-            <li><span><b>週次の調律レポート</b>。全チャネルの成績と要注意箇所が毎週届きます。</span></li>
-            <li><span><b>監査ページ</b>。定時ジョブの健康と障害を自動で見張り、記録します。</span></li>
-          </ul>
-        </div>
-        <div class="flip-visual">
-          <div class="loopcard">
-            <svg class="loop-svg" viewBox="0 0 300 300" role="img" aria-label="改善ループの図。配信、計測、判定、反映が円環で回り続ける。">
-              <circle cx="150" cy="150" r="92" fill="none" stroke="#C9D4E8" stroke-width="2"/>
-              <g class="loop-orbit">
-                <circle cx="150" cy="58" r="5" fill="#2E5CE6"/>
-              </g>
-              <g font-family="IBM Plex Sans JP,sans-serif" font-size="14" font-weight="600" fill="#17181C" text-anchor="middle">
-                <g><rect x="118" y="28" width="64" height="28" rx="8" fill="#FFFFFF" stroke="#AABAD6"/><text x="150" y="47">配信</text></g>
-                <g><rect x="226" y="136" width="64" height="28" rx="8" fill="#FFFFFF" stroke="#AABAD6"/><text x="258" y="155">計測</text></g>
-                <g><rect x="118" y="244" width="64" height="28" rx="8" fill="#FFFFFF" stroke="#AABAD6"/><text x="150" y="263">判定</text></g>
-                <g><rect x="10" y="136" width="64" height="28" rx="8" fill="#FFFFFF" stroke="#AABAD6"/><text x="42" y="155">反映</text></g>
-              </g>
-              <text x="150" y="156" font-family="IBM Plex Mono,monospace" font-size="12" fill="#7B838F" text-anchor="middle">毎週まわる</text>
-            </svg>
+            <p>変更のたびに自動テストが走り、<b>壊れていないことを機械的に確かめてから反映</b>されます。<br><b>見た目を変えるのも自由自在</b>です。</p>
           </div>
         </div>
       </div>
@@ -1065,20 +1021,6 @@
           <div class="itch-a">
             <div class="name">自動の見張り番</div>
             <p>定時ジョブの監視・障害記録・毎朝の送達テスト・日次バックアップ。<br><b>異常はDiscordに即通知</b>されます。</p>
-          </div>
-        </div>
-        <div class="itch-row">
-          <div class="itch-q">Google Analyticsを見ても、次の一手が分からない</div>
-          <div class="itch-a">
-            <div class="name">局面検知レコメンド</div>
-            <p>立ち上げ・成長・運用の局面をデータから判定し、<b>「今やるべきこと」だけ</b>を提示します。</p>
-          </div>
-        </div>
-        <div class="itch-row">
-          <div class="itch-q">メールの到達率が静かに下がっていく</div>
-          <div class="itch-a">
-            <div class="name">休眠整理</div>
-            <p>90日反応のない読者は自動で外し、戻れば即再開。<br><b>「届く」という資産</b>を仕組みで守ります。</p>
           </div>
         </div>
       </div>
@@ -1211,34 +1153,8 @@
     </div>
   </section>
 
-  <!-- 価格 -->
-  <section class="price-sec" id="price" data-sec="price">
-    <div class="wrap price-grid">
-      <div>
-        <p class="price-tag">βテスター先行販売・買い切り・継続課金なし</p>
-        <div class="price-big">¥4,980<small>（税込）</small></div>
-        <p class="hero-note" style="margin-top:4px">正式版価格は¥9,800を予定。<br>βテスター価格は、この先行販売の期間だけです。</p>
-        <ul class="price-notes">
-          <li>ソースコード一式と導入手順書</li>
-          <li>あなたのアカウントで動くので月額利用料なし</li>
-          <li>事業に合わせた改造は自由。正本はあなたの手元に</li>
-        </ul>
-        <div class="hero-ctas" style="margin-top:28px">
-          <a class="btn ghost" href="#shindan" data-rondo-label="CTA 価格上の適性診断">対象ユーザーか診断を受ける（7問30秒）</a>
-        </div>
-        <div class="hero-ctas" style="margin-top:12px">
-          <a class="btn primary" href="#reserve" data-rondo-label="CTA 価格先行販売" data-rondo-cta="reserve">先行販売に申し込む（審査制）</a>
-        </div>
-        <p class="hero-note">先行販売中です。<br>審査制のため、購入条件を満たす方にのみ販売します。<br>事前登録済みの方は、審査通過で10%オフが適用されます。</p>
-      </div>
-      <div class="env">
-        <div class="reco"><b>開発AIのLLMモデルはFableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）を強く推奨します。</b><br>RondoはFableで開発し、運用しています。<br>それ以外のモデル（Opus 5, GPT 5.6など）では、導入やカスタマイズに失敗する可能性があるのでご注意ください。</div>
-        <div class="up">サポート窓口はありません。<br>導入・運用・トラブル対応は、あなたとあなたの開発AIで完結させる上級者向け製品です。<br>デジタル商品の性質上、購入後の返金には一切応じられません。<br>アップデート保証もありません。<br>メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 先行販売(審査制) -->
+  <!-- 価格と先行販売(審査制)。#priceアンカーはヘッダーナビ用に温存 -->
+  <div id="price" aria-hidden="true" style="scroll-margin-top:72px"></div>
   <section id="reserve" data-sec="reserve">
     <div class="wrap">
       <h2 style="text-align:center">先行販売、審査制で始めました。</h2>
@@ -1254,14 +1170,22 @@
           <li>条件5: サポートに頼らず、開発AIとともに自力でセットアップ・運用することを理解していること</li>
         </ul>
         <div class="hero-ctas" style="justify-content:center;margin-top:22px">
+          <a class="btn ghost" href="#shindan" data-rondo-label="CTA 価格上の適性診断">対象ユーザーか診断を受ける（7問30秒）</a>
+        </div>
+        <div class="hero-ctas" style="justify-content:center;margin-top:12px">
           <a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 先行販売申込" data-rondo-cta="apply">先行販売に申し込む（審査は自動・約1分）</a>
         </div>
         <ul class="rsv-notes">
           <li><span>現在はβテスターフェーズの先行販売です。不具合・エラーは<a href="/rondo-report" data-rondo-label="reserve β報告">報告フォーム</a>で受け付けます（個別サポートはありません）</span></li>
+          <li>ソースコード一式と導入手順書つき。改造は自由、正本はあなたの手元に残ります</li>
           <li>審査は申込内容にもとづく自動判定です。条件を満たさない場合は購入できません</li>
           <li>決済はStripeの決済ページで行います。カード情報が当サイトに渡ることはありません</li>
           <li>デジタル商品の性質上、決済完了後の返金には応じられません</li>
         </ul>
+      </div>
+      <div class="env" style="max-width:640px;margin:16px auto 0">
+        <div class="reco"><b>開発AIのLLMモデルはFableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）を強く推奨します。</b><br>RondoはFableで開発し、運用しています。<br>それ以外のモデル（Opus 5, GPT 5.6など）では、導入やカスタマイズに失敗する可能性があるのでご注意ください。</div>
+        <div class="up">サポート窓口はありません。<br>導入・運用・トラブル対応は、あなたとあなたの開発AIで完結させる上級者向け製品です。<br>デジタル商品の性質上、購入後の返金には一切応じられません。<br>アップデート保証もありません。<br>メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
       </div>
     </div>
   </section>
