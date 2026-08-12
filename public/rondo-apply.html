@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rondo 先行販売の申込 | 審査制・買い切り¥4,980</title>
+<meta name="description" content="マーケティングOS「Rondo」の先行販売申込ページ。購入条件4つを確認し、審査（自動判定・約1分）を通過するとそのまま決済に進めます。">
+<meta property="og:title" content="Rondo 先行販売の申込 | 審査制・買い切り¥4,980">
+<meta property="og:description" content="購入条件を満たす方だけに販売する先行販売。審査は申込フォームの内容から自動で判定します。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
+<meta property="og:site_name" content="Studio VIBE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/rondo-assets/rondo-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta property="og:url" content="https://vibe.co.jp/rondo-apply">
+<link rel="canonical" href="https://vibe.co.jp/rondo-apply">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20260812" data-page="rondo-apply" defer></script>
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --glass:rgba(255,255,255,.72);
+    --glass-strong:rgba(255,255,255,.86);
+    --glass-band:#FAFBFD;
+    --hair:#E3E7EF; --hair-strong:#D3D9E4;
+    --hi:inset 0 1px 0 rgba(255,255,255,.85);
+    --orange:#E8622C;
+    --serif:Georgia,"Times New Roman",serif;
+    --shadow:0 18px 50px -20px rgba(58,80,140,.20), 0 4px 14px -10px rgba(58,80,140,.10);
+    --shadow-big:0 60px 120px -48px rgba(38,56,110,.35), 0 24px 56px -32px rgba(38,56,110,.22), 0 2px 8px -2px rgba(38,56,110,.10);
+    --ink:#17181C; --dim:#525863; --note:#7B838F;
+    --hover:rgba(255,255,255,.55);
+    --accent:#2E5CE6; --accent-soft:rgba(46,92,230,.10);
+    --ok:#178A50; --ok-soft:rgba(23,138,80,.10);
+    --warn:#9A6700; --warn-soft:rgba(154,103,0,.10);
+    --bad:#C9372C; --bad-soft:rgba(201,55,44,.08);
+    --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --r-btn:10px; --r-card:18px;
+    --w:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(760px 520px at 14% -8%, rgba(46,92,230,.07), transparent 62%),
+      radial-gradient(920px 660px at 96% 12%, rgba(96,146,224,.08), transparent 60%),
+      var(--bg)}
+  a{color:var(--accent);text-decoration:none}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+  h1{font-size:clamp(24px,4vw,32px);line-height:1.5;font-weight:700;letter-spacing:.01em}
+  .lede{color:var(--dim);font-size:15.5px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;
+       border-radius:var(--r-btn);font-family:var(--sans);font-size:15px;font-weight:600;
+       cursor:pointer;border:none;transition:transform 140ms ease-out,box-shadow 140ms ease-out,background 140ms}
+  .btn.primary{background:var(--ink);color:#fff;box-shadow:0 10px 26px -12px rgba(23,24,28,.55)}
+  .btn.primary:hover{transform:translateY(-1px)}
+  .btn.primary:disabled{opacity:.55;cursor:default;transform:none}
+  .btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--hair-strong)}
+  .btn.ghost:hover{background:rgba(255,255,255,.8);color:var(--ink)}
+  .btn:focus-visible, a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.60);
+         backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+         border-bottom:1px solid var(--hair)}
+  .head-in{display:flex;align-items:center;gap:28px;padding:14px 24px;max-width:1080px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink)}
+  .logo-mark{width:28px;height:28px;display:block;flex:none}
+  .logo .sub{font-size:13px;font-weight:500;color:var(--note)}
+  .head-back{margin-left:auto;font-size:14px;font-weight:500;color:var(--dim);padding:8px 12px;border-radius:var(--r-btn)}
+  .head-back:hover{background:var(--hover);color:var(--ink)}
+  @media(max-width:720px){ .logo .sub{display:none} }
+
+  .hero{padding:64px 0 8px}
+  .crumb{font-size:13px;font-weight:600;color:var(--note);margin-bottom:18px}
+  .crumb a{color:var(--note)}
+  .crumb a:hover{color:var(--ink)}
+  .hero .lede{margin-top:16px}
+  .price-line{margin-top:18px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .price-line .num{font-family:var(--mono);font-size:30px;font-weight:600}
+  .price-line .tag{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px}
+  .price-line .off{font-size:13px;color:var(--note)}
+
+  section{padding:44px 0}
+  .card{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);
+        box-shadow:var(--shadow),var(--hi)}
+  .form-card{padding:32px 32px 36px}
+  @media(max-width:560px){ .form-card{padding:24px 18px 28px} }
+
+  .fgroup{padding:22px 0;border-bottom:1px solid var(--hair)}
+  .fgroup:first-child{padding-top:0}
+  .fgroup:last-of-type{border-bottom:none}
+  .fgroup .cond{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:99px;margin-bottom:8px}
+  .fgroup label.t, .fgroup .t{display:block;font-weight:700;font-size:15.5px}
+  .fgroup .hint{font-size:13px;color:var(--note);margin-top:4px;line-height:1.7}
+  input[type=email], input[type=url], input[type=text], select, textarea{
+    width:100%;margin-top:12px;padding:12px 14px;font-family:var(--sans);font-size:15px;color:var(--ink);
+    background:#fff;border:1px solid var(--hair-strong);border-radius:var(--r-btn);
+    transition:border-color 140ms, box-shadow 140ms}
+  input:focus, select:focus, textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  textarea{min-height:96px;resize:vertical;line-height:1.7}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23525863' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  .urls{display:grid;gap:10px;margin-top:12px}
+  .urls input{margin-top:0}
+  .chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--dim);cursor:pointer}
+  .chk input{width:18px;height:18px;margin-top:4px;flex:none;accent-color:var(--accent)}
+
+  .notice{margin-top:8px;padding:16px 20px;border-radius:12px;
+    background:var(--warn-soft);border:1px solid rgba(154,103,0,.18)}
+  .notice .ntag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--warn);margin-bottom:6px}
+  .notice p, .notice li{font-size:14px;color:var(--warn);line-height:1.8}
+  .notice ul{padding-left:18px}
+
+  .submit-row{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .ap-err{font-size:14px;color:var(--bad);background:var(--bad-soft);border:1px solid rgba(201,55,44,.2);border-radius:10px;padding:10px 14px}
+  .result{padding:28px 32px;margin-top:8px}
+  .result h2{font-size:20px;font-weight:700;margin-bottom:10px}
+  .result p{font-size:15px;color:var(--dim)}
+  .result ul{margin-top:12px;padding-left:20px;font-size:14.5px;color:var(--dim)}
+  .result .st{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin-bottom:12px}
+  .result .st.pass{color:var(--ok);background:var(--ok-soft)}
+  .result .st.fail{color:var(--warn);background:var(--warn-soft)}
+  .result .btn{margin-top:18px}
+
+  footer{border-top:1px solid var(--hair);padding:36px 0 44px;margin-top:40px}
+  .foot-in{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .foot-links{display:flex;gap:16px;flex-wrap:wrap}
+  .foot-links a{font-size:13px;color:var(--note)}
+  .foot-links a:hover{color:var(--ink)}
+  .foot-copy{margin-left:auto;font-size:12.5px;color:var(--note)}
+  @media(max-width:720px){ .foot-copy{margin-left:0} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <a class="logo" href="/rondo" data-rondo-label="申込 ヘッダーロゴ"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo <span class="sub">先行販売の申込</span></a>
+    <a class="head-back" href="/rondo" data-rondo-label="申込 Rondoとは">Rondoとは</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="crumb"><a href="/rondo">Rondo</a> / 先行販売の申込</p>
+      <h1>先行販売の審査に申し込む</h1>
+      <p class="lede">Rondoの先行販売は審査制です。<br>下の4つの購入条件を確認のうえ、フォームを送信してください。<br>審査は申込内容から自動で判定し、通過するとそのまま決済ページへ進めます。</p>
+      <div class="price-line">
+        <span class="num">¥4,980</span>
+        <span class="tag">買い切り・税込</span>
+        <span class="off">事前登録済みの方は、審査通過で10%オフ（¥4,482）が自動適用されます。</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <form id="ap-form" class="card form-card" novalidate>
+        <div class="fgroup">
+          <span class="cond">共通</span>
+          <label class="t" for="ap-email">メールアドレス</label>
+          <p class="hint">審査結果・決済リンク・納品のご案内をお送りします。</p>
+          <input type="email" id="ap-email" name="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required data-rondo-label="申込 メール入力">
+        </div>
+
+        <div class="fgroup">
+          <span class="cond">条件 1</span>
+          <label class="t" for="ap-fable">Fableクラスの開発AIが使える環境</label>
+          <p class="hint">Rondoの導入・運用・カスタマイズはFableクラスのAI（Claude Fable 5など）が担当します。</p>
+          <select id="ap-fable" name="fableEnv" required data-rondo-label="申込 Fable環境">
+            <option value="">選択してください</option>
+            <option value="Claude Code（Max/Teamプランなど）">Claude Code（Max/Teamプランなど）で使っている</option>
+            <option value="Claude API・その他のFableクラス環境">Claude APIやその他の環境でFableクラスを使っている</option>
+          </select>
+          <label class="chk"><input type="checkbox" id="ap-fable-chk" required>Fableクラスの開発AIを自分で操作できます</label>
+        </div>
+
+        <div class="fgroup">
+          <span class="cond">条件 2</span>
+          <label class="t" for="ap-exp">ステップメールまたはステップLINE配信の経験</label>
+          <p class="hint">使用したツールと運用の内容を、1〜2文で書いてください（10文字以上）。</p>
+          <textarea id="ap-exp" name="stepExperience" required minlength="10" maxlength="2000" placeholder="例: MyASPでステップメール10通を2年運用しています。Lステップでの構築経験もあります。" data-rondo-label="申込 ステップ配信経験"></textarea>
+        </div>
+
+        <div class="fgroup">
+          <span class="cond">条件 3</span>
+          <span class="t">運用中のマーケティング媒体のURL（4つ以上）</span>
+          <p class="hint">X、Instagram、Threads、Facebook、YouTube、TikTok、note、Substack、LINE公式、Discord、メルマガ・ブログなど。同じプラットフォームの複数URLは1種類と数えます。メルマガは登録ページのURLで大丈夫です。</p>
+          <div class="urls">
+            <input type="url" name="mediaUrl" required placeholder="https://x.com/あなたのアカウント" aria-label="媒体URL 1" data-rondo-label="申込 媒体URL1">
+            <input type="url" name="mediaUrl" required placeholder="https://www.youtube.com/@あなたのチャンネル" aria-label="媒体URL 2" data-rondo-label="申込 媒体URL2">
+            <input type="url" name="mediaUrl" required placeholder="https://note.com/あなたのアカウント" aria-label="媒体URL 3" data-rondo-label="申込 媒体URL3">
+            <input type="url" name="mediaUrl" required placeholder="https://あなたのメルマガ登録ページ" aria-label="媒体URL 4" data-rondo-label="申込 媒体URL4">
+            <input type="url" name="mediaUrl" placeholder="5つ目以降は任意" aria-label="媒体URL 5" data-rondo-label="申込 媒体URL5">
+            <input type="url" name="mediaUrl" placeholder="6つ目（任意）" aria-label="媒体URL 6" data-rondo-label="申込 媒体URL6">
+          </div>
+        </div>
+
+        <div class="fgroup">
+          <span class="cond">条件 4</span>
+          <label class="t" for="ap-domain">独自ドメイン</label>
+          <p class="hint">メールの送信元に必須です。お持ちのドメイン名を入力してください（実在を自動確認します）。</p>
+          <input type="text" id="ap-domain" name="domain" required placeholder="example.com" autocomplete="off" data-rondo-label="申込 独自ドメイン">
+        </div>
+
+        <div class="fgroup">
+          <div class="notice">
+            <span class="ntag">申込前にご確認ください</span>
+            <ul>
+              <li>Rondoはサポート窓口のない上級者向け製品です。導入・運用・トラブル対応は、あなたとあなたの開発AIで完結させます。</li>
+              <li>デジタル商品の性質上、決済完了後の返金には一切応じられません。</li>
+              <li>買い切り商品のため、アップデート保証はありません。</li>
+              <li>販売者情報は<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="申込 特商法">特定商取引法に基づく表記</a>をご覧ください。</li>
+            </ul>
+          </div>
+          <label class="chk"><input type="checkbox" id="ap-agree" required>上記の注意事項（サポートなし・返金不可）を確認しました</label>
+        </div>
+
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="submit-row">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="light"></div>
+          <p class="ap-err" id="ap-err" hidden></p>
+          <button class="btn primary" type="submit" id="ap-btn" data-rondo-label="CTA 申込送信" data-rondo-cta="apply">審査に進む（自動判定・約1分）</button>
+          <p class="hint" style="text-align:center">送信すると、上の購入条件にもとづいて自動で審査します。<br>通過した場合はStripeの決済ページへ移動します。カード情報が当サイトに渡ることはありません。</p>
+        </div>
+      </form>
+
+      <div class="card result" id="ap-pass" hidden>
+        <span class="st pass">審査通過</span>
+        <h2>審査を通過しました。決済ページへ移動します。</h2>
+        <p>自動で移動しない場合は、下のボタンから進んでください。<br>同じ決済リンクをメールでもお送りしています（約72時間有効）。</p>
+        <a class="btn primary" id="ap-pay" href="#" data-rondo-label="CTA 決済へ進む" data-rondo-cta="checkout">決済ページへ進む</a>
+      </div>
+
+      <div class="card result" id="ap-fail" hidden>
+        <span class="st fail">見送り</span>
+        <h2>今回は、条件を満たしていることを確認できませんでした。</h2>
+        <p>次の項目が理由です。</p>
+        <ul id="ap-fail-reasons"></ul>
+        <p style="margin-top:14px">入力の誤りであれば、修正してもう一度お申し込みください。<br>条件がまだ揃っていない場合は、揃ってからのご購入をおすすめします。Rondoは逃げません。</p>
+        <a class="btn ghost" href="/rondo#reserve" data-rondo-label="申込 条件を見直す">購入条件をもう一度見る</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span class="logo"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo</span>
+    <nav class="foot-links">
+      <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="申込フッター 特商法">特定商取引法に基づく表記</a>
+      <a href="https://ikehaya.com/privacy/" target="_blank" rel="noopener" data-rondo-label="申込フッター プライバシー">プライバシーポリシー</a>
+      <a href="/rondo" data-rondo-label="申込フッター Rondoとは">Rondoとは</a>
+      <a href="/rondo-setup" data-rondo-label="申込フッター 導入の流れ">導入の流れ</a>
+      <a href="/contact" data-rondo-label="申込フッター お問い合わせ">お問い合わせ</a>
+    </nav>
+    <span class="foot-copy">© 2026 Studio VIBE / Rondo</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('ap-form').addEventListener('submit', async function(e){
+  e.preventDefault();
+  var form = this;
+  if(!form.checkValidity()){ form.reportValidity(); return; }
+  var btn = document.getElementById('ap-btn');
+  var err = document.getElementById('ap-err');
+  err.hidden = true;
+  var tk = (form.querySelector('[name="cf-turnstile-response"]') || {}).value || '';
+  if(!tk){ err.textContent = 'ボット確認の読み込みを待ってから、もう一度お試しください。'; err.hidden = false; return; }
+  var mediaUrls = Array.prototype.map.call(form.querySelectorAll('[name="mediaUrl"]'), function(i){ return i.value.trim(); })
+    .filter(function(v){ return v; });
+  btn.disabled = true; btn.textContent = '審査中…';
+  try{
+    var res = await fetch('/api/rondo-apply', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('ap-email').value.trim(),
+        fableEnv: document.getElementById('ap-fable').value,
+        stepExperience: document.getElementById('ap-exp').value.trim(),
+        mediaUrls: mediaUrls,
+        domain: document.getElementById('ap-domain').value.trim(),
+        turnstileToken: tk,
+        website: form.querySelector('[name="website"]').value
+      })
+    });
+    var d = await res.json().catch(function(){ return {}; });
+    if(res.ok && d.ok && d.verdict === 'passed' && d.checkoutUrl){
+      form.hidden = true;
+      var pass = document.getElementById('ap-pass');
+      document.getElementById('ap-pay').href = d.checkoutUrl;
+      pass.hidden = false;
+      pass.scrollIntoView({ block: 'center' });
+      setTimeout(function(){ window.location.href = d.checkoutUrl; }, 1200);
+      return;
+    }
+    if(res.ok && d.ok && d.verdict === 'rejected'){
+      form.hidden = true;
+      var fail = document.getElementById('ap-fail');
+      var ul = document.getElementById('ap-fail-reasons');
+      var reasons = (d.reasons || []);
+      ul.innerHTML = reasons.length
+        ? reasons.map(function(r){
+            var li = document.createElement('li');
+            li.textContent = r.label || r.code || '';
+            return li.outerHTML;
+          }).join('')
+        : '<li>申込内容をご確認ください。</li>';
+      fail.hidden = false;
+      fail.scrollIntoView({ block: 'center' });
+      return;
+    }
+    err.textContent = d.error || '送信に失敗しました。時間をおいてお試しください。';
+    err.hidden = false;
+  }catch(_){
+    err.textContent = '送信に失敗しました。通信環境をご確認ください。';
+    err.hidden = false;
+  }
+  btn.disabled = false; btn.textContent = '審査に進む（自動判定・約1分）';
+  if(window.turnstile){ try{ window.turnstile.reset(); }catch(_){} }
+});
+</script>
+
+</body>
+</html>
