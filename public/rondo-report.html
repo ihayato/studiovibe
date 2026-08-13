@@ -117,7 +117,8 @@
         <p class="hint">OS・Nodeのバージョンなど。分かる範囲で大丈夫です。</p>
         <input type="text" id="rp-env" maxlength="500" placeholder="例: Windows 11 / Node 24" data-rondo-label="報告 環境">
 
-        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <!-- honeypot: 意味のある名前(website等)はChrome自動入力が埋めて正規ユーザーを誤爆する -->
+        <input type="text" name="extra_field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="submit-row">
           <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="light"></div>
           <p class="rp-err" id="rp-err" hidden></p>
@@ -157,7 +158,7 @@ document.getElementById('rp-form').addEventListener('submit', async function(e){
         body: document.getElementById('rp-body').value.trim(),
         env: document.getElementById('rp-env').value.trim(),
         turnstileToken: tk,
-        website: form.querySelector('[name="website"]').value
+        extra_field: form.querySelector('[name="extra_field"]').value
       })
     });
     var d = await res.json().catch(function(){ return {}; });

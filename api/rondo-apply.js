@@ -17,10 +17,13 @@ export default async function handler(req, res) {
         return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const { email, fableEnv, stepExperience, mediaUrls, domain, selfSetup, turnstileToken, website } = req.body || {};
+    const { email, fableEnv, stepExperience, mediaUrls, domain, selfSetup, turnstileToken, website, extra_field: extraField } = req.body || {};
 
     // honeypot: botには合否だけ返して黙って捨てる(rondo側にも同じガードがあるがここで止める)
-    if (website) {
+    // 旧名websiteはChrome自動入力が埋めて正規ユーザーを誤爆した(2026-08-13)ため
+    // extra_fieldに改名。旧キーはキャッシュ済みページの移行期間ぶんだけ受ける。
+    if (website || extraField) {
+        console.warn('[rondo-apply] honeypot tripped', JSON.stringify({ legacyKey: !!website, email: String(email || '').slice(0, 254) }));
         return res.status(200).json({ ok: true, verdict: 'rejected', reasons: [] });
     }
 
@@ -47,9 +50,17 @@ export default async function handler(req, res) {
         );
         const turnstileData = await turnstileRes.json();
         if (!turnstileData.success) {
-            return res.status(400).json({ error: 'ボット判定に失敗しました。再度お試しください。' });
+            // 原因調査用: siteverifyのエラーコードをログに残す(トークン値そのものは出さない)
+            const codes = Array.isArray(turnstileData['error-codes']) ? turnstileData['error-codes'] : [];
+            console.warn('[rondo-apply] turnstile siteverify failed', JSON.stringify({ codes, tokenLen: String(turnstileToken).length }));
+            // 期限切れ/使い回し(記入に5分以上かかると起きる)は、やり直し手順つきの文言で案内する
+            const msg = codes.includes('timeout-or-duplicate')
+                ? 'ボット確認の有効期限が切れました。送信ボタン上のチェックがもう一度完了するのを待ってから、送信し直してください（入力内容は消えません）。'
+                : 'ボット判定に失敗しました。再度お試しください。';
+            return res.status(400).json({ error: msg });
         }
     } catch (err) {
+        console.error('[rondo-apply] turnstile siteverify error', err && err.message);
         return res.status(500).json({ error: 'ボット確認中にエラーが発生しました。時間をおいてお試しください。' });
     }
 
