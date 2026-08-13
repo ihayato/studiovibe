@@ -445,6 +445,7 @@
   .gallery-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:720px){ .gallery-2col{grid-template-columns:1fr} }
   .shot img{width:100%;height:auto}
+  .shot video{width:100%;height:auto;display:block;background:#0f1217}
   .shot figcaption{padding:10px 14px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--note)}
   .gallery-note{font-size:12.5px;color:var(--note);text-align:center}
 
@@ -1084,6 +1085,11 @@
           </div>
         </div>
         <div class="gallery">
+          <figure class="shot">
+            <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — 実演ツアー 9:57</span></div>
+            <video controls playsinline preload="none" poster="/rondo-assets/rondo-demo-poster.jpg" width="1284" height="862" src="/video/rondo-demo-tour.mp4"></video>
+            <figcaption>実演ムービー 9分57秒。<br>イケハヤが実物の管理画面を音声つきで案内します。</figcaption>
+          </figure>
           <div class="gallery-2col">
             <figure class="shot">
               <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — ステップメール</span></div>
