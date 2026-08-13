@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo | Fableユーザーのための、マーケティングOS</title>
-<meta name="description" content="Fableユーザーのための買い切りマーケティングOS。ステップメール、LINE配信、SNS、売上、顧客台帳を1つのダッシュボードに統合し、FableクラスのAI（Claude CodeやCodex）が運用する。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta name="description" content="Fableユーザーのための買い切りマーケティングOS。ステップメール、LINE配信、SNS、売上、顧客台帳を1つのダッシュボードに統合し、Fableで運用する。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
 <meta property="og:title" content="Rondo | Fableユーザーのための、マーケティングOS">
 <meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、Claude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
 <meta property="og:type" content="website">
@@ -598,6 +598,57 @@
     .need-row{grid-template-columns:1fr auto;gap:4px 14px}
     .need-desc{grid-column:1 / -1}
   }
+
+  /* 同梱物ツリー（#dist-tree・ターミナル面は.term-secと同じ#17181C系） */
+  #dist-tree .dt-term{margin-top:36px;background:#17181C;border-radius:24px;overflow:hidden;
+    box-shadow:0 18px 50px -20px rgba(58,80,140,.22)}
+  #dist-tree .dt-bar{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid #2A2C33}
+  #dist-tree .dt-dot{width:10px;height:10px;border-radius:50%;background:#3A3D45}
+  #dist-tree .dt-title{margin-left:6px;font-family:var(--mono);font-size:12px;color:#8A9098}
+  #dist-tree .dt-body{padding:22px 24px 26px;font-family:var(--mono);font-size:13.5px;line-height:2.05}
+  #dist-tree .dt-cmd{color:#8A9098;margin-bottom:10px}
+  #dist-tree .dt-cmd b{color:#C9CED6;font-weight:500}
+  #dist-tree .dt-row{display:flex;align-items:baseline;gap:14px;white-space:nowrap;width:100%}
+  #dist-tree button.dt-row{background:none;border:0;font:inherit;line-height:inherit;color:inherit;
+    text-align:left;cursor:pointer;padding:0;border-radius:6px}
+  #dist-tree button.dt-row:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  #dist-tree button.dt-row:hover .dt-name{text-decoration:underline;text-underline-offset:4px}
+  #dist-tree .dt-tree{color:#4A4F58}
+  #dist-tree .dt-caret{display:inline-block;width:14px;color:#8A9098;transition:transform 140ms ease-out}
+  #dist-tree [aria-expanded="true"] .dt-caret{transform:rotate(90deg)}
+  #dist-tree .dt-caret-pad{display:inline-block;width:14px}
+  #dist-tree .dt-name{color:#C9CED6}
+  #dist-tree .dt-name.dir{color:#FFFFFF;font-weight:500}
+  #dist-tree .dt-num{color:#8FA8F2;font-size:12.5px}
+  #dist-tree .dt-desc{color:#8A9098;font-size:12.5px;overflow:hidden;text-overflow:ellipsis}
+  #dist-tree .dt-desc.ok{color:#5FBF8F}
+  #dist-tree .dt-fill{flex:1 1 12px;min-width:12px;border-bottom:1px dotted #33363E;transform:translateY(-4px)}
+  #dist-tree .dt-tag{display:inline-block;margin-left:10px;padding:1px 8px;border-radius:99px;
+    font-size:11px;color:#B9C8F5;border:1px solid #3D4CBF;background:rgba(46,92,230,.18);vertical-align:1px}
+  #dist-tree .dt-children{margin:4px 0 12px 46px;padding:6px 0 6px 18px;border-left:1px solid #2A2C33;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px 18px;
+    font-size:12px;line-height:1.9;color:#8A9098}
+  #dist-tree .dt-children[hidden]{display:none}
+  #dist-tree .dt-total{margin-top:14px;padding-top:14px;border-top:1px solid #2A2C33;
+    color:#8A9098;font-size:12.5px;white-space:normal}
+  #dist-tree .dt-total b{color:#C9CED6;font-weight:500}
+  #dist-tree .dt-cap{margin-top:14px;font-size:12.5px;color:var(--note);text-align:center}
+  @media (prefers-reduced-motion: reduce){
+    #dist-tree .dt-caret{transition:none}
+  }
+  @media (max-width:640px){
+    #dist-tree .dt-term{border-radius:18px}
+    #dist-tree .dt-body{font-size:12px;padding:16px 14px 20px;line-height:1.9}
+    #dist-tree .dt-row{flex-wrap:wrap;column-gap:10px;white-space:normal;margin-bottom:8px}
+    #dist-tree .dt-fill{display:none}
+    #dist-tree .dt-desc{flex-basis:100%;padding-left:44px;white-space:normal;overflow:visible;
+      font-size:11.5px;line-height:1.6}
+    #dist-tree .dt-num{font-size:11px}
+    #dist-tree .dt-tag{margin-left:44px;margin-top:2px}
+    #dist-tree .dt-children{margin-left:14px;padding-left:10px;font-size:11px;
+      grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:0 10px}
+    #dist-tree .dt-children span{word-break:break-all}
+  }
 </style>
 </head>
 <body>
@@ -623,7 +674,7 @@
     <div class="wrap">
       <span class="hero-pill">βテスター先行販売（審査制）・買い切り <span class="mono">¥4,980</span>・正式版価格 <span class="mono">¥9,800</span> 予定</span>
       <h1>Fableユーザーのための、<br><span class="nb">マーケティングOS。</span></h1>
-      <p class="hero-sub"><span class="ph">ステップメール、LINE、SNS、売上、</span><span class="ph">顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">FableクラスのAI（Claude CodeやCodex）が</span><span class="ph">運用する、あなたの資産です。</span></p>
+      <p class="hero-sub"><span class="ph">ステップメール、LINE、SNS、売上、</span><span class="ph">顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">Fableで運用する、</span><span class="ph">あなたの資産です。</span></p>
       <div class="hero-ctas">
         <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー先行販売" data-rondo-cta="reserve">先行販売の審査に申し込む</a>
         <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
@@ -1067,10 +1118,91 @@
         <div class="mani-row"><span class="mani-no">7</span><span class="mani-name">ファネル分析</span><span class="mani-desc">流入元→訪問→クリック→注文→売上を同じ定義で一気通貫。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">8</span><span class="mani-name">改善エンジン</span><span class="mani-desc">件名A/B自動判定・成績の還流・週次調律レポート。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">9</span><span class="mani-name">監査と自動見張り</span><span class="mani-desc">ジョブ健康監視・障害記録・送達テスト・日次バックアップ。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">テスト一式</span><span class="mani-desc">ユニットテスト498件。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
+        <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">テスト一式</span><span class="mani-desc">ユニットテスト584件。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">11</span><span class="mani-name">イケハヤAI（診断AI）</span><span class="mani-desc">判断基準23項目のClaude Codeスキル。数字を読んで診断し、承認した処方は実装まで代行。</span><span class="mani-ok">✓</span></div>
         <div class="mani-foot">導入手順書（SETUP.md）つき。AIに丸ごと渡せば、セットアップ自体も任せられます。<br>進め方は<a href="/rondo-guides/setup" data-rondo-label="マニフェスト 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="マニフェスト 導入後設定ガイド">導入後の設定ガイド</a>で公開中です。</div>
       </div>
+    </div>
+  </section>
+
+  <!-- 同梱物ツリー（配布zipの実測。zip更新のたびに数字を実測で更新する） -->
+  <section id="dist-tree" data-sec="dist-tree" style="padding-top:0">
+    <div class="wrap">
+      <h2 style="text-align:center">買うと届くのは、<span style="display:inline-block">このフォルダです。</span></h2>
+      <p class="lede" style="text-align:center;margin:16px auto 40px">エンジンも、テストも、データベースの設計図も、ぜんぶ入っています。<br>サンプルなのは原稿だけ。あなたのAIが、あなたの原稿に差し替えて動かします。</p>
+      <div class="dt-term">
+        <div class="dt-bar" aria-hidden="true">
+          <span class="dt-dot"></span><span class="dt-dot"></span><span class="dt-dot"></span>
+          <span class="dt-title">rondo-dist/</span>
+        </div>
+        <div class="dt-body">
+          <div class="dt-cmd" aria-hidden="true">$ <b>tree rondo-dist</b></div>
+
+          <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">README.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">はじめかた</span></div>
+          <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">SETUP.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">AIが読む構築手順書</span></div>
+          <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">AI_CONSTITUTION.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">AI憲法。読者を守る掟</span></div>
+          <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">EULA.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">利用条件</span></div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="true" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">51 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・管理画面</span></button>
+            <div class="dt-children" id="dt-ch-src">
+              <span>worker.mjs</span><span>engine.mjs</span><span>sender.mjs</span><span>timing.mjs</span><span>warmup.mjs</span><span>guard.mjs</span><span>requeue.mjs</span><span>contents.mjs</span><span>confirm-mail.mjs</span><span>mail-casts.mjs</span><span>mail-html.mjs</span><span>mail-stats.mjs</span><span>mail-tracking.mjs</span><span>line.mjs</span><span>line-engine.mjs</span><span>line-contents.mjs</span><span>line-casts.mjs</span><span>line-render.mjs</span><span>line-richmenu.mjs</span><span>line-profiles.mjs</span><span>line-quota.mjs</span><span>line-diag.mjs</span><span>line.config.mjs</span><span>admin-ui.mjs</span><span>mobile-ui.mjs</span><span>mobile-icons.mjs</span><span>dashboard.mjs</span><span>health.mjs</span><span>heat.mjs</span><span>heat-client.mjs</span><span>persons.mjs</span><span>purchases.mjs</span><span>score.mjs</span><span>dormancy.mjs</span><span>personalize.mjs</span><span>project-stats.mjs</span><span>project-profiles.mjs</span><span>discord-link.mjs</span><span>discord-stats.mjs</span><span>financie-stats.mjs</span><span>tokuten.mjs</span><span>tokuten.config.mjs</span><span>tuning.mjs</span><span>ikehaya-mitate.mjs</span><span>auth.mjs</span><span>security.mjs</span><span>webhook-verify.mjs</span><span>scenarios.config.mjs</span><span>footer.config.mjs</span><span>themes.js</span><span>jst.mjs</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-test" data-rondo-label="同梱物ツリー test"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">test/</span><span class="dt-num">58 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc ok">テスト一式。届いたその場で全部走る</span></button>
+            <div class="dt-children" id="dt-ch-test" hidden>
+              <span>engine.test.mjs</span><span>sender.test.mjs</span><span>timing.test.mjs</span><span>warmup.test.mjs</span><span>guard.test.mjs</span><span>guard-throttle.test.mjs</span><span>requeue.test.mjs</span><span>contents.test.mjs</span><span>corpus.test.mjs</span><span>variants.test.mjs</span><span>confirm-mail.test.mjs</span><span>mail-casts.test.mjs</span><span>mail-stats.test.mjs</span><span>mail-tracking.test.mjs</span><span>deliverability.test.mjs</span><span>webhook.test.mjs</span><span>line.test.mjs</span><span>line-engine.test.mjs</span><span>line-contents.test.mjs</span><span>line-casts.test.mjs</span><span>line-render.test.mjs</span><span>line-richmenu.test.mjs</span><span>line-profiles.test.mjs</span><span>line-quota.test.mjs</span><span>admin-render.test.mjs</span><span>dashboard.test.mjs</span><span>dashboard-wiring.test.mjs</span><span>channel-push.test.mjs</span><span>mobile-render.test.mjs</span><span>mobile-next.test.mjs</span><span>mobile-icons.test.mjs</span><span>health.test.mjs</span><span>heat.test.mjs</span><span>persons.test.mjs</span><span>persons-link.test.mjs</span><span>purchases.test.mjs</span><span>score.test.mjs</span><span>dormancy.test.mjs</span><span>personalize.test.mjs</span><span>project-stats.test.mjs</span><span>project-profiles.test.mjs</span><span>discord-stats.test.mjs</span><span>financie-stats.test.mjs</span><span>tokuten.test.mjs</span><span>tuning.test.mjs</span><span>ikehaya-mitate.test.mjs</span><span>advisor-snapshot.test.mjs</span><span>auth.test.mjs</span><span>security.test.mjs</span><span>turnstile.test.mjs</span><span>alert-dedup.test.mjs</span><span>wrangler-secrets.test.mjs</span><span>guides.test.mjs</span><span>version.test.mjs</span><span>windows-compat.test.mjs</span><span>jst.test.mjs</span><span>d1-adapter.mjs</span><span>helpers-dist.mjs</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-mig" data-rondo-label="同梱物ツリー migrations"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">migrations/</span><span class="dt-num">27 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配信データベースの設計図</span></button>
+            <div class="dt-children" id="dt-ch-mig" hidden>
+              <span>0001_init.sql</span><span>0002_line.sql</span><span>0003_retry_cap.sql</span><span>0004_tuning_loop.sql</span><span>0005_ab_history.sql</span><span>0006_channel_stats.sql</span><span>0007_line_engine.sql</span><span>0008_channel_engine.sql</span><span>0009_line_fallback.sql</span><span>0010_audit.sql</span><span>0011_persons.sql</span><span>0012_diag_result.sql</span><span>0013_channel_post_kind.sql</span><span>0014_line_casts.sql</span><span>0015_persons_discord.sql</span><span>0016_line_link_code.sql</span><span>0017_person_purchases.sql</span><span>0018_person_score.sql</span><span>0019_tokuten_claims.sql</span><span>0020_mail_casts.sql</span><span>0021_heatmap.sql</span><span>0022_line_profiles.sql</span><span>0023_tokuten_unsub.sql</span><span>0024_send_guards.sql</span><span>0025_security_hardening.sql</span><span>0026_discord_channel.sql</span><span>0027_financie_daily.sql</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-scr" data-rondo-label="同梱物ツリー scripts"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">scripts/</span><span class="dt-num">14 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配備・検証・健康診断のコマンド</span></button>
+            <div class="dt-children" id="dt-ch-scr" hidden>
+              <span>deploy-contents.mjs</span><span>verify-contents.mjs</span><span>deploy-mail-casts.mjs</span><span>deploy-line-contents.mjs</span><span>deploy-line-casts.mjs</span><span>doctor.mjs</span><span>advisor-snapshot.mjs</span><span>new-variant.mjs</span><span>kian-guard.mjs</span><span>lib-build.mjs</span><span>lib-d1.mjs</span><span>lib-wrangler.mjs</span><span>lib-steps-dir.mjs</span><span>vendor/steps-source.mjs</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-con" data-rondo-label="同梱物ツリー contents"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">contents/</span><span class="dt-num">5 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">原稿サンプル</span><span class="dt-tag">あなたの原稿に差し替え</span></button>
+            <div class="dt-children" id="dt-ch-con" hidden>
+              <span>steps/001.md</span><span>steps/002.md</span><span>steps/003.md</span><span>line/aisatsu/001.md</span><span>line/casts/sample-cast.md</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-gui" data-rondo-label="同梱物ツリー guides"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">guides/</span><span class="dt-num">6 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">人が読むセットアップガイド</span></button>
+            <div class="dt-children" id="dt-ch-gui" hidden>
+              <span>setup.html</span><span>settings.html</span><span>update.html</span><span>assets/guide.css</span><span>assets/guide.js</span><span>assets/favicon.svg</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-ex" data-rondo-label="同梱物ツリー examples"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">examples/</span><span class="dt-num">1 file</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">登録フォームの見本</span></button>
+            <div class="dt-children" id="dt-ch-ex" hidden>
+              <span>subscribe-form.html</span>
+            </div>
+          </div>
+
+          <div class="dt-node">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-cl" data-rondo-label="同梱物ツリー claude"><span class="dt-tree" aria-hidden="true">└─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">.claude/</span><span class="dt-num">2 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">診断AI「イケハヤAI」</span></button>
+            <div class="dt-children" id="dt-ch-cl" hidden>
+              <span>skills/ikehaya-ai/SKILL.md</span><span>skills/ikehaya-ai/references/shindan.md</span>
+            </div>
+          </div>
+
+          <div class="dt-total">合計 <b>173ファイル</b>・機能の間引きなし。秘密情報・広告SDK・外部への通信は入っていません。</div>
+        </div>
+      </div>
+      <p class="dt-cap">2026-08-12版の実測です。ファイル数はzipを作り直すたびに実測で更新します。</p>
     </div>
   </section>
 
@@ -1425,6 +1557,18 @@
   box.addEventListener('focusout', play);
   show(0);
   play();
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('#dist-tree button[data-dir]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var kids = document.getElementById(btn.getAttribute('aria-controls'));
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      if (kids) kids.hidden = open;
+    });
+  });
 })();
 </script>
 
