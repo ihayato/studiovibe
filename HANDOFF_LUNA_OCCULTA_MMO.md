@@ -15,14 +15,14 @@
 - コピーは数値を出さない（Lv10/25等は仮値のため）。ボード=`main/_boards/kitan_mmo_site/build_board_20260902.png`。
 - 地雷: `<img height>`属性がある画像に`max-width`だけ当てると縦長に伸びる→`height:auto`必須（髪型アイコンで実発生）。
 
-## 🆕 09-02夜 「姿」節 改版2＝本人FB反映（コミット済み・**未デプロイ・本人GO待ち**）
+## 🎉 09-02夜 「姿」節 改版2＝本人FB反映・**本番デプロイ済み（本人「デプロイ」・Version 925ce8ba・19:0x）**
 - FB①「御霊を契約〜は本家の召喚時のカード券面動画を使って」→ 立ち絵を撤去し、本編 `dev/cn-kitan/files/cards/card_anim_<id>_vN.mp4`（最新版=sakuya v3/karura v2/izuna v3/shion v3/hinanojo v2/oen v2）を **420幅・CRF28・無音・faststart** で焼いて `card_<id>.mp4`＋poster webp。`<video autoplay muted loop playsinline preload=metadata>`＋IntersectionObserverで**見えている間だけ再生**（reduced-motionでは再生しない）。※札絵の枠はアプリ側合成のためサイトは絵のみ。
 - FB②「バリエーションが少ない・髪色のグラデもある」→ 髪型アイコン列を撤去し、**組み合わせ台帳**（髪型6/髪色12/グラデ5/目色6/肌7＝`client/scripts/avatar3d.gd` の HAIR_COLORS/HAIR_GRADS/EYE_COLORS/SKIN_COLORS と同期・色玉はCSS近似）＋**プリセット12種の写し** `var_A..L.webp`（`tools/charbuild` の PRESETS A〜L）を新設。撮影= `godot --path <ABS>/tools/charbuild --resolution 2000x1100 -- --preset=X --zoom=0.55 --hero-angle=4.9 --shot=<png> --quit-after=6`（**4.71=正面・0=右横・3.14=左横**・UIが左x<800に出るので中央400幅で切る=`tools/luna-occulta-mmo/crop_vars.py`）。
 - ボード=`main/_boards/kitan_mmo_site/vars_board_20260902.png`。素材合計3.4MB（動画6本=約2.2MB）。
 - 地雷: charbuildの `--hero-angle` 無指定は自動回転で向きが運任せ／ffmpegに libwebp なし→posterはpng抽出→cwebp。
 
 ## 次にやること（順）
-0. **「姿」節（改版2）のデプロイ（本人GO待ち・S1）**: `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`
+0. ~~「姿」節（改版2）のデプロイ~~ 済み（925ce8ba・var/card/build/keiyaku全200）。
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。
 2. 千枚・炭焼・境の写しの**掲載可否**を本人に聞く。可なら `public/luna-occulta-mmo.html` の該当 `<figure … data-pending="1">` から属性を外すだけ（CSS `[data-pending]{display:none}`）。写しは `~/Desktop/main/_boards/kitan_mmo_site/` にも置いてある。
 3. 野（フィールド）の写しは未契約403で撮れなかった（`KITAN_SPIRIT=sakuya`でも不可）。契約済みキャラで撮るなら `godot --path client --resolution 2560x1200 res://scenes/field.tscn -- --field=1 --cam-at=0,14 --tod=0.80 --quit-after=14 --shot=<png>` → `python3 tools/luna-occulta-mmo/crop_shots.py <src_dir> <dst_dir>`。
