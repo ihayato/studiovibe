@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月蝕綺譚ONLINE | 公式サイト</title>
+<meta name="description" content="月蝕綺譚の世界を、みんなで歩く。宵闇の3D世界を狩り、集う新作MMORPG『月蝕綺譚ONLINE』公式サイト。iOS / Android 近日公開。">
+<link rel="canonical" href="https://vibe.co.jp/luna-occulta-mmo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studio VIBE">
+<meta property="og:title" content="月蝕綺譚ONLINE | 公式サイト">
+<meta property="og:description" content="月蝕の夜に、金だけが灯る。宵闇の3D世界を歩き、狩り、集う新作MMORPG。iOS / Android 近日公開。">
+<meta property="og:url" content="https://vibe.co.jp/luna-occulta-mmo">
+<meta property="og:image" content="https://vibe.co.jp/luna-occulta-mmo-assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="月蝕綺譚ONLINE | 公式サイト">
+<meta name="twitter:description" content="月蝕の夜に、金だけが灯る。宵闇の3D世界を歩き、狩り、集う新作MMORPG。iOS / Android 近日公開。">
+<meta name="twitter:image" content="https://vibe.co.jp/luna-occulta-mmo-assets/og.jpg">
+<meta name="theme-color" content="#131320">
+<link rel="icon" href="/luna-occulta-mmo-assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;700;800&family=M+PLUS+Rounded+1c:wght@800&display=swap" rel="stylesheet">
+<!--
+  方向宣言（正典: kitan-mmo/DESIGN_DIRECTION.md を継承）
+  レジスター: 主=物語 副=静謐 / サーフェス: web
+  パレット: 宵闇藍 #131320・#1B1B2E / 面 #100E1C / 月白 #E8E4D8 / サブ #9D93B5 / 金泥 #D9A94C・#F0CE7E・#A67C2E（線と粒） / 蝕紅 #C93A2E（一点のみ）/ 暗紫 #5C4470・#8E6B9E
+  書体: Shippori Mincho B1（display 800 / body 400-500）・M PLUS Rounded 1c 800（数字）
+  シグネチャー: 題字ロゴの紅の円相（本人裁定09-02: コード描画の円環は不採用）。禁じ手: 金の面ベタ・すりガラス・常時パーティクル
+-->
+<style>
+:root{
+  --yoiyami:#131320; --yoiyami-2:#1b1b2e; --panel:#100e1c; --trough:#0b0a14;
+  --kindei:#d9a94c; --kindei-hi:#f0ce7e; --kindei-lo:#a67c2e;
+  --shokko:#c93a2e; --anshi:#5c4470; --anshi-sakura:#8e6b9e;
+  --geppaku:#e8e4d8; --sub:#9d93b5;
+  --line:rgba(217,169,76,.28); --line-dim:rgba(217,169,76,.14);
+  --serif:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --num:"M PLUS Rounded 1c","Hiragino Sans",sans-serif;
+  --w:1080px; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{background:var(--yoiyami);color:var(--geppaku);font-family:var(--serif);font-size:16px;line-height:1.9;letter-spacing:.04em;-webkit-font-smoothing:antialiased;overflow-x:clip;line-break:strict;overflow-wrap:break-word}
+img{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:rgba(217,169,76,.35);color:#fff}
+:where(a,button):focus-visible{outline:2px solid var(--kindei-hi);outline-offset:3px}
+.skip{position:fixed;top:12px;left:12px;z-index:100;transform:translateY(-160%);background:var(--yoiyami);border:2px solid var(--kindei-hi);padding:10px 14px;text-decoration:none}
+.skip:focus-visible{transform:none}
+
+/* 地: 全面の淡い霧 */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1100px 700px at 50% -10%, rgba(92,68,112,.30), transparent 62%),
+    radial-gradient(800px 600px at 100% 100%, rgba(27,27,46,.9), transparent 60%),
+    var(--yoiyami)}
+
+/* 共通部品 */
+.gold{background:linear-gradient(175deg,var(--kindei-hi) 8%,var(--kindei) 55%,var(--kindei-lo) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(217,169,76,.18)) drop-shadow(0 2px 6px rgba(0,0,0,.55))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 28px;border:1px solid var(--kindei);border-radius:5px;color:var(--kindei-hi);text-decoration:none;font-weight:700;font-size:15px;letter-spacing:.12em;line-height:1.4;background:transparent;transition:background .09s var(--ease),transform .09s var(--ease),border-color .2s var(--ease)}
+.btn:hover{background:rgba(217,169,76,.10);border-color:var(--kindei-hi)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:linear-gradient(180deg,rgba(217,169,76,.20),rgba(217,169,76,.05));box-shadow:0 0 0 1px rgba(217,169,76,.18),0 14px 30px -18px rgba(217,169,76,.45)}
+.btn-primary:hover{background:linear-gradient(180deg,rgba(217,169,76,.28),rgba(217,169,76,.08))}
+.btn .arrow{font-family:var(--num);font-size:13px;opacity:.85}
+.panel{background:var(--panel);border-radius:10px;box-shadow:inset 0 1px 0 rgba(240,206,126,.07),0 28px 56px -30px rgba(0,0,0,.85),0 8px 18px -12px rgba(0,0,0,.7)}
+.eyebrow{font-family:var(--num);font-size:11px;letter-spacing:.34em;color:var(--kindei);text-transform:uppercase}
+.eyebrow::before{content:"";display:inline-block;width:22px;height:1px;background:var(--kindei);margin-right:12px;vertical-align:middle;opacity:.7}
+h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spacing:.14em;line-height:1.35;font-feature-settings:"palt" 1}
+.lead{max-width:40em;margin-top:18px;font-size:16px;color:rgba(232,228,216,.9)}
+.lead+.lead{margin-top:10px}
+.sec{position:relative;max-width:var(--w);margin:0 auto;padding:96px 20px}
+.sec+.sec::before{content:"";position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--line-dim) 30%,var(--line-dim) 70%,transparent)}
+
+/* ナビ */
+.nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px;padding:0 20px;background:rgba(19,19,32,.86);border-bottom:1px solid var(--line-dim)}
+.nav-title{font-weight:800;letter-spacing:.18em;font-size:14px;text-decoration:none;color:var(--kindei-hi);white-space:nowrap}
+.nav-title small{font-family:var(--num);font-size:10px;letter-spacing:.3em;margin-left:8px;color:var(--kindei);vertical-align:1px}
+.nav-links{display:flex;gap:22px;list-style:none;font-size:13px;letter-spacing:.14em}
+.nav-links a{text-decoration:none;color:var(--sub);padding:8px 0}
+.nav-links a:hover{color:var(--kindei-hi)}
+.nav .btn{min-height:44px;padding:0 16px;font-size:13px}
+@media (max-width:720px){.nav-links{display:none}}
+
+/* ヒーロー */
+.hero{position:relative;min-height:calc(100svh - 56px);display:grid;place-content:center;justify-items:center;text-align:center;padding:56px 20px 64px;overflow:hidden;background:radial-gradient(640px 420px at 50% 38%,rgba(92,68,112,.22),transparent 70%)}
+.hero-logo{position:relative;width:min(92vw,760px);height:auto;filter:drop-shadow(0 14px 44px rgba(0,0,0,.65))}
+.hero-copy{position:relative;margin-top:16px;font-size:clamp(20px,3.6vw,28px);font-weight:700;letter-spacing:.22em;font-feature-settings:"palt" 1}
+.hero-sub{position:relative;margin-top:8px;color:var(--sub);font-size:14px;letter-spacing:.14em}
+.hero-plat{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px;font-family:var(--num);font-size:12px;letter-spacing:.2em}
+.hero-plat span{padding:5px 14px;border:1px solid var(--line);border-radius:5px;color:var(--kindei)}
+.hero-plat .soon{border-color:rgba(201,58,46,.7);color:#e2716a}
+.hero-cta{position:relative;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px}
+.hero-note{position:relative;margin-top:14px;font-size:12px;color:var(--sub);letter-spacing:.1em}
+.scroll-hint{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:var(--num);font-size:10px;letter-spacing:.3em;color:var(--sub);opacity:.8}
+.scroll-hint::after{content:"";display:block;width:1px;height:28px;margin:8px auto 0;background:linear-gradient(180deg,var(--kindei),transparent)}
+
+/* 世界 */
+.world-grid{display:grid;gap:28px;grid-template-columns:1.2fr 1fr;align-items:center;margin-top:32px}
+.world-text p{color:rgba(232,228,216,.9);font-size:16px}
+.world-text p+p{margin-top:12px}
+.shot{overflow:hidden}
+.shot img{width:100%;height:auto;aspect-ratio:1600/750;object-fit:cover}
+.shot figcaption{display:flex;flex-direction:column;gap:2px;padding:12px 16px 14px;border-top:1px solid var(--line-dim)}
+.shot figcaption b{color:var(--kindei-hi);letter-spacing:.14em;font-weight:700}
+.shot figcaption span{font-size:12.5px;color:var(--sub)}
+.shot-cap{margin-top:10px;font-size:11.5px;color:var(--sub);letter-spacing:.08em}
+@media (max-width:820px){.world-grid{grid-template-columns:1fr}}
+
+/* 遊びの柱 */
+.cards{list-style:none;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:32px}
+.card{position:relative;padding:28px 24px 26px}
+.card-no{font-family:var(--num);font-size:12px;letter-spacing:.3em;color:var(--kindei-lo)}
+.card h3{margin-top:8px;font-size:19px;font-weight:800;letter-spacing:.12em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.card p{margin-top:10px;font-size:14.5px;color:rgba(232,228,216,.86)}
+.card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.card-tags span{font-size:11.5px;letter-spacing:.1em;color:var(--sub);padding:3px 9px;border:1px solid var(--line-dim);border-radius:4px}
+
+/* 街の写し */
+.gallery{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:32px}
+[data-pending]{display:none}
+
+/* この先の夜 */
+.realm-list{list-style:none;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:28px}
+.realm-list li{padding:20px 18px;border:1px solid var(--line-dim);border-radius:9px;background:rgba(16,14,28,.6)}
+.realm-list b{display:block;font-size:20px;font-weight:800;letter-spacing:.16em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.realm-list span{display:block;margin-top:6px;font-size:13px;color:var(--sub)}
+.realm-list em{display:block;margin-top:10px;font-style:normal;font-family:var(--num);font-size:10px;letter-spacing:.3em;color:var(--kindei-lo)}
+
+/* 本編・締め */
+.links{margin-top:26px}
+.join{text-align:center}
+.join .lead{margin-left:auto;margin-right:auto}
+.social{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;margin-top:26px;font-size:13.5px;letter-spacing:.12em}
+.social a{color:var(--sub);text-decoration:none;padding:8px 0;border-bottom:1px solid transparent}
+.social a:hover{color:var(--kindei-hi);border-bottom-color:var(--line)}
+.foot{max-width:var(--w);margin:0 auto;padding:36px 20px 48px;text-align:center;font-size:12.5px;color:var(--sub);letter-spacing:.1em;border-top:1px solid var(--line-dim)}
+.foot p+p{margin-top:8px}
+.foot a{color:var(--sub);text-decoration:none}
+.foot a:hover{color:var(--kindei-hi)}
+
+@media (max-width:480px){
+  .sec{padding:72px 18px}
+  .card{padding:24px 20px 22px}
+  .btn{width:100%;max-width:360px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#world">本文へ</a>
+
+<nav class="nav" aria-label="ページ内">
+  <a class="nav-title" href="#top">月蝕綺譚<small>ONLINE</small></a>
+  <ul class="nav-links">
+    <li><a href="#world">世界</a></li>
+    <li><a href="#pillars">遊び</a></li>
+    <li><a href="#towns">街</a></li>
+    <li><a href="#realms">この先</a></li>
+  </ul>
+  <a class="btn" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo" target="_blank" rel="noopener">続報を受け取る</a>
+</nav>
+
+<header class="hero" id="top">
+  <img class="hero-logo" src="/luna-occulta-mmo-assets/logo.webp" width="1431" height="766" alt="月蝕綺譚ONLINE" fetchpriority="high">
+  <p class="hero-copy">月蝕の夜に、金だけが灯る。</p>
+  <p class="hero-sub">月蝕綺譚の世界を、みんなで歩く新作MMORPG</p>
+  <p class="hero-plat"><span>iOS</span><span>Android</span><span class="soon">近日公開</span></p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo" target="_blank" rel="noopener">月見台に登録して続報を受け取る<span class="arrow">→</span></a>
+    <a class="btn" href="#world">世界を見る</a>
+  </div>
+  <p class="hero-note">登録は無料。配信時期とテスト参加のお知らせを、月見台の会員へ最初に届けます。</p>
+  <div class="scroll-hint" aria-hidden="true">SCROLL</div>
+</header>
+
+<main>
+<section id="world" class="sec">
+  <p class="eyebrow">World</p>
+  <h2 class="gold">宵闇の世界を、歩く</h2>
+  <div class="world-grid">
+    <figure class="panel shot">
+      <img src="/luna-occulta-mmo-assets/shot_mizu.webp" width="1600" height="750" alt="水の里の夜。川沿いの宿場と太鼓橋" loading="lazy">
+    </figure>
+    <div class="world-text">
+      <p>『月蝕綺譚 -Luna Occulta-』の世界をそのままに、月蝕の夜が続く里と野を、みんなで歩けるようになりました。</p>
+      <p>ローポリの3D世界を、見下ろしの視点で。灯籠の光だまりと霧の向こうに、妖（あやかし）が潜みます。</p>
+      <p>スマホひとつ、横持ちで。狩って、集めて、里で集う。夜は、ここから始まります。</p>
+      <p class="shot-cap">※ 画面は開発中のものです</p>
+    </div>
+  </div>
+</section>
+
+<section id="pillars" class="sec">
+  <p class="eyebrow">Play</p>
+  <h2 class="gold">遊びの柱</h2>
+  <ul class="cards">
+    <li class="panel card">
+      <span class="card-no">01</span>
+      <h3>六つの道</h3>
+      <p>旅人として夜に出て、道を選びます。得物も技も、道ごとに違います。</p>
+      <div class="card-tags"><span>剣士</span><span>陰陽師</span><span>神楽</span><span>隠密</span><span>狩人</span><span>商人</span></div>
+    </li>
+    <li class="panel card">
+      <span class="card-no">02</span>
+      <h3>昼と夜が、めぐる</h3>
+      <p>世界の1日は40分。昼は野が明るく、夕暮れから灯籠と窓明かりが灯ります。夜が、この世界の顔です。</p>
+      <div class="card-tags"><span>昼18分</span><span>夕4分</span><span>夜14分</span><span>暁4分</span></div>
+    </li>
+    <li class="panel card">
+      <span class="card-no">03</span>
+      <h3>里と、四つの街</h3>
+      <p>中央の月隠の里から、東西南北の野の突き当たりに街があります。街ごとに役割があり、月環で行き来できます。</p>
+      <div class="card-tags"><span>薬師</span><span>市</span><span>打ち師</span><span>賭場</span></div>
+    </li>
+    <li class="panel card">
+      <span class="card-no">04</span>
+      <h3>淵の底</h3>
+      <p>月蝕の淵の北の端、岩の口から下る階層ダンジョン。深いほど妖は強く、実りは大きくなります。</p>
+      <div class="card-tags"><span>一層</span><span>二層</span><span>三層</span></div>
+    </li>
+    <li class="panel card">
+      <span class="card-no">05</span>
+      <h3>技の樹と、連れ</h3>
+      <p>技の樹で自分の型を育て、連れと淵へ。里では言葉とエモートで集えます。</p>
+      <div class="card-tags"><span>パーティ4人</span><span>技2枠</span><span>チャット</span></div>
+    </li>
+  </ul>
+</section>
+
+<section id="towns" class="sec">
+  <p class="eyebrow">Towns</p>
+  <h2 class="gold">夜の街々</h2>
+  <p class="lead">里を出て野を抜けると、雰囲気の違う街に着きます。空も霧も灯りも、街ごとに違います。</p>
+  <div class="gallery">
+    <figure class="panel shot">
+      <img src="/luna-occulta-mmo-assets/shot_tsukigakure.webp" width="1600" height="750" alt="月隠の里" loading="lazy">
+      <figcaption><b>月隠の里</b><span>すべての夜が始まる、中央の里</span></figcaption>
+    </figure>
+    <figure class="panel shot">
+      <img src="/luna-occulta-mmo-assets/shot_mizu.webp" width="1600" height="750" alt="水の里" loading="lazy">
+      <figcaption><b>水の里</b><span>川沿いの宿場。薬師の御神酒</span></figcaption>
+    </figure>
+    <figure class="panel shot" data-pending="1">
+      <img src="/luna-occulta-mmo-assets/shot_senmai.webp" width="1600" height="750" alt="千枚の里" loading="lazy">
+      <figcaption><b>千枚の里</b><span>棚田と夕暮れ。市と料理場</span></figcaption>
+    </figure>
+    <figure class="panel shot" data-pending="1">
+      <img src="/luna-occulta-mmo-assets/shot_sumiyaki.webp" width="1600" height="750" alt="炭焼きの里" loading="lazy">
+      <figcaption><b>炭焼きの里</b><span>窯の火と灰の地。打ち師の工房</span></figcaption>
+    </figure>
+    <figure class="panel shot" data-pending="1">
+      <img src="/luna-occulta-mmo-assets/shot_sakai.webp" width="1600" height="750" alt="境の宿場" loading="lazy">
+      <figcaption><b>境の宿場</b><span>黒鳥居と逆さ提灯。賭場と番付</span></figcaption>
+    </figure>
+  </div>
+  <p class="shot-cap">※ 画面は開発中のものです</p>
+</section>
+
+<section id="realms" class="sec">
+  <p class="eyebrow">Beyond</p>
+  <h2 class="gold">四つの門の、その先</h2>
+  <p class="lead">街の奥に、閉じたままの門があります。門の先は、まだ誰も見ていません。</p>
+  <ul class="realm-list">
+    <li><b>蝕城</b><span>鬼の本城。篝火と、赤い月</span><em>NORTH</em></li>
+    <li><b>天ノ浮橋</b><span>雲の上の天界</span><em>EAST</em></li>
+    <li><b>竜宮</b><span>深海の宮。珊瑚と真珠</span><em>SOUTH</em></li>
+    <li><b>根の国</b><span>黄泉。骨と、逆さの木</span><em>WEST</em></li>
+  </ul>
+</section>
+
+<section id="origin" class="sec">
+  <p class="eyebrow">Origin</p>
+  <h2 class="gold">『月蝕綺譚』から続く夜</h2>
+  <p class="lead">本作は、CryptoNinja外伝『月蝕綺譚 -Luna Occulta-』の姉妹作です。同じ世界、同じ夜。御霊たちの物語は本編で、みんなで歩く夜は本作で。</p>
+  <p class="lead">会員基盤「月見台」とのID連携を予定しています。</p>
+  <p class="links"><a class="btn" href="https://vibe.co.jp/luna-occulta" target="_blank" rel="noopener">本編『月蝕綺譚』公式サイト<span class="arrow">↗</span></a></p>
+</section>
+
+<section id="join" class="sec join">
+  <p class="eyebrow">Join</p>
+  <h2 class="gold">続報は、月見台で</h2>
+  <p class="lead">配信の時期、テスト参加のお知らせは、月見台の会員へ最初に届けます。登録は無料です。</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo" target="_blank" rel="noopener">月見台に登録する<span class="arrow">→</span></a>
+  </div>
+  <p class="social">
+    <a href="https://x.com/luna_occulta" target="_blank" rel="noopener">X @luna_occulta</a>
+    <a href="https://www.youtube.com/@luna_occulta_game" target="_blank" rel="noopener">YouTube</a>
+  </p>
+</section>
+</main>
+
+<footer class="foot">
+  <p>© <span id="y">2026</span> Studio VIBE</p>
+  <p><a href="https://vibe.co.jp/" target="_blank" rel="noopener">Studio VIBE</a> ・ <a href="https://vibe.co.jp/luna-occulta/privacy" target="_blank" rel="noopener">プライバシーポリシー</a></p>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
