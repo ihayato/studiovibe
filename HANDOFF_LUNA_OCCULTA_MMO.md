@@ -21,6 +21,8 @@
 - 色・書体は kitan-mmo/DESIGN_DIRECTION.md 継承（金泥は線と粒・蝕紅は「近日公開」札のみ）。
 
 ## 地雷
+- `scripts/verify-deploy.sh` の期待値2件が**移行前のまま古い**（デプロイ起因ではない・09-02実測）: 御用板 `/luna-occulta/goyo` は08-16に撤去され `/tsukimidai` へ307が正常／BotID `c.js` 経路はcn-kitan-web側でBotID撤去済みで404が正常。他セッションの未コミット差分が同居するファイルなので当方は触っていない。直すなら期待値を307/404に更新する。
+- 09-02のデプロイで上がった `worker.js`/`wrangler.jsonc` は08-13 11:42/09:33の未追跡ファイル（CF移行時のまま・mtime確認済み）＝中継ロジックは不変。
 - vibeの `node_modules` は空のことがある→ `npm ci`（package.jsonは他セッションが触っている＝`npm install`で書き換えない）。
 - Browserペインは非表示中に `computer` 系が30秒タイムアウトする。JSスクロール後のスクショが真っ黒になる型あり→ `navigate` で `#anchor` 付きURLへ飛ばしてからスクショが確実。
 - `scripts/verify-deploy.sh`・`package.json` は他セッションの未コミット差分が同居＝自分のハンクだけ一時インデックスでコミットした（`reference_git_selective_commit_temp_index`）。
