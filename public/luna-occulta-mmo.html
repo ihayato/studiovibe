@@ -111,13 +111,16 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
 @media (max-width:820px){.world-grid{grid-template-columns:1fr}}
 
 /* 遊びの柱 */
-.cards{list-style:none;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:32px}
-.card{position:relative;padding:28px 24px 26px}
+.cards{list-style:none;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:32px}
+.card{position:relative;padding:0 0 24px;overflow:hidden}
+.card-img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--line-dim)}
+.card-body{padding:20px 22px 0}
 .card-no{font-family:var(--num);font-size:12px;letter-spacing:.3em;color:var(--kindei-lo)}
-.card h3{margin-top:8px;font-size:19px;font-weight:800;letter-spacing:.12em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.card h3{margin-top:6px;font-size:19px;font-weight:800;letter-spacing:.12em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
 .card p{margin-top:10px;font-size:14.5px;color:rgba(232,228,216,.86)}
 .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .card-tags span{font-size:11.5px;letter-spacing:.1em;color:var(--sub);padding:3px 9px;border:1px solid var(--line-dim);border-radius:4px}
+@media (min-width:1000px){.card:first-child{grid-column:span 2}.card:first-child .card-img{aspect-ratio:32/9}}
 
 /* キャラビルド */
 .legend{display:grid;gap:10px;margin-top:28px}
@@ -178,7 +181,8 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
 
 @media (max-width:480px){
   .sec{padding:72px 18px}
-  .card{padding:24px 20px 22px}
+  .card{padding:0 0 20px}
+  .card-body{padding:16px 18px 0}
   .btn{width:100%;max-width:360px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -237,34 +241,49 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
   <h2 class="gold">遊びの柱</h2>
   <ul class="cards">
     <li class="panel card">
-      <span class="card-no">01</span>
-      <h3>六つの道</h3>
-      <p>旅人として夜に出て、道を選びます。得物も技も、道ごとに違います。</p>
-      <div class="card-tags"><span>剣士</span><span>陰陽師</span><span>神楽</span><span>隠密</span><span>狩人</span><span>商人</span></div>
+      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_michi.webp" width="1600" height="900" alt="六つの道の姿" loading="lazy">
+      <div class="card-body">
+        <span class="card-no">01</span>
+        <h3>六つの道</h3>
+        <p>旅人として夜に出て、道を選びます。得物も技も、道ごとに違います。</p>
+        <div class="card-tags"><span>剣士</span><span>陰陽師</span><span>神楽</span><span>隠密</span><span>狩人</span><span>商人</span></div>
+      </div>
     </li>
     <li class="panel card">
-      <span class="card-no">02</span>
-      <h3>昼と夜が、めぐる</h3>
-      <p>世界の1日は40分。昼は野が明るく、夕暮れから灯籠と窓明かりが灯ります。夜が、この世界の顔です。</p>
-      <div class="card-tags"><span>昼18分</span><span>夕4分</span><span>夜14分</span><span>暁4分</span></div>
+      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_daynight.webp" width="1600" height="900" alt="同じ里の昼・夕・夜" loading="lazy">
+      <div class="card-body">
+        <span class="card-no">02</span>
+        <h3>昼と夜が、めぐる</h3>
+        <p>世界の1日は40分。昼は野が明るく、夕暮れから灯籠と窓明かりが灯ります。夜が、この世界の顔です。</p>
+        <div class="card-tags"><span>昼18分</span><span>夕4分</span><span>夜14分</span><span>暁4分</span></div>
+      </div>
     </li>
     <li class="panel card">
-      <span class="card-no">03</span>
-      <h3>里と、四つの街</h3>
-      <p>中央の月隠の里から、東西南北の野の突き当たりに街があります。街ごとに役割があり、月環で行き来できます。</p>
-      <div class="card-tags"><span>薬師</span><span>市</span><span>打ち師</span><span>賭場</span></div>
+      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_towns.webp" width="1600" height="900" alt="月隠の里と街々" loading="lazy">
+      <div class="card-body">
+        <span class="card-no">03</span>
+        <h3>里と、四つの街</h3>
+        <p>中央の月隠の里から、東西南北の野の突き当たりに街があります。街ごとに役割があり、月環で行き来できます。</p>
+        <div class="card-tags"><span>薬師</span><span>市</span><span>打ち師</span><span>賭場</span></div>
+      </div>
     </li>
     <li class="panel card">
-      <span class="card-no">04</span>
-      <h3>淵の底</h3>
-      <p>月蝕の淵の北の端、岩の口から下る階層ダンジョン。深いほど妖は強く、実りは大きくなります。</p>
-      <div class="card-tags"><span>一層</span><span>二層</span><span>三層</span></div>
+      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_fuchi.webp" width="1600" height="900" alt="淵の底" loading="lazy">
+      <div class="card-body">
+        <span class="card-no">04</span>
+        <h3>淵の底</h3>
+        <p>月蝕の淵の北の端、岩の口から下る階層ダンジョン。深いほど妖は強く、実りは大きくなります。</p>
+        <div class="card-tags"><span>一層</span><span>二層</span><span>三層</span></div>
+      </div>
     </li>
     <li class="panel card">
-      <span class="card-no">05</span>
-      <h3>技の樹と、連れ</h3>
-      <p>技の樹で自分の型を育て、連れと淵へ。里では言葉とエモートで集えます。</p>
-      <div class="card-tags"><span>パーティ4人</span><span>技2枠</span><span>チャット</span></div>
+      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_waza.webp" width="1600" height="900" alt="技の樹の画面" loading="lazy">
+      <div class="card-body">
+        <span class="card-no">05</span>
+        <h3>技の樹と、連れ</h3>
+        <p>技の樹で自分の型を育て、連れと淵へ。里では言葉とエモートで集えます。</p>
+        <div class="card-tags"><span>パーティ4人</span><span>技2枠</span><span>チャット</span></div>
+      </div>
     </li>
   </ul>
 </section>
