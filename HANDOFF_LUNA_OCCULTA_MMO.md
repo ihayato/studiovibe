@@ -26,6 +26,12 @@
 - 撮影の型: `KITAN_DEVICE_SUFFIX=site` の写し番キャラは **`KITAN_SPIRIT=sakuya … keiyaku.tscn`で契約済みにした**（以後 field 1〜12 に入れる）。`--cam-at`固定の野1(0,14)は土の道だけで絵にならない＝里(plaza)の方が絵になる。
 - ボード=`main/_boards/kitan_mmo_site/pillar_*_20260902.webp`。地雷: モバイル用の旧`.card{padding}`上書きが残って画像が内側に縮んだ→`.card-body`側へ移した。
 
+## 🆕 09-06 夜 「今の開発状況を見て改善」便（本人発注）＝コミット済み・**未デプロイ・本人GO待ち**
+- 節を4つ足した: `#sato` 里でできること（能力/装い/鍛冶場/高札場/依頼/里の窓＝Codexの羽二重UI写し `docs/reports/images/2026-09-06-panels-refinement/` を16:9に切ってそのまま流用）／`#party` 集う。そして、狩る（社交=縁・耳打ち・衆／野の戦い=`--text-demo --shot-burst=6 --quit-after=3.9` の4枚目／横持ちの札=`ui-vitals-state/field.png`）／`#log` 開発だより（9/2〜9/6の10件・「反映済み」=開発版で動く／「検分中」=S1待ち）／街に「里の人々」＝`_boards/kitan_mmo_npc/talk_a2v2_2lines_2532.png` の16:9切り出し。
+- 差し替え: 世界の主役画像＝タイトル画面（`KITAN_TITLE_FAKE=ready … title.tscn -- --title-shot=`）／技の樹＝新UI（`waza_no_ki.tscn -- --waza-shot=` を1320x610で撮り窓まわりを等倍切り出し）／街5つ＝新キット（09-06 462点焼き直し後）で撮り直し・**千枚/炭焼/境の `data-pending` を外して5街表示**（本人が柱モザイク＝千枚/境入りをデプロイGOしたので掲載可と判断。NGなら属性を戻す）／四つの門の先＝「北から城下の焼け野と本丸三層、西の焔の峡と黄泉比良坂を制作中」を追記。
+- 撮影の型（追加）: `--cam-at=x:z`（town）・sakaiの1回目は窓が1092x876に化けた→撮り直しで正常（原因不明・サイズ検査を挟む）／`--slash-demo` は連写でも斬撃の瞬間が薄い（赤い命中フラッシュが乗る）→浮き文字の `--text-demo` の方が絵になる／UI窓は解像度に追従しない（2560で撮ると小さい）＝1320x610か報告画像の844x390をそのまま使う／NPC会話の実写しは自分の頭が立ち絵に被る→ボードの単体写しを使った／月蝕の紅い空は `GET /moon` 駆動でCLI固定不可（`_boards/kitan_mmo/sora_20260906_*` に写しあり）。
+- ボード=`main/_boards/kitan_mmo_site/{world_title,battle_slash,npc_talk,ui_waza,pillar_towns,shot_*}_20260906.webp`・`ui_board_20260906.png`。素材合計4.3MB。
+
 ## 次にやること（順）
 0. ~~遊びの柱（画像付き）のデプロイ~~ 済み（09-06・Version `d1df4d8e`）。次は本人の実機検分（`https://vibe.co.jp/luna-occulta-mmo#play` あたり）
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。

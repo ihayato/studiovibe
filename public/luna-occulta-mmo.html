@@ -156,6 +156,33 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
 .build-shot{margin-top:32px}
 @media (max-width:820px){.vars{grid-template-columns:repeat(4,1fr)}.build-schools{grid-template-columns:repeat(4,1fr)}.cards-v{grid-template-columns:repeat(3,1fr)}.legend-row{grid-template-columns:1fr;gap:6px}}
 @media (max-width:480px){.vars{grid-template-columns:repeat(3,1fr);gap:8px}.build-schools{grid-template-columns:repeat(3,1fr);gap:8px}.cards-v{grid-template-columns:repeat(2,1fr);gap:10px}}
+/* 里でできること / 集う・戦う */
+.sys{list-style:none;display:grid;gap:14px;grid-template-columns:repeat(3,1fr);margin-top:32px}
+.sys li{overflow:hidden;border-radius:10px}
+.sys img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--line-dim)}
+.sys .sys-body{padding:16px 18px 18px}
+.sys h3{font-size:17px;font-weight:800;letter-spacing:.12em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.sys p{margin-top:6px;font-size:13.5px;color:rgba(232,228,216,.84);line-height:1.8}
+.duo{display:grid;gap:16px;grid-template-columns:1fr 1fr;margin-top:32px}
+.duo .panel{overflow:hidden}
+.duo img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.duo figcaption{display:flex;flex-direction:column;gap:2px;padding:12px 16px 14px;border-top:1px solid var(--line-dim)}
+.duo figcaption b{color:var(--kindei-hi);letter-spacing:.14em;font-weight:700}
+.duo figcaption span{font-size:12.5px;color:var(--sub)}
+.wide{margin-top:16px}
+@media (max-width:820px){.sys{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.sys{grid-template-columns:1fr}.duo{grid-template-columns:1fr}}
+
+/* 開発だより */
+.log{list-style:none;margin-top:32px;border-top:1px solid var(--line-dim)}
+.log li{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--line-dim)}
+.log time{font-family:var(--num);font-size:13px;letter-spacing:.14em;color:var(--kindei);padding-top:3px}
+.log b{display:block;font-size:15.5px;font-weight:700;letter-spacing:.08em;color:var(--geppaku)}
+.log p{margin-top:4px;font-size:13.5px;color:rgba(232,228,216,.8);line-height:1.8}
+.log .st{display:inline-block;margin-left:8px;font-family:var(--num);font-size:10px;letter-spacing:.2em;padding:2px 8px;border:1px solid var(--line-dim);border-radius:4px;color:var(--sub);vertical-align:2px}
+.log .st.live{border-color:var(--line);color:var(--kindei)}
+@media (max-width:480px){.log li{grid-template-columns:1fr;gap:4px}}
+
 /* 街の写し */
 .gallery{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:32px}
 [data-pending]{display:none}
@@ -200,8 +227,10 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
     <li><a href="#world">世界</a></li>
     <li><a href="#pillars">遊び</a></li>
     <li><a href="#build">姿</a></li>
+    <li><a href="#sato">里</a></li>
     <li><a href="#towns">街</a></li>
     <li><a href="#realms">この先</a></li>
+    <li><a href="#log">だより</a></li>
   </ul>
   <a class="btn" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo" target="_blank" rel="noopener">続報を受け取る</a>
 </nav>
@@ -225,7 +254,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
   <h2 class="gold">宵闇の世界を、歩く</h2>
   <div class="world-grid">
     <figure class="panel shot">
-      <img src="/luna-occulta-mmo-assets/shot_mizu.webp" width="1600" height="750" alt="水の里の夜。川沿いの宿場と太鼓橋" loading="lazy">
+      <img src="/luna-occulta-mmo-assets/world_title.webp" width="1600" height="750" alt="タイトル画面。鳥居と灯籠の参道に題字" loading="lazy">
     </figure>
     <div class="world-text">
       <p>『月蝕綺譚 -Luna Occulta-』の世界をそのままに、月蝕の夜が続く里と野を、みんなで歩けるようになりました。</p>
@@ -277,7 +306,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
       </div>
     </li>
     <li class="panel card">
-      <img class="card-img" src="/luna-occulta-mmo-assets/pillar_waza.webp" width="1600" height="900" alt="技の樹の画面" loading="lazy">
+      <img class="card-img" src="/luna-occulta-mmo-assets/ui_waza.webp" width="1600" height="900" alt="技の樹の画面" loading="lazy">
       <div class="card-body">
         <span class="card-no">05</span>
         <h3>技の樹と、連れ</h3>
@@ -324,6 +353,32 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
   </div>
 </section>
 
+<section id="sato" class="sec">
+  <p class="eyebrow">Life</p>
+  <h2 class="gold">里で、できること</h2>
+  <p class="lead">狩りの合間は里へ。能力を振り分け、装いを整え、鍛冶場で得物を打ち直し、高札場で売り買いします。窓はすべて羽二重の一枚板で、宵闇から浮かせています。</p>
+  <ul class="sys">
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_ability.webp" width="782" height="440" alt="能力の画面" loading="lazy"><div class="sys-body"><h3>能力</h3><p>体・力・速・技・知・運の六つに、上がった分を自分で振ります。姿は3Dのまま横に立ちます。</p></div></li>
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_yosooi.webp" width="693" height="390" alt="装いの画面" loading="lazy"><div class="sys-body"><h3>装い</h3><p>頭と背に、気に入りの品を着けます。見た目の品は、妖の落とし物から手に入ります。</p></div></li>
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_kajiba.webp" width="693" height="390" alt="鍛冶場の画面" loading="lazy"><div class="sys-body"><h3>鍛冶場</h3><p>欠片と銭で得物を打ち直し、素材を精製し、いらない品は解体します。</p></div></li>
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_ichi.webp" width="693" height="390" alt="高札場の画面" loading="lazy"><div class="sys-body"><h3>高札場</h3><p>札を貼って売り、欲しい品を買います。相場は、里の人の売り買いで動きます。</p></div></li>
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_irai.webp" width="693" height="390" alt="依頼の画面" loading="lazy"><div class="sys-body"><h3>依頼</h3><p>里や街の頼まれごとを受けて、野で果たし、銭を受け取ります。</p></div></li>
+    <li class="panel"><img src="/luna-occulta-mmo-assets/ui_town.webp" width="782" height="440" alt="里のメニュー" loading="lazy"><div class="sys-body"><h3>里の窓</h3><p>能力・装い・道具・社交・会話・設定。里でも街でも、右下の六つの印から開きます。</p></div></li>
+  </ul>
+</section>
+
+<section id="party" class="sec">
+  <p class="eyebrow">Together</p>
+  <h2 class="gold">集う。そして、狩る</h2>
+  <p class="lead">縁を結んだ相手と耳打ちを交わし、衆をつくり、連れと淵へ。野では、隣で振るう相手の刀も矢も、その場で見えます。</p>
+  <div class="duo">
+    <figure class="panel"><img src="/luna-occulta-mmo-assets/ui_shakou.webp" width="693" height="390" alt="社交の画面" loading="lazy"><figcaption><b>縁と耳打ち</b><span>縁を結ぶと、居場所が見え、耳打ちが届く</span></figcaption></figure>
+    <figure class="panel"><img src="/luna-occulta-mmo-assets/ui_shu.webp" width="693" height="390" alt="衆の画面" loading="lazy"><figcaption><b>衆</b><span>名を掲げて仲間を集める。長と幹部と一般</span></figcaption></figure>
+    <figure class="panel"><img src="/luna-occulta-mmo-assets/battle_slash.webp" width="1600" height="900" alt="野での戦い" loading="lazy"><figcaption><b>野の戦い</b><span>飛ぶ斬撃と浮き文字。連れの一撃も、隣で見える</span></figcaption></figure>
+    <figure class="panel"><img src="/luna-occulta-mmo-assets/ui_field.webp" width="693" height="390" alt="野の画面" loading="lazy"><figcaption><b>横持ちの札</b><span>自分の札と標的、右下に技。親指の届く所へ</span></figcaption></figure>
+  </div>
+</section>
+
 <section id="towns" class="sec">
   <p class="eyebrow">Towns</p>
   <h2 class="gold">夜の街々</h2>
@@ -337,19 +392,23 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
       <img src="/luna-occulta-mmo-assets/shot_mizu.webp" width="1600" height="750" alt="水の里" loading="lazy">
       <figcaption><b>水の里</b><span>川沿いの宿場。薬師の御神酒</span></figcaption>
     </figure>
-    <figure class="panel shot" data-pending="1">
+    <figure class="panel shot">
       <img src="/luna-occulta-mmo-assets/shot_senmai.webp" width="1600" height="750" alt="千枚の里" loading="lazy">
       <figcaption><b>千枚の里</b><span>棚田と夕暮れ。市と料理場</span></figcaption>
     </figure>
-    <figure class="panel shot" data-pending="1">
+    <figure class="panel shot">
       <img src="/luna-occulta-mmo-assets/shot_sumiyaki.webp" width="1600" height="750" alt="炭焼きの里" loading="lazy">
       <figcaption><b>炭焼きの里</b><span>窯の火と灰の地。打ち師の工房</span></figcaption>
     </figure>
-    <figure class="panel shot" data-pending="1">
+    <figure class="panel shot">
       <img src="/luna-occulta-mmo-assets/shot_sakai.webp" width="1600" height="750" alt="境の宿場" loading="lazy">
       <figcaption><b>境の宿場</b><span>黒鳥居と逆さ提灯。賭場と番付</span></figcaption>
     </figure>
   </div>
+  <figure class="panel shot wide">
+    <img src="/luna-occulta-mmo-assets/npc_talk.webp" width="1600" height="750" alt="街の住人との会話" loading="lazy">
+    <figcaption><b>里の人々</b><span>住人は立ち絵で語ります。街ごとの役目を持つ人が、頼みごとと物語を運びます</span></figcaption>
+  </figure>
   <p class="shot-cap">※ 画面は開発中のものです</p>
 </section>
 
@@ -357,11 +416,30 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spaci
   <p class="eyebrow">Beyond</p>
   <h2 class="gold">四つの門の、その先</h2>
   <p class="lead">街の奥に、閉じたままの門があります。門の先は、まだ誰も見ていません。</p>
+  <p class="lead">いまは北から順に、城下の焼け野と本丸の三層、西の焔の峡と黄泉比良坂を作っています。</p>
   <ul class="realm-list">
     <li><b>蝕城</b><span>鬼の本城。篝火と、赤い月</span><em>NORTH</em></li>
     <li><b>天ノ浮橋</b><span>雲の上の天界</span><em>EAST</em></li>
     <li><b>竜宮</b><span>深海の宮。珊瑚と真珠</span><em>SOUTH</em></li>
     <li><b>根の国</b><span>黄泉。骨と、逆さの木</span><em>WEST</em></li>
+  </ul>
+</section>
+
+<section id="log" class="sec">
+  <p class="eyebrow">Log</p>
+  <h2 class="gold">開発だより</h2>
+  <p class="lead">いま作っているものを、そのまま書きます。「反映済み」は開発版で動いているもの、「検分中」は組み上がって確かめている途中のものです。</p>
+  <ul class="log">
+    <li><time>9.06</time><div><b>世界の素材を焼き直し<span class="st live">反映済み</span></b><p>里と街の建物・灯り・木を四百点あまり作り直しました。炎と灯籠は、光るようになりました。</p></div></li>
+    <li><time>9.06</time><div><b>里の空が、月蝕で紅に<span class="st live">反映済み</span></b><p>月蝕のあいだは里と街の空も紅く染まり、和太鼓が鳴ります。明ければ、また宵闇へ。</p></div></li>
+    <li><time>9.06</time><div><b>画面の札を作り直し<span class="st">検分中</span></b><p>自分の札、標的、技の枠を横持ちの親指圏へ。里の窓は羽二重の一枚板に揃えました。</p></div></li>
+    <li><time>9.06</time><div><b>隣の一撃が見える<span class="st">検分中</span></b><p>連れが振るう刀も、放つ矢も、その場で見えるようにしました。宝具の握りも整えています。</p></div></li>
+    <li><time>9.05</time><div><b>打ち師<span class="st">検分中</span></b><p>炭焼きの里の鍛冶で、得物を打ち直す手触りを作っています。</p></div></li>
+    <li><time>9.04</time><div><b>札の新体系<span class="st">検分中</span></b><p>妖から落ちる札で技を強くします。札の絵は五十枚。相性が合えば、もっと効きます。</p></div></li>
+    <li><time>9.03</time><div><b>縁・耳打ち・衆<span class="st">検分中</span></b><p>縁を結び、耳打ちを交わし、衆を立てる。連れの淵は、自分たちだけの淵です。</p></div></li>
+    <li><time>9.02</time><div><b>技の樹<span class="st live">反映済み</span></b><p>道ごとの樹に修練点を振ります。忘れたくなったら、技忘れの水で戻せます。</p></div></li>
+    <li><time>9.02</time><div><b>四つの街と、住人の語り<span class="st live">反映済み</span></b><p>水の里、千枚の里、炭焼きの里、境の宿場。住人は立ち絵で語ります。</p></div></li>
+    <li><time>9.02</time><div><b>昼と夜がめぐる<span class="st live">反映済み</span></b><p>世界の一日は四十分。淵の底の三層も、この日に開きました。</p></div></li>
   </ul>
 </section>
 
