@@ -143,11 +143,13 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 .ctl-text button{padding:0 12px}
 .ctl-btns i{display:block;width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
 .builder-note{margin-top:12px;font-size:12px;color:var(--sub);letter-spacing:.08em}
-.maker{margin-top:24px;padding:28px 28px 26px}
-.maker .eyebrow{margin-bottom:8px}
-.maker p{font-size:15.5px;color:rgba(232,228,216,.9)}
-.maker p+p{margin-top:10px}
-.maker .sign{margin-top:16px;font-size:12.5px;letter-spacing:.2em;color:var(--sub)}
+.letter{position:relative;text-align:center;overflow:hidden;isolation:isolate}
+.letter-bg{position:absolute;inset:-12px;z-index:-1;background:url(/luna-occulta-mmo-assets/world_title.webp) center 45%/cover no-repeat;opacity:.22;filter:blur(5px) saturate(.8)}
+.letter-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--yoiyami) 0%,rgba(19,19,32,.6) 30%,rgba(19,19,32,.6) 70%,var(--yoiyami) 100%)}
+.letter-body{max-width:34em;margin:24px auto 0}
+.letter-body p{font-size:clamp(17px,2.6vw,21px);font-weight:500;letter-spacing:.12em;line-height:2.1;color:var(--geppaku);font-feature-settings:"palt" 1}
+.letter-body p+p{margin-top:22px}
+.letter-body .sign{margin-top:28px;font-size:13px;letter-spacing:.24em;color:var(--kindei)}
 @media (max-width:720px){.builder{grid-template-columns:1fr;gap:18px;padding:18px}.builder-view img{max-width:240px}}
 
 /* FAQ */
@@ -171,7 +173,6 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 @media (max-width:480px){
   .sec{padding:80px 18px}
   .btn{width:100%;max-width:360px}
-  .maker{padding:22px 20px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -203,7 +204,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 <main>
 <section id="why" class="sec empathy">
   <p class="eyebrow">Why</p>
-  <h2 class="gold">露店をひやかし、ギルドで集まり、<br>ボスを追って、気づけば朝でした。</h2>
+  <h2 class="gold">ログインすれば仲間がいて、ギルドで集まり、<br>ボスを追って、気づけば朝でした。</h2>
   <p class="lead">あの夜の熱を、今のスマホで。里に戻れば誰かがいて、衆というギルドを立て、大鬼の夜には皆で挑む。そういう夜を作っています。</p>
   <figure class="why-img panel">
     <img src="/luna-occulta-mmo-assets/pillar_daynight.webp" width="1600" height="900" alt="同じ里の昼と夜" loading="lazy">
@@ -275,12 +276,6 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
       <p class="builder-note">目の色や道の装束は、ゲームの中で。</p>
     </div>
   </div>
-  <div class="panel maker">
-    <p class="eyebrow">作り手から</p>
-    <p>ぼくが一番遊びたかったMMOを、自分で作っています。夜更かしした頃の熱を、いまのスマホで、仲間と取り戻すためです。</p>
-    <p>毎日、素材を焼き直し、街を組み、画面を作り直しています。途中の姿も隠さずお見せします。最初の夜に、ぜひ来てください。</p>
-    <p class="sign">—— イケハヤ</p>
-  </div>
 </section>
 
 <section id="faq" class="sec">
@@ -291,6 +286,17 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
     <li><b>お金はかかりますか。</b><p>登録は無料です。ゲームの料金は、決まり次第、月見台でお知らせします。</p></li>
     <li><b>本編『月蝕綺譚』を遊んでいなくても大丈夫ですか。</b><p>大丈夫です。同じ世界の姉妹作で、御霊たちにはここで初めて出会えます。会員基盤「月見台」とのID連携を予定しています。</p></li>
   </ul>
+</section>
+
+<section id="letter" class="sec letter">
+  <div class="letter-bg" aria-hidden="true"></div>
+  <p class="eyebrow">Letter</p>
+  <div class="letter-body">
+    <p>夜ごとにログインして、仲間と朝まで狩った。<br>あの熱を、ぼくはまだ覚えています。</p>
+    <p>だから、自分で作ることにしました。<br>月蝕綺譚の世界に、みんなで歩ける夜を。</p>
+    <p>まだ途中です。街も、鬼も、毎日増えています。<br>最初の夜に、里の門で待っています。</p>
+    <p class="sign">—— イケハヤ</p>
+  </div>
 </section>
 
 <section id="join" class="sec join">
