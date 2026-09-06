@@ -86,7 +86,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 
 /* ヒーロー */
 .hero{position:relative;min-height:calc(100svh - 56px);display:grid;place-content:center;justify-items:center;text-align:center;padding:64px 20px 72px;overflow:hidden;isolation:isolate}
-.hero-bg{position:absolute;inset:-12px;z-index:-1;background:url(/luna-occulta-mmo-assets/shot_tsukigakure.webp) center 30%/cover no-repeat;opacity:.3;filter:saturate(.8) blur(3px)}
+.hero-bg{position:absolute;inset:-12px;z-index:-1;background:url(/luna-occulta-mmo-assets/shot_tsukigakure.webp) center 30%/cover no-repeat;opacity:.26;filter:saturate(.8) blur(6px)}
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(19,19,32,.35) 0%,rgba(19,19,32,.55) 45%,var(--yoiyami) 100%)}
 .hero-logo{width:min(88vw,680px);height:auto;filter:drop-shadow(0 14px 44px rgba(0,0,0,.7))}
 .hero h1{margin-top:26px;font-size:clamp(27px,5.2vw,46px);font-weight:800;letter-spacing:.16em;line-height:1.35;font-feature-settings:"palt" 1}
@@ -120,23 +120,27 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 .cards-v span{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--sub)}
 @media (max-width:820px){.promise{grid-template-columns:1fr;gap:20px}.promise:nth-of-type(even) .promise-img{order:0}.cards-v{grid-template-columns:repeat(3,1fr)}}
 
-/* 証拠 */
-.proof-strip{margin-top:32px;overflow:hidden;border-radius:10px}
-.proof-strip img{width:100%;height:auto}
-.proof-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:24px;align-items:start}
-.maker{padding:28px 28px 26px}
+/* 姿を組む */
+.builder{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:center;margin-top:32px;padding:24px}
+.builder-view{text-align:center}
+.builder-view img{width:100%;max-width:300px;height:auto;aspect-ratio:3/4;margin:0 auto;border-radius:8px;background:#282546}
+.builder-name{margin-top:10px;font-size:13px;letter-spacing:.14em;color:var(--sub)}
+.ctl-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:10px 0;border-top:1px solid var(--line-dim)}
+.ctl-row:first-child{border-top:0;padding-top:0}
+.ctl-row b{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--kindei-hi);padding-top:8px}
+.ctl-btns{display:flex;flex-wrap:wrap;gap:8px}
+.ctl-btns button{appearance:none;cursor:pointer;min-width:44px;min-height:44px;padding:0;border:1px solid var(--line-dim);border-radius:6px;background:rgba(255,255,255,.02);color:var(--geppaku);font-family:var(--serif);font-size:13px;letter-spacing:.08em;display:inline-flex;align-items:center;justify-content:center;transition:border-color .09s var(--ease),background .09s var(--ease)}
+.ctl-btns button:hover{border-color:var(--line)}
+.ctl-btns button.on{border-color:var(--kindei-hi);box-shadow:0 0 0 1px var(--kindei-hi) inset}
+.ctl-text button{padding:0 12px}
+.ctl-btns i{display:block;width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.builder-note{margin-top:12px;font-size:12px;color:var(--sub);letter-spacing:.08em}
+.maker{margin-top:24px;padding:28px 28px 26px}
 .maker .eyebrow{margin-bottom:8px}
 .maker p{font-size:15.5px;color:rgba(232,228,216,.9)}
 .maker p+p{margin-top:10px}
 .maker .sign{margin-top:16px;font-size:12.5px;letter-spacing:.2em;color:var(--sub)}
-.log{list-style:none}
-.log li{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line-dim)}
-.log li:first-child{border-top:1px solid var(--line-dim)}
-.log time{font-family:var(--num);font-size:12.5px;letter-spacing:.14em;color:var(--kindei);padding-top:3px}
-.log b{display:block;font-size:14.5px;font-weight:700;letter-spacing:.06em}
-.log p{margin-top:2px;font-size:13px;color:rgba(232,228,216,.78);line-height:1.75}
-.log-more{margin-top:12px;font-size:12.5px;color:var(--sub);letter-spacing:.1em}
-@media (max-width:820px){.proof-grid{grid-template-columns:1fr}}
+@media (max-width:720px){.builder{grid-template-columns:1fr;gap:18px;padding:18px}.builder-view img{max-width:240px}}
 
 /* FAQ */
 .faq{list-style:none;margin-top:28px;border-top:1px solid var(--line-dim)}
@@ -179,7 +183,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
   <div class="hero-bg" aria-hidden="true"></div>
   <img class="hero-logo" src="/luna-occulta-mmo-assets/logo.webp" width="1431" height="766" alt="月蝕綺譚ONLINE" fetchpriority="high">
   <h1>あの頃の夜を、<br class="sp">もう一度。</h1>
-  <p class="hero-sub">MMOで夜更かしした人へ。月蝕綺譚の世界を、仲間と歩く新作MMORPG。スマホで、横持ちで、狩りは短くても構いません。</p>
+  <p class="hero-sub">MMOで夜更かしした人へ。月蝕綺譚の世界を、仲間と歩く新作MMORPG。</p>
   <p class="hero-plat"><span>iOS</span><span>Android</span><span class="soon">近日公開</span></p>
   <div class="cta-row">
     <a class="btn btn-primary" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo" target="_blank" rel="noopener">月見台に登録して、最初の夜へ<span class="arrow">→</span></a>
@@ -192,7 +196,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 <section id="why" class="sec empathy">
   <p class="eyebrow">Why</p>
   <h2 class="gold">露店を眺めて、狩場で待ち合わせて、<br>気づけば朝でした。</h2>
-  <p class="lead">あの夜の熱を、もう一度。ただし今は、スマホで、仲間と、空いた時間で。里に戻れば誰かがいて、野へ出れば隣で刀が振られる。そういう夜を、作っています。</p>
+  <p class="lead">あの夜の熱を、今のスマホで、仲間と。里に戻れば誰かがいて、野へ出れば隣で刀が振られる。そういう夜を作っています。</p>
   <blockquote>
     宵の刻。里の門で、そなたを待っています。<br>喰われた月の下で、逢いましょう。
     <footer>—— 道しるべの御霊・栞</footer>
@@ -208,8 +212,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
     <div>
       <span class="promise-no">01</span>
       <h3>宵闇の世界を、自分の足で歩く</h3>
-      <p>中央の月隠の里から、東西南北の野の先に街があります。水の里、千枚の里、炭焼きの里、境の宿場。街ごとに空も灯りも役目も違います。</p>
-      <p>世界の一日は四十分。夕暮れから灯籠が灯り、夜が本作の顔になります。街の奥には、まだ閉じたままの門があります。</p>
+      <p>月隠の里から、四方の野の先に四つの街。街ごとに空も灯りも役目も違います。世界の一日は四十分。夕暮れから灯籠が灯り、夜がこの世界の顔になります。</p>
     </div>
   </div>
 
@@ -218,8 +221,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
     <div>
       <span class="promise-no">02</span>
       <h3>連れと淵へ。隣の一撃が、見える</h3>
-      <p>縁を結んだ相手と耳打ちを交わし、衆をつくり、最大四人で階層ダンジョン「淵の底」へ。連れが振るう刀も放つ矢も、その場で見えます。</p>
-      <p>一人の夜も、悪くありません。皆の淵で誰かと居合わせるのも、この世界の楽しみです。</p>
+      <p>縁を結び、衆をつくり、最大四人で階層ダンジョン「淵の底」へ。連れが振るう刀も放つ矢も、その場で見えます。一人の夜には、皆の淵で誰かと居合わせます。</p>
     </div>
   </div>
 
@@ -227,8 +229,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
     <div>
       <span class="promise-no">03</span>
       <h3>御霊を装備して、転職する</h3>
-      <p>はじめは旅人。力がついたら、栞のもとで転職の儀を受けます。御霊と契約して装備すると、その御霊の道に就きます。剣士、陰陽師、神楽、隠密、狩人、商人。</p>
-      <p>御霊を替えれば、道も替わります。本編『月蝕綺譚』で迎えた御霊たちが、今度はあなたの隣で戦います。</p>
+      <p>はじめは旅人。力がついたら御霊と契約して装備し、その御霊の道に就きます。剣士、陰陽師、神楽、隠密、狩人、商人。本編で迎えた御霊たちが、今度はあなたの隣で戦います。</p>
       <ul class="cards-v" aria-label="入口の御霊">
         <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_sakuya.mp4" poster="/luna-occulta-mmo-assets/card_sakuya_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="咲耶の札絵"></video></div><b>咲耶</b><span>剣士</span></li>
         <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_karura.mp4" poster="/luna-occulta-mmo-assets/card_karura_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="カルラの札絵"></video></div><b>カルラ</b><span>陰陽師</span></li>
@@ -243,26 +244,27 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
   <p class="note">※ 画面はすべて開発中のものです。札絵は本編『月蝕綺譚』の召喚札より</p>
 </section>
 
-<section id="proof" class="sec">
-  <p class="eyebrow">Proof</p>
-  <h2 class="gold">作っている途中を、そのまま見せます</h2>
-  <p class="lead">姿は髪型、髪色、目の色、肌まで自分で組めます。里でも野でも、その姿でみんなに見えます。</p>
-  <div class="proof-strip panel"><img src="/luna-occulta-mmo-assets/proof_variety.webp" width="1600" height="540" alt="組んだ姿の例。髪色や肌の違う十二人" loading="lazy"></div>
-  <div class="proof-grid">
-    <div class="panel maker">
-      <p class="eyebrow">作り手から</p>
-      <p>ぼくが一番遊びたかったMMOを、自分で作っています。夜更かしした頃の熱を、いまのスマホで、仲間と取り戻すためです。</p>
-      <p>毎日、素材を焼き直し、街を組み、画面を作り直しています。途中の姿も隠さずお見せします。最初の夜に、ぜひ来てください。</p>
-      <p class="sign">—— イケハヤ</p>
+<section id="build" class="sec">
+  <p class="eyebrow">Try</p>
+  <h2 class="gold">姿を、組んでみる</h2>
+  <p class="lead">髪型、髪色、肌。組んだ姿は、里でも野でも、その姿でみんなに見えます。</p>
+  <div class="builder panel">
+    <div class="builder-view">
+      <img id="bv" src="/luna-occulta-mmo-assets/build/b_2_0_0.webp" width="300" height="400" alt="組んだ姿" decoding="async">
+      <p id="bv-name" class="builder-name">姫セミ・藍・標準</p>
     </div>
-    <div>
-      <ul class="log">
-        <li><time>9.06</time><div><b>里と街の素材を四百点あまり焼き直し</b><p>炎と灯籠が光るようになりました。月蝕のあいだは、里の空も紅く染まります。</p></div></li>
-        <li><time>9.03</time><div><b>縁・耳打ち・衆を実装</b><p>連れの淵は、自分たちだけの淵です。</p></div></li>
-        <li><time>9.02</time><div><b>四つの街と、住人の語り</b><p>住人は立ち絵で語ります。世界の一日は四十分になりました。</p></div></li>
-      </ul>
-      <p class="log-more">続きは、月見台の会員へ最初に届けます。</p>
+    <div class="builder-ctl">
+      <div class="ctl-row"><b>髪型</b><div class="ctl-btns ctl-text"><button type="button" data-k="h" data-i="0" class="">短髪</button><button type="button" data-k="h" data-i="1" class="">男子</button><button type="button" data-k="h" data-i="2" class="on">姫セミ</button><button type="button" data-k="h" data-i="3" class="">ツインテ</button><button type="button" data-k="h" data-i="4" class="">ポニテ</button><button type="button" data-k="h" data-i="5" class="">ボブ</button></div></div>
+      <div class="ctl-row"><b>髪色</b><div class="ctl-btns"><button type="button" data-k="c" data-i="0" class="on" aria-label="藍" title="藍"><i style="background:#2b2f5a"></i></button><button type="button" data-k="c" data-i="1" class="" aria-label="栗" title="栗"><i style="background:#6b4a2f"></i></button><button type="button" data-k="c" data-i="2" class="" aria-label="桜" title="桜"><i style="background:#e8a5c0"></i></button><button type="button" data-k="c" data-i="3" class="" aria-label="銀" title="銀"><i style="background:#c9cbd3"></i></button><button type="button" data-k="c" data-i="4" class="" aria-label="金" title="金"><i style="background:#d9b45a"></i></button><button type="button" data-k="c" data-i="5" class="" aria-label="紅" title="紅"><i style="background:#b23a3a"></i></button><button type="button" data-k="c" data-i="6" class="" aria-label="翠" title="翠"><i style="background:#3f8a5a"></i></button><button type="button" data-k="c" data-i="7" class="" aria-label="菫" title="菫"><i style="background:#7d5aa8"></i></button><button type="button" data-k="c" data-i="8" class="" aria-label="白" title="白"><i style="background:#efeeea"></i></button><button type="button" data-k="c" data-i="9" class="" aria-label="黒" title="黒"><i style="background:#1b1b22"></i></button><button type="button" data-k="c" data-i="10" class="" aria-label="橙" title="橙"><i style="background:#d97a3a"></i></button><button type="button" data-k="c" data-i="11" class="" aria-label="水" title="水"><i style="background:#5aa8c9"></i></button><button type="button" data-k="c" data-i="12" class="" aria-label="藍→桜" title="藍→桜"><i style="background:linear-gradient(180deg,#2b2f5a,#e8a5c0)"></i></button><button type="button" data-k="c" data-i="13" class="" aria-label="紅→金" title="紅→金"><i style="background:linear-gradient(180deg,#b23a3a,#d9b45a)"></i></button><button type="button" data-k="c" data-i="14" class="" aria-label="菫→水" title="菫→水"><i style="background:linear-gradient(180deg,#7d5aa8,#5aa8c9)"></i></button><button type="button" data-k="c" data-i="15" class="" aria-label="白→紅" title="白→紅"><i style="background:linear-gradient(180deg,#efeeea,#b23a3a)"></i></button><button type="button" data-k="c" data-i="16" class="" aria-label="黒→翠" title="黒→翠"><i style="background:linear-gradient(180deg,#1b1b22,#3f8a5a)"></i></button></div></div>
+      <div class="ctl-row"><b>肌</b><div class="ctl-btns"><button type="button" data-k="s" data-i="0" class="on" aria-label="標準" title="標準"><i style="background:#f3d9c4"></i></button><button type="button" data-k="s" data-i="1" class="" aria-label="小麦" title="小麦"><i style="background:#e2b48f"></i></button><button type="button" data-k="s" data-i="2" class="" aria-label="日灼" title="日灼"><i style="background:#c98f66"></i></button><button type="button" data-k="s" data-i="3" class="" aria-label="白磁" title="白磁"><i style="background:#f8ede6"></i></button><button type="button" data-k="s" data-i="4" class="" aria-label="灰" title="灰"><i style="background:#b8b6c2"></i></button><button type="button" data-k="s" data-i="5" class="" aria-label="緑" title="緑"><i style="background:#b9d4a8"></i></button><button type="button" data-k="s" data-i="6" class="" aria-label="赤" title="赤"><i style="background:#d66a5a"></i></button></div></div>
+      <p class="builder-note">目の色や道の装束は、ゲームの中で。</p>
     </div>
+  </div>
+  <div class="panel maker">
+    <p class="eyebrow">作り手から</p>
+    <p>ぼくが一番遊びたかったMMOを、自分で作っています。夜更かしした頃の熱を、いまのスマホで、仲間と取り戻すためです。</p>
+    <p>毎日、素材を焼き直し、街を組み、画面を作り直しています。途中の姿も隠さずお見せします。最初の夜に、ぜひ来てください。</p>
+    <p class="sign">—— イケハヤ</p>
   </div>
 </section>
 
@@ -272,9 +274,7 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
   <ul class="faq">
     <li><b>いつ遊べますか。</b><p>iOSとAndroidで近日公開です。配信の時期とテスト参加の案内は、月見台の会員へ最初に届けます。</p></li>
     <li><b>お金はかかりますか。</b><p>登録は無料です。ゲームの料金は、決まり次第、月見台でお知らせします。</p></li>
-    <li><b>時間がなくても遊べますか。</b><p>横持ちのスマホで、狩りは短くても構いません。里に戻れば、いつでも誰かがいます。</p></li>
-    <li><b>本編『月蝕綺譚』を遊んでいなくても大丈夫ですか。</b><p>大丈夫です。同じ世界の姉妹作で、御霊たちはここで初めて出会えます。本編の会員基盤「月見台」とのID連携を予定しています。</p></li>
-    <li><b>一人でも遊べますか。</b><p>遊べます。皆の淵で居合わせた誰かと組むのも、連れの淵で仲間だけで潜るのも、自由です。</p></li>
+    <li><b>本編『月蝕綺譚』を遊んでいなくても大丈夫ですか。</b><p>大丈夫です。同じ世界の姉妹作で、御霊たちにはここで初めて出会えます。会員基盤「月見台」とのID連携を予定しています。</p></li>
   </ul>
 </section>
 
@@ -299,6 +299,19 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 </footer>
 <script>
 document.getElementById('y').textContent=new Date().getFullYear();
+(function(){
+  var H=['短髪','男子','姫セミ','ツインテ','ポニテ','ボブ'];
+  var C=['藍','栗','桜','銀','金','紅','翠','菫','白','黒','橙','水','藍→桜','紅→金','菫→水','白→紅','黒→翠'];
+  var S=['標準','小麦','日灼','白磁','灰','緑','赤'];
+  var st={h:2,c:0,s:0}; var img=document.getElementById('bv'); var nm=document.getElementById('bv-name'); if(!img) return;
+  function src(h,c,s){return '/luna-occulta-mmo-assets/build/b_'+h+'_'+c+'_'+s+'.webp';}
+  function show(){ var u=src(st.h,st.c,st.s); var pre=new Image(); pre.onload=function(){img.src=u;}; pre.src=u; nm.textContent=H[st.h]+'・'+C[st.c]+'・'+S[st.s]; }
+  document.querySelectorAll('.ctl-btns button').forEach(function(b){ b.addEventListener('click',function(){
+    var k=b.dataset.k, i=+b.dataset.i; st[k]=i;
+    b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});
+    show();
+  });});
+})();
 (function(){
   var vids=document.querySelectorAll('.cards-v video'); if(!vids.length) return;
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

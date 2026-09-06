@@ -39,6 +39,11 @@
 - 事実検品: 四つの街／一日四十分／最大四人（PARTY_MAX=4は仮値）／四百点あまり（462点）／縁・耳打ち・衆（実装済み・S1待ちだが「実装」と記載）／料金は未定のため「決まり次第」。リーガル: 煽り語なし・価格表示なし・登録無料は事実。
 - 検分: build緑・linkcheck全OK・AI臭0・390/1280はみ出しゼロ・見出しはスマホで2行（`<br class="sp">`）・CTA1行。
 
+## 🆕 09-06 夜 擬似キャラビルド＋整理（本人「姿の帯がおかしい・擬似ビルド機能を作ろう・まだ情報量が多い」・コミット済み・**未デプロイ・本人GO待ち**）
+- **擬似キャラビルド `#build`**: 髪型6×髪色17（単色12+グラデ5）×肌7＝**714通りを事前描画**（目=茶固定）。素材=`public/luna-occulta-mmo-assets/build/b_{髪i}_{色i}_{肌i}.webp`（300x400・q80・計5.9MB・押した1枚だけ読む）。描画器＝**charbuildの私家コピー**（`scratchpad/charbuild_site`＝`tools/charbuild`を`cp -Rc`して`main.gd`に`--batch=<txt>`を足した。共有ツリーは触っていない。1プロセスで714枚＝約5分）。切り出し=`tools/luna-occulta-mmo/crop_build.py`。並び順の正=`client/scripts/avatar3d.gd`のHAIR_COLORS/HAIR_GRADS/SKIN_COLORSと同じ（順を変えるとindexがずれる）。
+- 整理: ヒーロー副文1文／共感1段落／約束は各1段落／証拠節を廃止して「姿を組む」＋作り手の板だけ／FAQ 5→3／開発だよりの帯は撤去（素材残置）。本文≈3,400字（前回4,600字）。
+- 地雷: 帯合成でgap計算が負になり重なった（12×372>1600）。以後は帯にせず擬似ビルドへ。
+
 ## 次にやること（順）
 0. ~~遊びの柱（画像付き）のデプロイ~~ 済み（09-06・Version `d1df4d8e`）。次は本人の実機検分（`https://vibe.co.jp/luna-occulta-mmo#play` あたり）
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。
