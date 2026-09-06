@@ -48,6 +48,10 @@
 - 見出し→本文→**同じ里の昼と夜（pillar_daynight）**→**栞の板**（本編公式サイトの `shiori_full.webp`＝月を背にした一枚絵を左・語りを右の羽二重板。スマホは縦積み）。
 - 栞の一枚絵は `cn-kitan-web/public/media/img/shiori_full.webp` を600x800に縮小して流用（出自は本編公式サイト＝同社素材）。
 
+## 🆕 09-06 夜 サムネ（OGP）＋Why/約束02のコピー強化（本人指摘・コミット済み・**未デプロイ・GO待ち**）
+- **og.jpg**＝ロゴ左・入口の御霊6人を右に扇状（本編公式サイトの立ち絵 `standing_*.webp`・咲耶を手前）・地は月隠の里の写しをぼかして宵闇に沈める。組み方は結の一時スクリプト（案A=ロゴ上/御霊下は顔にロゴが被りNG・案B=右に大きすぎ→案C採用）。写し=`main/_boards/kitan_mmo_site/og_20260906.jpg`。
+- コピー: Why見出し「露店をひやかし、ギルドで集まり、ボスを追って、気づけば朝でした。」／本文「衆というギルドを立て、大鬼の夜には皆で挑む」／約束02「衆を立て、淵へ潜り、大鬼に挑む」（本人「ギルド機能・レイドボスの魅力を」「隣で刀が振られるは微妙」）。**「大鬼」「レイド」は本人の言＝実装の有無は未照合**（ボス部屋・封印素材は搬入済み）。
+
 ## 次にやること（順）
 0. ~~遊びの柱（画像付き）のデプロイ~~ 済み（09-06・Version `d1df4d8e`）。次は本人の実機検分（`https://vibe.co.jp/luna-occulta-mmo#play` あたり）
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。
