@@ -118,9 +118,14 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
   const wsUrl = buildWsUrl(room);
   let ws = null;
   let sendTimer = null;
+  let reconnectTimer = null; // 予約済み再接続（背景移行時に解除する・Codex監査#4）
+  let gen = 0;               // 接続世代。古い接続のイベントは無視する
   let retries = 0;
   let closedByFull = false;
   let fullNotified = false; // 満員トーストは一度だけ（再試行のたびに出さない）
+  // 背景タブでは接続を畳む（2026-09-06 コスト是正）: 放置タブ1本が部屋DOを起こし続けていた。
+  // 見えなくなったら送信を止めてcloseし、戻ったら再接続する（満員待ちの再試行も止める）
+  let pausedByHidden = false;
   const FULL_RETRY_MS = 75_000; // 満員時はこの間隔＋ゆらぎで静かに再試行（枠が空いたらリロード不要で合流）
 
   const notify = () => onCount && onCount(peers.size + 1);
@@ -134,25 +139,39 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
     };
   }
 
+  const scheduleReconnect = (ms) => {
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(() => { reconnectTimer = null; connect(); }, ms);
+  };
+
   const connect = () => {
+    if (pausedByHidden) return; // 背景中は繋がない
+    if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) return; // 二重接続防止
+    let sock;
     try {
-      ws = new WebSocket(wsUrl);
+      sock = new WebSocket(wsUrl);
     } catch {
       return;
     }
+    const myGen = ++gen;
+    ws = sock;
+    const isCurrent = () => myGen === gen && ws === sock;
 
-    ws.addEventListener('open', () => {
+    sock.addEventListener('open', () => {
+      if (!isCurrent()) { try { sock.close(1000, 'stale'); } catch {} return; }
       retries = 0;
       const s = getState();
-      ws.send(JSON.stringify({ t: 'hi', name: identity.name, c: identity.c, v: identity.v, x: r3(s.x), z: r3(s.z), yaw: r3(s.yaw), a: s.a || 0 }));
+      sock.send(JSON.stringify({ t: 'hi', name: identity.name, c: identity.c, v: identity.v, x: r3(s.x), z: r3(s.z), yaw: r3(s.yaw), a: s.a || 0 }));
+      if (sendTimer) clearInterval(sendTimer);
       sendTimer = setInterval(() => {
-        if (ws.readyState !== WebSocket.OPEN) return;
+        if (!isCurrent() || sock.readyState !== WebSocket.OPEN) return;
         const p = getState();
-        ws.send(JSON.stringify({ t: 'p', x: r3(p.x), z: r3(p.z), yaw: r3(p.yaw), w: r3(p.w), j: r3(p.j), a: p.a || 0 }));
+        sock.send(JSON.stringify({ t: 'p', x: r3(p.x), z: r3(p.z), yaw: r3(p.yaw), w: r3(p.w), j: r3(p.j), a: p.a || 0 }));
       }, SEND_MS);
     });
 
-    ws.addEventListener('message', (e) => {
+    sock.addEventListener('message', (e) => {
+      if (!isCurrent()) return;
       let m;
       try { m = JSON.parse(e.data); } catch { return; }
       if (m.t === 'welcome') {
@@ -182,23 +201,43 @@ export function initPresence({ scene, terrainH, identity, getState, onCount, onF
       }
     });
 
-    ws.addEventListener('close', () => {
-      clearInterval(sendTimer);
+    sock.addEventListener('close', () => {
+      if (!isCurrent()) return; // 古い接続のcloseは新接続の状態に触らない
+      if (sendTimer) { clearInterval(sendTimer); sendTimer = null; }
       for (const p of peers.values()) p.dispose();
       peers.clear();
       notify();
-      if (closedByFull) {
+      if (pausedByHidden) {
+        // 自分で畳んだ接続。visibilitychangeで戻ったときに再接続する
+        closedByFull = false;
+      } else if (closedByFull) {
         // 満員: ソロで遊べたまま、間隔を空けて静かに再試行する
         closedByFull = false;
-        setTimeout(connect, FULL_RETRY_MS + Math.random() * 30_000);
+        scheduleReconnect(FULL_RETRY_MS + Math.random() * 30_000);
       } else if (retries < 6) {
         retries += 1;
-        setTimeout(connect, 2000 * retries);
+        scheduleReconnect(2000 * retries);
       }
     });
   };
 
-  connect();
+  const onVisibility = () => {
+    if (document.hidden) {
+      pausedByHidden = true;
+      if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; } // 予約済み再接続も止める
+      if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) {
+        try { ws.close(1000, 'hidden'); } catch {}
+      }
+    } else if (pausedByHidden) {
+      pausedByHidden = false;
+      retries = 0;
+      connect();
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
+
+  if (document.hidden) pausedByHidden = true; // 背景で開かれたタブは、見えるまで繋がない
+  else connect();
 
   return {
     update(dt, t) {

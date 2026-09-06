@@ -5,8 +5,8 @@ const MAX_VISITORS = 10; // 島に同時に立てる人数（10人×10通/秒×9
 // DoS対策の各上限。標準WebSocket APIのまま、部屋DO内で自衛する。
 const MAX_CONNECTIONS = 32;     // hi前を含む生ソケットの総数上限（任意名の接続で満員判定を迂回して居座る穴を塞ぐ）
 const HELLO_TIMEOUT_MS = 5_000; // 接続後この時間内に hi が来なければ強制close
-const HEARTBEAT_MS = 5_000;     // alarm() で死活を掃引する間隔
-const STALE_MS = 15_000;        // この時間メッセージが途絶えたソケットは亡霊とみなし除去（クライアントは約10通/秒送るので誤検知しない）
+const HEARTBEAT_MS = 10_000;    // alarm() で死活を掃引する間隔（hibernation下の唯一の定期起床。2026-09-06 5s→10s）
+const STALE_MS = 30_000;        // この時間メッセージが途絶えたソケットは亡霊とみなし除去（クライアントは約10通/秒・背景タブでも約1通/秒送るので誤検知しない）
 // メッセージのトークンバケット（1接続あたり）。クライアントの正常時は約10通/秒なので、
 // 20通/秒＋バースト25でmargin十分。溢れた分は間引き、溢れっぱなしが続けば切断する。
 const MSG_BURST = 25;
@@ -21,129 +21,191 @@ const fin = (v, lo = -60, hi = 60) => {
 const cosmeticMask = (v) => Math.max(0, Math.floor(Number(v) || 0)) & 7;
 
 export class Room {
+  // 2026-09-06 コスト是正: 標準WebSocket(ws.accept)→Hibernation API(acceptWebSocket)へ。
+  // 旧実装は接続が1本でもあるとDOがwall-clockで課金され続け、島ページのタブ放置1本で
+  // 月295時間(口座DO durationの78%)を食っていた。Hibernation方式ではメッセージ処理中しか
+  // 課金されない。接続ごとの状態はattachment(deserializeAttachment)に持ち、メモリMapは持たない
+  // (休眠→復帰でメモリは消えるため)。
   constructor(state, env) {
     this.state = state;
-    this.clients = new Map(); // id -> { ws, state, tokens, lastRefill, lastSeen, dropped, helloTimer }
+  }
+
+  sockets() {
+    return this.state.getWebSockets();
+  }
+
+  // 論理的に有効な接続だけ（close済み=closing印のCLOSINGソケットはgetWebSockets()に残り得る・Codex監査#5）
+  live() {
+    return this.sockets().filter((ws) => {
+      const a = this.att(ws);
+      return a && !a.closing;
+    });
+  }
+
+  att(ws) {
+    try {
+      return ws.deserializeAttachment();
+    } catch {
+      return null;
+    }
+  }
+
+  joinedCount(except) {
+    let n = 0;
+    for (const ws of this.live()) {
+      if (ws === except) continue;
+      const a = this.att(ws);
+      if (a && a.joined) n += 1;
+    }
+    return n;
+  }
+
+  // 退出を一度だけ記録・通知してcloseする共通経路。closeフレームの到達に依存せず枠を解放する
+  leave(ws, a, code, reason) {
+    if (!a || a.closing) return;
+    const wasJoined = a.joined;
+    a.closing = true;
+    a.joined = false;
+    try { ws.serializeAttachment(a); } catch {}
+    try { ws.close(code, String(reason).slice(0, 120)); } catch {}
+    if (wasJoined) this.broadcast({ t: 'bye', id: a.id }, ws);
   }
 
   async fetch(req) {
     if (req.headers.get('Upgrade') !== 'websocket') {
-      return new Response(JSON.stringify({ ok: true, visitors: this.clients.size }), {
+      return new Response(JSON.stringify({ ok: true, visitors: this.joinedCount() }), {
         headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*' },
+      });
+    }
+    // コネクションフラッド対策: 生ソケットの総数に上限。満員判定はhi後のjoinedで見るため、
+    // hiを送らずに張るだけの接続はこの総数上限でのみ弾ける。accept前にHTTPで拒む（受け入れ数の厳密な上限）
+    if (this.live().length >= MAX_CONNECTIONS) {
+      return new Response(JSON.stringify({ ok: false, error: 'busy' }), {
+        status: 503,
+        headers: { 'content-type': 'application/json', 'access-control-allow-origin': '*', 'retry-after': '30' },
       });
     }
     const pair = new WebSocketPair();
     const [client, server] = Object.values(pair);
-    this.handle(server);
+    const now = Date.now();
+    this.state.acceptWebSocket(server); // 公式例に合わせ accept→serialize の順
+    server.serializeAttachment({
+      id: crypto.randomUUID().slice(0, 8),
+      joined: false,
+      closing: false,
+      st: null,
+      tokens: MSG_BURST,
+      lastRefill: now,
+      lastSeen: now,
+      dropped: 0,
+      openedAt: now,
+    });
     // 死活掃引のalarmを（無ければ）仕掛ける。setAlarmは上書きなので二重には積まない。
     await this.ensureAlarm();
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  handle(ws) {
-    ws.accept();
-    // コネクションフラッド対策: 生ソケットの総数に上限。満員判定はhi後のstate有無で見るため、
-    // hiを送らずに張るだけの接続はこの総数上限でのみ弾ける。
-    if (this.clients.size >= MAX_CONNECTIONS) {
-      this.safeSend(ws, { t: 'busy' });
-      try { ws.close(1013, 'busy'); } catch {}
+  webSocketMessage(ws, data) {
+    const a = this.att(ws);
+    if (!a || a.closing) return;
+    // レート制限はパース前に。broadcast/パースのコストを濫用させない。
+    if (!this.allow(a)) {
+      a.dropped += 1;
+      if (a.dropped > MSG_DROP_LIMIT) {
+        this.dropClient(ws, a, 1008, 'flood');
+        return;
+      }
+      ws.serializeAttachment(a);
       return;
     }
-    const id = crypto.randomUUID().slice(0, 8);
-    const now = Date.now();
-    const entry = { ws, state: null, tokens: MSG_BURST, lastRefill: now, lastSeen: now, dropped: 0, helloTimer: null };
-    this.clients.set(id, entry);
-
-    // ハンドシェイクタイムアウト: 一定時間 hi が来なければ切断（居座り防止）。
-    entry.helloTimer = setTimeout(() => {
-      if (this.clients.get(id) === entry && !entry.state) {
-        this.clients.delete(id);
-        try { ws.close(1008, 'no hello'); } catch {}
-      }
-    }, HELLO_TIMEOUT_MS);
-
-    ws.addEventListener('message', (e) => {
-      // レート制限はパース前に。broadcast/パースのコストを濫用させない。
-      if (!this.allow(entry)) {
-        entry.dropped += 1;
-        if (entry.dropped > MSG_DROP_LIMIT) this.dropClient(id, entry, 1008, 'flood');
+    a.dropped = 0;
+    a.lastSeen = Date.now();
+    let m;
+    try {
+      m = JSON.parse(typeof data === 'string' ? data : new TextDecoder().decode(data));
+    } catch {
+      ws.serializeAttachment(a);
+      return;
+    }
+    if (m.t === 'hi' && !a.joined) {
+      if (this.joinedCount(ws) >= MAX_VISITORS) {
+        this.safeSend(ws, { t: 'full', max: MAX_VISITORS });
+        this.leave(ws, a, 1000, 'full');
         return;
       }
-      entry.dropped = 0;
-      entry.lastSeen = Date.now();
-      let m;
-      try {
-        m = JSON.parse(e.data);
-      } catch {
-        return;
+      a.joined = true;
+      a.st = {
+        id: a.id,
+        name: String(m.name || '旅人').slice(0, 12),
+        c: String(m.c || 'tarte').slice(0, 16), // キャラ種別（将来の他CNPキャラ用）
+        v: Math.max(0, Math.floor(Number(m.v) || 0)) % 32, // 甲羅色などのバリアント
+        x: fin(m.x),
+        z: fin(m.z),
+        yaw: fin(m.yaw, -7, 7),
+        w: 0,
+        j: 0,
+        a: cosmeticMask(m.a),
+      };
+      ws.serializeAttachment(a);
+      const peers = [];
+      for (const other of this.live()) {
+        if (other === ws) continue;
+        const o = this.att(other);
+        if (o && o.joined && o.st) peers.push(o.st);
       }
-      if (m.t === 'hi') {
-        clearTimeout(entry.helloTimer);
-        const joined = [...this.clients.values()].filter((c) => c !== entry && c.state).length;
-        if (joined >= MAX_VISITORS) {
-          this.safeSend(ws, { t: 'full', max: MAX_VISITORS });
-          this.clients.delete(id);
-          try { ws.close(1000, 'full'); } catch {}
-          return;
-        }
-        entry.state = {
-          id,
-          name: String(m.name || '旅人').slice(0, 12),
-          c: String(m.c || 'tarte').slice(0, 16), // キャラ種別（将来の他CNPキャラ用）
-          v: Math.max(0, Math.floor(Number(m.v) || 0)) % 32, // 甲羅色などのバリアント
-          x: fin(m.x),
-          z: fin(m.z),
-          yaw: fin(m.yaw, -7, 7),
-          w: 0,
-          j: 0,
-          a: cosmeticMask(m.a),
-        };
-        const peers = [...this.clients.values()]
-          .filter((c) => c !== entry && c.state)
-          .map((c) => c.state);
-        this.safeSend(ws, { t: 'welcome', id, peers });
-        this.broadcast({ t: 'join', peer: entry.state }, id);
-      } else if (m.t === 'p' && entry.state) {
-        entry.state.x = fin(m.x);
-        entry.state.z = fin(m.z);
-        entry.state.yaw = fin(m.yaw, -7, 7);
-        entry.state.w = fin(m.w, 0, 1);
-        entry.state.j = fin(m.j, 0, 20);
-        entry.state.a = cosmeticMask(m.a);
-        this.broadcast({ t: 'p', id, x: entry.state.x, z: entry.state.z, yaw: entry.state.yaw, w: entry.state.w, j: entry.state.j, a: entry.state.a }, id);
-      } else if (m.t === 'e' && entry.state) {
-        // エモート（頭上の吹き出し）。種類番号だけ中継する
-        const k = Math.max(0, Math.floor(Number(m.k) || 0)) % 8;
-        this.broadcast({ t: 'e', id, k }, id);
-      }
-    });
+      this.safeSend(ws, { t: 'welcome', id: a.id, peers });
+      this.broadcast({ t: 'join', peer: a.st }, ws);
+      return;
+    }
+    if (m.t === 'p' && a.joined && a.st) {
+      a.st.x = fin(m.x);
+      a.st.z = fin(m.z);
+      a.st.yaw = fin(m.yaw, -7, 7);
+      a.st.w = fin(m.w, 0, 1);
+      a.st.j = fin(m.j, 0, 20);
+      a.st.a = cosmeticMask(m.a);
+      ws.serializeAttachment(a);
+      this.broadcast({ t: 'p', id: a.id, x: a.st.x, z: a.st.z, yaw: a.st.yaw, w: a.st.w, j: a.st.j, a: a.st.a }, ws);
+      return;
+    }
+    if (m.t === 'e' && a.joined) {
+      ws.serializeAttachment(a);
+      // エモート（頭上の吹き出し）。種類番号だけ中継する
+      const k = Math.max(0, Math.floor(Number(m.k) || 0)) % 8;
+      this.broadcast({ t: 'e', id: a.id, k }, ws);
+      return;
+    }
+    ws.serializeAttachment(a);
+  }
 
-    const bye = () => {
-      clearTimeout(entry.helloTimer);
-      if (!this.clients.has(id)) return;
-      this.clients.delete(id);
-      if (entry.state) this.broadcast({ t: 'bye', id }, id);
-    };
-    ws.addEventListener('close', bye);
-    ws.addEventListener('error', bye);
+  webSocketClose(ws, code = 1000, reason = '') {
+    // hibernatable WSはハンドラ側でclose()を返して握手を完了させる（二重closeは握る）。
+    // 既に leave() 済み(closing)なら bye は送らない（二重送信防止）
+    const a = this.att(ws);
+    if (a && !a.closing) {
+      this.leave(ws, a, code, reason);
+    } else {
+      try { ws.close(code, String(reason).slice(0, 120)); } catch {}
+    }
+  }
+
+  webSocketError(ws) {
+    this.webSocketClose(ws, 1011, 'error');
   }
 
   // トークンバケット: 送信できるならtrue。満タンを超えては貯めない。
-  allow(entry) {
+  allow(a) {
     const now = Date.now();
-    const elapsed = (now - entry.lastRefill) / 1000;
-    entry.lastRefill = now;
-    entry.tokens = Math.min(MSG_BURST, entry.tokens + elapsed * MSG_REFILL_PER_SEC);
-    if (entry.tokens < 1) return false;
-    entry.tokens -= 1;
+    const elapsed = (now - a.lastRefill) / 1000;
+    a.lastRefill = now;
+    a.tokens = Math.min(MSG_BURST, a.tokens + elapsed * MSG_REFILL_PER_SEC);
+    if (a.tokens < 1) return false;
+    a.tokens -= 1;
     return true;
   }
 
-  dropClient(id, entry, code, reason) {
-    clearTimeout(entry.helloTimer);
-    const had = this.clients.delete(id);
-    try { entry.ws.close(code, reason); } catch {}
-    if (had && entry.state) this.broadcast({ t: 'bye', id }, id);
+  dropClient(ws, a, code, reason) {
+    this.leave(ws, a, code, reason);
   }
 
   // alarmが無ければ1つ仕掛ける（既にあれば触らない＝接続のたびに先送りしない）。
@@ -153,17 +215,25 @@ export class Room {
     }
   }
 
-  // 死活掃引: メッセージが途絶えた亡霊接続を除去してスロットを解放する。
+  // 死活掃引: hi無しの居座り・メッセージが途絶えた亡霊接続を除去してスロットを解放する。
   // TCPのclose通知が遅れる/欠落しても、満員スロットが空かない問題をここで根治する。
   async alarm() {
     const now = Date.now();
-    for (const [id, c] of this.clients) {
-      if (now - c.lastSeen > STALE_MS) {
-        this.dropClient(id, c, 1001, 'stale');
+    for (const ws of this.sockets()) {
+      const a = this.att(ws);
+      if (!a) {
+        try { ws.close(1008, 'no state'); } catch {}
+        continue;
+      }
+      if (a.closing) continue; // 退出済み(CLOSING残留)は数えない
+      if (!a.joined && now - a.openedAt > HELLO_TIMEOUT_MS) {
+        this.dropClient(ws, a, 1008, 'no hello');
+      } else if (now - a.lastSeen > STALE_MS) {
+        this.dropClient(ws, a, 1001, 'stale');
       }
     }
-    // まだ誰かいる間だけ掃引を続ける。全員去ったら再設定せず止める。
-    if (this.clients.size > 0) {
+    // まだ誰か(論理的に有効な接続)がいる間だけ掃引を続ける。全員去ったら再設定せず止める＝完全休眠。
+    if (this.live().length > 0) {
       await this.state.storage.setAlarm(now + HEARTBEAT_MS);
     }
   }
@@ -174,12 +244,14 @@ export class Room {
     } catch {}
   }
 
-  broadcast(obj, excludeId) {
+  broadcast(obj, exceptWs) {
     const s = JSON.stringify(obj);
-    for (const [cid, c] of this.clients) {
-      if (cid === excludeId || !c.state) continue;
+    for (const ws of this.sockets()) {
+      if (ws === exceptWs) continue;
+      const a = this.att(ws);
+      if (!a || a.closing || !a.joined) continue;
       try {
-        c.ws.send(s);
+        ws.send(s);
       } catch {}
     }
   }

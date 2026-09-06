@@ -21,13 +21,13 @@
 - ボード=`main/_boards/kitan_mmo_site/vars_board_20260902.png`。素材合計3.4MB（動画6本=約2.2MB）。
 - 地雷: charbuildの `--hero-angle` 無指定は自動回転で向きが運任せ／ffmpegに libwebp なし→posterはpng抽出→cwebp。
 
-## 🆕 09-02夜 遊びの柱＝画像付きカードに改版（本人「文字しかないのが微妙。ちゃんと画像を使おう」・コミット済み・**未デプロイ・本人GO待ち**）
+## 🎉 09-02夜 遊びの柱＝画像付きカードに改版（本人「文字しかないのが微妙。ちゃんと画像を使おう」・コミット済み・**09-06 本番デプロイ済み（本人GO・Version `d1df4d8e`・巻き戻し先 `925ce8ba`）**。同便で島クライアント net.js（presenceコスト是正）も同乗。live↔dist全数一致・pillar_*.webp 5枚200・verify-deploy.sh は既知の古い期待値2件以外OK）
 - 5枚に16:9の写し `pillar_{michi,daynight,towns,fuchi,waza}.webp` を上乗せ（PC=3列・1枚目は2列幅32:9／スマホ=1列）。組み方は `tools/luna-occulta-mmo/compose_pillars.py`（昼夜=同じ里の`--tod=0.30`と`0.80`を左右／淵の底=field 10の二層鳥居と結晶まわり・**暗所のため露出1.7倍+コントラスト1.15の持ち上げのみ**／技の樹=`KITAN_FAKE_SKILLS=onmyoji … waza_no_ki.tscn -- --waza-shot=`／六道=`build_*.webp`を横一列合成／街=4街の2x2）。
 - 撮影の型: `KITAN_DEVICE_SUFFIX=site` の写し番キャラは **`KITAN_SPIRIT=sakuya … keiyaku.tscn`で契約済みにした**（以後 field 1〜12 に入れる）。`--cam-at`固定の野1(0,14)は土の道だけで絵にならない＝里(plaza)の方が絵になる。
 - ボード=`main/_boards/kitan_mmo_site/pillar_*_20260902.webp`。地雷: モバイル用の旧`.card{padding}`上書きが残って画像が内側に縮んだ→`.card-body`側へ移した。
 
 ## 次にやること（順）
-0. **遊びの柱（画像付き）のデプロイ（本人GO待ち・S1）**: `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`
+0. ~~遊びの柱（画像付き）のデプロイ~~ 済み（09-06・Version `d1df4d8e`）。次は本人の実機検分（`https://vibe.co.jp/luna-occulta-mmo#play` あたり）
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。
 2. 千枚・炭焼・境の写しの**掲載可否**を本人に聞く。可なら `public/luna-occulta-mmo.html` の該当 `<figure … data-pending="1">` から属性を外すだけ（CSS `[data-pending]{display:none}`）。写しは `~/Desktop/main/_boards/kitan_mmo_site/` にも置いてある。
 3. 野（フィールド）の写しは未契約403で撮れなかった（`KITAN_SPIRIT=sakuya`でも不可）。契約済みキャラで撮るなら `godot --path client --resolution 2560x1200 res://scenes/field.tscn -- --field=1 --cam-at=0,14 --tod=0.80 --quit-after=14 --shot=<png>` → `python3 tools/luna-occulta-mmo/crop_shots.py <src_dir> <dst_dir>`。
