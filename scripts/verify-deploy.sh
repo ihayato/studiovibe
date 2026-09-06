@@ -16,16 +16,30 @@ check() { # label url expected
     echo "OK  $label ($code)"
   else
     echo "NG  $label -> $code (期待 $expect)"
+    # 誰が弾いたかをその場で記録する(2026-08-13の全経路403で出所特定に難儀した教訓。
+    # server:Vercel+x-vercel-mitigated=Vercel防壁 / server:cloudflare=CF経由 / 無応答=DNS,TLS)
+    curl -s -o /dev/null -D - -m 20 "$url" | grep -i -E '^(server|x-vercel-error|x-vercel-mitigated|x-vercel-id|cf-ray|cf-mitigated):' | sed 's/^/      /'
     fail=1
   fi
 }
 
 check "本殿" "https://vibe.co.jp/" 200
 check "月蝕綺譚ティザー" "https://vibe.co.jp/luna-occulta" 200
-check "御用板" "https://vibe.co.jp/luna-occulta/goyo" 200
+# 御用板は2026-08-16に撤去され /luna-occulta/tsukimidai へ307するのが正常(200に戻ったら旧ページの復活を疑う)
+check "御用板(→月見台へ307)" "https://vibe.co.jp/luna-occulta/goyo" 307
+loc=$(curl -s -o /dev/null -D - -m 20 "https://vibe.co.jp/luna-occulta/goyo" | tr -d '\r' | awk 'tolower($1)=="location:"{print $2}')
+if [ "$loc" = "/luna-occulta/tsukimidai" ]; then
+  echo "OK  御用板の転送先 ($loc)"
+else
+  echo "NG  御用板の転送先 -> '$loc' (期待 /luna-occulta/tsukimidai)"
+  fail=1
+fi
 check "月蝕綺譚ONLINE" "https://vibe.co.jp/luna-occulta-mmo" 200
-check "BotIDチャレンジ経路(勾玉付与の生命線)" \
-  "https://vibe.co.jp/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/a-4-a/c.js?i=0&v=3&h=vibe.co.jp" 200
+check "月見台(勾玉付与の受け皿)" "https://vibe.co.jp/luna-occulta/tsukimidai" 200
+# BotIDチャレンジ経路はcn-kitan-web側でBotID撤去済み(CF移行後)。404が正常で、200に戻ったら
+# 旧Vercel線の中継が復活していないか疑う(2026-07-17事故の逆向き検知として残す)
+check "BotIDチャレンジ経路(撤去済み=404が正)" \
+  "https://vibe.co.jp/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/a-4-a/c.js?i=0&v=3&h=vibe.co.jp" 404
 
 # 詣でAPIは素curlで401(session)が正常。404/503は経路破損・設定退行を疑う
 code=$(curl -s -o /dev/null -m 20 -w '%{http_code}' -X POST \
