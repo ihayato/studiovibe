@@ -1,29 +1,22 @@
 # HANDOFF: 月蝕綺譚ONLINE 公式LP（vibe.co.jp/luna-occulta-mmo）
 
-2026-09-06 更新。この1ファイルだけ読めば仕事を再開できることを目標にした引き継ぎ文書。読み手は「このプロジェクトを何も知らないAI」。
+2026-09-07 更新。この1ファイルだけ読めば仕事を再開できることを目標にした引き継ぎ文書。読み手は「このプロジェクトを何も知らないAI」。
 
 ## 現在地（どこまで終わっているか）
 
-- **公開中の本番**: https://vibe.co.jp/luna-occulta-mmo ＝ 2026-09-06夜の **Version e3355c1b**（マーケ型LP第1版。「あの頃の夜を、もう一度。」共感→約束3→証拠→FAQ→CTA）。
-- **ローカル先端（コミット済み・未デプロイ・本人GO待ち）**: ブランチ `codex/meikyo-island` の `7783bda` まで。本番との差分＝下の「次にやること 1」の中身。
-  - 擬似キャラビルド（髪型6×髪色17×肌7＝714通りを事前描画・`assets/build/b_{髪i}_{色i}_{肌i}.webp`・押した1枚だけ読む）
-  - 整理（ヒーロー副文1文・共感1段落・約束各1段落・FAQ 5→3・証拠節と開発だよりの帯を撤去）
-  - Why節に絵（同じ里の昼夜の写し＋栞の一枚絵の板）・見出し「ログインすれば仲間がいて、ギルドで集まり、ボスを追って、気づけば朝でした。」
-  - 御霊の札＝職業名を主・御霊名を副（「剣士／御霊 咲耶」）
-  - コピー強化＝衆（ギルド）と大鬼（レイド）を前面に（Why本文・約束02）
-  - 手紙の節 `#letter`（FAQの後・作り手の言葉をエモ寄せで移動・**結の下書き＝本人差し替え待ち**）
-  - サムネ（OGP）＝正典シート参照でGPT Image 2に描き起こした**A「誘い」**（ロゴは左上に後合成）
-  - Why節の昼夜の写しを組み直し（`7783bda`）＝右端で「写し番」の名札が「写し」に切れていた→昼cx800／夜cx1350で名札を全部収める（`tools/luna-occulta-mmo/compose_daynight.py`）
+- **公開中の本番**: https://vibe.co.jp/luna-occulta-mmo ＝ 2026-09-07 の **Version fda0a12b**（本人「最新版をデプロイ」）。ブランチ `codex/meikyo-island` の `94dee0b` と一致＝**未デプロイ差分なし**。
+- 09-07便で本番に入ったもの: 擬似キャラビルド（714通り）・整理（副文1文/FAQ3）・Why節の絵と見出し・御霊札=職業名主・衆と大鬼のコピー・手紙 `#letter`（**結の下書きのまま**）・サムネA「誘い」・Why昼夜写しの名札是正・**約束03の板＝7職アバター**（下記）。
+- **約束03「御霊を装備して、転職する」の板**（09-07・本人「スタート画面ではなく、さまざまな職業のアバターを見せようか」）: タイトル画面 `world_title.webp` をやめ、同じ姿（姫セミ・藍）が道ごとに装束と得物を変える **7職アバター**（旅人＋剣士/陰陽師/神楽/隠密/狩人/商人＝既存の `build_{tabibito,kenshi,onmyoji,kagura,onmitsu,kariudo,akindo}.webp` 540x810）に差し替え。大きい1枚＋7枚の帯（role=tablist）。帯の姿か上の御霊札（`li[data-job]`）を押すと大きい1枚が切り替わる（フェード・reduced-motionでは即時）。`world_title.webp` は手紙の節の背景で引き続き使用。
 - ページ構成（先端）: ヒーロー → `#why` 共感 → `#promise` 約束3（歩く／衆と大鬼／御霊を装備して転職＝札絵動画6本） → `#build` 姿を組んでみる → `#faq` 3問 → `#letter` 手紙 → `#join` CTA。行動は月見台登録の1種類（`https://vibe.co.jp/luna-occulta/tsukimidai?via=mmo`）。
 - 検証状態: `npx vite build` 緑・`bash scripts/linkcheck-luna-occulta-mmo.sh` 全OK・AI臭検査 ERROR0/WARN0・390/1280幅の横はみ出しゼロ・ビルダーの切替は機械検査済み。**見た目＝09-06 21時にPlaywright(python)でPC1280/SP390の全節を撮って結が目視済み**（写し＝`main/_boards/kitan_mmo_site/kenbun_20260906/`・大きな崩れなし・手紙の節の背景にタイトル画面のボタンが薄く透ける＝意匠の範囲として残置）。本人の目視は本番反映後に。
 
 ## 次にやること（上から着手順）
 
-1. **本人GO（S1）→本番反映**。node_modulesが空なら先に `npm ci`。
+1. （09-07に反映済み）次に本番へ出すときの型は同じ。node_modulesが空なら先に `npm ci`。
    ```bash
    cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh
    ```
-   反映後の確認: `curl -s https://vibe.co.jp/luna-occulta-mmo | grep -c 'id="build"'` が1、`https://vibe.co.jp/luna-occulta-mmo-assets/build/b_2_0_0.webp` と `/og.jpg` が200。
+   反映後の確認: `curl -s https://vibe.co.jp/luna-occulta-mmo | grep -c 'id="jobs"'` が1、`/luna-occulta-mmo-assets/build_kenshi.webp`・`/build/b_2_0_0.webp`・`/og.jpg` が200。
 2. **手紙（`#letter`）の本文を本人の言葉に差し替える**（軍配の掟＝本人の声はAIが置き換えない。一人称は「ぼく」・です・ます）。届いたら差し込み→build→deploy。
 3. サムネの再検討があれば `tools/luna-occulta-mmo/gen_kv.py` で再発注（B「大鬼との対峙」の原画は `main/_boards/kitan_mmo_site/kv_B_raw_20260906.png` に保存済み）。
 4. 公開後の伸びしろ（設計書§8）: ストアバッジ・公式PV埋め込み・開発だよりの復活（素材は `assets/` に残置）。
@@ -69,13 +62,14 @@
 ## 主要ファイル
 
 - `public/luna-occulta-mmo.html` — ページ本体（HTML+CSS+小さなJS。1ファイル完結）
-- `public/luna-occulta-mmo-assets/` — logo.webp／og.jpg／shot_*.webp（街の写し）／card_*.mp4+poster／world_title.webp／battle_slash.webp／pillar_daynight.webp／shiori.webp／build/b_*.webp（714枚）／ui_*.webp・var_*.webp・pillar_*.webp（撤去節の素材・残置）
+- `public/luna-occulta-mmo-assets/` — logo.webp／og.jpg／build_*.webp（7職アバター・約束03）／shot_*.webp（街の写し）／card_*.mp4+poster／world_title.webp／battle_slash.webp／pillar_daynight.webp／shiori.webp／build/b_*.webp（714枚）／ui_*.webp・var_*.webp・pillar_*.webp（撤去節の素材・残置）
 - `tools/luna-occulta-mmo/` — crop_shots.py（街の写し）・crop_vars.py／crop_build.py（姿）・compose_pillars.py・make_og.py（旧OGP）・gen_kv.py（サムネ発注器）
 - `scripts/linkcheck-luna-occulta-mmo.sh` — ページ内hrefと素材の到達検査
 - 本人向けの写し置き場: `~/Desktop/main/_boards/kitan_mmo_site/`
 
 ## 過去ログ（新しい順・要点のみ）
 
+- 09-07: 約束03の板を7職アバターに差し替え（`94dee0b`）→ **本番へ fda0a12b**（09-06夜からの未反映7便＋1を同乗・verify-deploy全項目OK・Playwright PC1280/SP390で目視済み）。
 - 09-06 21時: 先端の見た目検分（Playwright撮影・PC/SP全節）→ Why節の写しの名札切れを是正（`7783bda`）。launch.jsonの一時エントリ `vibe-preview-mmo` は削除済み（サーバー本体は前セッションのものを残置）。
 - 09-06夜: サムネ描き起こし2案→A採用（`ffab4dd`）／手紙の節・見出し差し替え（`07003b9`）／衆と大鬼のコピー（`380e131`）／職業名を主（`c2fab5e`）／Why節に絵（`613a6f1`）／擬似ビルド＋整理（`ce8e4b9`）／**マーケ型LP第1版を本番へ e3355c1b**（`c2c72d1`）／開発状況反映便＝里の6窓・集う・開発だより・タイトル画面・新キット5街（`a8cd99d`・後にカタログとして撤去）。
 - 09-06昼: 遊びの柱＝画像付き5枚を本番へ（Version d1df4d8e・別セッションのnet.js便に同乗）。
