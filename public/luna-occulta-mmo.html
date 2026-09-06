@@ -100,8 +100,15 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 /* 共感 */
 .empathy{text-align:center}
 .empathy .lead{margin-left:auto;margin-right:auto}
-.empathy blockquote{max-width:30em;margin:36px auto 0;padding:26px 28px;border-top:1px solid var(--line-dim);border-bottom:1px solid var(--line-dim);font-size:clamp(17px,2.6vw,21px);font-weight:500;letter-spacing:.12em;line-height:2;color:var(--kindei-hi);font-feature-settings:"palt" 1}
-.empathy blockquote footer{margin-top:10px;font-size:12.5px;letter-spacing:.2em;color:var(--sub)}
+.why-img{margin:36px auto 0;max-width:880px;overflow:hidden}
+.why-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.why-img figcaption{padding:10px 16px 12px;font-size:12.5px;letter-spacing:.1em;color:var(--sub);border-top:1px solid var(--line-dim)}
+.shiori{display:grid;grid-template-columns:220px 1fr;gap:0;max-width:760px;margin:24px auto 0;overflow:hidden;text-align:left;background:linear-gradient(90deg,rgba(92,68,112,.18),var(--panel) 60%)}
+.shiori-img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;aspect-ratio:3/4}
+.shiori blockquote{align-self:center;padding:28px 30px}
+.shiori blockquote p{font-size:clamp(16px,2.4vw,19px);font-weight:500;letter-spacing:.12em;line-height:2;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.shiori blockquote footer{margin-top:12px;font-size:12.5px;letter-spacing:.2em;color:var(--sub)}
+@media (max-width:560px){.shiori{grid-template-columns:1fr}.shiori-img{aspect-ratio:16/10;object-position:50% 8%}.shiori blockquote{padding:22px 20px}}
 
 /* 約束 */
 .promise{display:grid;grid-template-columns:1.15fr 1fr;gap:36px;align-items:center;margin-top:56px}
@@ -197,10 +204,17 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
   <p class="eyebrow">Why</p>
   <h2 class="gold">露店を眺めて、狩場で待ち合わせて、<br>気づけば朝でした。</h2>
   <p class="lead">あの夜の熱を、今のスマホで、仲間と。里に戻れば誰かがいて、野へ出れば隣で刀が振られる。そういう夜を作っています。</p>
-  <blockquote>
-    宵の刻。里の門で、そなたを待っています。<br>喰われた月の下で、逢いましょう。
-    <footer>—— 道しるべの御霊・栞</footer>
-  </blockquote>
+  <figure class="why-img panel">
+    <img src="/luna-occulta-mmo-assets/pillar_daynight.webp" width="1600" height="900" alt="同じ里の昼と夜" loading="lazy">
+    <figcaption>同じ里の、昼と夜。世界の一日は四十分でめぐります</figcaption>
+  </figure>
+  <div class="shiori panel">
+    <img class="shiori-img" src="/luna-occulta-mmo-assets/shiori.webp" width="600" height="800" alt="道しるべの御霊・栞" loading="lazy">
+    <blockquote>
+      <p>宵の刻。里の門で、そなたを待っています。<br>喰われた月の下で、逢いましょう。</p>
+      <footer>—— 道しるべの御霊・栞</footer>
+    </blockquote>
+  </div>
 </section>
 
 <section id="promise" class="sec">

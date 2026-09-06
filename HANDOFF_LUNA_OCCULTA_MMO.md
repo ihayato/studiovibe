@@ -44,6 +44,10 @@
 - 整理: ヒーロー副文1文／共感1段落／約束は各1段落／証拠節を廃止して「姿を組む」＋作り手の板だけ／FAQ 5→3／開発だよりの帯は撤去（素材残置）。本文≈3,400字（前回4,600字）。
 - 地雷: 帯合成でgap計算が負になり重なった（12×372>1600）。以後は帯にせず擬似ビルドへ。
 
+## 🆕 09-06 夜 Why節に絵（本人「文字しかない・栞のセリフも」・コミット済み・**未デプロイ・GO待ち**）
+- 見出し→本文→**同じ里の昼と夜（pillar_daynight）**→**栞の板**（本編公式サイトの `shiori_full.webp`＝月を背にした一枚絵を左・語りを右の羽二重板。スマホは縦積み）。
+- 栞の一枚絵は `cn-kitan-web/public/media/img/shiori_full.webp` を600x800に縮小して流用（出自は本編公式サイト＝同社素材）。
+
 ## 次にやること（順）
 0. ~~遊びの柱（画像付き）のデプロイ~~ 済み（09-06・Version `d1df4d8e`）。次は本人の実機検分（`https://vibe.co.jp/luna-occulta-mmo#play` あたり）
 1. ~~本番反映~~ 済み（Version ff2baabf）。再デプロイは `cd ~/Desktop/dev/vibe && npm run build && npx wrangler deploy && bash scripts/verify-deploy.sh`（node_modulesが空なら先に `npm ci`）。
