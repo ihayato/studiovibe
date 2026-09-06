@@ -127,6 +127,23 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
 .cards-v span{display:block;margin-top:1px;font-size:10.5px;letter-spacing:.14em;color:var(--sub)}
 .cards-v span::before{content:"御霊 ";opacity:.7}
 @media (max-width:820px){.promise{grid-template-columns:1fr;gap:20px}.promise:nth-of-type(even) .promise-img{order:0}.cards-v{grid-template-columns:repeat(3,1fr)}}
+.cards-v li[data-job]{cursor:pointer}
+.jobs{padding:18px 18px 14px;display:grid;gap:12px;justify-items:center}
+.jobs-view{text-align:center;width:100%}
+.jobs-view img{width:100%;max-width:210px;height:auto;aspect-ratio:2/3;object-fit:cover;margin:0 auto;border-radius:8px;background:#1d1c2e;box-shadow:0 0 0 1px rgba(217,169,76,.14);transition:opacity .28s var(--ease)}
+.jobs-view img.swap{opacity:0}
+.jobs-name{margin-top:10px;line-height:1.5}
+.jobs-name b{display:block;font-size:20px;font-weight:800;letter-spacing:.2em;color:var(--kindei-hi);font-feature-settings:"palt" 1}
+.jobs-name span{display:block;font-size:11.5px;letter-spacing:.12em;color:var(--sub)}
+.jobs-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:100%}
+.jobs-strip button{appearance:none;background:transparent;border:0;padding:0;cursor:pointer;color:var(--sub);font-family:var(--serif);text-align:center}
+.jobs-strip img{width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;border-radius:6px;background:#1d1c2e;box-shadow:0 0 0 1px rgba(217,169,76,.14);opacity:.62;transition:opacity .2s var(--ease),box-shadow .2s var(--ease),transform .2s var(--ease)}
+.jobs-strip button:hover img{opacity:.9}
+.jobs-strip button[aria-selected="true"] img{opacity:1;box-shadow:0 0 0 2px var(--kindei);transform:translateY(-2px)}
+.jobs-strip span{display:block;margin-top:5px;font-size:10.5px;letter-spacing:.06em;line-height:1.3;white-space:nowrap}
+.jobs-strip button[aria-selected="true"] span{color:var(--kindei-hi);font-weight:700}
+.jobs-hint{font-size:11.5px;letter-spacing:.06em;color:var(--sub);text-align:center;line-height:1.7}
+@media (max-width:820px){.jobs{padding:16px 14px 12px}.jobs-view img{max-width:190px}.jobs-strip{gap:4px}.jobs-strip span{font-size:10px;letter-spacing:0}}
 
 /* 姿を組む */
 .builder{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:center;margin-top:32px;padding:24px}
@@ -247,15 +264,30 @@ h2{margin-top:10px;font-size:clamp(26px,4.4vw,40px);font-weight:800;letter-spaci
       <h3>御霊を装備して、転職する</h3>
       <p>はじめは旅人。力がついたら御霊と契約して装備し、その御霊の道に就きます。剣士、陰陽師、神楽、隠密、狩人、商人。本編で迎えた御霊たちが、今度はあなたの隣で戦います。</p>
       <ul class="cards-v" aria-label="入口の御霊">
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_sakuya.mp4" poster="/luna-occulta-mmo-assets/card_sakuya_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="咲耶の札絵"></video></div><b>剣士</b><span>咲耶</span></li>
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_karura.mp4" poster="/luna-occulta-mmo-assets/card_karura_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="カルラの札絵"></video></div><b>陰陽師</b><span>カルラ</span></li>
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_izuna.mp4" poster="/luna-occulta-mmo-assets/card_izuna_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="イズナの札絵"></video></div><b>神楽</b><span>イズナ</span></li>
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_shion.mp4" poster="/luna-occulta-mmo-assets/card_shion_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="紫苑の札絵"></video></div><b>隠密</b><span>紫苑</span></li>
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_hinanojo.mp4" poster="/luna-occulta-mmo-assets/card_hinanojo_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="雛之丞の札絵"></video></div><b>狩人</b><span>雛之丞</span></li>
-        <li><div class="cardv"><video src="/luna-occulta-mmo-assets/card_oen.mp4" poster="/luna-occulta-mmo-assets/card_oen_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="おえんの札絵"></video></div><b>商人</b><span>おえん</span></li>
+        <li data-job="kenshi"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_sakuya.mp4" poster="/luna-occulta-mmo-assets/card_sakuya_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="咲耶の札絵"></video></div><b>剣士</b><span>咲耶</span></li>
+        <li data-job="onmyoji"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_karura.mp4" poster="/luna-occulta-mmo-assets/card_karura_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="カルラの札絵"></video></div><b>陰陽師</b><span>カルラ</span></li>
+        <li data-job="kagura"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_izuna.mp4" poster="/luna-occulta-mmo-assets/card_izuna_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="イズナの札絵"></video></div><b>神楽</b><span>イズナ</span></li>
+        <li data-job="onmitsu"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_shion.mp4" poster="/luna-occulta-mmo-assets/card_shion_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="紫苑の札絵"></video></div><b>隠密</b><span>紫苑</span></li>
+        <li data-job="kariudo"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_hinanojo.mp4" poster="/luna-occulta-mmo-assets/card_hinanojo_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="雛之丞の札絵"></video></div><b>狩人</b><span>雛之丞</span></li>
+        <li data-job="akindo"><div class="cardv"><video src="/luna-occulta-mmo-assets/card_oen.mp4" poster="/luna-occulta-mmo-assets/card_oen_poster.webp" width="420" height="564" autoplay muted loop playsinline preload="metadata" aria-label="おえんの札絵"></video></div><b>商人</b><span>おえん</span></li>
       </ul>
     </div>
-    <div class="promise-img panel"><img src="/luna-occulta-mmo-assets/world_title.webp" width="1600" height="750" alt="タイトル画面。鳥居と灯籠の参道" loading="lazy"></div>
+    <div class="promise-img panel jobs" id="jobs">
+      <div class="jobs-view">
+        <img id="jv" src="/luna-occulta-mmo-assets/build_tabibito.webp" width="540" height="810" alt="旅人の姿" loading="lazy" decoding="async">
+        <p class="jobs-name"><b id="jv-job">旅人</b><span id="jv-sub">御霊を装備する前の姿</span></p>
+      </div>
+      <div class="jobs-strip" role="tablist" aria-label="道を選ぶ">
+        <button type="button" role="tab" aria-selected="true" data-job="tabibito" data-name="旅人" data-sub="御霊を装備する前の姿"><img src="/luna-occulta-mmo-assets/build_tabibito.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>旅人</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="kenshi" data-name="剣士" data-sub="御霊 咲耶を装備"><img src="/luna-occulta-mmo-assets/build_kenshi.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>剣士</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="onmyoji" data-name="陰陽師" data-sub="御霊 カルラを装備"><img src="/luna-occulta-mmo-assets/build_onmyoji.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>陰陽師</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="kagura" data-name="神楽" data-sub="御霊 イズナを装備"><img src="/luna-occulta-mmo-assets/build_kagura.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>神楽</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="onmitsu" data-name="隠密" data-sub="御霊 紫苑を装備"><img src="/luna-occulta-mmo-assets/build_onmitsu.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>隠密</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="kariudo" data-name="狩人" data-sub="御霊 雛之丞を装備"><img src="/luna-occulta-mmo-assets/build_kariudo.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>狩人</span></button>
+        <button type="button" role="tab" aria-selected="false" data-job="akindo" data-name="商人" data-sub="御霊 おえんを装備"><img src="/luna-occulta-mmo-assets/build_akindo.webp" width="540" height="810" alt="" loading="lazy" decoding="async"><span>商人</span></button>
+      </div>
+      <p class="jobs-hint">札か姿を押すと、道が変わります。同じ姿のまま、装束と得物が変わります。</p>
+    </div>
   </div>
   <p class="note">※ 画面はすべて開発中のものです。札絵は本編『月蝕綺譚』の召喚札より</p>
 </section>
@@ -332,6 +364,22 @@ document.getElementById('y').textContent=new Date().getFullYear();
     b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});
     show();
   });});
+})();
+(function(){
+  var jv=document.getElementById('jv'), jj=document.getElementById('jv-job'), js=document.getElementById('jv-sub'); if(!jv) return;
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.jobs-strip button'));
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function pick(job){
+    var t=null; tabs.forEach(function(b){ var on=b.dataset.job===job; b.setAttribute('aria-selected',on?'true':'false'); if(on) t=b; });
+    if(!t) return;
+    var src='/luna-occulta-mmo-assets/build_'+job+'.webp';
+    var apply=function(){ jv.src=src; jv.alt=t.dataset.name+'の姿'; jj.textContent=t.dataset.name; js.textContent=t.dataset.sub; jv.classList.remove('swap'); };
+    if(reduce){ apply(); return; }
+    jv.classList.add('swap');
+    var im=new Image(); im.onload=im.onerror=apply; im.src=src;
+  }
+  tabs.forEach(function(b){ b.addEventListener('click',function(){ pick(b.dataset.job); }); });
+  document.querySelectorAll('.cards-v li[data-job]').forEach(function(li){ li.addEventListener('click',function(){ pick(li.dataset.job); }); });
 })();
 (function(){
   var vids=document.querySelectorAll('.cards-v video'); if(!vids.length) return;
