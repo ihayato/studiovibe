@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ツキアワセ 〜月夜の絵あわせ〜</title>
+<meta name="description" content="月夜にそろえる、一日一局の絵あわせ。同じ絵札を三枚そろえて山を崩す、和風の絵あわせパズルです。課金はありません。広告も出ません。">
+<meta name="theme-color" content="#131320">
+<meta property="og:title" content="ツキアワセ 〜月夜の絵あわせ〜">
+<meta property="og:description" content="月夜にそろえる、一日一局の絵あわせ。">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://vibe.co.jp/tsukiawase/">
+<meta property="og:url" content="https://vibe.co.jp/tsukiawase/">
+<meta property="og:site_name" content="ツキアワセ">
+<meta property="og:image" content="https://vibe.co.jp/tsukiawase/img/ogp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://vibe.co.jp/tsukiawase/img/ogp.jpg">
+<link rel="icon" href="img/icon180.png">
+<link rel="apple-touch-icon" href="img/icon180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/hero_poster.jpg">
+<style>
+:root{
+  --yoi:#131320;        /* 地: 宵闇藍 */
+  --men:#1a1729;        /* 面 */
+  --men2:#211d33;       /* 面の上 */
+  --shiro:#E8E4D8;      /* 文字: 月白 */
+  --kin:#D9A94C;        /* 金泥: 主導線・成就・選択のみ */
+  --kin-hi:#F0CE7E;
+  --beni:#C93A2E;       /* 蝕紅: 徴のみ */
+  --sen:rgba(232,228,216,.18);  /* 静の枠線 */
+  --sen2:rgba(232,228,216,.29);
+  --usu:rgba(232,228,216,.62);  /* 副文字 */
+  --fuda:#EFE8D6;       /* 札の面 */
+  --ease:cubic-bezier(.22,.8,.28,1);
+  --wrap:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--yoi);color:var(--shiro);font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:500;line-height:1.9;letter-spacing:.04em;font-feature-settings:"palt";overflow-x:hidden}
+img,video{display:block;max-width:100%}
+img{height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--kin-hi);outline-offset:3px;border-radius:4px}
+.wrap{width:min(100% - 40px,var(--wrap));margin-inline:auto}
+section{padding:112px 0;position:relative}
+@media (max-width:720px){section{padding:80px 0}}
+
+/* 見出し */
+.ban{display:flex;align-items:baseline;gap:14px;font-size:13px;letter-spacing:.32em;color:var(--usu);margin-bottom:20px}
+.ban i{font-style:normal;display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--shiro);opacity:.55;box-shadow:3px 0 0 0 var(--yoi) inset;transform:translateY(-1px)}
+h2{font-size:clamp(28px,4.4vw,44px);font-weight:800;line-height:1.45;letter-spacing:.06em;margin-bottom:24px}
+.lead{color:var(--usu);font-size:16px;max-width:34em}
+.lead + .lead{margin-top:12px}
+
+/* 釦: 暗面×細金縁×沈み込み */
+.store{display:inline-flex;align-items:center;gap:12px;min-height:56px;padding:10px 26px 10px 20px;border-radius:10px;text-decoration:none;
+  background:linear-gradient(180deg,#26213a,#15121f);border:1px solid rgba(217,169,76,.62);
+  box-shadow:0 14px 28px -12px rgba(0,0,0,.8),0 2px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:transform .16s var(--ease),border-color .16s,box-shadow .16s}
+.store:hover{border-color:var(--kin-hi);box-shadow:0 14px 32px -10px rgba(217,169,76,.28),0 2px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1)}
+.store:active{transform:translateY(2px);box-shadow:0 4px 10px -6px rgba(0,0,0,.8),inset 0 2px 6px rgba(0,0,0,.5)}
+.store svg{width:24px;height:24px;flex:none;fill:var(--shiro)}
+.store span{display:block;line-height:1.25}
+.store small{display:block;font-size:10.5px;letter-spacing:.18em;color:var(--usu)}
+.store b{font-size:17px;font-weight:700;letter-spacing:.08em}
+.stores{display:flex;flex-wrap:wrap;gap:14px}
+
+/* 上の帯 */
+.top{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px max(20px,env(safe-area-inset-left));
+  transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent}
+.top.on{background:rgba(19,19,32,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--sen)}
+.top .mark{height:34px;opacity:0;transform:translateY(-4px);transition:opacity .3s,transform .3s var(--ease)}
+.top.on .mark{opacity:1;transform:none}
+.top nav{display:flex;gap:26px;font-size:13px;letter-spacing:.2em}
+.top nav a{text-decoration:none;color:var(--usu);padding:10px 0;transition:color .16s}
+.top nav a:hover{color:var(--shiro)}
+.top nav a.get{color:var(--kin-hi)}
+@media (max-width:720px){.top nav a:not(.get){display:none}}
+
+/* ─── 表: ヒーロー ─── */
+.hero{min-height:100svh;padding:0;display:grid;isolation:isolate;overflow:hidden}
+.hero .eizo{position:absolute;z-index:-2;inset:0 0 0 auto;height:100%;aspect-ratio:9/16;max-width:100%}
+.hero .eizo video,.hero .eizo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.hero .eizo{-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.5) 24%,#000 52%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.5) 24%,#000 52%)}
+.hero .eizo::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--yoi) 0%,transparent 26%)}
+.hero .tsuki{position:absolute;z-index:-3;left:-12vw;top:-18vw;width:60vw;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 60% 60%,rgba(240,206,126,.10),rgba(240,206,126,.03) 45%,transparent 66%)}
+.hero .naka{align-self:center;padding:120px 0 96px}
+.hero .logo{width:min(520px,84%);margin-left:-10px;filter:drop-shadow(0 18px 30px rgba(0,0,0,.6))}
+.hero .fuku{font-size:14px;letter-spacing:.42em;color:var(--usu);margin:6px 0 30px 4px}
+.hero h1{font-size:clamp(26px,3.5vw,40px);font-weight:800;line-height:1.6;letter-spacing:.08em;margin-bottom:18px}
+.hero p{color:var(--usu);max-width:25em;margin-bottom:38px}
+.hero .yakusoku{display:flex;gap:20px;margin-top:30px;font-size:13px;letter-spacing:.2em;color:var(--usu)}
+.hero .yakusoku span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--shiro);opacity:.6;margin-right:9px;vertical-align:middle}
+.hero .text{max-width:560px}
+@media (max-width:900px){
+  .hero .eizo{inset:0;width:100%;height:100%;aspect-ratio:auto;-webkit-mask-image:none;mask-image:none}
+  .hero .eizo::after{background:linear-gradient(0deg,var(--yoi) 0%,rgba(19,19,32,.86) 30%,rgba(19,19,32,.2) 58%,transparent 72%)}
+  .hero .naka{align-self:end;padding:0 0 max(40px,env(safe-area-inset-bottom))}
+  .hero .logo{width:min(340px,82%)}
+  .hero .fuku{margin-bottom:16px;font-size:12px}
+  .hero h1{font-size:23px;margin-bottom:10px}
+  .hero p{font-size:14.5px;margin-bottom:24px;line-height:1.8}
+  .hero .store{flex:1 1 150px;padding-inline:12px 14px;justify-content:center;gap:10px}
+  .hero .store b{font-size:15px;white-space:nowrap;letter-spacing:.04em}
+  .hero .yakusoku{margin-top:20px;gap:14px;font-size:12px}
+}
+@media (max-width:900px) and (max-height:760px){
+  .hero{min-height:720px}
+  .hero .logo{width:min(230px,70%)}
+  .hero p{display:none}
+  .hero h1{margin-bottom:22px}
+}
+@media (max-width:360px){.asobi .ban-dai{margin-inline:-14px;padding-inline:6px}}
+.sagaru{position:absolute;left:50%;bottom:22px;width:1px;height:44px;background:linear-gradient(var(--sen2),transparent);transform-origin:top;animation:sagaru 2.6s var(--ease) infinite}
+@keyframes sagaru{0%{transform:scaleY(0)}55%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+@media (max-width:900px){.sagaru{display:none}}
+
+/* ─── 一: あそびかた（その場で崩せる小さな山） ─── */
+.asobi .naka{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:72px;align-items:center}
+.okite{list-style:none;margin-top:36px;counter-reset:o}
+.okite li{counter-increment:o;display:grid;grid-template-columns:44px 1fr;align-items:baseline;padding:16px 0;border-top:1px solid var(--sen)}
+.okite li:last-child{border-bottom:1px solid var(--sen)}
+.okite li::before{content:counter(o,cjk-ideographic);font-size:20px;font-weight:800;color:var(--usu)}
+.ban-dai{background:linear-gradient(180deg,#1d1930,#141122);border-radius:20px;padding:20px 18px 18px;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.9),0 8px 18px -8px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06)}
+.ban-atama{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2em;color:var(--usu);padding:0 4px 12px}
+.ban-atama b{font-size:22px;font-weight:800;color:var(--shiro);letter-spacing:.06em;margin-right:4px;font-variant-numeric:tabular-nums}
+.tsumu{font-size:13px;letter-spacing:.2em;padding:10px 14px;min-height:44px;border-radius:8px;border:1px solid var(--sen2);color:var(--usu);transition:color .16s,border-color .16s}
+.tsumu:hover{color:var(--shiro);border-color:var(--usu)}
+.stage{container-type:inline-size;position:relative}
+.yama{--u:calc(100cqw/14);position:relative;height:calc(var(--u)*9.3)}
+.bon{position:absolute;left:0;right:0;top:calc(var(--u)*6.95);height:calc(var(--u)*2.3);border-radius:10px;background:rgba(0,0,0,.34);
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.6),inset 0 0 0 1px var(--sen);display:grid;grid-template-columns:repeat(7,1fr)}
+.bon i{border-right:1px solid rgba(232,228,216,.07)}
+.bon i:last-child{border:0}
+.fuda{position:absolute;width:calc(var(--u)*2);height:calc(var(--u)*2);padding:calc(var(--u)*.07);
+  left:calc(var(--u)*var(--x) - var(--l)*3px);top:calc(var(--u)*var(--y) - var(--l)*4px);z-index:var(--z);
+  transition:left .26s var(--ease),top .26s var(--ease),filter .2s,opacity .24s,transform .24s var(--ease)}
+.fuda span{display:block;width:100%;height:100%;border-radius:14%;background:var(--fuda) center/cover no-repeat;
+  box-shadow:0 calc(var(--u)*.16) 0 #0c0a14,0 calc(var(--u)*.2) 0 rgba(217,169,76,.34),0 calc(var(--u)*.3) calc(var(--u)*.3) rgba(0,0,0,.55),inset 0 0 0 1px rgba(0,0,0,.18)}
+.fuda[disabled]{cursor:default;filter:brightness(.5) saturate(.75)}
+.fuda:not([disabled]):not(.oki):hover{transform:translateY(-3px)}
+.fuda.oki{cursor:default}
+.fuda.sorou span{box-shadow:0 0 0 2px var(--kin-hi),0 0 calc(var(--u)*.9) rgba(240,206,126,.75)}
+.fuda.kieru{opacity:0;transform:scale(.7)}
+.maku{position:absolute;inset:0;z-index:999;display:grid;place-content:center;justify-items:center;text-align:center;gap:6px;border-radius:12px;
+  background:rgba(19,19,32,.86);opacity:0;pointer-events:none;transition:opacity .42s}
+.maku.on{opacity:1;pointer-events:auto}
+.maku img{width:84px;margin-bottom:4px}
+.maku strong{font-size:30px;font-weight:800;letter-spacing:.14em}
+.maku.yoake strong{color:var(--kin-hi)}
+.maku p{color:var(--usu);font-size:14px;margin-bottom:14px}
+.maku .narabi{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.kinbtn{display:inline-flex;align-items:center;min-height:46px;padding:8px 22px;border-radius:8px;text-decoration:none;font-weight:700;letter-spacing:.14em;font-size:14px;
+  color:#1b1508;background:linear-gradient(180deg,var(--kin-hi),var(--kin));box-shadow:0 10px 22px -10px rgba(217,169,76,.6),inset 0 1px 0 rgba(255,255,255,.5)}
+.kinbtn:active{transform:translateY(2px)}
+@media (max-width:900px){.asobi .naka{grid-template-columns:1fr;gap:44px}.ban-dai{padding:16px 10px 12px;margin-inline:-8px}}
+
+/* ─── 二: 映像 ─── */
+.eizo-sec{background:linear-gradient(180deg,transparent,rgba(0,0,0,.28) 30%,rgba(0,0,0,.28) 70%,transparent)}
+.eizo-sec .naka{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:80px;align-items:center}
+.gaku{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:9/16;background:#0c0a14;
+  box-shadow:0 50px 90px -30px rgba(0,0,0,.95),0 10px 20px -8px rgba(0,0,0,.7),0 0 0 1px var(--sen)}
+.gaku video,.gaku img.shita{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.saisei{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(0deg,rgba(12,10,20,.7),rgba(12,10,20,.15) 50%);transition:opacity .3s}
+.saisei.kie{opacity:0;pointer-events:none}
+.saisei i{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:rgba(19,19,32,.6);border:1px solid rgba(240,206,126,.8);
+  box-shadow:0 0 0 0 rgba(240,206,126,.4);animation:kokyu 2.8s ease-in-out infinite;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.saisei i::before{content:"";border-left:22px solid var(--kin-hi);border-block:13px solid transparent;margin-left:7px}
+.saisei em{position:absolute;bottom:24px;font-style:normal;font-size:12px;letter-spacing:.3em;color:var(--usu)}
+@keyframes kokyu{50%{box-shadow:0 0 0 16px rgba(240,206,126,0)}}
+.koma{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:40px;max-width:520px}
+.koma figure{font-size:12px;letter-spacing:.16em;color:var(--usu)}
+.koma img{width:100%;border-radius:10px;aspect-ratio:9/12;object-fit:cover;object-position:top;margin-bottom:8px;box-shadow:0 0 0 1px var(--sen)}
+@media (max-width:900px){.eizo-sec .naka{grid-template-columns:1fr;gap:40px}.eizo-sec .gaku{max-width:340px;margin-inline:auto;order:2}.koma{display:none}}
+
+/* ─── 三: 稽古と番付 ─── */
+.keiko{padding:0}
+.keiko .e{position:absolute;z-index:-1;top:0;bottom:0;left:max(0px,calc((100vw - var(--wrap))/2 - 80px));aspect-ratio:9/15;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 62%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 62%,transparent)}
+.keiko .e img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.keiko .e::after{content:"";position:absolute;inset:0;background:linear-gradient(var(--yoi),transparent 16%,transparent 80%,var(--yoi))}
+.keiko{isolation:isolate}
+.keiko .naka{min-height:min(920px,110vh);display:grid;grid-template-columns:1fr minmax(0,460px);align-items:center;padding-block:120px}
+.keiko .kaku{grid-column:2}
+.mittsu{margin-top:36px;display:grid;gap:0}
+.mittsu div{padding:20px 0;border-top:1px solid var(--sen)}
+.mittsu div:last-child{border-bottom:1px solid var(--sen)}
+.mittsu h3{font-size:19px;font-weight:700;letter-spacing:.1em;margin-bottom:2px}
+.mittsu p{font-size:14.5px;color:var(--usu);line-height:1.8}
+@media (max-width:900px){
+  .keiko .naka{grid-template-columns:1fr;min-height:0;padding-block:430px 72px}
+  .keiko .kaku{grid-column:1}
+  .keiko .e{left:0;right:0;bottom:auto;height:520px;aspect-ratio:auto;-webkit-mask-image:none;mask-image:none}
+  .keiko .e::after{background:linear-gradient(var(--yoi),transparent 14%,transparent 50%,var(--yoi) 94%)}
+  .keiko .e img{object-position:50% 12%}
+}
+
+/* ─── 四・五: 愛でる部屋 ─── */
+.heya .naka{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:88px;align-items:center}
+.heya.gyaku .naka{grid-template-columns:minmax(0,400px) minmax(0,1fr)}
+.heya.gyaku .gaku{order:-1}
+.heya .gaku{cursor:pointer}
+.heya .gaku video{opacity:0;transition:opacity .42s}
+.heya .gaku video.on{opacity:1}
+.fukidashi{position:absolute;left:16px;right:16px;bottom:16px;padding:14px 18px;border-radius:12px;font-size:14px;line-height:1.7;
+  background:rgba(20,17,34,.9);box-shadow:0 0 0 1px var(--sen),0 12px 24px -10px rgba(0,0,0,.8)}
+.fukidashi b{display:block;font-size:11px;letter-spacing:.3em;color:var(--usu);font-weight:500;margin-bottom:2px}
+.men{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.men button{min-height:44px;padding:8px 18px;border-radius:999px;font-size:14px;letter-spacing:.14em;color:var(--usu);
+  background:var(--men);box-shadow:0 6px 14px -8px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05);transition:color .16s,background .16s,box-shadow .16s}
+.men button:hover{color:var(--shiro);background:var(--men2)}
+.men button[aria-pressed=true]{color:var(--kin-hi);box-shadow:0 0 0 1px var(--kin),0 6px 14px -8px rgba(0,0,0,.8)}
+.sasou{margin-top:22px;font-size:13px;letter-spacing:.16em;color:var(--usu)}
+/* 月の満ち欠け（段） */
+.tsukidan{display:flex;gap:18px;margin-top:34px;align-items:flex-end}
+.tsukidan button{display:grid;justify-items:center;gap:10px;min-width:56px;min-height:44px;font-size:12px;letter-spacing:.2em;color:var(--usu);transition:color .16s}
+.tsukidan button i{width:34px;height:34px;border-radius:50%;background:#2a2640;position:relative;overflow:hidden;box-shadow:0 0 0 1px var(--sen2);transition:box-shadow .2s}
+.tsukidan button i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--shiro);transform:translateX(var(--kake));opacity:.92}
+.tsukidan button[aria-pressed=true]{color:var(--kin-hi)}
+.tsukidan button[aria-pressed=true] i{box-shadow:0 0 0 2px var(--kin),0 0 18px rgba(240,206,126,.4)}
+.tsukidan button[aria-pressed=true] i::after{background:var(--kin-hi)}
+.tsukidan .saki{opacity:.5;cursor:default}
+@media (max-width:900px){
+  .heya .naka,.heya.gyaku .naka{grid-template-columns:1fr;gap:40px}
+  .heya .gaku,.heya.gyaku .gaku{order:2;max-width:360px;width:100%;margin-inline:auto}
+}
+
+/* ─── 六: 彩帖と暦 ─── */
+.saicho{overflow:hidden}
+.saicho .atama{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:end;margin-bottom:64px}
+.nagare{display:flex;gap:14px;width:max-content;animation:nagare 90s linear infinite}
+.nagare.gyaku{animation-direction:reverse;animation-duration:110s;margin-top:18px}
+.nagare:hover{animation-play-state:paused}
+@keyframes nagare{to{transform:translateX(-50%)}}
+.nagare b{flex:none;width:92px;height:92px;border-radius:13px;background:var(--fuda) center/cover;
+  box-shadow:0 7px 0 #0c0a14,0 9px 0 rgba(217,169,76,.3),0 16px 18px rgba(0,0,0,.5);margin-bottom:22px}
+.nagare b.mi{background:#17142250;box-shadow:0 7px 0 #0c0a14,0 16px 18px rgba(0,0,0,.5),inset 0 0 0 1px var(--sen)}
+.koyomi{margin-top:72px;display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+.koyomi p{font-size:14.5px;color:var(--usu);max-width:14em;text-wrap:balance}
+.tomoshibi{display:grid;grid-template-columns:repeat(14,1fr);gap:0;align-items:center;position:relative;padding:22px 0}
+.tomoshibi::before{content:"";position:absolute;left:3%;right:3%;top:50%;height:1px;background:var(--sen)}
+.tomoshibi i{justify-self:center;border-radius:50%;position:relative;opacity:.16;background:var(--shiro);transition:opacity .5s,box-shadow .5s,background .5s;transition-delay:calc(var(--n)*90ms)}
+.tomoshibi i.ten{width:7px;height:7px}
+.tomoshibi i.han{width:16px;height:16px;background:linear-gradient(90deg,transparent 50%,#B9BDC9 50%);box-shadow:inset 0 0 0 1px rgba(185,189,201,.5)}
+.tomoshibi i.man{width:18px;height:18px}
+.tomoshibi.on i{opacity:1}
+.tomoshibi.on i.ten{opacity:.55}
+.tomoshibi.on i.man{background:var(--kin-hi);box-shadow:0 0 16px rgba(240,206,126,.6)}
+.tomoshibi i.koyoi::after{content:"今宵";position:absolute;top:26px;left:50%;transform:translateX(-50%);font-style:normal;font-size:11px;letter-spacing:.2em;color:var(--usu);white-space:nowrap}
+@media (max-width:900px){.saicho .atama{grid-template-columns:1fr;gap:20px;margin-bottom:44px}.koyomi{grid-template-columns:1fr;gap:12px;margin-top:48px}.nagare b{width:72px;height:72px}}
+
+/* ─── 七: 画面 ─── */
+.gamen .yoko{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px max(20px,calc((100vw - var(--wrap))/2)) 32px;scrollbar-width:thin;scrollbar-color:var(--sen2) transparent}
+.gamen figure{flex:none;width:min(260px,64vw);scroll-snap-align:center}
+.gamen img{border-radius:22px;box-shadow:0 30px 50px -24px rgba(0,0,0,.9),0 0 0 1px var(--sen)}
+.gamen figcaption{margin-top:16px;font-size:13px;letter-spacing:.24em;color:var(--usu);text-align:center}
+
+/* ─── 結: 入手 ─── */
+.get{text-align:center;padding-bottom:140px}
+.get::before{content:"";position:absolute;left:50%;top:0;width:min(900px,120vw);aspect-ratio:1;transform:translate(-50%,-8%);border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(240,206,126,.09),transparent 60%)}
+.get{isolation:isolate;overflow:hidden}
+.get .fude{width:min(440px,84%);margin:0 auto 12px}
+.get .chibi{width:96px;margin:0 auto -6px}
+.get h2{margin-bottom:14px}
+.get .lead{margin:0 auto 40px}
+.get .stores{justify-content:center}
+.get .nashi{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 34px;margin-top:48px;font-size:14px;letter-spacing:.18em;color:var(--usu)}
+.get .nashi span::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--shiro);opacity:.6;margin-right:10px;vertical-align:middle}
+
+footer{border-top:1px solid var(--sen);padding:48px 0 max(48px,env(safe-area-inset-bottom));font-size:13px;color:var(--usu)}
+footer .naka{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:center}
+footer nav{display:flex;flex-wrap:wrap;gap:28px;letter-spacing:.14em}
+footer a{text-decoration:none;padding:12px 0;display:inline-block}
+footer a:hover{color:var(--shiro)}
+footer small{font-size:12px;letter-spacing:.06em}
+
+/* 出（スクロールで現れる） */
+.de{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.de.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  .de{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <a href="#hero" aria-label="ツキアワセ 先頭へ"><img class="mark" src="img/logo.webp" alt="" width="81" height="34"></a>
+  <nav aria-label="頁の案内">
+    <a href="#asobi">あそびかた</a>
+    <a href="#eizo">映像</a>
+    <a href="#tobari">トバリの間</a>
+    <a href="#negura">ねぐらの間</a>
+    <a class="get" href="#get">入手する</a>
+  </nav>
+</header>
+
+<main>
+<!-- 表 -->
+<section class="hero" id="hero">
+  <div class="tsuki" aria-hidden="true"></div>
+  <div class="eizo" aria-hidden="true">
+    <img src="img/hero_poster.jpg" alt="" width="1080" height="1920" fetchpriority="high">
+    <video id="heroV" muted loop playsinline autoplay preload="auto" poster="img/hero_poster.jpg">
+      <source src="movie/title_tobari.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="wrap naka">
+    <div class="text">
+      <img class="logo" src="img/logo.webp" alt="ツキアワセ" width="800" height="337">
+      <div class="fuku">月夜の絵あわせ</div>
+      <h1>月夜にそろえる、<br>一日一局の絵あわせ。</h1>
+      <p>同じ絵札を三枚そろえて、山を崩す。夜の主トバリと、ねぐらで眠る小さな眷属が待っています。</p>
+      <div class="stores">
+        <a class="store" href="https://apps.apple.com/jp/app/id6804358216" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.5.8 1.2 1.7 2.4 3 2.4 1.200-.1 1.7-.8 3.100-.8s1.9.8 3.100.7c1.3 0 2.100-1.200 2.900-2.300.9-1.300 1.300-2.600 1.300-2.700-.1 0-2.700-1-2.700-4zM14.300 5.800c.700-.800 1.100-1.900 1-3-1 .1-2.100.7-2.800 1.500-.6.700-1.200 1.800-1 2.900 1.100.1 2.200-.6 2.800-1.400z"/></svg>
+          <span><small>iPhone・iPad</small><b>App Store</b></span>
+        </a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=jp.co.vibe.tsukiawase" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2.6v18.8c0 .5.5.8.9.5L20.600 12.800c.600-.400.600-1.200 0-1.600L4.900 2.100c-.4-.3-.9 0-.9.5z"/></svg>
+          <span><small>Android</small><b>Google Play</b></span>
+        </a>
+      </div>
+      <div class="yakusoku"><span>課金なし</span><span>広告なし</span><span>登録不要</span></div>
+    </div>
+  </div>
+  <div class="sagaru" aria-hidden="true"></div>
+</section>
+
+<!-- 一 あそびかた -->
+<section class="asobi" id="asobi">
+  <div class="wrap naka">
+    <div class="de">
+      <div class="ban"><i></i>一　あそびかた</div>
+      <h2>三枚そろえて、<br>山を崩す。</h2>
+      <p class="lead">読むより、崩すほうが早い遊びです。隣の小さな山は、この場でそのまま遊べます。</p>
+      <ol class="okite">
+        <li>山から札を取り、盆に並べる</li>
+        <li>同じ絵の札が三枚そろうと消える</li>
+        <li>盆は七枠。あふれる前に崩し切れば、夜明け</li>
+      </ol>
+    </div>
+    <div class="ban-dai de">
+      <div class="ban-atama">
+        <span>残り <b id="nokori">24</b>札</span>
+        <button class="tsumu" id="tsumu" type="button">積み直す</button>
+      </div>
+      <div class="stage">
+        <div class="yama" id="yama">
+          <div class="bon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="maku" id="maku" role="status" aria-live="polite">
+            <img id="makuE" src="img/chibi_tobari_cheer_hd.webp" alt="" width="195" height="284">
+            <strong id="makuT"></strong>
+            <p id="makuP"></p>
+            <div class="narabi">
+              <button class="tsumu" type="button" id="makuB">もう一度</button>
+              <a class="kinbtn" href="#get" id="makuA">今宵の一局へ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 二 映像 -->
+<section class="eizo-sec" id="eizo">
+  <div class="wrap naka">
+    <div class="gaku de">
+      <video id="opV" playsinline preload="none" poster="img/op_poster.jpg">
+        <source src="movie/op_tsukiawase.mp4" type="video/mp4">
+      </video>
+      <button class="saisei" id="opB" type="button" aria-label="幕開きの映像を再生する。音が出ます">
+        <i></i><em>音が出ます　十秒</em>
+      </button>
+    </div>
+    <div class="de">
+      <div class="ban"><i></i>二　映像</div>
+      <h2>十秒で、夜に入る。</h2>
+      <p class="lead">灯籠の参道、月光の札山、札を置く指先。幕開きの映像を、音つきでそのままご覧いただけます。</p>
+      <div class="koma">
+        <figure><img src="img/shots/01_tsumesho.jpg" alt="詰所の画面。トバリが全面に立ち、下に今宵の一局の釦" loading="lazy" width="660" height="1434">詰所</figure>
+        <figure><img src="img/shots/02_koyoi_ban.jpg" alt="今宵の盤の画面。絵札の山と七枠の盆" loading="lazy" width="660" height="1434">今宵の盤</figure>
+        <figure><img src="img/shots/05_keiko_yamamichi.jpg" alt="稽古の山道の画面。月夜の参道に八つの段" loading="lazy" width="660" height="1434">稽古の山道</figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 三 今宵・稽古・番付 -->
+<section class="keiko" id="keiko">
+  <div class="e" aria-hidden="true"><img src="img/ezu_tsuki.jpg" alt="" loading="lazy" width="900" height="1611"></div>
+  <div class="wrap naka">
+    <div class="kaku de">
+      <div class="ban"><i></i>三　夜の過ごしかた</div>
+      <h2>一夜に、一局。</h2>
+      <p class="lead">その夜の山は、遊ぶ人みな同じ形。毎晩一分、月夜の盤に向かう静かな日課です。</p>
+      <div class="mittsu">
+        <div><h3>今宵の一局</h3><p>一夜に一局。崩し切った札の数で採点します。「戻す」「袂」の助けは、使えば点が下がります。</p></div>
+        <div><h3>稽古</h3><p>一ノ段から八ノ段まで、段ごとに山の形が変わります。何度でも通えて、ベストの点が残ります。</p></div>
+        <div><h3>番付</h3><p>週ごとの場所で成績を競えます。参加は任意。雅号を名乗った方だけが記録されます。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 四 トバリの間 -->
+<section class="heya" id="tobari">
+  <div class="wrap naka">
+    <div class="de">
+      <div class="ban"><i></i>四　トバリの間</div>
+      <h2>なでると、<br>表情が変わる。</h2>
+      <p class="lead">夜の主、トバリを愛でる部屋です。なでると表情が変わり、声で応えます。一日一度、言葉をかけると返事が返ります。</p>
+      <div class="men" id="men" role="group" aria-label="トバリの表情"></div>
+      <p class="sasou">絵に触れても、表情が変わります</p>
+    </div>
+    <div class="gaku de" id="medeG" role="button" tabindex="0" aria-label="トバリをなでる">
+      <img class="shita" id="medeP" src="img/mede_base.jpg" alt="縁側のトバリ" loading="lazy" width="720" height="1280">
+      <video id="medeA" muted loop playsinline preload="none"></video>
+      <video id="medeB" muted loop playsinline preload="none"></video>
+      <div class="fukidashi"><b>トバリ</b><span id="medeS">縁側は、月がよく見えます。……どうぞ</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 五 ねぐらの間 -->
+<section class="heya gyaku" id="negura">
+  <div class="wrap naka">
+    <div class="de">
+      <div class="ban"><i></i>五　ねぐらの間</div>
+      <h2>眠り繭から、<br>こばねが育つ。</h2>
+      <p class="lead">小さな眷属、こばねの部屋です。なでる、実をあげる。世話を重ねると姿が変わります。夜には、寝かしつけに立ち会えます。</p>
+      <div class="tsukidan" id="dan" role="group" aria-label="こばねの育ち">
+        <button type="button" data-s="0" aria-pressed="true" style="--kake:-100%"><i></i>眠り繭</button>
+        <button type="button" data-s="1" aria-pressed="false" style="--kake:-66%"><i></i>二の月</button>
+        <button type="button" data-s="2" aria-pressed="false" style="--kake:-40%"><i></i>三の月</button>
+        <button type="button" class="saki" disabled style="--kake:0%"><i></i>その先</button>
+      </div>
+      <p class="sasou">その先の姿は、ねぐらで</p>
+    </div>
+    <div class="gaku de" id="neguraG">
+      <img class="shita" src="img/negura_s0.jpg" alt="梁からさがる眠り繭" loading="lazy" width="720" height="1280">
+      <video id="neguraA" muted loop playsinline preload="none"></video>
+      <video id="neguraB" muted loop playsinline preload="none"></video>
+    </div>
+  </div>
+</section>
+
+<!-- 六 彩帖と暦 -->
+<section class="saicho" id="saicho">
+  <div class="wrap">
+    <div class="atama de">
+      <div>
+        <div class="ban"><i></i>六　彩帖と暦</div>
+        <h2>遊んだ夜が、<br>積み上がる。</h2>
+      </div>
+      <p class="lead">四十一種の絵札、衣裳、覚え、絵日記が少しずつ増えていきます。まだ見ぬ札は、暗い影のまま棚で待っています。</p>
+    </div>
+  </div>
+  <div class="nagare" id="nagare1" aria-hidden="true"></div>
+  <div class="nagare gyaku" id="nagare2" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="koyomi de">
+      <p>遊んだ夜は暦に灯り、灯籠の列が伸びていきます。</p>
+      <div class="tomoshibi" id="tomoshibi" role="img" aria-label="十四夜ぶんの灯の列。満月形、半月形、点の三種の灯が並ぶ"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 七 画面 -->
+<section class="gamen" id="gamen">
+  <div class="wrap de">
+    <div class="ban"><i></i>七　画面</div>
+    <h2>宵闇に、金。</h2>
+  </div>
+  <div class="yoko" tabindex="0" aria-label="画面の写し。横に送れます">
+    <figure><img src="img/shots/01_tsumesho.jpg" alt="詰所" loading="lazy" width="660" height="1434"><figcaption>詰所</figcaption></figure>
+    <figure><img src="img/shots/02_koyoi_ban.jpg" alt="今宵の盤" loading="lazy" width="660" height="1434"><figcaption>今宵の盤</figcaption></figure>
+    <figure><img src="img/shots/03_tobari_ma.jpg" alt="トバリの間" loading="lazy" width="660" height="1434"><figcaption>トバリの間</figcaption></figure>
+    <figure><img src="img/shots/04_negura_ma.jpg" alt="ねぐらの間" loading="lazy" width="660" height="1434"><figcaption>ねぐらの間</figcaption></figure>
+    <figure><img src="img/shots/05_keiko_yamamichi.jpg" alt="稽古の山道" loading="lazy" width="660" height="1434"><figcaption>稽古の山道</figcaption></figure>
+    <figure><img src="img/shots/06_keiko_ban.jpg" alt="稽古の盤" loading="lazy" width="660" height="1434"><figcaption>稽古の盤</figcaption></figure>
+  </div>
+</section>
+
+<!-- 結 -->
+<section class="get" id="get">
+  <div class="wrap de">
+    <img class="chibi" src="img/chibi_tobari_idle_hd.webp" alt="" loading="lazy" width="195" height="284">
+    <img class="fude" src="img/btn_ikkyoku.webp" alt="今宵の一局" loading="lazy" width="900" height="281">
+    <p class="lead">今夜の山は、もう積まれています。</p>
+    <div class="stores">
+      <a class="store" href="https://apps.apple.com/jp/app/id6804358216" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.5.8 1.2 1.7 2.4 3 2.4 1.200-.1 1.7-.8 3.100-.8s1.9.8 3.100.7c1.3 0 2.100-1.200 2.900-2.300.9-1.300 1.300-2.600 1.300-2.700-.1 0-2.700-1-2.700-4zM14.300 5.800c.700-.800 1.100-1.900 1-3-1 .1-2.100.7-2.800 1.500-.6.700-1.200 1.800-1 2.900 1.100.1 2.200-.6 2.800-1.400z"/></svg>
+        <span><small>iPhone・iPad</small><b>App Store</b></span>
+      </a>
+      <a class="store" href="https://play.google.com/store/apps/details?id=jp.co.vibe.tsukiawase" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2.6v18.8c0 .5.5.8.9.5L20.600 12.800c.600-.400.600-1.200 0-1.600L4.900 2.100c-.4-.3-.9 0-.9.5z"/></svg>
+        <span><small>Android</small><b>Google Play</b></span>
+      </a>
+    </div>
+    <div class="nashi"><span>課金はありません</span><span>広告も出ません</span><span>アカウント登録は不要です</span></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap naka">
+    <nav aria-label="案内">
+      <a href="https://tsukiawase-legal.pages.dev/support/">サポート</a>
+      <a href="https://tsukiawase-legal.pages.dev/privacy/">プライバシーポリシー</a>
+    </nav>
+    <small>© 2026 合同会社日本の田舎は資本主義のフロンティアだ</small>
+  </div>
+</footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* 上の帯・出 */
+const top=$('#top');
+addEventListener('scroll',()=>top.classList.toggle('on',scrollY>innerHeight*.6),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.18});
+document.querySelectorAll('.de,.tomoshibi').forEach(el=>io.observe(el));
+if(calm){const h=$('#heroV');h.removeAttribute('autoplay');h.pause()}
+else document.addEventListener('visibilitychange',()=>{if(!document.hidden)$('#heroV').play().catch(()=>{})});
+
+/* ── 小さな山 ── */
+const KINDS=['tobari','chochin','magatama','gesshoku','janome','nekomata','shiba','book'];
+const yama=$('#yama'),nokori=$('#nokori'),maku=$('#maku');
+let tiles=[],bon=[],busy=false;
+const layout=()=>{const t=[];
+  for(let y=0;y<3;y++)for(let x=0;x<5;x++)t.push({x:2+x*2,y:y*2,l:0});
+  t.push({x:0,y:2,l:0},{x:12,y:2,l:0});
+  for(let y=0;y<2;y++)for(let x=0;x<3;x++)t.push({x:4+x*2,y:1+y*2,l:1});
+  t.push({x:6,y:2,l:2});return t};
+const covers=(a,b)=>b.l>a.l&&Math.abs(b.x-a.x)<2&&Math.abs(b.y-a.y)<2;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function deal(){
+  const t=layout();
+  // 崩せる順を先に作り、その順に三枚組を割り振る＝必ず崩し切れる山
+  let rest=[...t],order=[];
+  while(rest.length){const free=rest.filter(a=>!rest.some(b=>covers(a,b)));const p=free[Math.random()*free.length|0];order.push(p);rest=rest.filter(a=>a!==p)}
+  // 絵柄は五種（三種は六枚・二種は三枚）＝見えている札の中に、そろう三枚がほぼ必ずある
+  const five=shuffle([...KINDS]).slice(0,5);const ks=shuffle([five[0],five[1],five[2],five[3]]).concat(shuffle([five[0],five[1],five[2],five[4]]));let ki=0;
+  for(let i=0;i<order.length;i+=6){const chunk=order.slice(i,i+6);
+    const pat=chunk.length===6?shuffle([0,0,0,1,1,1]):[0,0,0];
+    chunk.forEach((tile,j)=>tile.k=ks[ki+pat[j]]);ki+=chunk.length===6?2:1}
+  return t}
+function build(){
+  yama.querySelectorAll('.fuda').forEach(e=>e.remove());maku.className='maku';bon=[];busy=false;
+  tiles=deal();
+  tiles.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.className='fuda';
+    b.setAttribute('aria-label','絵札');b.innerHTML='<span style="background-image:url(img/tiles/'+t.k+'.webp)"></span>';
+    b.style.cssText=`--x:${t.x};--y:${t.y};--l:${t.l};--z:${t.l*100+t.y*10+t.x}`;
+    b.addEventListener('click',()=>pick(t));t.el=b;t.on=true;yama.appendChild(b)});
+  refresh()}
+function refresh(){
+  const live=tiles.filter(t=>t.on);
+  live.forEach(t=>{const blocked=live.some(b=>covers(t,b));t.el.disabled=blocked});
+  nokori.textContent=live.length+bon.length}
+function seat(){bon.forEach((t,i)=>{t.el.style.setProperty('--x',i*2);t.el.style.setProperty('--y',7.1);t.el.style.setProperty('--l',0);t.el.style.setProperty('--z',500+i)})}
+function pick(t){
+  if(!t.on||busy||bon.length>=7)return;
+  t.on=false;t.el.classList.add('oki');t.el.disabled=false;t.el.tabIndex=-1;
+  let at=-1;bon.forEach((b,i)=>{if(b.k===t.k)at=i});
+  at<0?bon.push(t):bon.splice(at+1,0,t);
+  seat();refresh();
+  const same=bon.filter(b=>b.k===t.k);
+  if(same.length===3){busy=true;
+    setTimeout(()=>same.forEach(s=>s.el.classList.add('sorou')),calm?0:240);
+    setTimeout(()=>{same.forEach(s=>s.el.classList.add('kieru'));bon=bon.filter(b=>b.k!==t.k);seat();refresh();busy=false;
+      setTimeout(()=>same.forEach(s=>s.el.remove()),300);
+      if(!tiles.some(x=>x.on)&&!bon.length)end(true)},calm?120:560)}
+  else if(bon.length>=7)setTimeout(()=>end(false),360)}
+function end(win){
+  $('#makuT').textContent=win?'夜明けです':'盆があふれました';
+  $('#makuP').textContent=win?'お見事。毎晩の山は、もう少し高く積まれます。':'七枠が埋まると、そこで仕舞です。';
+  $('#makuE').src=win?'img/chibi_tobari_cheer_hd.webp':'img/chibi_tobari_idle_hd.webp';
+  $('#makuA').style.display=win?'':'none';
+  maku.className='maku on'+(win?' yoake':'')}
+$('#tsumu').onclick=build;$('#makuB').onclick=build;build();
+
+/* ── 幕開きの映像 ── */
+const opV=$('#opV'),opB=$('#opB');
+opB.onclick=()=>{opV.controls=true;opV.play();opB.classList.add('kie')};
+opV.addEventListener('ended',()=>{opV.controls=false;opB.classList.remove('kie');opV.load()});
+
+/* ── 重ね映し（二枚の動画を差し替える） ── */
+function kasane(a,b){let cur=a,nxt=b,visible=false,want=null;
+  const show=src=>{want=src;nxt.src=src;nxt.load();
+    const go=()=>{if(want!==src)return;nxt.classList.add('on');cur.classList.remove('on');const old=cur;cur=nxt;nxt=old;setTimeout(()=>{old.pause();old.removeAttribute('src')},460)};
+    nxt.addEventListener('playing',go,{once:true});
+    if(!calm)nxt.play().catch(()=>{})};
+  // 裏に回っている間は再生が断られる。表に戻ったら掛け直す
+  document.addEventListener('visibilitychange',()=>{if(document.hidden||calm||!visible)return;
+    (nxt.src&&want&&!nxt.classList.contains('on')?nxt:cur).play().catch(()=>{})});
+  const watch=(box,first)=>new IntersectionObserver(es=>es.forEach(e=>{visible=e.isIntersecting;
+    if(calm)return;if(visible){cur.src?cur.play().catch(()=>{}):show(first)}else cur.pause()}),{threshold:.35}).observe(box);
+  return{show,watch}}
+
+/* トバリの間 */
+/* 台詞は本編 voice_bank.dart の写し・面の紐づけは kMedeLineFace に従う */
+const MEN=[['base','常','縁側は、月がよく見えます。……どうぞ'],['tere','照れ','……むに、とか。言わせないでください'],['fuwari','ふわり','手のひらが、あたたかいですね'],['mukure','むくれ','髪、乱れます。……少しなら、いいですけど'],['warai','忍び笑い','……手相でも、見ましょうか。嘘です'],['jito','ジト目','そんなに握っても、逃げませんよ']];
+const medeG=$('#medeG'),men=$('#men'),mede=kasane($('#medeA'),$('#medeB'));let mi=0;
+function face(i){mi=i;const[m,,s]=MEN[i];$('#medeP').src='img/mede_'+m+'.jpg';$('#medeS').textContent=s;
+  men.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));mede.show('movie/mede_'+m+'.mp4')}
+MEN.forEach(([m,n],i)=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.setAttribute('aria-pressed',i===0);b.onclick=()=>face(i);men.appendChild(b)});
+const nade=()=>{let n;do{n=1+(Math.random()*(MEN.length-1)|0)}while(n===mi);face(n)};
+medeG.addEventListener('click',nade);medeG.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();nade()}});
+mede.watch(medeG,'movie/mede_base.mp4');
+
+/* ねぐらの間 */
+const neguraG=$('#neguraG'),negura=kasane($('#neguraA'),$('#neguraB'));
+const NALT=['梁からさがる眠り繭','繭から顔を出したこばね','梁にぶらさがるこばね'];
+$('#dan').querySelectorAll('button[data-s]').forEach(b=>b.onclick=()=>{const s=+b.dataset.s;
+  $('#dan').querySelectorAll('button[data-s]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const p=neguraG.querySelector('.shita');p.src='img/negura_s'+s+'.jpg';p.alt=NALT[s];negura.show('movie/negura_s'+s+'.mp4')});
+negura.watch(neguraG,'movie/negura_s0.mp4');
+
+/* 彩帖の流れ */
+const ALL='anne arujidono atoza aun benten book chochin dan emma gesshoku gokou hinanojo izuna janome kanaoni karma karura kohaku magatama magoichi naruka nekomata nemu oen orochi oto rotton sakuya sasura shiba shinra shion shiori shuriken tart tobari torika uka xiaolan yui'.split(' ');
+const row=(el,list)=>{const h=list.map((k,i)=>i%7===5?'<b class="mi"></b>':'<b style="background-image:url(img/tiles/'+k+'.webp)"></b>').join('');el.innerHTML=h+h};
+row($('#nagare1'),ALL.slice(0,20));row($('#nagare2'),ALL.slice(20));
+
+/* 灯の列 */
+const TOMO='ten ten han ten man han ten han man ten han man man ten'.split(' ');
+$('#tomoshibi').innerHTML=TOMO.map((c,i)=>`<i class="${c}${i===13?' koyoi':''}" style="--n:${i}"></i>`).join('');
+})();
+</script>
+</body>
+</html>
