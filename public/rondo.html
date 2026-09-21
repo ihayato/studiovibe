@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rondo | Fableユーザーのための、マーケティングOS</title>
-<meta name="description" content="Fableユーザーのための買い切りマーケティングOS。ステップメール、LINE配信、SNS、売上、顧客台帳を1つのダッシュボードに統合し、Fableで運用する。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
-<meta property="og:title" content="Rondo | Fableユーザーのための、マーケティングOS">
-<meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、Claude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<title>Rondo | Astra/Fableユーザーのための、マーケティングOS</title>
+<meta name="description" content="AstraやFableを使う人のための買い切りマーケティングOS。ステップメール、LINE配信、SNS、売上、顧客台帳を1つのダッシュボードに統合し、あなたのAIで運用する。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta property="og:title" content="Rondo | Astra/Fableユーザーのための、マーケティングOS">
+<meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Studio VIBE">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Rondo | Fableユーザーのための、マーケティングOS">
-<meta name="twitter:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、Claude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta name="twitter:title" content="Rondo | Astra/Fableユーザーのための、マーケティングOS">
+<meta name="twitter:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
 <meta name="twitter:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
@@ -102,7 +102,7 @@
   .head-nav a{font-size:14px;font-weight:500;color:var(--dim);padding:8px 12px;border-radius:var(--r-btn);transition:background 140ms,color 140ms}
   .head-nav a:hover{background:var(--hover);color:var(--ink)}
   .head-cta{padding:10px 18px;min-height:44px;font-size:14px}
-  @media(max-width:720px){ .head-nav{display:none} }
+  @media(max-width:720px){ .head-nav{display:none} .head-cta{margin-left:auto} }
 
   /* ヒーロー（v14: 中央寄せ+プロダクト・シアター） */
   .hero{padding:80px 0 0;text-align:center}
@@ -110,6 +110,10 @@
              border:1px solid var(--hair);border-radius:999px;padding:6px 15px;margin-bottom:26px;
              background:#fff;box-shadow:var(--shadow)}
   .hero-pill .mono{color:var(--ink)}
+  @media(max-width:420px){
+    .hero-pill{display:inline-block;border-radius:16px;padding:8px 16px;line-height:1.7}
+    .head-cta{white-space:nowrap;padding:10px 14px;font-size:13px}
+  }
   h1{font-size:clamp(21px,5.6vw,42px);font-weight:700;line-height:1.42;letter-spacing:.01em;margin-bottom:20px}
   h1 .nb{display:inline-block}
   .hero-sub{color:var(--dim);font-size:15.5px;max-width:620px;margin:0 auto 30px}
@@ -349,6 +353,10 @@
   .cc-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid #2A2C34}
   .cc-bar i{width:9px;height:9px;border-radius:50%;background:#3A3D47}
   .cc-bar .t{margin-left:8px;font-family:var(--mono);font-size:11px;color:#6B707C}
+  .cc-seg{margin-left:auto;display:flex;gap:2px;padding:2px;border:1px solid #2A2C34;border-radius:8px;background:#16171D}
+  .cc-seg button{font-family:var(--mono);font-size:11px;line-height:1;color:#8A8F9B;background:none;border:0;border-radius:6px;padding:0 12px;min-height:28px;cursor:pointer}
+  .cc-seg button[aria-pressed="true"]{background:#2A2C34;color:#E9EAEE}
+  .cc-seg button:focus-visible{outline:2px solid #8FA8F2;outline-offset:1px}
   .cc-body{padding:18px 18px 6px;display:grid;gap:14px}
   .cc-who{display:block;font-size:11px;font-weight:600;letter-spacing:.04em;margin-bottom:5px}
   .cc-you .cc-who{color:#8FA8F2}
@@ -674,14 +682,14 @@
   <section class="hero" data-sec="hero">
     <div class="wrap">
       <span class="hero-pill">βテスター先行販売（審査制）・買い切り <span class="mono">¥4,980</span>・正式版価格 <span class="mono">¥9,800</span> 予定</span>
-      <h1>Fableユーザーのための、<br><span class="nb">マーケティングOS。</span></h1>
-      <p class="hero-sub"><span class="ph">ステップメール、LINE、SNS、売上、</span><span class="ph">顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">Fableで運用する、</span><span class="ph">あなたの資産です。</span></p>
+      <h1><span class="nb">Astra/Fable</span><span class="nb">ユーザーのための、</span><br><span class="nb">マーケティングOS。</span></h1>
+      <p class="hero-sub"><span class="ph">ステップメール、LINE、SNS、売上、</span><span class="ph">顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">AstraやFableで運用する、</span><span class="ph">あなたの資産です。</span></p>
       <div class="hero-ctas">
         <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー先行販売" data-rondo-cta="reserve">先行販売の審査に申し込む</a>
         <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
       </div>
-      <p class="hero-caution"><span class="hc-t">サポート窓口のない、<span class="nb">FableクラスのAIを使いこなす</span><span class="nb">上級者向け製品です。</span></span><a href="#shindan" data-rondo-label="ヒーロー 適性診断">30秒の適性診断で確かめる</a></p>
-      <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br>イケハヤの実務で本番稼働中。</p>
+      <p class="hero-caution"><span class="hc-t">サポート窓口のない、<span class="nb">AstraやFableを使いこなす</span><span class="nb">上級者向け製品です。</span></span><a href="#shindan" data-rondo-label="ヒーロー 適性診断">30秒の適性診断で確かめる</a></p>
+      <p class="hero-note">Cloudflare無料枠で動作、月額の固定費なし。<br><span style="display:inline-block">Astraなら、ChatGPTの</span><span style="display:inline-block">月3,000円ほどのプランから</span><span style="display:inline-block">始められます。</span><br>イケハヤの実務で本番稼働中。</p>
     </div>
   </section>
 
@@ -923,7 +931,7 @@
         <div class="tri-card">
           <p class="flip-kicker">逆転 その二</p>
           <h2>やりたいことは、<br>あなたのAIに日本語で頼むだけ。</h2>
-          <p>本質は<b>閲覧・把握用のダッシュボード</b>。<br>中身の作り込みは、あなたがいつも使っている<b>Claude CodeやCodex</b>の仕事です。</p>
+          <p>本質は<b>閲覧・把握用のダッシュボード</b>。<br>中身の作り込みは、あなたがいつも使っている<b>CodexやClaude Code</b>の仕事です。</p>
         </div>
         <div class="tri-card">
           <p class="flip-kicker">逆転 その三</p>
@@ -934,15 +942,20 @@
 
       <div class="term-sec" data-sec="ai">
         <div class="flip-visual">
-          <div class="cc" role="img" aria-label="Claude Codeアプリでの指示と実行結果のイメージ。日本語で頼むと、編集からテスト、本番反映まで自動で進む。">
-            <div class="cc-bar"><i></i><i></i><i></i><span class="t">Claude Code</span></div>
-            <div class="cc-body">
+          <div class="cc" id="cc-demo">
+            <div class="cc-bar"><i></i><i></i><i></i><span class="t" id="cc-app">Codex</span>
+              <div class="cc-seg" role="group" aria-label="実演で表示する開発AI">
+                <button type="button" aria-pressed="true" data-cc-app="Codex" data-cc-who="Astra" data-rondo-label="実演切替 Codex">Astra</button>
+                <button type="button" aria-pressed="false" data-cc-app="Claude Code" data-cc-who="Fable" data-rondo-label="実演切替 Claude Code">Fable</button>
+              </div>
+            </div>
+            <div class="cc-body" role="img" aria-label="開発AIアプリでの指示と実行結果のイメージ。日本語で頼むと、編集からテスト、本番反映まで自動で進む。">
               <div class="cc-you">
                 <span class="cc-who">あなた</span>
                 <p>登録直後の1通目、件名を書き換えて。</p>
               </div>
               <div class="cc-ai">
-                <span class="cc-who">Claude</span>
+                <span class="cc-who" id="cc-who">Astra</span>
                 <p>承知しました。原稿を更新します。</p>
                 <div class="cc-steps">
                   <div class="cc-step"><span class="ck">✓</span><span>原稿を編集 <span class="path">contents/step/001.md</span></span></div>
@@ -1013,7 +1026,7 @@
           </div>
         </figure>
       </div>
-      <p class="gallery-note" style="margin-top:28px">ここに無い機能が必要なら、Claude Codeに「作って」と言えば足せます。<br>それがOSである理由です。</p>
+      <p class="gallery-note" style="margin-top:28px">ここに無い機能が必要なら、AstraやFableに「作って」と言えば足せます。<br>それがOSである理由です。</p>
     </div>
   </section>
 
@@ -1125,7 +1138,7 @@
         <div class="mani-row"><span class="mani-no">8</span><span class="mani-name">改善エンジン</span><span class="mani-desc">件名A/B自動判定・成績の還流・週次調律レポート。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">9</span><span class="mani-name">監査と自動見張り</span><span class="mani-desc">ジョブ健康監視・障害記録・送達テスト・日次バックアップ。</span><span class="mani-ok">✓</span></div>
         <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">テスト一式</span><span class="mani-desc">ユニットテスト584件。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">11</span><span class="mani-name">イケハヤAI（診断AI）</span><span class="mani-desc">判断基準23項目のClaude Codeスキル。数字を読んで診断し、承認した処方は実装まで代行。</span><span class="mani-ok">✓</span></div>
+        <div class="mani-row"><span class="mani-no">11</span><span class="mani-name">イケハヤAI（診断AI）</span><span class="mani-desc">判断基準23項目の診断スキル。数字を読んで診断し、承認した処方は実装まで代行。</span><span class="mani-ok">✓</span></div>
         <div class="mani-foot">導入手順書（SETUP.md）つき。AIに丸ごと渡せば、セットアップ自体も任せられます。<br>進め方は<a href="/rondo-guides/setup" data-rondo-label="マニフェスト 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="マニフェスト 導入後設定ガイド">導入後の設定ガイド</a>で公開中です。</div>
       </div>
     </div>
@@ -1218,7 +1231,7 @@
       <h2 style="text-align:center">導入に必要なもの</h2>
       <p class="lede" style="text-align:center;margin:16px auto 0">すべて自分名義のアカウントで、Rondoのための新しい月額契約はありません。</p>
       <div class="needs">
-        <div class="need-row"><span class="need-name">Fableクラスの開発AI</span><span class="need-cost">月100ドル程度</span><span class="need-desc">Claude Codeなど。導入・運用・カスタマイズの担当者で、実質必須です。すでに使っている人は追加費用なし。</span></div>
+        <div class="need-row"><span class="need-name">AstraかFableの開発AI</span><span class="need-cost">月3,000円ほど〜</span><span class="need-desc">CodexやClaude Code。導入・運用・カスタマイズの担当者で、実質必須です。AstraはChatGPTの月3,000円ほどのプランで使えます。すでに使っている人は追加費用なし。</span></div>
         <div class="need-row"><span class="need-name">独自ドメイン</span><span class="need-cost">年1,000円台〜</span><span class="need-desc">メールの送信元に必須。持っていない場合は、Rondo本体が動くCloudflareでの取得がおすすめです。</span></div>
         <div class="need-row"><span class="need-name">Cloudflare</span><span class="need-cost free">無料〜</span><span class="need-desc">Rondo本体が動く場所。無料プランで動作します。</span></div>
         <div class="need-row"><span class="need-name">Resend</span><span class="need-cost free">無料〜</span><span class="need-desc">メール送信サービス。小規模なら無料枠内です。</span></div>
@@ -1226,7 +1239,7 @@
         <div class="need-row"><span class="need-name">LINE公式アカウント</span><span class="need-cost">任意</span><span class="need-desc">LINE配信を使う場合のみ。無料プランから始められます。</span></div>
         <div class="need-row"><span class="need-name">Rondo本体</span><span class="need-cost">¥4,980 買い切り</span><span class="need-desc">βテスター先行販売価格。正式版は¥9,800を予定。月額はありません。</span></div>
       </div>
-      <p class="lede" style="text-align:center;margin:24px auto 0;font-size:14px">月々の固定費は、実質、開発AIの利用料だけです。</p>
+      <p class="lede" style="text-align:center;margin:24px auto 0;font-size:14px">月々の固定費は、実質、開発AIの利用料だけです。<br>Astraなら月3,000円ほどから。</p>
     </div>
   </section>
 
@@ -1239,7 +1252,7 @@
         <div class="fit-col yes">
           <h3>Rondoが向いている人</h3>
           <ul>
-            <li>FableクラスのAI（Claude Fable 5、Kimi K3など）をClaude CodeやCodexで使いこなしている人</li>
+            <li>AstraやFable（GPT-6 Astra、Claude Fable 5など）をCodexやClaude Codeで使いこなしている人</li>
             <li>発信で商売をしている個人・小さなチーム</li>
             <li>SaaSの月額と仕様に縛られたくない人</li>
           </ul>
@@ -1251,7 +1264,7 @@
             <li>完成品のアプリを期待する人。パッケージは「種」です</li>
             <li>開発AIを使う予定がない人</li>
             <li>独自ドメインを持っていない人。メールの送信元に必須です（取得すれば使えます）</li>
-            <li>開発AIに月100ドル程度を投資できない人。Fableクラスの利用が最低ラインです</li>
+            <li>ひとつ前の世代のモデルで済ませたい人。AstraかFableクラスの利用が最低ラインです</li>
             <li>サポート窓口が必要な人。Rondoにサポートはありません。トラブル対応も自分とAIの仕事です</li>
           </ul>
         </div>
@@ -1285,7 +1298,7 @@
         <div class="rsv-off"><span class="was">¥9,800</span><span class="now">¥4,980</span><span class="tag">βテスター価格</span></div>
         <p class="rsv-sub">¥9,800は正式版価格（リリース後に適用予定）。βテスターのいまは¥4,980（税込・買い切り）、<br>事前登録済みの方はさらに10%オフ（¥4,482）が適用されます</p>
         <ul class="rsv-notes" style="text-align:left;max-width:560px;margin-left:auto;margin-right:auto">
-          <li>条件1: Fableクラスの開発AI（Claude Fable 5など）が使える環境があること</li>
+          <li>条件1: AstraかFableクラスの開発AI（GPT-6 Astra、Claude Fable 5など）が使える環境があること</li>
           <li>条件2: ステップメールまたはステップLINE配信の運用経験があること</li>
           <li>条件3: 運用中のマーケティング媒体が4つ以上あること（X、Instagram、YouTube、note、メルマガなど）</li>
           <li>条件4: 独自ドメインを持っていること</li>
@@ -1304,7 +1317,7 @@
         </ul>
       </div>
       <div class="env" style="max-width:640px;margin:16px auto 0">
-        <div class="reco"><b>RondoはFableで開発し、Fableで運用しています。</b><br>開発AIはFableクラスのフロンティアモデル（Claude Fable 5、Kimi K3など）を強く推奨します。<br>Opus 5やGPT 5.6などの他モデルでは、導入やカスタマイズに失敗する可能性があります。<br>サポート窓口はなく、導入からトラブル対応まで、あなたとあなたの開発AIで完結させる上級者向け製品です。<br><b>デジタル商品の性質上、購入後の返金には一切応じられません。</b><br>アップデート保証もありません。メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
+        <div class="reco"><b>RondoはFableで開発し、Fableで運用しています。</b><br>開発AIはAstraかFableクラスのフロンティアモデル（GPT-6 Astra、Claude Fable 5、Kimi K3など）を強く推奨します。<br>Opus 5やGPT 5.6など、ひとつ前の世代のモデルでは、導入やカスタマイズに失敗する可能性があります。<br>サポート窓口はなく、導入からトラブル対応まで、あなたとあなたの開発AIで完結させる上級者向け製品です。<br><b>デジタル商品の性質上、購入後の返金には一切応じられません。</b><br>アップデート保証もありません。メジャー進化時は次版を別商品として、既購入者に優待価格を予定しています。</div>
       </div>
     </div>
   </section>
@@ -1316,7 +1329,7 @@
       <div class="faq faq-panel">
         <details>
           <summary data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary>
-          <div class="a">コードを書くのはClaude CodeやCodexの仕事なので、あなたが書く必要はありません。<br>ただしノーコードツールではなく、開発AIに日本語で指示を出せることが前提です。<br>Claude Codeに「セットアップして」と頼めるなら大丈夫です。</div>
+          <div class="a">コードを書くのはCodexやClaude Codeの仕事なので、あなたが書く必要はありません。<br>ただしノーコードツールではなく、開発AIに日本語で指示を出せることが前提です。<br>AstraやFableに「セットアップして」と頼めるなら大丈夫です。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ サポート">サポートはありますか？</summary>
@@ -1328,23 +1341,23 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ 導入の流れ">購入後は、どういう流れで使い始めるのですか？</summary>
-          <div class="a">ソースコード一式（zip）と導入手順書SETUP.mdをお渡しします。<br>手順書はAIに読ませる前提で書かれているので、Claude Codeにフォルダごと渡して「セットアップして」と言えば、あなたのCloudflareアカウントへの設置まで進みます。<br>人間が行うのは、CloudflareやResendなど各サービスのアカウント作成と権限の承認です。<br>必要なサービスと設定の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」ページ</a>に全体像をまとめています。<br>実際の作業は、公開中の<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="FAQ 導入後設定ガイド">導入後の設定ガイド</a>のチェックリストに沿って進められます。</div>
+          <div class="a">ソースコード一式（zip）と導入手順書SETUP.mdをお渡しします。<br>手順書はAIに読ませる前提で書かれているので、CodexやClaude Codeにフォルダごと渡して「セットアップして」と言えば、あなたのCloudflareアカウントへの設置まで進みます。<br>人間が行うのは、CloudflareやResendなど各サービスのアカウント作成と権限の承認です。<br>必要なサービスと設定の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」ページ</a>に全体像をまとめています。<br>実際の作業は、公開中の<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="FAQ 導入後設定ガイド">導入後の設定ガイド</a>のチェックリストに沿って進められます。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ AIモデル">どのAIモデルを使えばいいですか？</summary>
-          <div class="a">Fableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）での利用を強く推奨します。<br>RondoはFableで開発し、運用しています。<br>それ以外のモデル（Opus 5, GPT 5.6など）では、導入やカスタマイズの途中で失敗する可能性があるのでご注意ください。<br>Codexなど他の開発AIでも構造上は動きますが、最上位クラスのモデルをお使いください。</div>
+          <div class="a">AstraかFableクラス（GPT-6 Astra、Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）での利用を強く推奨します。<br>AstraはCodexで、FableはClaude Codeで使えます。どちらでも同じ手順書で進みます。<br>AstraはChatGPTの月3,000円ほどのプランから使えるので、始めやすいのはこちらです（2026年9月時点）。利用枠には上限があるため、作り込みが増えたら上位プランを検討してください。<br>ひとつ前の世代のモデル（Opus 5、GPT 5.6など）では、導入やカスタマイズの途中で失敗する可能性があるのでご注意ください。<br>なお、RondoはFableで開発し、運用しています。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 月額費用">月々の費用は本当にかからないのですか？</summary>
-          <div class="a">Rondo本体は買い切りです。<br>動作に使うCloudflareは無料枠で足り、メール配信のResendも小規模なら無料枠内です。<br>リストが育つと配信量に応じた従量費用が発生します。<br>また、運用を担当するClaude Codeなどの開発AIの利用料は含みません。<br>すでにAIを使っている人なら、Rondoのための追加契約はありません。</div>
+          <div class="a">Rondo本体は買い切りです。<br>動作に使うCloudflareは無料枠で足り、メール配信のResendも小規模なら無料枠内です。<br>リストが育つと配信量に応じた従量費用が発生します。<br>また、運用を担当するCodexやClaude Codeなどの開発AIの利用料は含みません。<br>Astraなら、ChatGPTの月3,000円ほどのプランから使えます。<br>すでにAIを使っている人なら、Rondoのための追加契約はありません。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary>
-          <div class="a">読者リストと原稿を書き出せるツール（MyASP、Lステップなど）であれば、移行作業そのものをClaude Codeに任せる想定です。<br>Rondoの原稿はMarkdownなので、既存のステップメールをそのまま持ち込めます。<br>購入者リストのCSV取込スクリプトも同梱しています。<br>イケハヤ自身も、長年使った配信スタンドから628通のステップメールを移し替えて運用しています。</div>
+          <div class="a">読者リストと原稿を書き出せるツール（MyASP、Lステップなど）であれば、移行作業そのものをAstraやFableに任せる想定です。<br>Rondoの原稿はMarkdownなので、既存のステップメールをそのまま持ち込めます。<br>購入者リストのCSV取込スクリプトも同梱しています。<br>イケハヤ自身も、長年使った配信スタンドから628通のステップメールを移し替えて運用しています。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 決済サブスク">決済やサブスクの管理もできますか？</summary>
-          <div class="a">標準では、購入者リストのCSV取込、購入履歴の台帳、購入実績を反映した顧客スコアまでを同梱しています。<br>さらにStripe APIとの接続をClaude Codeに実装させれば、決済・サブスクの管理まで統合できます。<br>商品を買った人だけへのフォローアップ配信やアップセル配信は、顧客セグメントの機構でそのまま実現できます。</div>
+          <div class="a">標準では、購入者リストのCSV取込、購入履歴の台帳、購入実績を反映した顧客スコアまでを同梱しています。<br>さらにStripe APIとの接続をAstraやFableに実装させれば、決済・サブスクの管理まで統合できます。<br>商品を買った人だけへのフォローアップ配信やアップセル配信は、顧客セグメントの機構でそのまま実現できます。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 安全性">「AIが安全に触れる」の根拠は何ですか？</summary>
@@ -1352,11 +1365,11 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ マーケ相談">マーケティングの相談もできますか？</summary>
-          <div class="a">同梱の診断AI「イケハヤAI」に頼めます。<br>リポジトリでClaude Codeを開いて「イケハヤAI、うちのマーケ診て」と言うと、管理画面の数字を読み、イケハヤの判断基準（23項目の診断台帳を同梱）で診断と処方を出します。<br>あなたが承認した処方は、実装まで代行します。<br>一斉送信の予約だけはAIに渡さない憲法つきです。</div>
+          <div class="a">同梱の診断AI「イケハヤAI」に頼めます。<br>リポジトリでCodexやClaude Codeを開いて「イケハヤAI、うちのマーケ診て」と言うと、管理画面の数字を読み、イケハヤの判断基準（23項目の診断台帳を同梱）で診断と処方を出します。<br>あなたが承認した処方は、実装まで代行します。<br>一斉送信の予約だけはAIに渡さない憲法つきです。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ アップデート">アップデートはありますか？</summary>
-          <div class="a">保証はしていません。<br>買い切りの価格はその前提です。<br>ただし正本はgitなので、本家の更新をClaude Codeに取り込ませることは可能です。<br>メジャー進化時は次版を別商品として出し、既購入者には優待価格を予定しています。</div>
+          <div class="a">保証はしていません。<br>買い切りの価格はその前提です。<br>ただし正本はgitなので、本家の更新をあなたのAIに取り込ませることは可能です。<br>メジャー進化時は次版を別商品として出し、既購入者には優待価格を予定しています。</div>
         </details>
       </div>
     </div>
@@ -1366,7 +1379,7 @@
   <section class="last" data-sec="final" style="padding-top:24px">
     <div class="wrap">
       <h2>ソフトを買うのではなく、<br>マーケティング部門の設計図を買う。</h2>
-      <p class="lede">維持費ほぼゼロの土地に建てて、FableクラスのClaude Codeという専属エンジニアに任せる。<br>それがRondoです。</p>
+      <p class="lede">維持費ほぼゼロの土地に建てて、AstraやFableという専属エンジニアに任せる。<br>それがRondoです。</p>
       <a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 最終先行販売" data-rondo-cta="apply">先行販売の審査に申し込む</a>
     </div>
   </section>
@@ -1395,22 +1408,22 @@
       ['発信はしているが、リスト配信はこれから', 1],
       ['発信も商売も、これから始める', 0]
     ]},
-    { q: 'Claude CodeやCodexなどの開発AIは？', c: [
+    { q: 'CodexやClaude Codeなどの開発AIは？', c: [
       ['ふだんから使っている', 2],
       ['触ったことはある', 1],
       ['使ったことがない', 0]
     ]},
     // モデルの問いは判定スコアに影響させない(注意事項の出し分けにだけ使う)
     { q: 'ふだん使うAIモデルは？', c: [
-      ['Fableクラス（Claude Fable 5、Kimi K3など）', 0],
-      ['Opus 5やGPT 5.6など、別のモデルが中心', 0],
+      ['AstraかFableクラス（GPT-6 Astra、Claude Fable 5、Kimi K3など）', 0],
+      ['Opus 5やGPT 5.6など、ひとつ前の世代が中心', 0],
       ['モデルは気にしたことがない', 0]
     ]},
     // 投資の問いは判定スコアに入れない(最低ライン未満を弾くゲートにだけ使う)
-    { q: '開発AI（Claude Code等）への月の投資は？', c: [
-      ['月100ドル以上、すでに払っている', 0],
-      ['必要なら月100ドル払える', 0],
-      ['月100ドルは払えない・払いたくない', 0]
+    { q: '開発AI（CodexやClaude Code）への月の投資は？', c: [
+      ['すでに払っている', 0],
+      ['月3,000円ほどなら払える', 0],
+      ['払えない・払いたくない', 0]
     ]},
     // ドメインの問いもスコアには入れない(「持っている」以外はC判定に落とすゲート)
     { q: 'メールの送信元に使う独自ドメインは？', c: [
@@ -1467,7 +1480,7 @@
   function verdict(){
     var score = answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0);
     var wantsFinished = answers[5] === 2;   // 設計図の問い「不安。完成品のアプリがいい」
-    var noBudget = answers[3] === 2;        // 投資の問い「月100ドルは払えない」=最低ライン未満
+    var noBudget = answers[3] === 2;        // 投資の問い「払えない・払いたくない」=最低ライン未満
     var noDomain = answers[4] !== 0;        // ドメインの問い「持っている」以外は必須要件を満たさない
     if(wantsFinished || noBudget || noDomain || score <= 2) return 'c';
     // A判定はLP文面「リストがあり、開発AIが手元にある」と厳密に一致させる
@@ -1477,8 +1490,8 @@
 
   function renderResult(){
     var v = verdict();
-    var notFable = answers[2] !== 0; // モデルの問いでFableクラス以外
-    var fableNote = '<p class="sh-note">Rondoは、Fableクラス（Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）でのカスタマイズを前提に設計しています。<br>Opus 5やGPT 5.6では、カスタマイズが難しい可能性があります。</p>';
+    var notFable = answers[2] !== 0; // モデルの問いでAstra・Fableクラス以外
+    var fableNote = '<p class="sh-note">Rondoは、AstraかFableクラス（GPT-6 Astra、Claude Fable 5、Kimi K3などの、いわゆるフロンティアモデル）でのカスタマイズを前提に設計しています。<br>Opus 5やGPT 5.6では、カスタマイズが難しい可能性があります。<br>AstraはChatGPTの月3,000円ほどのプランから使えます。</p>';
     var noBudget = answers[3] === 2;
     var noDomain = answers[4] !== 0;
     var wantsFinished = answers[5] === 2;
@@ -1492,7 +1505,7 @@
         + '<div class="sh-ctas"><a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 診断A先行販売" data-rondo-cta="apply">先行販売に申し込む（審査制）</a></div>';
     } else if(v === 'b'){
       var next = [];
-      if(answers[1] >= 1) next.push('まず、Claude Codeを日常に入れてください。Rondoの導入も改造も、開発AIが担当します。');
+      if(answers[1] >= 1) next.push('まず、CodexかClaude Codeを日常に入れてください。Astraなら月3,000円ほどから始められます。Rondoの導入も改造も、開発AIが担当します。');
       if(answers[0] === 2) next.push('配る相手を作るのが先です。Rondoは、リストがあってこそ生きます。');
       if(!next.length) next.push('「向いている人」の条件は、あとひとつで揃います。上の一覧をもう一度見てください。');
       html = '<span class="sh-pill b">もう一歩</span>'
@@ -1505,7 +1518,7 @@
     } else {
       var reasons = [];
       if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。<br>年1,000円台〜で取得できます。取得してから、また診断しに来てください。');
-      if(noBudget) reasons.push('Rondoの運用は、Fableクラスの開発AI（月100ドル程度）が最低ラインです。<br>この投資ができないうちは、導入しても止まります。');
+      if(noBudget) reasons.push('Rondoの運用は、AstraかFableクラスの開発AI（月3,000円ほど〜）が最低ラインです。<br>この投資ができないうちは、導入しても止まります。');
       if(wantsFinished || score <= 2) reasons.push('Rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、大手配信スタンド型SaaS（MyASP、Lステップなど）の方が合っています。<br>開発AIが日常になったら、また診断しに来てください。');
       html = '<span class="sh-pill c">今は向いていません</span>'
         + '<p class="sh-title">正直に言います。今は買わない方がいいです。</p>'
@@ -1563,6 +1576,18 @@
 })();
 </script>
 <script>
+(function(){
+  var seg = document.querySelectorAll('#cc-demo .cc-seg button');
+  var app = document.getElementById('cc-app'), who = document.getElementById('cc-who');
+  if(!seg.length || !app || !who) return;
+  seg.forEach(function(b){
+    b.addEventListener('click', function(){
+      seg.forEach(function(o){ o.setAttribute('aria-pressed', String(o === b)); });
+      app.textContent = b.getAttribute('data-cc-app');
+      who.textContent = b.getAttribute('data-cc-who');
+    });
+  });
+})();
 (function(){
   document.querySelectorAll('#dist-tree button[data-dir]').forEach(function(btn){
     btn.addEventListener('click', function(){

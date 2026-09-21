@@ -175,14 +175,15 @@
 
         <div class="fgroup">
           <span class="cond">条件 1</span>
-          <label class="t" for="ap-fable">Fableクラスの開発AIが使える環境</label>
-          <p class="hint">Rondoの導入・運用・カスタマイズはFableクラスのAI（Claude Fable 5など）が担当します。</p>
+          <label class="t" for="ap-fable">AstraかFableクラスの開発AIが使える環境</label>
+          <p class="hint">Rondoの導入・運用・カスタマイズはAstraかFableクラスのAI（GPT-6 Astra、Claude Fable 5など）が担当します。</p>
           <select id="ap-fable" name="fableEnv" required data-rondo-label="申込 Fable環境">
             <option value="">選択してください</option>
-            <option value="Claude Code（Max/Teamプランなど）">Claude Code（Max/Teamプランなど）で使っている</option>
-            <option value="Claude API・その他のFableクラス環境">Claude APIやその他の環境でFableクラスを使っている</option>
+            <option value="Codex（ChatGPTのPlus/Proプランなど）でAstra">Codex（ChatGPTのPlus/Proプランなど）でAstraを使っている</option>
+            <option value="Claude Code（Max/Teamプランなど）">Claude Code（Max/Teamプランなど）でFableを使っている</option>
+            <option value="API・その他のAstra/Fableクラス環境">APIやその他の環境でAstra・Fableクラスを使っている</option>
           </select>
-          <label class="chk"><input type="checkbox" id="ap-fable-chk" required>Fableクラスの開発AIを自分で操作できます</label>
+          <label class="chk"><input type="checkbox" id="ap-fable-chk" required>AstraかFableクラスの開発AIを自分で操作できます</label>
         </div>
 
         <div class="fgroup">
