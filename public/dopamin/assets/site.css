@@ -23,6 +23,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--gold-hi); outli
 .pop { font-family: var(--pop); font-weight: 400; color: var(--cream); -webkit-text-stroke: 8px var(--navy); paint-order: stroke fill; letter-spacing: .02em; line-height: 1.25; margin: 0; }
 .pop.red { color: var(--red); -webkit-text-stroke: 9px var(--cream); filter: drop-shadow(0 4px 0 var(--navy)); }
 .pop.gold { color: var(--gold-hi); }
+.pop.inl { display: inline-block; margin: 0 .14em; }
 .eyebrow { font-family: var(--mincho); font-weight: 700; font-size: 14px; letter-spacing: .32em; color: var(--gold); margin: 0 0 10px; }
 .lead { color: var(--moon-2); margin: 14px 0 0; }
 
@@ -57,7 +58,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--gold-hi); outli
 .hero-copy h1 { margin: 0; }
 .hero-copy h1 img { width: min(560px, 100%); height: auto; filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .45)); }
 .catch { font-family: var(--pop); font-size: clamp(24px, 6.4vw, 36px); line-height: 1.4; color: var(--cream); -webkit-text-stroke: 6px var(--navy); paint-order: stroke fill; margin: 18px 0 0; }
-.catch em { font-style: normal; color: var(--red); -webkit-text-stroke: 7px var(--cream); }
+.catch em { font-style: normal; color: var(--red); -webkit-text-stroke: 7px var(--cream); display: inline-block; margin: 0 .16em; }
 .hero .lead { max-width: 34em; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
 .chips li { font-weight: 700; font-size: 14px; letter-spacing: .08em; color: var(--night); background: var(--gold); border-radius: 999px; padding: 4px 14px 5px; }
@@ -166,13 +167,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--gold-hi); outli
 @media (min-width: 880px) { .emaki { grid-template-columns: repeat(3, 1fr); } .emaki img:nth-child(2) { transform: translateY(26px); } }
 
 /* 無料 */
-.free-grid { display: grid; gap: 22px; grid-template-columns: 1fr; margin-top: 10px; }
+.free-grid { display: grid; gap: 22px; grid-template-columns: 1fr; margin-top: 10px; max-width: 760px; }
 .hanko { border-radius: 22px; background: var(--red); color: var(--cream); text-align: center; padding: 22px 12px 20px; box-shadow: 0 0 0 5px var(--cream), 0 0 0 10px var(--navy), 0 20px 40px rgba(0, 0, 0, .45); }
 .hanko b { display: block; font-family: var(--pop); font-weight: 400; font-size: clamp(34px, 8vw, 46px); line-height: 1.15; }
 .hanko span { display: block; font-weight: 700; letter-spacing: .16em; font-size: 14px; margin-top: 4px; }
 .free-note { margin-top: 26px; font-size: 14px; color: var(--moon-2); }
-@media (min-width: 560px) { .free-grid { grid-template-columns: repeat(3, 1fr); } }
-.free-grid .hanko:nth-child(1) { transform: rotate(-2deg); } .free-grid .hanko:nth-child(3) { transform: rotate(2deg); }
+@media (min-width: 560px) { .free-grid { grid-template-columns: repeat(2, 1fr); } }
+.free-grid .hanko:nth-child(1) { transform: rotate(-2deg); } .free-grid .hanko:nth-child(2) { transform: rotate(2deg); }
 
 /* 本編 */
 .sister { display: grid; gap: 22px; align-items: center; background: var(--face); border-radius: 24px; padding: 26px; box-shadow: 0 20px 50px rgba(0, 0, 0, .4); }
