@@ -28,10 +28,73 @@
     }
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  // 念のため位置でも判定（IO が来ない環境で節が透明のまま残らないように）
+  const revealCheck = () => { const H = innerHeight; document.querySelectorAll(".reveal:not(.in)").forEach((el) => { if (el.getBoundingClientRect().top < H * 0.92) el.classList.add("in"); }); };
+  let rt = 0; addEventListener("scroll", () => { clearTimeout(rt); revealCheck(); rt = setTimeout(revealCheck, 90); }, { passive: true });
+  setTimeout(revealCheck, 300);
   if (!reduce) document.querySelectorAll("video[data-lazy]").forEach((v) => io.observe(v));
   else document.querySelectorAll("video[data-lazy]").forEach((v) => { v.preload = "metadata"; v.controls = true; });
   const hero = document.getElementById("heroVideo");
   if (hero && reduce) { hero.pause(); hero.removeAttribute("autoplay"); }
+
+  // ---- 文字のポップ（09-26 本人「スクロールで文字がポップする感じ」）----
+  // 見出しを一文字ずつに割り、画面に入ったら跳ねて出す。跳ね終えたら元の組みに戻す（縁取りの重なりを残さない）。
+  const POP = ".catch, .catch2, .sec-head h2, .try-side h2, .hochi h2 .big, .hochi h2 .sub2, .play-text h3, .play-text .no, .idle-list b, .hanko b, .closing .say, .sister h2, .soon b, .clock b";
+  if (!reduce) {
+    const split = (node, st) => {
+      for (const c of [...node.childNodes]) {
+        if (c.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          for (const ch of c.textContent) {
+            if (/\s/.test(ch)) { frag.appendChild(document.createTextNode(ch)); continue; }
+            const sp = document.createElement("span");
+            sp.className = "ch"; sp.textContent = ch; sp.style.setProperty("--k", st.n++);
+            frag.appendChild(sp);
+          }
+          c.replaceWith(frag);
+        } else if (c.nodeType === 1 && c.tagName !== "BR") split(c, st);
+      }
+    };
+    // IntersectionObserver だけに頼らず、スクロールのたびに位置で判定する（見えない枠では IO が来ないことがある＝文字が消えたままにしない）
+    const pending = new Set();
+    const fire = (el) => {
+      pending.delete(el);
+      const n = Number(el.dataset.chn || 1), step = Math.min(42, 620 / n);
+      el.style.setProperty("--step", `${step}ms`);
+      el.classList.add("chgo");
+      setTimeout(() => { if (el.dataset.chorig != null) { el.innerHTML = el.dataset.chorig; delete el.dataset.chorig; } el.classList.remove("chwait", "chgo"); }, n * step + 700);
+    };
+    let last = 0, trail = 0;
+    const check = () => {
+      const H = innerHeight;
+      for (const el of pending) {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0) { el.innerHTML = el.dataset.chorig; delete el.dataset.chorig; el.classList.remove("chwait"); pending.delete(el); } // 飛ばして過ぎた＝そのまま見せる
+        else if (r.top < H * 0.9) fire(el);
+      }
+    };
+    // rAF は裏のタブで止まるので使わない（止まると文字が隠れたままになる）。60ms に一度＋止まった後にもう一度
+    const onScroll = () => { const t = Date.now(); if (t - last > 60) { last = t; check(); } clearTimeout(trail); trail = setTimeout(check, 90); };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    document.querySelectorAll(POP).forEach((el) => {
+      if (el.closest(".stage")) return;
+      el.dataset.chorig = el.innerHTML;
+      const label = el.textContent.trim();
+      const wrap = document.createElement("span");
+      wrap.setAttribute("aria-hidden", "true");
+      wrap.innerHTML = el.innerHTML;
+      const st = { n: 0 }; split(wrap, st);
+      el.dataset.chn = st.n;
+      el.innerHTML = "";
+      const sr = document.createElement("span"); sr.className = "sr"; sr.textContent = label;
+      el.append(sr, wrap);
+      el.classList.add("chwait");
+      pending.add(el);
+    });
+    check();
+    setTimeout(check, 400);
+  }
 
   // ---- ためし斬り ----
   const stage = document.getElementById("stage");
