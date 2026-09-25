@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>どーぱみんクリッカー！｜月蝕綺譚 外伝・和風ポップな連打ゲーム</title>
+<meta name="description" content="たたくほど斬撃が走り、小判が降る。月蝕綺譚の仲間30人と夜を斬り進む、和風ポップな放置クリッカー。ダウンロード無料・広告なし・課金なし。iOS・Android 近日配信。">
+<meta name="theme-color" content="#15121F">
+<link rel="canonical" href="https://vibe.co.jp/dopamin/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="どーぱみんクリッカー！">
+<meta property="og:title" content="どーぱみんクリッカー！｜月蝕綺譚 外伝">
+<meta property="og:description" content="指一本で、こわい夜を祓え。月蝕綺譚の仲間30人と夜を斬り進む、和風ポップな連打ゲーム。iOS・Android 近日配信。">
+<meta property="og:url" content="https://vibe.co.jp/dopamin/">
+<meta property="og:image" content="https://vibe.co.jp/dopamin/assets/img/ogp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Shippori+Mincho+B1:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="どーぱみんクリッカー！ トップへ">
+      <img class="icon" src="assets/img/icon.png" alt="" width="34" height="34">
+      <img class="word" src="assets/img/logo.webp" alt="" width="69" height="30">
+    </a>
+    <nav class="nav" aria-label="ページ内">
+      <a href="#movie">ムービー</a><a href="#try">ためし斬り</a><a href="#play">あそびかた</a><a href="#nakama">なかま</a><a href="#honpen">月蝕綺譚</a>
+    </nav>
+    <span class="soon-pill">近日配信</span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="eclipse" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-art">
+        <video id="heroVideo" src="assets/video/emma_loop.mp4" poster="assets/img/emma_key.webp" autoplay muted loop playsinline preload="auto" aria-label="星柄の着物のエマが、一角の槍を担いでウインクする"></video>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">月蝕綺譚 外伝</p>
+        <h1><img src="assets/img/logo.webp" alt="どーぱみんクリッカー！" width="1484" height="646"></h1>
+        <p class="catch">指一本で、<em>こわい夜</em>を祓え。</p>
+        <p class="lead">たたくほど斬撃が走り、小判が降る。『月蝕綺譚』の仲間30人と、夜をどこまでも斬り進む。和風ポップな放置クリッカーです。</p>
+        <ul class="chips" aria-label="料金">
+          <li>ダウンロード無料</li><li>広告なし</li><li>課金なし</li>
+        </ul>
+        <div class="cta">
+          <a class="btn primary" href="#movie"><span class="tri" aria-hidden="true"></span>ムービーを見る</a>
+          <p class="soon" style="margin:0"><b>近日配信</b><span>iOS ・ Android</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="movie" aria-labelledby="movie-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">MOVIE</p>
+        <h2 class="pop" id="movie-h">紹介ムービー</h2>
+      </div>
+      <div class="movie-frame reveal">
+        <video id="pv" src="assets/video/pv.mp4" poster="assets/video/pv_poster.jpg" controls playsinline preload="none"></video>
+      </div>
+      <p class="movie-note">約1分・音が出ます。語りはエマ。</p>
+    </div>
+  </section>
+
+  <section class="sec" id="try" aria-labelledby="try-h">
+    <div class="wrap try-grid">
+      <div class="reveal">
+        <button class="stage" id="stage" type="button" aria-label="妖をたたく（連打できます）">
+          <span class="moonlit" aria-hidden="true"></span>
+          <img class="torii" src="assets/img/fx/bg18_prop_torii.webp" alt="" aria-hidden="true">
+          <span class="ground" aria-hidden="true"></span>
+          <img class="ally" src="assets/img/chibi/emma.webp" alt="" aria-hidden="true">
+          <img class="foe" id="foe" src="assets/img/fx/anim_mob_water_idle.webp" alt="" aria-hidden="true">
+          <span class="hpbar" id="hp" aria-hidden="true"><i id="hpFill"></i></span>
+          <span class="timer" id="timer" aria-hidden="true"></span>
+          <span class="hud" aria-hidden="true">
+            <span class="pill" id="night">第1夜</span>
+            <span class="pill" id="coins"><img src="assets/img/fx/koban.webp" alt="">0</span>
+          </span>
+          <span class="combo" id="combo" aria-hidden="true"></span>
+          <span class="banner" id="banner" aria-hidden="true"></span>
+          <span class="hint" aria-hidden="true">たたいて！</span>
+        </button>
+      </div>
+      <div class="try-side reveal">
+        <p class="eyebrow">TRY</p>
+        <h2 class="pop" id="try-h">ためしに、<br>たたいてみて。</h2>
+        <p class="lead">夜の絵を押すと、斬撃が走ります。続けて押すほど連打がつながって、数字も小判も派手になる。これが、どーぱみんの気持ちよさ。</p>
+        <ul class="facts">
+          <li><b>10夜</b>ごとに大妖（おおあやかし）。刻限は30秒</li>
+          <li><b>百連</b>・<b>千連</b>で、画面がきらきらに</li>
+        </ul>
+        <p style="margin-top:14px"><button class="sound" id="sound" type="button" aria-pressed="false" style="position:static">音：オフ</button></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="play" aria-labelledby="play-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">HOW TO PLAY</p>
+        <h2 class="pop" id="play-h">あそびかたは、三つだけ。</h2>
+      </div>
+      <div class="play">
+        <div class="play-row reveal">
+          <div class="phone"><video data-lazy src="assets/video/play_tap.mp4" poster="assets/video/play_tap.jpg" muted loop playsinline preload="none" aria-label="連打で千連に届いた実際の画面"></video></div>
+          <div class="play-text">
+            <span class="no" aria-hidden="true">壱</span>
+            <h3 class="pop">たたく</h3>
+            <p>画面を押せば斬撃。妖を倒すたびに小判がこぼれます。連打がつながるほど画面は華やかになり、千連・二千連で祝祭が起きます。</p>
+            <div class="memo"><span>斬撃</span><span>小判</span><span>千連</span></div>
+          </div>
+        </div>
+        <div class="play-row reveal">
+          <div class="phone"><video data-lazy src="assets/video/play_boss.mp4" poster="assets/video/play_boss.jpg" muted loop playsinline preload="none" aria-label="大妖との戦いで仲間の必殺技が次々に出る実際の画面"></video></div>
+          <div class="play-text">
+            <span class="no" aria-hidden="true">弐</span>
+            <h3 class="pop red">迎えて、育てる</h3>
+            <p>小判で仲間を鍛え、絵巻で召喚して新しい仲間を迎えます。十夜ごとに現れる大妖は、30秒の勝負。ためた奥義は最大10本まで連発できます。</p>
+            <div class="memo"><span>召喚</span><span>大妖 30秒</span><span>奥義 最大10連発</span></div>
+          </div>
+        </div>
+        <div class="play-row reveal">
+          <div class="phone"><video data-lazy src="assets/video/play_idle.mp4" poster="assets/video/play_idle.jpg" muted loop playsinline preload="none" aria-label="留守中の実入りを受け取る実際の画面"></video></div>
+          <div class="play-text">
+            <span class="no" aria-hidden="true">参</span>
+            <h3 class="pop gold">置いておく</h3>
+            <p>手を離しているあいだも、仲間は戦い続けます。留守中の実入りは最大8時間分。夜が深くなったら月蝕を起こして明け直し、もっと先の夜へ。</p>
+            <div class="memo"><span>留守中の実入り 最大8時間</span><span>月蝕</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="nakama" aria-labelledby="nakama-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">CHARACTERS</p>
+        <h2 class="pop" id="nakama-h">『月蝕綺譚』の仲間、<span class="red pop" style="display:inline">30人</span>。</h2>
+        <p class="lead">本編『月蝕綺譚』の仲間たちが、ちびの姿で夜を駆けます。召喚で迎えて、覚醒で星を上げて。推しを隊に入れて進めます。</p>
+      </div>
+    </div>
+    <div class="rail" id="rail1" aria-label="仲間の一覧（前半）"><ul></ul></div>
+    <div class="rail rev" id="rail2" aria-label="仲間の一覧（後半）"><ul></ul></div>
+  </section>
+
+  <section class="sec" id="emaki" aria-labelledby="emaki-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">STORY</p>
+        <h2 class="pop" id="emaki-h">夜を進むと、絵巻がひらく。</h2>
+        <p class="lead">夜を進めるたびに「月蝕絵巻」の場面がひらいていきます。三十の場面でつづる、エマたちの小さな物語。</p>
+      </div>
+      <div class="emaki reveal">
+        <img src="assets/img/emaki_01.webp" alt="月蝕絵巻の一場面" loading="lazy" width="840" height="280">
+        <img src="assets/img/emaki_12.webp" alt="月蝕絵巻の一場面" loading="lazy" width="840" height="280">
+        <img src="assets/img/emaki_30.webp" alt="月蝕絵巻の一場面" loading="lazy" width="840" height="280">
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="free" aria-labelledby="free-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">PRICE</p>
+        <h2 class="pop" id="free-h">お代は、いただきません。</h2>
+      </div>
+      <div class="free-grid reveal">
+        <div class="hanko"><b>無料</b><span>ダウンロード</span></div>
+        <div class="hanko"><b>広告なし</b><span>広告の表示ゼロ</span></div>
+        <div class="hanko"><b>課金なし</b><span>アプリ内課金ゼロ</span></div>
+      </div>
+      <p class="free-note">アプリ内に広告の表示および有料コンテンツの販売はありません（<a href="terms/">利用規約</a> 第2条）。通信にかかる費用はお客様のご負担となります。</p>
+    </div>
+  </section>
+
+  <section class="sec" id="honpen" aria-labelledby="honpen-h">
+    <div class="wrap">
+      <div class="sister reveal">
+        <img src="assets/img/emaki_05.webp" alt="" loading="lazy" width="840" height="280">
+        <div>
+          <p class="eyebrow">ORIGIN</p>
+          <h2 class="pop" id="honpen-h">本編『月蝕綺譚』配信中</h2>
+          <p class="lead">仲間たちの本当の物語は、本編『月蝕綺譚』で。</p>
+          <div class="links">
+            <a class="btn ghost" href="https://apps.apple.com/jp/app/id6792935442" rel="noopener">App Store</a>
+            <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.ikehaya.cnKitan" rel="noopener">Google Play</a>
+            <a class="btn ghost" href="https://vibe.co.jp/luna-occulta/">公式サイト</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec closing" aria-label="配信のお知らせ">
+    <div class="wrap reveal">
+      <img class="logo" src="assets/img/logo.webp" alt="どーぱみんクリッカー！" width="1484" height="646" loading="lazy">
+      <p class="say">いっしょに、夜を明けよ？</p>
+      <p class="soon"><b>近日配信</b><span>iOS ・ Android</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <nav class="foot-nav" aria-label="サイト情報"><a href="terms/">利用規約</a><a href="privacy/">プライバシーポリシー</a><a href="support/">サポート</a></nav>
+  <p>開発・運営 合同会社日本の田舎は資本主義のフロンティアだ</p>
+  <p>© 2026 CryptoNinja</p>
+</footer>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>
