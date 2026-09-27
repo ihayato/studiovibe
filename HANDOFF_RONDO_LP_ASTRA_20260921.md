@@ -1,5 +1,20 @@
 # HANDOFF — Rondo公式サイト「Astra/Fableユーザーのための」改稿（2026-09-21）
 
+> ## 🔵 09-27 更新（最新・ここが正）: 「Astra/Fable推奨」を撤回し、Codex/Claude Code軸で**本番配信済み**
+> 本人（2026-09-27）:「opus5.5が賢くなったので、Astra/Fable推奨という表現を取りましょう」
+> - 見出し＝**「Codex/Claude Codeユーザーのための、マーケティングOS。」**（本人選択）。title/OG/Twitterも同じ。
+> - **モデルの指定はしない**。「強く推奨」「最低ライン＝Astra/Fableクラス」「Opus 5やGPT 5.6では失敗」を全撤去。FAQは「モデルの指定はありません／新しめのモデルを。古い世代ほどつまずきやすい」だけ。
+> - 「RondoはFableで開発し、Fableで運用」の一文も撤去（推奨の文脈で読まれるため）。
+> - 料金は「CodexもClaude Codeも月3,000円ほどのプランから」（2026年9月時点の注記はFAQに残す）。
+> - 適性診断: モデルの問い(旧Q3)を削除し**6問**に。判定の添字は 投資=answers[2]・ドメイン=answers[3]・設計図=answers[4]。※分析ラベル「診断 QnAm」はQ3以降の番号が1つずれた。
+> - 実演パネル: 切替ボタンを Astra/Fable → **Codex/Claude Code** に。バーのアプリ名表示(#cc-app)は重複するので削除。
+> - 申込フォーム条件1: 「CodexやClaude Codeなどの開発AIが使える環境」。選択肢の Claude Code は「Pro/Maxプランなど」に訂正。項目名 `fableEnv` は据え置き。
+> - 審査の不合格文言（rondo `src/sales.mjs` の `REJECT_LABELS.fable_env`）も同文に直し、ikehaya-marketing-os main にコミット。**rondo Worker へは未配信**（本番は deploy/* 枝運用で main と大きく乖離。select必須のため実際にはほぼ出ない文言。次の rondo 配信に相乗りでよい）。
+> - 状態: vibe **6a17f03**・本番 Version **46635f76**・verify-deploy 全項目OK。配信前にdist全67ファイルを本番と突き合わせ、差分は rondo 3頁のみを確認。
+> - **以後、vibe配信時に rondo 3頁を 55c8b6c 版へ戻す運用は廃止**（memory vibe-site-deploy-new-mac も更新済み）。
+> - 下の09-21の記述のうち「見出し」「Astra先頭」「Fableで開発の一文を残す」「最低ライン＝世代」は**失効**。
+
+
 ## 依頼
 本人（2026-09-21）:「rondoの公式サイト、Astra/Fableユーザーのためのツールという感じでリニューアルします。Astraは月3000円で使えるので、だいぶ使いやすくなりますね。」
 
