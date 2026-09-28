@@ -1,0 +1,483 @@
+// 制作レポート『AIで、ゲームは本当にちゃんと作れるのか。』（/report/deck）の中身。
+// ビルド時に vite.config.js の studio-partials が <!-- @deck --> を静的HTMLへ展開する（グラフもSVGとして焼き込む）。
+// 動き（ページ送り・カウントアップ・グラフの伸び・押すと開く部品）は site/deck.js。
+// 厳守: 事実の出典は cn-kitan リポジトリの記録（site/deck-data.mjs）。攻撃の手がかりになる具体は書かない。
+//       「イメージ図」と明記したもの以外は実データ。仮置きの料金・条件（試作パッケージ・NDA等）は載せない。
+import { CHARACTERS, COMMITS_WEEKLY, TESTS_WEEKLY, TEST_FILES, REVIEWS_MONTHLY, PRIVACY, SCREENS, CI_JOBS, FAL_TOTAL_USD, FAL_BREAKDOWN, FAL_JULY_USD, USD_JPY, UNIT_COSTS, CF_USAGE, CF_R2, LLM_COST_STEPS, LLM_DAILY_CAP, AI_TOOLS, AI_TOOLS_MONTHS } from './deck-data.mjs'
+
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+const fmt = (n) => n.toLocaleString('ja-JP')
+const ILLU = '/studio/report/illu'
+const COMMITS_SUM = COMMITS_WEEKLY.reduce((n, [, v]) => n + v, 0)
+const illu = (name, cls = '') => `<img class="ds-illu ${cls}" src="${ILLU}/${name}.webp" alt="" loading="lazy" decoding="async" />`
+
+let count = 0
+const slides = []
+const add = (title, html, { cls = '', chapter = '', id: slug } = {}) => {
+  count += 1
+  const id = slug || `p${String(count).padStart(2, '0')}`
+  slides.push({ id, title, chapter, no: count })
+  return `<section class="ds ${cls}" id="${id}" data-title="${esc(title)}" aria-label="${esc(title)}">${html}</section>`
+}
+const head = (kicker, title) => `<header class="ds-head">${kicker ? `<p class="ds-kicker">${kicker}</p>` : ''}<h2>${title}</h2></header>`
+
+// ---------- グラフ（SVG を焼き込む。色は CSS のクラスで塗る） ----------
+// 1系列の棒グラフ。4px 丸めの上端・基線に接地・2px の隙間。ホバーで data-tip を出す
+const barChart = ({ data, unit, tip, aria, highlight = [], labelEvery = 1, h = 360 }) => {
+  const W = 1000, H = h, padL = 56, padR = 8, padT = 40, padB = 44
+  const max = Math.max(...data.map((d) => d[1]))
+  const nice = Math.ceil(max / 500) * 500
+  const band = (W - padL - padR) / data.length
+  const bw = Math.min(56, band - 8)
+  const y = (v) => padT + (H - padT - padB) * (1 - v / nice)
+  const grid = Array.from({ length: nice / 500 + 1 }, (_, k) => k * 500).map((v) => {
+    const yy = y(v)
+    return `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}"/><text class="axis" x="${padL - 10}" y="${yy + 5}" text-anchor="end">${fmt(v)}</text>`
+  }).join('')
+  const bars = data.map(([label, v], i) => {
+    const x = padL + band * i + (band - bw) / 2, top = y(v), base = y(0), r = 4
+    const path = `M${x},${base} V${top + r} Q${x},${top} ${x + r},${top} H${x + bw - r} Q${x + bw},${top} ${x + bw},${top + r} V${base} Z`
+    const hl = highlight.includes(i)
+    return `<g class="bar${hl ? ' is-hl' : ''}" style="--i:${i}" data-tip="${esc(tip(label, v))}"${hl ? ' tabindex="0"' : ''}>
+      <rect class="hit" x="${padL + band * i}" y="${padT}" width="${band}" height="${H - padT - padB}"/>
+      <path class="mark" d="${path}"/>
+      ${hl ? `<text class="val" x="${x + bw / 2}" y="${top - 12}" text-anchor="middle">${fmt(v)}${unit}</text>` : ''}
+      ${i % labelEvery === 0 || i === data.length - 1 ? `<text class="axis" x="${x + bw / 2}" y="${H - 14}" text-anchor="middle">${label}</text>` : ''}
+    </g>`
+  }).join('')
+  return `<svg class="chart bar-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(aria)}">${grid}<line class="base" x1="${padL}" x2="${W - padR}" y1="${y(0)}" y2="${y(0)}"/>${bars}</svg>`
+}
+
+// 1系列の折れ線（面つき）。最初と最後だけ値を直接ラベル。各点はホバーで data-tip
+const lineChart = ({ data, unit, tip, aria, h = 520 }) => {
+  const W = 1000, H = h, padL = 64, padR = 40, padT = 48, padB = 44
+  const max = Math.max(...data.map((d) => d[1]))
+  const nice = Math.ceil(max / 500) * 500
+  const step = (W - padL - padR) / (data.length - 1)
+  const x = (i) => padL + step * i
+  const y = (v) => padT + (H - padT - padB) * (1 - v / nice)
+  const pts = data.map(([, v], i) => `${x(i)},${y(v)}`)
+  const line = `M${pts.join(' L')}`
+  const area = `${line} L${x(data.length - 1)},${y(0)} L${x(0)},${y(0)} Z`
+  const grid = [0, 0.5, 1].map((t) => {
+    const v = Math.round(nice * t), yy = y(v)
+    return `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}"/><text class="axis" x="${padL - 10}" y="${yy + 5}" text-anchor="end">${fmt(v)}</text>`
+  }).join('')
+  const last = data.length - 1
+  const points = data.map(([label, v], i) => `<g class="pt" data-tip="${esc(tip(label, v))}"${i === last ? ' tabindex="0"' : ''}>
+      <rect class="hit" x="${x(i) - step / 2}" y="${padT}" width="${step}" height="${H - padT - padB}"/>
+      <circle class="dot${i === last ? ' is-last' : ''}" cx="${x(i)}" cy="${y(v)}" r="6"/>
+      ${i % 2 === 0 || i === last ? `<text class="axis" x="${x(i)}" y="${H - 14}" text-anchor="middle">${label}</text>` : ''}
+    </g>`).join('')
+  return `<svg class="chart line-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(aria)}">
+    <defs><linearGradient id="lg-area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ede8df" stop-opacity=".22"/><stop offset="1" stop-color="#ede8df" stop-opacity="0"/></linearGradient></defs>
+    ${grid}<path class="area" d="${area}" fill="url(#lg-area)"/><path class="line" d="${line}" pathLength="1"/>
+    <circle class="dot is-first" cx="${x(0)}" cy="${y(data[0][1])}" r="6"/>
+    <text class="val" x="${x(0) + 16}" y="${y(data[0][1]) + 32}">${fmt(data[0][1])}${unit}</text>
+    <text class="val is-hl" x="${x(last) - 8}" y="${y(data[last][1]) - 20}" text-anchor="end">${fmt(data[last][1])}${unit}</text>
+    ${points}</svg>`
+}
+
+// 月別の積み上げ棒（2系列: 別のAIによるレビュー／そのほかの点検）
+const stackedBars = (data) => {
+  const W = 1000, H = 360, padL = 56, padR = 8, padT = 32, padB = 48
+  const max = Math.ceil((Math.max(...data.map((d) => d.codex + d.other)) + 3) / 5) * 5
+  const band = (W - padL - padR) / data.length
+  const bw = 120
+  const y = (v) => padT + (H - padT - padB) * (1 - v / max)
+  const grid = Array.from({ length: max / 5 + 1 }, (_, k) => k * 5).map((v) => `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${padL - 10}" y="${y(v) + 5}" text-anchor="end">${v}</text>`).join('')
+  const bars = data.map((d, i) => {
+    const x = padL + band * i + (band - bw) / 2
+    const total = d.codex + d.other
+    const yCodexTop = y(d.codex), yTotalTop = y(total), base = y(0)
+    return `<g class="bar" style="--i:${i}" data-tip="${esc(`${d.month}: 報告書${total}本（うち別のAI ${d.codex}本）`)}">
+      <rect class="hit" x="${padL + band * i}" y="${padT}" width="${band}" height="${H - padT - padB}"/>
+      <rect class="mark seg-a" x="${x}" y="${yCodexTop}" width="${bw}" height="${base - yCodexTop}"/>
+      ${d.other ? `<rect class="mark seg-b" x="${x}" y="${yTotalTop}" width="${bw}" height="${yCodexTop - yTotalTop - 2}" rx="4"/>` : ''}
+      <text class="val" x="${x + bw / 2}" y="${yTotalTop - 12}" text-anchor="middle">${total}本</text>
+      <text class="axis" x="${x + bw / 2}" y="${H - 16}" text-anchor="middle">${d.month}</text>
+    </g>`
+  }).join('')
+  return `<svg class="chart stack-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(data.map((d) => `${d.month} ${d.codex + d.other}本（うち別のAI ${d.codex}本）`).join('、'))}">${grid}<line class="base" x1="${padL}" x2="${W - padR}" y1="${y(0)}" y2="${y(0)}"/>${bars}</svg>`
+}
+
+// イメージ図: 見る人が増えたときのデータベースへのアクセス（キャッシュなし＝比例／あり＝ほぼ一定）
+const cacheConcept = () => `<svg class="chart concept-chart" viewBox="0 0 1000 360" role="img" aria-label="イメージ図">
+  <line class="base" x1="60" x2="980" y1="300" y2="300"/><line class="base" x1="60" x2="60" y1="30" y2="300"/>
+  <text class="axis" x="980" y="336" text-anchor="end">見る人の数 →</text>
+  <text class="axis" x="72" y="44">データベースへのアクセス</text>
+  <path class="line ghost" d="M60,296 L960,60" pathLength="1"/>
+  <path class="line" d="M60,292 C200,262 260,258 960,250" pathLength="1"/>
+  <text class="axis" x="48" y="306" text-anchor="end">0</text>
+  <text class="lbl dim" x="950" y="48" text-anchor="end">キャッシュなし</text>
+  <text class="lbl" x="950" y="232" text-anchor="end">キャッシュあり（月蝕綺譚）</text>
+</svg>`
+
+// ---------- 費用のグラフ ----------
+const usd = (n) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+const yenMan = (usdN) => `約${Math.round((usdN * USD_JPY) / 10000)}万円`
+const TOOLS_MONTHLY = AI_TOOLS.reduce((n, t) => n + t.accounts * t.usdPerMonth, 0)
+const TOOLS_TOTAL = TOOLS_MONTHLY * AI_TOOLS_MONTHS
+
+// fal の内訳: 横一本の積み上げバー＋凡例（値は直接ラベル）
+const falBar = () => {
+  const total = FAL_BREAKDOWN.reduce((n, d) => n + d.usd, 0)
+  return `<div class="stackbar" role="img" aria-label="${esc(FAL_BREAKDOWN.map((d) => `${d.label} ${usd(d.usd)}`).join('、'))}">
+    ${FAL_BREAKDOWN.map((d, i) => `<span class="sb sb-${d.key}" style="--w:${(d.usd / total) * 100}%;--i:${i}" data-tip="${esc(`${d.label}：${usd(d.usd)}（${d.note}）`)}"><b>${d.label}</b></span>`).join('')}
+  </div>
+  <ul class="sb-legend">${FAL_BREAKDOWN.map((d) => `<li><i class="sb-${d.key}"></i><b>${d.label}</b><span>${usd(d.usd)}</span><em>${d.note}</em></li>`).join('')}</ul>`
+}
+
+// Cloudflare: 月額プランの範囲に対する使用率のバー（100% の位置に目印）
+const cfBars = () => `<div class="util">
+  ${CF_USAGE.map((d, i) => {
+    const pct = (d.used / d.included) * 100
+    const w = Math.min(pct, 220) / 2.2 // 220% を横幅いっぱいとする
+    return `<div class="util-row" style="--i:${i}">
+      <p class="util-name">${d.what}</p>
+      <div class="util-track"><span class="util-bar${pct > 100 ? ' is-over' : ''}" style="--w:${w}%"></span><span class="util-line" aria-hidden="true"></span></div>
+      <p class="util-val"><b>${Math.round(pct)}%</b><span>${fmt(d.used)} / 範囲 ${fmt(d.included)} ${d.unit}</span><em>超過の費用 ${d.over}</em></p>
+    </div>`
+  }).join('')}
+  <p class="util-key"><i aria-hidden="true"></i>縦の線が月額プランの範囲（100%）。斜線は範囲を超えた項目</p>
+</div>`
+
+// 会話AI 1回あたり: 下がっていく棒
+const llmBars = () => {
+  const max = LLM_COST_STEPS[0].yen
+  return `<div class="steps-cost" role="img" aria-label="${esc(LLM_COST_STEPS.map((d) => `${d.when} ${d.yen}円`).join('、'))}">
+    ${LLM_COST_STEPS.map((d, i) => `<div class="sc" style="--h:${(d.yen / max) * 100}%;--i:${i}"><span class="sc-val">${d.yen}<small>円</small></span><span class="sc-bar${i === LLM_COST_STEPS.length - 1 ? ' is-hl' : ''}"></span><b>${d.when}</b><em>${d.how}</em></div>`).join('')}
+  </div>`
+}
+
+// 技術構成（実際の構成: cn-kitan の worker/・worker-takusen/ の wrangler.toml で確認 09-28）
+const ARCH_NODES = [
+  ['Cloudflare Workers', 'サーバーの処理', '機能ごとに別々のWorkerで動かし、1つの不具合が全体に広がらないようにしています。'],
+  ['Cloudflare D1', 'データベース', 'プレイヤーのデータを保存します。本番とテスト用は分けています。'],
+  ['Cloudflare KV', 'ランキングの集計', 'ランキングは集計済みの結果を配り、データベースへの読み込みを減らしています。'],
+  ['Cloudflare R2', '素材の配信', 'アプリには最初の素材だけを入れ、絵・動画・声は必要なときに配信します。'],
+  ['Turnstile', 'ボット対策・回数制限', '会員登録などの入口でボットを見分け、回数の上限と組み合わせています。'],
+  ['OpenAI', 'キャラと話すAI（外部）', '軽量モデルをサーバー経由で呼び、端末ごと・1日あたりの回数に上限を設けています。'],
+]
+
+// ---------- スライド ----------
+// 型: 「Q. 読者の疑問」→ 答えの見出し → 図1つ → 一言。注記は数え方のページにまとめる。
+const S = []
+const go = (id, label) => `<button type="button" class="a" data-go="#${id}">${label}</button>`
+const q = (text) => `<p class="ds-kicker q-kicker">Q. ${text}</p>`
+const h = (question, title) => `<header class="ds-head">${q(question)}<h2>${title}</h2></header>`
+
+S.push(add('表紙', `
+  <div class="cover-eclipse" aria-hidden="true"></div>
+  <div class="ds-in">
+    <p class="ds-kicker">STUDIO VIBE REPORT ／ 2026年9月</p>
+    <h1>AIで、ゲームは<br>本当にちゃんと<br>作れるのか。</h1>
+    <p class="cover-sub">月蝕綺譚 制作・運用レポート</p>
+    <p class="ds-lead">AIを使ったゲーム開発を外注する前に出てくる疑問に、私たちが開発・運用しているスマホゲーム『月蝕綺譚』の記録でお答えします。</p>
+    <button type="button" class="btn btn-primary ds-start" data-go="next">はじめる<span class="arrow" aria-hidden="true">↓</span></button>
+  </div>${illu('shiori_chibi_eclipse', 'is-cover')}`, { cls: 'is-cover', id: 'cover' }))
+
+S.push(add('気になるところから', `
+  <div class="ds-in">
+    ${head('はじめに', '気になるところから、どうぞ。')}
+    <div class="roles">
+      ${[
+        ['ゲームの品質は？', [['real', '実物'], ['fit', '向き・不向き'], ['pipeline', '作り方']]],
+        ['費用はいくら？', [['cost-gen', 'AIの費用'], ['cost-run', '公開後の費用'], ['cost-kinds', '発注の費用']]],
+        ['公開後も安全？', [['arch', '構成'], ['security', 'セキュリティ'], ['restore', '止まったら']]],
+        ['何を決めれば発注できる？', [['approval', '確認の流れ'], ['agree', '決めること'], ['checklist', 'チェックリスト']]],
+      ].map(([qq, links]) => `<div class="role-card"><p class="role-name">${qq}</p><div class="role-links">${links.map(([id, l]) => go(id, `${l} →`)).join('')}</div></div>`).join('')}
+    </div>
+  </div>`, { id: 'roles' }))
+
+S.push(add('実物を見る', `
+  <div class="ds-in split real">
+    <div>
+      ${h('AIで、どんな品質のゲームができる？', 'まず、月蝕綺譚をご覧ください。')}
+      <div class="stats">
+        <div><b data-count="${CHARACTERS}">${CHARACTERS}</b><span>キャラクター</span></div>
+        <div><b data-count="850">850</b><span>ボイス（本以上）</span></div>
+        <div><b class="is-text">iOS<br>Android</b><span>配信中</span></div>
+      </div>
+      <p class="ds-note">月蝕綺譚は、2026年7月から社内で開発・運用している和風ファンタジーのスマホゲームです。<a href="/luna-occulta" target="_blank" rel="noopener">公式サイト↗</a>　アニメの実績は<a href="/hankacho/" target="_blank" rel="noopener">ニンジャ犯科帳↗</a></p>
+    </div>
+    <figure class="phone-video">
+      <video data-autoplay muted loop playsinline preload="none" poster="/studio/report/kitan_play.webp" src="/studio/report/kitan_play.mp4" aria-label="月蝕綺譚の画面を収めた紹介映像"></video>
+    </figure>
+  </div>`, { id: 'real' }))
+
+S.push(add('向き・不向き', `
+  <div class="ds-in">
+    ${h('ゲーム制作で、AIが苦手なことは？', '細かい動きと文字は苦手。試作で確かめます。')}
+    <div class="fit">
+      <div class="fit-col is-good"><p class="lane-label">AIが得意</p><ul>
+        <li><b>キャラクターの絵を数多く作る</b></li>
+        <li><b>短い演出動画をたくさん作る</b></li>
+        <li><b>企画の段階で、素早く試作する</b></li>
+        <li><b>キャラクターごとに声をつける</b></li>
+      </ul></div>
+      <div class="fit-col is-care"><p class="lane-label">AIが苦手</p><ul>
+        <li><b>手や道具の細かい動き</b></li>
+        <li><b>既存キャラクターの厳密な再現</b></li>
+        <li><b>長く途切れない演技</b></li>
+        <li><b>絵の中の文字</b></li>
+      </ul></div>
+    </div>
+    <p class="ds-note">△は、月蝕綺譚で作り直しが多かったところです。</p>
+  </div>${illu('shiori_chibi_story')}`, { id: 'fit' }))
+
+S.push(add('AIの費用', `
+  <div class="ds-in">
+    ${h('月蝕綺譚で、AIの利用料はいくらかかった？', '開発用AIに約78万円。素材づくりのAIに約49万円。')}
+    <div class="cost-hero three">
+      <div class="cost-total"><p class="lane-label">開発用AI（プログラム／約${AI_TOOLS_MONTHS}か月）</p><b>${usd(TOOLS_TOTAL)}</b><span>${yenMan(TOOLS_TOTAL)}</span>
+        <ul class="tool-list">${AI_TOOLS.map((t) => `<li>${t.name} ${t.plan} × ${t.accounts}</li>`).join('')}</ul></div>
+      <div class="cost-total is-sub"><p class="lane-label">素材づくりのAI（画像・動画・音声／fal）</p><b>${usd(FAL_TOTAL_USD)}</b><span>${yenMan(FAL_TOTAL_USD)}（参考値）</span></div>
+    </div>
+    <figure class="figure"><figcaption>素材づくりのAIの内訳</figcaption>${falBar()}</figure>
+    <p class="ds-note">人件費は含みません。条件は「<button type="button" class="inline-go" data-go="#method">数字の読み方</button>」に。</p>
+  </div>`, { id: 'cost-gen' }))
+
+S.push(add('1回あたりの料金', `
+  <div class="ds-in split">
+    <div>
+      ${h('AIで素材を1つ作ると、いくら？', '画像1枚6〜12円、動画5秒60円ほど。')}
+      <table class="unit-table">
+        <tbody>${UNIT_COSTS.map((u) => `<tr><th>${u.what}</th><td>${u.yen}<small>$${u.usd}</small></td></tr>`).join('')}</tbody>
+      </table>
+      <p class="ds-note">総額を左右するのは、単価より作り直しの回数です。</p>
+    </div>
+    <div class="saving">
+      <p class="lane-label">費用を抑える工夫</p>
+      <ol>
+        <li><b>低い解像度で作り、手元で拡大</b></li>
+        <li><b>1本の動画に、複数の動きをまとめる</b></li>
+        <li><b>構図と合格の基準を先に決める</b></li>
+      </ol>
+    </div>
+  </div>`, { id: 'cost-unit' }))
+
+S.push(add('公開後の費用', `
+  <div class="ds-in">
+    ${h('ゲームを公開した後は、毎月いくらかかる？', 'サーバー代は定額＋数ドル。キャラと話すAIは1回0.08円。')}
+    <div class="split wide-chart even">
+      <figure class="figure"><figcaption>サーバー（Cloudflare）月額プランの範囲に対する使用量・30日間</figcaption>${cfBars()}</figure>
+      <figure class="figure"><figcaption>キャラと話すAI：1回あたりの費用（円）</figcaption>${llmBars()}</figure>
+    </div>
+    <p class="ds-note">範囲を超えた分は月に数ドル。キャラと話すAIは1日${fmt(LLM_DAILY_CAP)}回までに制限しています。</p>
+  </div>`, { id: 'cost-run' }))
+
+S.push(add('発注の費用', `
+  <div class="ds-in">
+    ${h('発注すると、何に費用がかかる？', '制作費・実費・運用費・保守費の4つです。')}
+    <div class="cost-kinds">
+      ${[
+        ['制作費', '企画から実装・確認まで'],
+        ['外部の実費', 'AIや素材サービスの利用料'],
+        ['運用費', 'サーバー代、使うたびのAI利用料'],
+        ['保守・更新', '修正、OS対応、追加'],
+      ].map(([t, d], i) => `<div class="ck" style="--i:${i}"><b>${t}</b><p>${d}</p></div>`).join('')}
+    </div>
+    <p class="ds-note">制作費はゲーム・アニメとも30万円〜。運用費は、アプリなど公開後も動かす案件だけにかかります。</p>
+  </div>`, { id: 'cost-kinds' }))
+
+S.push(add('作り方', `
+  <div class="ds-in">
+    ${h('AIに任せきりで、ゲームの品質は大丈夫？', 'AIが作り、検査プログラムが見張り、人が選びます。')}
+    <ol class="pipe">
+      <li style="--i:0"><b>見本</b><span>人が基準の絵を決める</span></li>
+      <li style="--i:1"><b>生成</b><span>AIが作る</span></li>
+      <li style="--i:2"><b>自動の検査</b><span>欠けや動かない素材を探す</span></li>
+      <li style="--i:3" class="is-human"><b>人の確認</b><span>見て、聴いて、選ぶ</span></li>
+      <li style="--i:4"><b>採用</b><span>一覧に記録</span></li>
+    </ol>
+    <svg class="pipe-back" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><path d="M690,0 V34 H310 V6" /><path class="head" d="M302,14 L310,2 L318,14" /></svg>
+    <p class="pipe-loop-label">不合格なら、見分け方を基準に足して作り直す</p>
+  </div>`, { id: 'pipeline' }))
+
+S.push(add('失敗から', `
+  <div class="ds-in">
+    ${h('AIの素材で失敗したら、どうなる？', '失敗するたびに、検査を増やしています。')}
+    <div class="fixes">
+      ${[
+        ['キャラの攻撃動画が、構えたまま動かない', '動かない動画を、公開前に自動で検出'],
+        ['作った素材が、ゲームに入っていない', '素材の一覧と照合し、漏れがあれば公開を止める'],
+        ['同じキャラの顔が、少しずつ変わる', '毎回、同じ見本の絵をAIに渡す'],
+      ].map(([a, b]) => `<div class="fix"><div class="fix-a"><span class="lane-label">起きたこと</span><p>${a}</p></div><div class="fix-arrow" aria-hidden="true">↓</div><div class="fix-b"><span class="lane-label">いま</span><p>${b}</p></div></div>`).join('')}
+    </div>
+  </div>`, { id: 'fixes' }))
+
+S.push(add('確認の流れ', `
+  <div class="ds-in">
+    ${h('発注したら、どの段階で確認できる？', '試作・途中・納品の3回、確認できます。')}
+    <ol class="approval">
+      ${[
+        ['ご相談', '作りたいものを伺う'],
+        ['お見積もり', '範囲・費用・修正の扱い'],
+        ['試作', '見て、進めるか決める'],
+        ['制作', '途中経過を見る'],
+        ['納品', '合意どおりかを見る'],
+      ].map(([t, what], i) => `<li style="--i:${i}"${i === 2 ? ' class="is-key"' : ''}><b>${t}</b><p>${what}</p></li>`).join('')}
+    </ol>
+  </div>`, { id: 'approval' }))
+
+S.push(add('技術構成', `
+  <div class="ds-in">
+    ${h('月蝕綺譚は、何で作られている？', 'アプリはFlutter、サーバーはCloudflare。')}
+    <div class="arch" data-arch>
+      <div class="arch-app"><b>アプリ</b><span>Flutter</span><span>iOS・Android・Web を<br>1つのコードで</span></div>
+      <div class="arch-wire" aria-hidden="true"><span>データのやりとり</span><span>素材のダウンロード</span></div>
+      <div class="arch-cloud">
+        <p class="arch-title">サーバー<span>押すと説明</span></p>
+        <div class="arch-grid">
+          ${ARCH_NODES.map(([t, sub, d], i) => `<button type="button" class="arch-node" aria-pressed="${i === 0}" data-detail="${esc(d)}"><b>${t}</b><span>${sub}</span></button>`).join('')}
+        </div>
+        <p class="arch-detail" aria-live="polite">${ARCH_NODES[0][2]}</p>
+      </div>
+    </div>
+    <p class="ds-note">独自の特殊な基盤ではなく、広く使われているサービスで組んでいます。</p>
+  </div>`, { id: 'arch' }))
+
+S.push(add('セキュリティ', `
+  <div class="ds-in">
+    ${h('セキュリティは大丈夫？', '基本の守りは点検済み。専門家の診断は、まだです。')}
+    <div class="sec3">
+      <div class="sec-col" style="--i:0"><p class="lane-label">守っていること</p><ul>
+        <li>パスワード不要のログイン（パスキー）</li>
+        <li>パスワード類は保管庫で一元管理</li>
+        <li>ボット対策と、入口ごとの回数制限</li>
+        <li>ランキングの記録を改ざんから守る</li>
+      </ul></div>
+      <div class="sec-col" style="--i:1"><p class="lane-label">確かめたこと</p><ul>
+        <li>別のAIによる総合点検で、最優先の指摘をすべて修正</li>
+        <li>プライバシーポリシーを実装と${PRIVACY.total}項目照合</li>
+        <li>設定が抜けていたら、通さず止まる作り</li>
+      </ul></div>
+      <div class="sec-col is-todo" style="--i:2"><p class="lane-label">まだのこと</p><ul>
+        <li>専門家による第三者診断</li>
+      </ul><p class="sec-foot">必要な案件では、診断を見積もりに含めてご相談します。</p></div>
+    </div>
+  </div>`, { id: 'security' }))
+
+S.push(add('確かめ方', `
+  <div class="ds-in split wide-chart">
+    <div>
+      ${h('プログラムの品質は、どう確かめている？', '変更のたびに自動テスト、節目ごとに別のAIが点検。')}
+      <div class="stats">
+        <div><b data-count="2524">2,524</b><span>自動テストの数</span></div>
+        <div><b>4</b><span>自動で確かめる画面サイズ</span></div>
+        <div><b data-count="19">19</b><span>点検・レビュー</span></div>
+      </div>
+    </div>
+    <figure class="figure">
+      <figcaption>点検・レビューの報告書（月別）</figcaption>
+      <p class="legend"><span class="sw a"></span>別のAI（OpenAI Codex）<span class="sw b"></span>そのほか</p>
+      ${stackedBars(REVIEWS_MONTHLY)}
+    </figure>
+  </div>`, { id: 'checks' }))
+
+S.push(add('止まったら', `
+  <div class="ds-in">
+    ${h('サーバーが止まったら、どこまで戻せる？', 'プレイヤーのデータは、最大1日分の損失が目標。復元は2回試しました。')}
+    <div class="dr" role="table">
+      <div class="dr-row" role="row"><b role="rowheader">プレイヤーデータ</b><div role="cell" class="dr-goal">最大24時間分まで（目標）</div><p role="cell"><span class="done">実施</span>復元を2回確認</p></div>
+      <div class="dr-row" role="row"><b role="rowheader">ゲーム素材</b><div role="cell" class="dr-goal">改ざんを検知できる形で保管</div><p role="cell"><span class="done">実施</span>一部の復元を確認</p></div>
+      <div class="dr-row" role="row"><b role="rowheader">開発環境</b><div role="cell" class="dr-goal">4時間で再開（目標）</div><p role="cell"><span class="doc">未実測</span>手順書あり</p></div>
+    </div>
+  </div>${illu('shiori_chibi_eclipse_fumizukai')}`, { id: 'restore' }))
+
+S.push(add('事例', `
+  <div class="ds-in">
+    ${h('公開後に、実際に問題は起きた？', 'あります。ボットによる大量の会員登録です。')}
+    <div class="stepper" data-stepper>
+      <ol class="steps-rail">
+        ${[
+          ['気づく', '登録数が不自然に急増'],
+          ['突き止める', 'ボットの自動登録が混ざっていた'],
+          ['塞ぐ', 'ボット対策と回数制限を強化'],
+          ['見張る', '不正な登録を削除し、急増時は自動で入口を絞る'],
+        ].map(([t, d], i) => `<li class="st" data-step="${i}"${i ? '' : ' aria-current="step"'}><button type="button"><span class="st-no">${i + 1}</span>${t}</button><p>${d}</p></li>`).join('')}
+      </ol>
+      <div class="stepper-nav"><button type="button" class="btn btn-ghost" data-step-prev>← 前へ</button><button type="button" class="btn btn-ghost" data-step-next>次へ →</button></div>
+    </div>
+  </div>`, { id: 'incident' }))
+
+S.push(add('決めること', `
+  <div class="ds-in">
+    ${h('発注の前に、何を決める？', 'この12項目を、見積もりと契約でお客さまと決めます。')}
+    <div class="agree">
+      ${[
+        ['作るもの', '成果物・数量・形式'],
+        ['期間', '試作・確認・納品の日程'],
+        ['修正', '範囲と、承認後の変更'],
+        ['費用', '4つの費用の分け方'],
+        ['支払い', '時期と、中止時の精算'],
+        ['試作', '作るもの・費用・やめる条件'],
+        ['権利', '譲渡か利用許諾か、改変、編集データ'],
+        ['AIの使い方', '使うAI・参考資料・AI使用の表記'],
+        ['資料', 'AIに入れる範囲と削除'],
+        ['運用', '契約名義・月の予算・連絡'],
+        ['窓口', '担当と不在時の連絡'],
+        ['終了', 'データと管理権限の引き渡し'],
+      ].map(([k, v], i) => `<div class="ag" style="--i:${i}"><b>${k}</b><p>${v}</p></div>`).join('')}
+    </div>
+  </div>`, { id: 'agree' }))
+
+// 発注前チェックリスト: [済んだら入れられる文, 制作会社への質問（コピー用）, 解説ページ]
+const CHECK_GROUPS = [
+  ['相談のとき', [
+    ['その会社のゲームを、実際に遊んだ', '実際に作ったゲームを見せてもらえますか？', 'real'],
+    ['AIに向く企画かどうか、聞いた', 'この企画で、AIが苦手な部分はどこですか？', 'fit'],
+  ]],
+  ['見積もりのとき', [
+    ['費用が、制作・実費・運用・保守に分かれている', '費用を、制作費・実費・運用費・保守費に分けて出してもらえますか？', 'cost-kinds'],
+    ['公開後の月額と、AI利用料の上限がわかる', '公開後の月額と、AI利用料の上限はいくらですか？', 'cost-run'],
+    ['確認する時期（試作・途中・納品）が決まっている', 'どの段階で、何を確認できますか？', 'approval'],
+  ]],
+  ['契約の前に', [
+    ['ログインや不正対策の説明を受けた', 'ログインや不正対策は、どうしていますか？', 'security'],
+    ['テストや点検の結果を見せてもらった', 'テストや点検の結果を見せてもらえますか？', 'checks'],
+    ['障害時にどこまで戻せるか、聞いた', '障害が起きたら、データはどこまで戻せますか？', 'restore'],
+    ['権利とAIの使い方が、契約書にある', '権利とAIの使い方を、契約書に書いてもらえますか？', 'agree'],
+    ['担当者と、終了時の引き継ぎ方が決まっている', '担当者と、終了時の引き継ぎ方を決めてもらえますか？', 'agree'],
+  ]],
+]
+const CHECKS = CHECK_GROUPS.flatMap(([, items]) => items)
+S.push(add('チェックリスト', `
+  <div class="ds-in">
+    ${h('制作会社に、何を確かめればいい？', 'この10個を確かめてから、発注を。')}
+    <div class="clist" data-checklist>
+      ${(() => { let n = 0; return CHECK_GROUPS.map(([g, items]) => `<section class="cl-group"><p class="lane-label">${g}</p><ul>${items.map(([t, ask, pg]) => { const i = n++; return `<li><label class="cl-item"><input type="checkbox" data-q="${i}" data-ask="${esc(ask)}" /><span class="cl-box" aria-hidden="true"></span><span class="cl-text">${t}</span></label><button type="button" class="cl-go" data-go="#${pg}" aria-label="解説のページへ">→</button></li>` }).join('')}</ul></section>`).join('') })()}
+    </div>
+    <div class="q-actions"><span class="q-count" aria-live="polite">済み <b data-q-count>0</b> / ${CHECKS.length}</span><button type="button" class="btn btn-ghost" data-copy-questions>まだの項目を、質問としてコピー</button><span class="ds-note q-save">制作会社へのメールに、そのまま貼れます。</span></div>
+  </div>`, { id: 'checklist' }))
+
+S.push(add('ご相談', `
+  <div class="ds-in split">
+    <div>
+      ${head('Studio VIBE', 'つくりたいものを、<br>お聞かせください。')}
+      <p class="ds-lead">ゲーム開発と、アニメ・MV・PV。月蝕綺譚で培った作り方で、ご依頼の作品をつくります。</p>
+      <div class="cta-row"><a class="btn btn-primary" href="/contact?ref=report">制作の相談をする<span class="arrow" aria-hidden="true">→</span></a><a class="text-link" href="/services">料金<span aria-hidden="true">→</span></a></div>
+      <p class="ds-note">3営業日以内にお返事します。決まっていないことは「未定」で大丈夫です。</p>
+    </div>
+  </div>${illu('shiori_chibi_okaeri', 'is-end')}`, { cls: 'is-end', id: 'contact' }))
+
+S.push(add('数字の読み方', `
+  <div class="ds-in">
+    ${head('補足', '数字の読み方。')}
+    <dl class="method">
+      <div><dt>開発用AI</dt><dd>約2か月の開発で契約した定額プランの合計（Claude Code ×12、Codex ×1）</dd></div>
+      <div><dt>素材づくりのAI</dt><dd>fal の利用実績（2025年1月〜2026年8月13日）。教材制作の生成も一部含む参考値</dd></div>
+      <div><dt>円換算</dt><dd>1ドル=${USD_JPY}円</dd></div>
+      <div><dt>人件費</dt><dd>作業時間を記録していないため含まず。作品の制作原価やキャラクター1体あたりの額は出していません</dd></div>
+      <div><dt>サーバー</dt><dd>Cloudflare の30日の実測（2026年8月15日〜9月14日）。公式サイトなども含む全体の値</dd></div>
+      <div><dt>キャラと話すAI</dt><dd>1回の入出力量からの目安。回数の上限は、金額の上限ではありません</dd></div>
+      <div><dt>自動テスト</dt><dd>コードに書かれたテストの数（実行結果の件数ではない）</dd></div>
+      <div><dt>受託の価格</dt><dd>このレポートの数字は受託の価格ではありません。各30万円〜で、内容に応じてお見積もりします</dd></div>
+    </dl>
+  </div>`, { id: 'method' }))
+
+export const DECK_CHECKS = CHECKS
+export const renderDeck = () => S.join('\n')
+export const renderDeckToc = () => slides.map((s, i) => `<li><a href="#${s.id}" data-toc="${s.id}"><span>${String(i + 1).padStart(2, '0')}</span>${esc(s.title)}</a></li>`).join('')
+export const DECK_COUNT = () => slides.length

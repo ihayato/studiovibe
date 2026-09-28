@@ -3161,7 +3161,7 @@ if (photoSave) {
 const photoTweet = document.getElementById('photo-tweet');
 if (photoTweet) {
   photoTweet.addEventListener('click', () => {
-    const text = 'Studio VIBEの島を散歩してきた🐢✨\n#StudioVIBE #月蝕綺譚\nhttps://vibe.co.jp';
+    const text = 'Studio VIBEの島を散歩してきた🐢✨\n#StudioVIBE #月蝕綺譚\nhttps://vibe.co.jp/island';
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   });
 }

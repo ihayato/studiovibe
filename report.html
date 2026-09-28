@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AIで、ゲームは本当にちゃんと作れるのか。月蝕綺譚 制作・運用レポート（無料）｜Studio VIBE</title>
+  <meta name="description" content="AIでのゲーム開発を外注する前に。運用中のスマホゲーム『月蝕綺譚』で実際にかかったAIの費用、作り方、守り方を{{deckCount}}ページの図解レポートにしました。制作会社に確かめる10の質問と、企画書を作るClaudeのスキルつき。無料。" />
+  <link rel="canonical" href="https://vibe.co.jp/report" />
+  <meta property="og:title" content="AIで、ゲームは本当にちゃんと作れるのか。月蝕綺譚 制作・運用レポート｜Studio VIBE" />
+  <meta property="og:description" content="AIの利用料の実額、素材1つの単価、公開後の月額、発注前に決める12項目。運用中のゲームの記録で答える無料レポート。" />
+  <meta property="og:url" content="https://vibe.co.jp/report" />
+  <!-- @head -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script type="module" src="/site/report.js"></script>
+</head>
+<body class="page-report">
+  <!-- @header report -->
+
+  <main id="main">
+    <!-- 1. ヒーロー: 誰向けか・何がもらえるか・その場で受け取る -->
+    <section class="rp-hero">
+      <div class="wrap rp-hero-grid">
+        <div class="rp-hero-copy">
+          <p class="rp-kicker">AIでのゲーム開発を、外注する前に</p>
+          <h1 class="rp-title">AIで、ゲームは<br>本当にちゃんと<br>作れるのか。</h1>
+          <p class="rp-lead">私たちがAIで開発し、運用しているスマホゲーム『月蝕綺譚』。実際に払ったAIの費用、作り方、守り方を、{{deckCount}}ページの図解レポートにまとめました。</p>
+        </div>
+
+        <div class="rp-hero-gets">
+          <p class="rp-gets-title">読むとわかること</p>
+          <ul class="rp-gets">
+            <li>AIの利用料の実額と、画像・動画1つあたりの単価</li>
+            <li>AIが得意なこと・苦手なことと、失敗から増やした検査</li>
+            <li>発注前に決める12項目と、制作会社に確かめる10の質問</li>
+          </ul>
+        </div>
+
+        <aside class="rp-card" id="get" aria-labelledby="get-title">
+          <div class="rp-card-head" data-form-intro>
+            <img class="rp-card-cover" src="/studio/report/cover.webp" alt="" width="1200" height="675" fetchpriority="high" />
+            <div>
+              <h2 class="rp-card-title" id="get-title">無料で、いますぐ読む</h2>
+              <p class="rp-card-sub">{{deckCount}}ページのレポート＋特典スキル</p>
+            </div>
+          </div>
+
+          <form class="rp-form" id="guide-form" novalidate>
+            <div class="field">
+              <label for="name">お名前<span class="req">必須</span></label>
+              <input class="input" id="name" name="name" type="text" autocomplete="name" maxlength="100" required aria-describedby="name-error" />
+              <p class="field-error" id="name-error"></p>
+            </div>
+            <div class="field">
+              <label for="email">メールアドレス<span class="req">必須</span></label>
+              <input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="email-error" />
+              <p class="field-error" id="email-error"></p>
+            </div>
+            <div class="field">
+              <label for="company">会社名・団体名<span class="opt">任意</span></label>
+              <input class="input" id="company" name="company" type="text" autocomplete="organization" maxlength="100" />
+            </div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="dark" data-language="ja" data-size="flexible"></div>
+            <button class="btn btn-primary rp-submit" type="submit">無料でレポートを読む<span class="arrow" aria-hidden="true">→</span></button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            <ul class="rp-assure">
+              <li>送信すると、この画面ですぐに開けます</li>
+              <li>電話番号はうかがいません</li>
+            </ul>
+            <p class="rp-privacy">ご入力の内容は、レポートとスキルのお渡しに使います。<a href="/contact#privacy">取り扱いについて</a></p>
+          </form>
+
+          <div class="rp-thanks" id="thanks" hidden tabindex="-1">
+            <p class="rp-thanks-title">ありがとうございます。<br>レポートをお読みください。</p>
+            <a class="btn btn-primary rp-submit" href="/report/deck">レポートを開く<span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost rp-submit" href="/studio/report/ai-game-planner.zip" download="ai-game-planner.zip">特典のスキルを保存<span class="arrow" aria-hidden="true">↓</span></a>
+            <details class="rp-install">
+              <summary>スキルの入れ方</summary>
+              <ol>
+                <li><b>claude.ai</b>：設定の「スキル」から、保存したzipをそのままアップロード</li>
+                <li><b>Claude Code</b>：zipを展開し、<code>ai-game-planner</code> フォルダを <code>~/.claude/skills/</code> に置く</li>
+                <li>Claudeに「ゲームを作りたい」と話しかけると始まります</li>
+              </ol>
+            </details>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 2. 共感: 読者の迷いを、読者の言葉で -->
+    <section class="rp-section rp-worry" aria-labelledby="worry-title">
+      <div class="wrap rp-narrow">
+        <h2 class="rp-h2" id="worry-title">発注の前に、こんな迷いはありませんか。</h2>
+        <ul class="rp-worries">
+          <li>AIで作れば安くなると聞くけれど、どこまで本当なのか分からない</li>
+          <li>見積もりをもらっても、その金額が妥当か判断できない</li>
+          <li>公開した後に毎月いくらかかり、止まったら誰が直すのか不安</li>
+          <li>制作会社に何を確かめればいいのか、質問が浮かばない</li>
+        </ul>
+        <p class="rp-answer">AIでのゲーム制作は新しく、比べる材料がまだ少ない分野です。だから、私たちが作って運用しているゲームの記録を、数字と画面のままお見せします。</p>
+      </div>
+    </section>
+
+    <!-- 3. 中身: 4つの疑問と、実際のスライド -->
+    <section class="rp-section rp-inside" aria-labelledby="inside-title">
+      <div class="wrap">
+        <h2 class="rp-h2" id="inside-title">4つの疑問に、{{deckCount}}ページで答えます。</h2>
+
+        <article class="rp-ch reveal">
+          <div class="rp-ch-text">
+            <p class="rp-ch-label">品質</p>
+            <h3 class="rp-h3">AIで、どこまでの品質のゲームができる？</h3>
+            <ul class="rp-points">
+              <li>月蝕綺譚の実際の画面と、紹介映像</li>
+              <li>AIが得意な素材と、作り直しが多かった素材</li>
+              <li>失敗するたびに足してきた、自動の検査</li>
+            </ul>
+          </div>
+          <figure class="rp-slide">
+            <img src="/studio/report/peek/fit.webp" alt="レポートのページ見本「細かい動きと文字は苦手。試作で確かめます。」AIが得意なこと4つと苦手なこと4つの比較" width="1200" height="673" loading="lazy" decoding="async" />
+            <figcaption><span class="rp-pg">p.04 ／ {{deckCount}}</span>向き・不向き</figcaption>
+          </figure>
+        </article>
+
+        <article class="rp-ch reveal">
+          <div class="rp-ch-text">
+            <p class="rp-ch-label">費用</p>
+            <h3 class="rp-h3">AIの利用料は、実際いくらかかった？</h3>
+            <ul class="rp-points">
+              <li>開発用のAIと、素材づくりのAIに払った実額</li>
+              <li>画像・動画・ボイス1つあたりの単価</li>
+              <li>公開後のサーバー代と、キャラと話すAIの1回の費用</li>
+              <li>発注するとかかる4種類の費用</li>
+            </ul>
+          </div>
+          <figure class="rp-slide">
+            <img src="/studio/report/peek/cost-gen.webp" alt="レポートのページ見本「開発用AIに約78万円。素材づくりのAIに約49万円。」費用の内訳のグラフ" width="1200" height="673" loading="lazy" decoding="async" />
+            <figcaption><span class="rp-pg">p.05 ／ {{deckCount}}</span>AIの費用</figcaption>
+          </figure>
+        </article>
+
+        <article class="rp-ch reveal">
+          <div class="rp-ch-text">
+            <p class="rp-ch-label">安全</p>
+            <h3 class="rp-h3">公開した後も、安全に動かせる？</h3>
+            <ul class="rp-points">
+              <li>アプリとサーバーの構成</li>
+              <li>守っていること・確かめたこと・まだのこと</li>
+              <li>障害のときにどこまで戻せるかと、実際に起きた問題への対処</li>
+            </ul>
+          </div>
+          <figure class="rp-slide">
+            <img src="/studio/report/peek/security.webp" alt="レポートのページ見本「基本の守りは点検済み。専門家の診断は、まだです。」守っていること・確かめたこと・まだのことの3列" width="1200" height="673" loading="lazy" decoding="async" />
+            <figcaption><span class="rp-pg">p.13 ／ {{deckCount}}</span>セキュリティ</figcaption>
+          </figure>
+        </article>
+
+        <article class="rp-ch reveal">
+          <div class="rp-ch-text">
+            <p class="rp-ch-label">発注</p>
+            <h3 class="rp-h3">何を決めて、何を確かめれば発注できる？</h3>
+            <ul class="rp-points">
+              <li>試作・途中・納品の、確認の流れ</li>
+              <li>見積もりと契約で決める12項目</li>
+              <li>制作会社に確かめる10の質問。まだの項目だけをコピーして、メールに貼れます</li>
+            </ul>
+          </div>
+          <figure class="rp-slide">
+            <img src="/studio/report/peek/checklist.webp" alt="レポートのページ見本「この10個を確かめてから、発注を。」相談・見積もり・契約の3段階に分けたチェックリスト" width="1200" height="673" loading="lazy" decoding="async" />
+            <figcaption><span class="rp-pg">p.18 ／ {{deckCount}}</span>チェックリスト</figcaption>
+          </figure>
+        </article>
+
+        <p class="rp-note">他社への発注を比べる材料としても、お使いいただけます。</p>
+      </div>
+    </section>
+
+    <!-- 4. 信用: 誰が書いたか・書かなかったこと -->
+    <section class="rp-section rp-who" aria-labelledby="who-title">
+      <div class="wrap rp-who-grid">
+        <div class="rp-who-text">
+          <h2 class="rp-h2" id="who-title">書いたのは、月蝕綺譚をつくっているチームです。</h2>
+          <p class="rp-body">月蝕綺譚は、2026年7月から私たち Studio VIBE が開発し、運用している和風ファンタジーのスマホゲームです。レポートの数字は、このゲームの記録から数えています。</p>
+          <dl class="rp-facts">
+            <div><dt>キャラクター</dt><dd>37</dd></div>
+            <div><dt>ボイス</dt><dd>850<small>本以上</small></dd></div>
+            <div><dt>自動テスト</dt><dd>2,524</dd></div>
+            <div><dt>配信</dt><dd class="is-text">iOS・Android</dd></div>
+          </dl>
+
+          <h3 class="rp-h3 rp-honest-title">わからないことは、わからないと書きました。</h3>
+          <ul class="rp-honest">
+            <li>人件費と作業時間は記録していないため、載せていません。</li>
+            <li>セキュリティの専門家による診断は、まだ受けていません。</li>
+            <li>素材づくりのAIの額は、教材づくりの分を少し含む参考値です。</li>
+          </ul>
+        </div>
+        <figure class="rp-phone">
+          <video data-autoplay muted loop playsinline preload="none" poster="/studio/report/kitan_play.webp" src="/studio/report/kitan_play.mp4" aria-label="月蝕綺譚のプレイ画面"></video>
+          <figcaption>月蝕綺譚のプレイ画面</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 5. 特典 -->
+    <section class="rp-section rp-gift" aria-labelledby="gift-title">
+      <div class="wrap rp-gift-grid">
+        <div>
+          <p class="rp-ch-label">特典</p>
+          <h2 class="rp-h2" id="gift-title">思いつきを、発注できる形に。<br>AIゲームプランナー</h2>
+          <p class="rp-body">「こんなゲームを作りたい」とClaudeに話しかけると、質問に5つまで答えるだけで、制作会社にそのまま渡せる3つの書類ができあがります。</p>
+          <p class="rp-small">claude.ai または Claude Code で使えます。出すのはAIの利用料の目安までで、制作費の金額は出しません。</p>
+        </div>
+        <ol class="rp-docs">
+          <li><b>企画書</b><span>作りたいゲームを1枚に</span></li>
+          <li><b>発注メモ</b><span>決める12項目と、AIの利用料の目安</span></li>
+          <li><b>見積もり依頼の文面</b><span>そのまま送れる形で</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 6. よくある質問 -->
+    <section class="rp-section" aria-labelledby="faq-title">
+      <div class="wrap rp-narrow">
+        <h2 class="rp-h2" id="faq-title">よくある質問</h2>
+        <div class="faq rp-faq">
+          <details><summary>本当に無料ですか？</summary><p class="answer">無料です。あとから料金がかかることもありません。</p></details>
+          <details><summary>登録したあと、どうやって読みますか？</summary><p class="answer">送信すると、この画面に「レポートを開く」ボタンが出ます。そのままブラウザで読めます。メールの確認を待つ必要はありません。</p></details>
+          <details><summary>スマホでも読めますか？</summary><p class="answer">読めます。スマホの画面に合わせて表示され、横に長いグラフは指で横に動かせます。</p></details>
+          <details><summary>営業の連絡は来ますか？</summary><p class="answer">来ません。電話番号はうかがわず、メールの配信もしていません。</p></details>
+          <details><summary>Claudeを使っていなくても役に立ちますか？</summary><p class="answer">レポートはどなたでも読めます。特典のスキルを使うときだけ、Claude（claude.ai または Claude Code）が必要です。</p></details>
+          <details><summary>Studio VIBEに発注するつもりがなくても、読んでいいですか？</summary><p class="answer">どうぞお読みください。10の質問は、どの制作会社に聞いても使える形にしています。</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. 締め -->
+    <section class="rp-section rp-closing" aria-labelledby="closing-title">
+      <div class="wrap rp-narrow">
+        <h2 class="rp-h2" id="closing-title">発注の前に、{{deckCount}}ページだけ。</h2>
+        <p class="rp-body">費用、品質、安全、決めること。見積もりを取る前に知っておくと、制作会社との話が早くなります。</p>
+        <a class="btn btn-primary rp-submit" href="#get" data-to-form>無料でレポートを読む<span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <div class="rp-bar" aria-label="レポートの受け取り" hidden>
+    <p class="rp-bar-text">無料レポート（{{deckCount}}ページ）<span class="rp-bar-extra">＋特典スキル</span></p>
+    <a class="btn btn-primary" href="#get" data-to-form>無料で読む</a>
+  </div>
+
+  <!-- @footer nobar -->
+</body>
+</html>

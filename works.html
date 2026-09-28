@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>作品｜Studio VIBE</title>
+  <meta name="description" content="Studio VIBEが自社で企画・制作したゲーム、アニメ、MV、バーチャルワールドの一覧です。" />
+  <link rel="canonical" href="https://vibe.co.jp/works" />
+  <meta property="og:title" content="作品｜Studio VIBE" />
+  <meta property="og:description" content="自社で企画・制作したゲーム、アニメ、MV、バーチャルワールドの一覧。" />
+  <meta property="og:url" content="https://vibe.co.jp/works" />
+  <!-- @head -->
+  <script type="module" src="/site/studio.js"></script>
+</head>
+<body>
+  <!-- @header works -->
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="wrap">
+        <h1 class="h-section">作品</h1>
+        <p class="lead">自社で企画から制作まで手がけた、ゲーム、アニメ、MV、Webサービス。各作品の公式サイトへご案内します。</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0" aria-label="作品一覧">
+      <div class="wrap">
+        <div class="filters" role="group" aria-label="作品の種類で絞り込む">
+          <button type="button" data-filter="all" aria-pressed="true">すべて</button>
+          <button type="button" data-filter="game" aria-pressed="false">ゲーム・アプリ</button>
+          <button type="button" data-filter="anime" aria-pressed="false">アニメ・MV</button>
+          <button type="button" data-filter="web" aria-pressed="false">Web・ワールド</button>
+          <p class="caption" data-work-count aria-live="polite" style="align-self: center; margin-left: 8px">{{worksCount}}作品</p>
+        </div>
+        <div class="works-grid">
+          <!-- @works all -->
+        </div>
+      </div>
+    </section>
+
+    <section class="section videos-section" id="videos" aria-labelledby="videos-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="videos-title">映像を観る</h2>
+          <p class="lead">アニメシリーズとMVは、YouTubeで公開しています。サムネイルを押すと、この場で再生できます。</p>
+        </div>
+        <!-- @videos -->
+        <div class="works-more reveal">
+          <a class="text-link" href="{{channelUrl}}" target="_blank" rel="noopener">YouTubeチャンネルを見る<span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- @guide-banner -->
+
+    <section class="section closing" aria-labelledby="closing-title">
+      <div class="wrap reveal">
+        <h2 class="h-section" id="closing-title">この制作チームに、<br>ご依頼できます。</h2>
+        <div class="closing-actions">
+          <a class="btn btn-primary" href="/contact">制作を相談する<span class="arrow" aria-hidden="true">→</span></a>
+          <a class="text-link" href="/services">受託制作について<span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @footer -->
+</body>
+</html>

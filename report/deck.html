@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js deck-page">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AIで、ゲームは本当にちゃんと作れるのか。月蝕綺譚 制作・運用レポート｜Studio VIBE</title>
+  <meta name="description" content="自社タイトル『月蝕綺譚』の記録から、AI制作の工程・技術とセキュリティ・品質と運用を、図とグラフで見ていくレポート。" />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://vibe.co.jp/report" />
+  <!-- @head -->
+  <script type="module" src="/site/deck.js"></script>
+</head>
+<body>
+  <a class="skip" href="#p01">本文へ移動</a>
+  <header class="deck-bar">
+    <a class="wordmark" href="/" aria-label="Studio VIBE トップへ"><span>Studio</span><b>VIBE</b></a>
+    <p class="deck-now" aria-live="polite"><span data-now-no>01</span><i>/</i><span>{{deckCount}}</span><b data-now-title>表紙</b></p>
+    <div class="deck-actions">
+      <button type="button" class="deck-btn" data-toc-open aria-haspopup="dialog">目次</button>
+      <a class="btn btn-primary deck-cta" href="/contact?ref=report">相談する</a>
+    </div>
+    <div class="deck-progress" aria-hidden="true"><span data-progress></span></div>
+  </header>
+
+  <main id="main" class="deck">
+    <!-- @deck -->
+  </main>
+
+  <nav class="deck-nav" aria-label="ページ送り">
+    <button type="button" data-go="prev" aria-label="前のページ">↑</button>
+    <button type="button" data-go="next" aria-label="次のページ">↓</button>
+  </nav>
+
+  <dialog class="deck-toc" data-toc>
+    <div class="toc-in">
+      <div class="toc-head"><p class="h-item">目次</p><button type="button" class="player-close" data-toc-close aria-label="閉じる">×</button></div>
+      <ol>{{deckToc}}</ol>
+    </div>
+  </dialog>
+  <div class="deck-tip" role="tooltip" hidden></div>
+</body>
+</html>

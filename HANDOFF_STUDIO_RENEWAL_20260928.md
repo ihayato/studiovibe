@@ -1,0 +1,151 @@
+# HANDOFF: vibe.co.jp スタジオサイト刷新（2026-09-28）
+
+## 現在地
+- 作業木: `~/Desktop/dev/vibe-studio`（枝 `feat/studio-renewal`、本番枝 `codex/meikyo-island` の 62387c4 から分岐）
+- **09-28 夜に本番配信済み（本人GO）**: vibe commit 2d40265（刷新）＋ 28588b9（本番枝のどーぱみん3件を取り込み）→ codex/meikyo-island を早送り・push済み。Worker Version f0659200。verify-deploy 全項目OK、/・/works・/services・/about・/contact・/report・/report/deck・/island が本番で200。トップは新スタジオサイト、島は /island
+- 以後の作業は本番枝 codex/meikyo-island（作業木 ~/Desktop/dev/vibe）で。feat/studio-renewal は配信済みの記録として残す
+- 実装済み: トップ（`index.html`）／作品一覧（`works.html`）／受託制作（`services.html`）／会社概要（`about.html`）／問い合わせ（`contact.html`）
+- `npx vite build` 成功（09-28 第2便後も）。スマホ3寸法（390×844・375×667・320×693）の収まり検査は全5ページ合格（`scripts/fit-check.js`）。デスクトップ1440幅も目視済み
+- 問い合わせフォームは、入力チェックと送信内容の組み立てを確認済み（fetchを差し替えて検証。本物の送信はしていない）。Turnstileは localhost では 110200 エラーになるが、本番ドメインでは従来と同じ sitekey なので動く想定
+
+## 設計の正典
+- 見た目: `DESIGN_DIRECTION.md`（夜 #07070B・月白 #EDE8DF・朱 #FF5B3A はCTA専用・Shippori Mincho B1＋Zen Kaku Gothic New・シグネチャー「月窓」）
+- 作品台帳: `site/works.mjs` がトップ／作品一覧の唯一の出どころ。ビルド時に静的HTMLへ展開される（`vite.config.js` の studio-partials）
+- 共通部品: `site/partials/{head,header,footer}.html`。ページ側は `<!-- @head -->` `<!-- @header works -->` `<!-- @footer -->` で差し込む
+- YouTube台帳: `site/videos.mjs`（チャンネル @sakuya_aimusic。犯科帳10話・咲耶MV6本）。新作は先頭に1行足す。埋め込みは押した時だけ読み込む（youtube-nocookie）
+- 月窓リール: 台帳 `tools/reel/clips.txt` → `python3 tools/reel/build_reel.py` で `public/studio/video/reel.mp4`・ポスター・`site/reel.json`（キャプション同期用）を再生成。静止画はゆっくり寄る。百火繚乱3D・ツキオニの素材は `~/Desktop/main/kitan-subbrand-cm/media`（告知CMの実機素材）を直接参照
+- CSS/JS: `site/studio.css`（約5.5KB gzip）・`site/studio.js`（約2.4KB gzip）・`site/contact.js`
+- 素材: `public/studio/`（計3.5MB。リール1.6MB・作品サムネ・ホバー用ループ・OGP）
+
+## 本人裁定（勝手に変えない）
+- 受託の主力はゲーム開発とアニメ・MV・PV。料金は各「30万円〜」。返信は「3営業日以内」
+- 実績は自社作品のみ（出せる受託実績は現時点でない）
+- 09-28追加裁定: ニンジャ犯科帳を前に出す（トップ2番目・アニメの柱の画像・リール2場面）。百火繚乱3D・ツキオニ・Gachiho(gachiho.ninja)を掲載。月蝕綺譚ONLINEと鎖月は掲載から外す（台帳に `hidden: true` で残置）。咲耶のMVを「映像を観る」でまとめて見られるようにする
+- 月窓の瀬織は顔（猫ではなく）。円の中心に顔が来る切り抜きが原則
+- 島（メタバース）はトップから外し、`/island` で公開。ミント・星屑夜市は島の中にそのまま残す
+- まずは日本語のみ
+
+## 変えたこと（既存への影響）
+- `vite.config.js`: 島をトップへ差し替えていた `island-root-entry` を廃止。スタジオ用の部品差し込みプラグインを追加し、入力に works / services を追加
+- 島: 共有文のURLを `https://vibe.co.jp/island` に、og:url を `/island` に変更（`poc/island/main.js`・`poc/island/index.html`）。`/island` は本番Workerの既存ルートで `/poc/island/` を配信している
+- 旧トップ・会社概要・問い合わせの中身を差し替え。使われなくなった `main.js`・`about.js`・`contact.js`（ルート直下）を git rm
+- `/api/contact` は変更なし。種別・会社名・予算・時期・参考URLは本文の先頭に【】付きでまとめて送る。type は取材・その他だけ `other`、それ以外は `production`
+- ブログ・ライセンス・バーチャルオフィス・rondo・各作品サイト・アプリの規約URLには触れていない
+
+## 09-28 第2便で変えたこと
+- リールを15場面・約20秒に（月蝕綺譚／瀬織／犯科帳×2／百火繚乱3D×2／咲耶×2／どーぱみん／ツキオニ×2／ツキアワセ／Gachiho／ミタマ）。月窓の下のキャプションが今映っている作品名に切り替わる
+- トップ「つくってきたもの」10作（大小の組み: 月蝕綺譚L＋犯科帳／百火・ツキオニ・ミタセオ／咲耶・どーぱみん・ツキアワセ／Gachiho＋夜空の島L）。作品一覧は12作、絞り込みの「ワールド」は「Web・ワールド」に
+- 「映像を観る」欄をトップと作品一覧に追加（横スクロール列・PCは←→ボタン）
+- `/sakuya/` は本番では別Worker（咲耶サイト）へ中継しているため、このリポジトリのdevサーバーには無いのが正しい
+
+## 09-28 第3便: 受託の問い合わせを増やす改善（Codex・Fableのレビュー反映）＋リードマグネット
+- レビュー原文: cn-kitan-wt-webpoc の `vibe-studio-renewal_20260928/review_codex.md`・`review_fable.md`
+- トップの並び: ヒーロー → 柱2本 → **サービスと料金（#pricing）** → 作品8作 → 映像（各シリーズ3本）→ 理由 → 手順 → 発注ガイド案内 → 閉じ。Gachiho・夜空の島はトップから外し /works のみ
+- ヒーロー: リードを発注者向けに（「その制作チームが、企業・アーティストのゲーム開発と、アニメ・MV・PVの制作をお受けしています」）、副ボタン「料金を見る」、料金と返信の一行
+- 料金台帳 `site/pricing.mjs`（トップ compact／/services full／発注ガイドPDF の3か所に差し込み）。**30万円〜以外はすべて仮置き**: ゲーム 30万〜ミニゲーム・150万〜スマホアプリ・運営は月額／映像 30万〜PV・80万〜MV/ショートアニメ・200万〜シリーズ／期間の目安／試作パッケージ10万円・2週間（本制作で差し引き）／税別・修正2回・請求書払い50/50
+- FAQ台帳 `site/faq.mjs`（/services の一覧＋FAQPage構造化データ）。権利（譲渡か許諾かを見積と契約に明記・商用可ツールのみ・ツール一覧を納品時に渡す・権利者の許可がないキャラや実在人物に似せる制作は受けない）、AI公表、修正2回、納期、NDA、支払い — **いずれも仮置き・本人裁定待ち**
+- 文言の矛盾を解消: 「試作と修正を何度でも」→「早い段階で試作を見せ、方向を合わせて仕上げる」
+- 問い合わせ: 必須4項目（種類→相談内容→名前→メール）を先に、会社名・予算・時期・参考URLは折りたたみ。種類に「試作パッケージ」追加。`/contact?kind=game|anime|trial&ref=<slug>` で引き継ぎ。本文先頭に【見ていた作品】【流入元】を自動で添える（`site/lead.js`）。完了画面の誤り（届かない確認メールへの言及）を修正。取り扱いの説明を #privacy に
+- リードマグネット: （第5便で制作レポートに差し替え済み。下記）
+- 計測: `site/config.mjs` の `CF_BEACON_TOKEN` に Cloudflare Web Analytics のトークンを入れると全ページに計測タグ。完了は `?sent=1` の擬似ページビュー（/contact・/guide）。**トークンは未設定**
+- SEO: トップ・/services のタイトル変更、Organization に所在地（高知県）と YouTube、/services に FAQPage。ナビ「受託制作」→「サービス・料金」、「発注ガイド」を追加
+- 会社概要: 所在地（高知県）を追加、「世界最長のAIアニメ」→「約20分のフルAIアニメ『ニンジャ犯科帳』」
+- 検査: ビルド成功、スマホ3寸法で全ページ合格（375×667・320×693 でも相談ボタンが最初の画面に入る）、ガイド受け取りと問い合わせの送信内容をfetch差し替えで確認（本物の送信はしていない）
+
+## 09-28 第4便
+- ゲームの柱: 粗い1コマ（720p切り出し）→ 百火繚乱3D・ツキオニ・ツキアワセの実機画面3台を並べた映像（`public/studio/works/pillar-game.{webp,mp4}`・素材は main/kitan-subbrand-cm と kitan-release-cm-20260908 の実機録画）。アニメの柱も犯科帳KVがゆっくり寄るホバー動画（`pillar-anime.mp4`）。柱は `.pillar[data-video]` で作品カードと同じ仕組みで再生
+- 作品カードが「飛ばない」件: 本番では別Worker・別配信の作品サイト（/dopamin/・/hankacho/・/sakuya/ など）が dev に無く、トップへ戻っていた。`vite.config.js` の `server.proxy` で dev だけ本番へ中継（本番の12リンクは全部200を確認済み）
+
+## 09-28 第5便: リードマグネットを「月蝕綺譚 制作・運用レポート」に差し替え＋再生ポップアップ
+- 本人指示: リードマグネットは月蝕綺譚の技術構成・運用・セキュリティのレポートに（「AIで本当にちゃんと作れるのか」の不安を消す）。スライド形式・デザインにこだわる・うるさくしない・Codex/Fableに点検させる
+- 成果物: `/report`（`report.html`・`site/report.js`、旧 /guide は廃止・旧発注ガイドPDFも削除）。PDFは `node tools/report/build_report.mjs` で再生成（16:9・18枚・約4.6MB＝大半は和文フォント）。出力 `public/studio/report/`
+- 事実の出典: cn-kitan 各リポジトリの事実台帳（worker 調査 09-28）。数字は 約2,500件のテスト・点検/レビュー記録29本（うち12本は開発とは別のAI=OpenAI Codex）・素材台帳2,852点・CI 9ジョブ・4画面サイズ巡回・プライバシー照合28項目/追記3
+- Codex・Fable 点検（原文: cn-kitan-wt-webpoc の `vibe-studio-renewal_20260928/review_codex_report.md`）で直したこと: 「社外の監査」表現を撤回（第三者機関の診断は未実施と明記）／朱は1枚1点・章ラベルは副文字色／見出しを全ページ上端固定・本文は残り高さで縦中央／結果未確定のANR事例→完結したボット急増の事例に差し替え／ボイス本数の矛盾を解消（2,869を削除）／「AIの使い方と、ご依頼時の取り決め」を新設／仮置きの料金（試作10万円等）とNDAはPDFに載せない（30万円〜のみ）／復元への備えは「対象・目標・確認したこと」の表に／構成図を読みやすく／10の質問に確認資料と該当ページ
+- （第6便でWeb化。p.11「着手前に決めること」列は約束ではなく取り決め項目の列挙に変更済み）旧: p.07「ご依頼時の取り決め」列（使用ツール一覧の納品・許可のないキャラや実在人物に似せる制作は受けない・資料の扱いを着手前に決める・権利を見積もりと契約書に明記）はサイトFAQの仮置きと同じ方針。確定したら配布可
+- 映像を観る: サムネを押すと大きな再生ポップアップ（ネイティブ dialog・×/背景/Escで閉じ、閉じた瞬間にiframeを捨てて音を止める）
+
+## 09-28 第6便: 制作レポートを PDF → インタラクティブなWebスライド（/report/deck・24ページ）に
+- 本人指示: PDFは文字が多い→図解・イラスト・グラフ・比較図をふんだんに。スライド風のWebページに。Codex/Fableに点検させる
+- 構成: `report/deck.html`（器）＋ `site/deck.mjs`（中身・SVGグラフをビルド時に焼き込み）＋ `site/deck-data.mjs`（グラフの実データ）＋ `site/deck.css` ＋ `site/deck.js`（ページ送り・カウントアップ・グラフの伸び・ツールチップ・目次・事例の段階送り・構成図の説明・10の質問チェック/コピー）。`?shot=p05` でそのページだけ表示（検品撮影用）
+- 受け取り: `/report` で登録 → 「レポートを開く」で `/report/deck`（noindex）。PDFと `tools/report/build_report.mjs` は削除
+- 実データの数え方（deck-data.mjs）: 週別コミット＝cn-kitan で `git log --all` を ISO 週集計（9/28週は除外・合計3,704）／テスト定義数＝各週末のコミットで `test(`/`testWidgets(` を git grep／報告書＝AUDIT_*.md（依頼書除く）月別・Codex名義を分離／プライバシー照合28項目中一致25・追記3／キャラ37＝game_data.dart の Hero(
+- イラスト: 栞（`public/studio/report/illu/`・cn-kitan の app/assets/img からコピー、透過webp）。章扉・表紙・一部ページ
+- Codex・Fable 点検（原文: cn-kitan-wt-webpoc の `vibe-studio-renewal_20260928/review_codex_webreport.md`）で直したこと: 復元はゲージ→「対象・目標・確認したこと（実施/文書）」表／見出しの数字を棒グラフの合計と一致（3,704）＋コミット数は作業量と明記／テストは「定義数」・一部除外を明記／「丸投げ」比較を「基準や検査を設けないと起きやすいこと」に／p11は「着手前に決めること」の形に（約束を断定しない）／キャッシュは概念図と明記・見出しを限定／Spaceキーがボタン操作を奪う不具合／スマホのグラフは本体だけ横スクロール／章扉イラストの四角い背景（.is-chapter の背景がimgにも当たっていた）／分担はタブ→4行の表／裏返しカード→失敗と対策を常時表示／分岐図をY字に／プライバシーの「追記3」は朱でなく斜線／固定の相談ボタンは月白（朱は1ページ1意味）／10の質問に該当ページへのリンク・確認状況ごとコピー／scroll-snap は proximity
+- DESIGN_DIRECTION.md に「/report/deck の例外」を追記
+
+## 09-28 第7便: 制作レポートを「発注者の疑問に答える」26ページに再構成＋費用ページ
+- 状態: **未コミット・未配信**。開発サーバーは本人のターミナルで `npx vite --port 5178`（本人が起動・止めない）
+- 構成（site/deck.mjs・ページIDはスラッグ。`/report/deck?shot=<id>` で1ページ表示）: cover / roles（立場別の読みどころ）/ about / real（紹介映像 public/studio/report/kitan_play.mp4）/ fit（向き・不向き）/ cost-gen / cost-unit / cost-run / cost-llm / cost-kinds / pipeline / roles-ai / fixes / approval / rights / arch / security / review / checks / incident / restore / handover / agree / checklist（立場別12項目×5状態・localStorage）/ method / contact
+- 費用データ（site/deck-data.mjs）: fal 累計 $3,257（2025-01〜2026-08-13・**教材制作を少し含む参考値として載せる＝本人裁定 09-28**）、7月 $1,332、内訳（動画1,043/画像1,222/音声225/3D35/その他732）、単価、Cloudflare 30日実測（Workers 202%・D1読31%・書33%・メール110%、超過は月数ドル、R2配信128GB→0円）、会話AI 1.5→0.2→0.08円・上限2,000問/日。出典: main/fal-textbook/ledger/COST_LEDGER.md、cn-kitan-honsen/AUDIT_CAPACITY_20260914.md、HANDOFF_TAKUSEN.md。1ドル=150円換算
+- 載せていない（記録なし）: 人件費・作業時間・キャラ1体あたり総額・担当体制・固定費の金額。推測で作らない
+- Codex 発注者目線レビュー: 1回目 scratchpad/webrev/codex_buyer.md（48項目）を反映済み。**2回目（26ページ版の再点検）を実行中** → 出力 scratchpad/rev3/codex.md（セッションが切れたら再実行: 同フォルダ prompt.md を codex exec に渡す）
+- 本人に確認待ち: ①担当体制（窓口・代わり）を書けるか ②approval ページ「品質が合意に届かないときは作り直しとして扱う」の文言 ③サイトの料金・FAQの仮置き条件（試作10万円・修正2回・50/50等）がそのまま公開されている件＝レポートと整合させる必要（Codex指摘）
+- 地雷: zsh は `$VAR` を単語分割しない（`${=VAR}` を使う）／ヘッドレスChromeを for で回すと終わらず残る→ Playwright（~/Desktop/main/kintsugi/node_modules/playwright-core＋~/Library/Caches/ms-playwright の headless shell）で1起動にまとめる（scratchpad/web/shoot.cjs）／`.is-chapter` のように section と img で同じクラスを使うと背景が画像にも当たる
+
+## 09-28 第8便: AI開発ツールの費用を追加＋Codex再点検（rev3）の反映
+- cost-gen を「AIの利用料」に: AI開発ツール $5,200（約2か月・Claude Code Max 月200ドル×12アカウント＋ChatGPT Pro（Codex）月200ドル×1＝月$2,600。**本人申告 09-28**・deck-data.mjs の AI_TOOLS）＋ fal $3,257（参考値）。人件費は未記録で原価は算出しないと明記
+- Codex rev3（scratchpad/rev3/codex.md、48項目のうち15項目が改善）から反映: 単価ページ＝生成1回の料金例・基準日明記／サーバー＝利用量と超過の概算・月額総額は示さないと明記／会話AI＝回数の上限（金額保証ではない）／費用4分類＝請求時期は別・含む/別途/対象外／試作で「進む・見直す・終える」を決める／合意項目に試作・品質未達・窓口・終了移管を追加／権利に外部AIへの送信・表示と掲載・申し立て時を追加／引き継ぎに「別担当での再開は未検証」／チェックリストの状態名「説明を確認」、自動チェックと復元を分割
+- （第9便で解決）サイトの /services・FAQ の仮置き条件（試作10万円・修正2回・50/50 等）がレポートの「個別に決める」と食い違う（Codex最重要指摘）。確定させるか、数値を外して協議事項に揃えるか
+
+## 09-28 第9便: 料金・条件は「ご依頼ごとに決める」に統一（本人裁定）
+- 確定は「ゲーム開発・アニメ/MV/PV 各30万円〜」だけ。ほかの金額（150万・80万・200万）、期間、試作10万円・2週間、修正2回、50/50支払い、税別表記、NDAの確約はサイトから撤去
+- site/pricing.mjs（30万円〜以外の段は「お見積もり」表示・試作は「まずは試作から」金額なし・TERMSは協議事項）、site/faq.mjs（修正・納期・支払い・権利・AI表示・NDAを「ご依頼ごとに決める」に）、contact.html（試作パッケージ→「試作から相談」、予算の10万円の選択肢削除）、contact.js（試作の自動入力を削除）、services.html・index.html の文言
+- **今後も数字を置かない**。確定したら pricing.mjs / faq.mjs を直し、制作レポート（deck.mjs の approval・agree・cost-kinds）と矛盾しないか確認
+
+## 09-28 第10便: 制作レポートを「冗長・説明過多」から簡潔版へ（本人指摘）
+- 26ページ・約8,200字 → **20ページ・約3,400字**。全ページを「Q. 読者の疑問（`q-kicker`）→ 答えの見出し → 図1つ → 一言」の型に統一。注記は最後の `method`（数字の読み方）に集約
+- 構成: cover / roles（4つの疑問から飛ぶ目次）/ real / fit / cost-gen / cost-unit / cost-run（サーバー＋会話AIを統合）/ cost-kinds / pipeline / fixes / approval / arch / security / checks / restore / incident / agree（12項目）/ checklist / contact / method。撤去: about・cost-llm・roles-ai・rights・review・handover（中身は agree・method 等に吸収）
+- 言葉の方針: 社内用語を出さない（込み枠→月額プランの範囲、D1→データ、設定画→見本、鍵→認証/パスワード類、署名→改ざんから守る、台帳→一覧）。目標値は見出しで言い切らず「目標は」と書く（restore）。合計額は期間・用途が違うので足さない（cost-gen は「開発ツール約78万円／生成は参考で約49万円」）
+- 単価表は円を主・ドルを従に表示（deck-data.mjs の UNIT_COSTS に `yen` を追加）
+- （第11便で作り直し）チェックリストは一時3状態にしていた
+- Codex 発注者目線の再点検（第10便）: 出力は scratchpad/v10/codex_v10.md（写しは cwd の vibe-studio-renewal_20260928/review_codex_v10.md）。言い過ぎ・用語・合計の見せ方は反映。**見送り**: roles・arch・fixes・checklist のページ削除（図解を減らす方向なので本人判断待ち）、cost-run に月額の総額を出す（記録がないので推測で書かない）
+- security ページ（本人指摘「大丈夫？に答えてる？」）: 見出しを考え方（止める側に倒す）から答えへ＝「基本の守りは点検済み。専門家の診断は、まだです。」。守っていること／確かめたこと／まだのこと（第三者診断・必要なら見積もりに含めて相談）の3列。checks ページの第三者診断の注記は重複するので削除
+- 確認: vite build 成功、デスクトップ1440×900とスマホ390×844で全20ページ撮影して目視（scratchpad/v10）。スマホで `.split.even`・`.agree`・`.cost-hero.three` が列のまま潰れる不具合を直した
+
+## 09-28 第11便: 主語・目的語をはっきりさせる（本人指摘「主語がない」）＋技術構成を具体名に
+- タイトルは「AIで、ゲームは本当にちゃんと作れるのか。」（表紙・title・og・report.html・guide-banner を統一）。レポートは**ゲーム制作の話**として書く
+- 全ページの Q と見出しに「何が／誰が」を入れた（例: どんな品質のゲームができる？／月蝕綺譚でAIの利用料は？／ゲームを公開した後は？／サーバーが止まったら／プレイヤーのデータ）。「会話AI」→「キャラと話すAI」、「生成API」→「素材づくりのAI」、「AI開発ツール」→「開発用AI」、「機械」→「検査プログラム／自動の検査」
+- arch（技術構成）は**具体的な技術名を出す**（本人指示）: アプリ=Flutter（iOS・Android・Web）、サーバー=Cloudflare Workers／D1／KV（ランキング集計）／R2（素材配信）／Turnstile＋回数制限、キャラと話すAI=OpenAI（外部・軽量モデル）。出典は cn-kitan の worker/・worker-takusen/ の wrangler.toml（09-28確認）。deck.mjs の ARCH_NODES。ID・ドメイン・モデル名の細部は出さない
+- checklist を作り直し（本人指摘「わかりにくい・対象外？・チェックリストになってない」）: 3択ラジオをやめ、**1項目1チェックボックス**。項目は「〜した／〜がある」の済んだら入れられる文。相談のとき(2)・見積もりのとき(3)・契約の前に(4…計10)の3群（deck.mjs の CHECK_GROUPS＝[文, 制作会社への質問, 解説ページ]）。ボタンは「まだの項目を、質問としてコピー」＝未チェック分を質問文にしてクリップボードへ（全部済みなら全項目）。保存キー `vibe_report_checklist_v3`（0/1配列）。見出し Q「制作会社に、何を確かめればいい？」→「この10個を確かめてから、発注を。」。Playwright でチェック→件数→コピー内容→再読込後の保持を確認済み
+- 「月蝕綺譚は代表が1人で企画・開発・マーケティング」を一度入れたが、**本人裁定で撤回（09-28）: レポートでは1人制作に触れない**（アニメ・今後のゲームはチーム制作で、かえってややこしいため）。サイトの「制作チーム」表記はそのまま。contact は「月蝕綺譚で培った作り方で、ご依頼の作品をつくります。」
+- report.html（申込ページ）を20ページ版の目次（4つの疑問＋チェックリスト）に更新。ページ数は {{deckCount}} で自動
+
+## 09-28 第12便（最新・ここが正）: 資料請求の特典にスキル「AIゲームプランナー」を追加（本人GO・同じフォームで配布）
+- 狙い: 発注者（非エンジニア）が思いつきを「企画書1枚・発注メモ（12項目＋AI実費の目安）・見積もり依頼文」にまとめられるClaudeスキル。レポートの中身（向き不向き・単価・12項目・チェックリスト）を道具化し、最後に一度だけ Studio VIBE への相談導線
+- **正本 `~/.claude/skills/ai-game-planner/`**（SKILL.md・references/ai-fit.md・costs.md・order-items.md・templates/3種・README.md・.publish.json）。直したら必ず `python3 ~/.claude/skills/skill-publisher/scripts/package_skill.py ~/.claude/skills/ai-game-planner --out <dir>` で再パッケージ（機械検査＋まっさら展開E2E合格済み）→ `public/studio/report/ai-game-planner.zip` を差し替え
+- 掟（スキル内）: **制作費の金額は出さない**（サイト方針と同じ）。出すのはAI実費の目安だけ（単価×数量、1回で済んだ場合と平均5回作り直した場合の幅。5回は仮定と明記）。月蝕綺譚の実績額は相手の見積もりに使わない。クーポン・景品は景品表示法などの確認を制作会社・専門家へ
+- 試運転: worker（Sonnet）で架空の和菓子屋案件を完走 → 出力は cwd の agp-test_20260928/。見つかった穴（クーポンの置き場・無関係な質問の混入・自社キャラ1枚問題・タイトル決め・BGM単価なし）は反映済み
+- report.html: バッジ「無料：Webレポート＋Claudeのスキル」、目次の下に特典ボックス、フォーム見出し「レポートとスキルを受け取る」・ボタン「無料で受け取る」、送信後に「レポートを開く」「スキルをダウンロード」＋入れ方3行。受け取り後はフォーム見出しも隠す（data-form-intro）。guide-banner と資料請求の通知文面（report.js）も更新
+- public/studio/report/cover.webp をデッキ表紙の新タイトル版に差し替え（デッキ表紙を1600×900で撮影→cwebp 1200×675。旧版は scratchpad/v10/cover_old.webp）
+
+## 次にやること
+1. 本人の検収（`npx vite --port 5178` で起動して確認）。**仮置きの料金・期間・試作パッケージ・FAQ（権利/修正/支払い/NDA）の裁定** → `site/pricing.mjs`・`site/faq.mjs` を直し、`node tools/guide/build_guide.mjs` でPDFを作り直す
+1-2. Cloudflare Web Analytics のトークン発行 → `site/config.mjs`
+1-3. 自動返信メール（`api/contact.js` は Discord 通知のみ。問い合わせ・資料請求の受付メールは未実装）
+2. 本人GO後にコミット → 本番配信。**配信の型は `HANDOFF_RONDO_LP_ASTRA_20260921.md` と memory vibe-site-deploy-new-mac に従う**（本番Workerの最新写しを取り直し、`wrangler deploy <写し> --no-bundle --no-autoconfig --keep-vars` → `bash scripts/verify-deploy.sh`）
+3. 配信前の注意: 本番の `public/senri/*` はメインのチェックアウト（`~/Desktop/dev/vibe`）で**未追跡のまま**配信されている。この作業木には無いので、ここからビルドすると senri が消える。配信は本線へ取り込んでから、dist を本番と突き合わせて差分がスタジオ関連だけか確認すること
+4. 余力があれば: 主要作品の事例ページ（/works/<slug>）、英語版（/en）
+
+## 踏んだ地雷
+- header 自体に `backdrop-filter` を掛けると、中の `position: fixed` なモバイルメニューの基準が header になって潰れる。ぼかしは `::before` に置いた
+- zsh では変数に入れた ffmpeg 引数が分割されない。配列（`E=(...)`）で渡す
+- ヘッドレスChromeの `--window-size=390,...` は最小幅（約500px）で組まれて右が切れる。スマホ幅の確認はブラウザペインの寸法指定で行う
+- 咲耶MVは上下に黒帯があり、下に歌詞が入る。切り出しは y≈48〜625 の範囲に収める
+
+## 09-28 夜: /report の表紙が縦に伸びる不具合を修正
+- 症状: /report の右の表紙（16:9）が縦長に引き伸ばされ、文字が縦に潰れて見えた
+- 原因: `<img width="1200" height="675">` の height 属性が効いたまま、`.guide-hero-cover` に `height: auto` が無かった（幅だけ320px前後に縮む→320×675）
+- 修正: `site/studio.css` の `.guide-hero-cover` に `height: auto` を追加。1440幅・375幅で比率どおりを確認
+- 教訓: 幅だけCSSで縮める画像には必ず `height: auto`（width/height 属性を付けている画像すべて）
+
+## 09-28 夜 第2便: /report（受け取りページ）をCVR最大化のためにゼロから作り直し
+- 本人指示: 「表紙と文字が被っている。マーケティング的に見直し、セールスライティングも。ゼロベースでCVRを最大化するページデザインを」
+- 方向宣言: `DESIGN_DIRECTION.md` の「制作レポートの受け取りページ」（行動は1種類・傾けた表紙を文字に重ねない・入力欄は3つまで・限定演出なし）
+- 構成（report.html）: ①ヒーロー＝見出し＋リード＋「読むとわかること」3点＋受け取りカード（PCは右列、スマホは見出しの直後）②迷い4つ（読者の言葉）③4つの疑問（品質・費用・安全・発注）ごとに本物のスライド画像（p.04/05/13/18）④書いたチーム（キャラ37・ボイス850本以上・自動テスト2,524・iOS/Android）＋「わからないことは、わからないと書きました」3点＋プレイ映像 ⑤特典 AIゲームプランナー（3書類）⑥FAQ 6問 ⑦締め
+- フォーム: お名前・メール（必須）＋会社名（任意）。「関心のあるもの」は削除。送信後はカード内で「レポートを開く」「特典のスキルを保存」、ページ内の誘導と下部バーも「レポートを開く」に切り替わる（localStorage `vibe_report_done`）
+- 行動の一本化: サイト共通の相談バーはこのページでは出さない（`@footer nobar`）。代わりに `.rp-bar`（フォームが画面外のときだけ出る「無料で読む」）。ヘッダーの相談ボタンはこのページだけ面色に沈めた
+- 新規ファイル: `site/report.css`（report.js から import）、`public/studio/report/peek/{fit,cost-gen,security,checklist}.webp`（デッキを `?shot=<id>&bare` で撮影した実画面）
+- 変えた既存: `vite.config.js` の `{{deckCount}}` 置換を replaceAll に（2か所目以降が置換されていなかった）／`site/deck.js`・`site/deck.css` に `&bare`（撮影時に上部バーとページ送りを隠す）を追加／`site/studio.css` から旧 /report 用の `.guide-hero*`・`.guide-toc`・`.guide-form-wrap`・`.gift*`・`.thanks-actions`・`.install*` を削除（他ページ未使用を確認）
+- 検査: 3寸法 390×844・375×667・320×693 で fitCheck 合格（320はiframeで実測。Turnstileの最小300pxに合わせ、372px未満ではカードを画面端まで広げる）。1440×900 でも送信ボタンまで最初の画面に入る。送信はfetch差し替えで確認（本物の送信なし）。`check_sales_copy.py` ERROR 0 / WARN 0。`vite build` 成功
+- 注意: スライド見本のページ番号（p.04/05/13/18）は手書き。デッキの並びを変えたら report.html の figcaption と peek 画像を撮り直す（撮影: headless Chrome で `/report/deck?shot=<id>&bare`、1440×810。カウントアップのある「実物」ページは途中の数字で写るので使わない）
+- 本人裁定（09-28）: メール配信はしない。FAQは「来ません。電話番号はうかがわず、メールの配信もしていません。」、フォーム横は「レポートとスキルのお渡しに使います。」に。配信を始めるときは両方を先に直す
