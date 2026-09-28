@@ -311,10 +311,54 @@ body.is-android .qr { display: none; }
 /* 出入り */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 460ms var(--ease), transform 460ms var(--ease); }
 .js .reveal.in { opacity: 1; transform: none; }
+
+/* ちびの行進（09-29 本人「ちびがもっと動く・スマホで要素が動いてる」→全部採用）
+   アプリの歩きアニメ WebP をコマ帯 assets/img/walk/<id>.webp（高さ192px・横一列）に焼き直し、CSS steps() で回す
+   ＝画面外で止められる・iPhone の自動再生オフでも固まらない・歩調と移動の速さを合わせられる。帯は3か所まで・1画面に1本 */
+.band { position: relative; height: 150px; overflow: hidden; contain: paint; -webkit-tap-highlight-color: transparent; }
+.band .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 34px; background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(232, 184, 79, .10), transparent 70%), linear-gradient(var(--face-2), #1b1629); box-shadow: inset 0 2px 0 rgba(255, 241, 214, .10); }
+.band .stones { position: absolute; left: 0; bottom: 6px; height: 22px; width: calc(100% + 160px); z-index: 1; background-image: radial-gradient(circle at 20px 12px, rgba(185, 178, 198, .35) 2px, transparent 3px), radial-gradient(circle at 70px 16px, rgba(185, 178, 198, .22) 1.5px, transparent 2.5px), radial-gradient(circle at 130px 9px, rgba(232, 184, 79, .28) 1.5px, transparent 2.5px); background-size: 160px 22px; background-repeat: repeat-x; }
+.band.live .stones { animation: flow 3.2s linear infinite; }
+@keyframes flow { to { transform: translateX(-160px); } }
+.band .troop { position: absolute; left: 0; right: 0; bottom: 22px; height: 100px; z-index: 2; }
+.walker { position: absolute; bottom: 0; cursor: pointer; touch-action: manipulation; }
+.walker .wb { position: relative; transform-origin: 50% 100%; }
+.walker .wsp { overflow: hidden; }
+.walker .wsp img { display: block; max-width: none; animation: stride var(--dur) steps(var(--n)) infinite; animation-delay: var(--ph); animation-play-state: paused; }
+.band.live .walker .wsp img { animation-play-state: running; }
+@keyframes stride { to { transform: translateX(-100%); } }
+.walker .wsh { position: absolute; left: 19%; right: 19%; bottom: -3px; height: 9px; border-radius: 50%; background: rgba(0, 0, 0, .45); }
+.walker .wname { position: absolute; left: 50%; bottom: -19px; transform: translateX(-50%); white-space: nowrap; font-weight: 800; font-size: 11px; line-height: 1; color: var(--moon-2); letter-spacing: .04em; }
+.wbub { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap; background: var(--cream); color: var(--navy); font-weight: 800; font-size: 13px; line-height: 1; padding: 7px 11px; border-radius: 12px; box-shadow: 0 0 0 2px var(--navy), 0 4px 0 2px var(--navy); pointer-events: none; z-index: 3; }
+.wbub::after { content: ""; position: absolute; left: 50%; top: 100%; margin-left: -6px; border: 6px solid transparent; border-top-color: var(--cream); }
+.wkoban { position: absolute; width: 18px; height: 31px; pointer-events: none; z-index: 4; filter: drop-shadow(0 2px 0 rgba(35, 26, 46, .9)); }
+/* ヒーローの足元: 隊は止まり地面が流れる・見えた瞬間に左から歩き入る（先頭エマ） */
+.band-hero { margin-top: -26px; }
+.band-hero .troop { display: flex; align-items: flex-end; justify-content: center; gap: 12px; }
+.band-hero .walker { position: relative; }
+.js .band-hero .walker { transform: translateX(-110vw); }
+.js .band-hero.entered .walker { transform: none; transition: transform 1.25s cubic-bezier(.2, .7, .2, 1); }
+/* 行進: 隊ごと右へ（歩幅に合わせて 50px/秒） */
+.band-march .track { position: absolute; left: 0; bottom: 0; display: flex; align-items: flex-end; gap: 34px; padding-left: 34px; animation: marchR var(--mdur, 40s) linear infinite; animation-play-state: paused; }
+.band-march.live .track { animation-play-state: running; }
+.band-march .walker { position: relative; }
+@keyframes marchR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+#nakama .band-march { margin-top: 10px; }
+.band-moon { height: 170px; margin-top: -40px; background: radial-gradient(circle at 88% 30%, rgba(227, 69, 45, .30), transparent 32%); }
+.band-moon::before { content: ""; position: absolute; right: 8%; top: 16px; width: 62px; height: 62px; border-radius: 50%; background: #07060b; box-shadow: 0 0 0 2px rgba(255, 233, 176, .35), 0 0 26px 8px rgba(227, 69, 45, .55); }
+/* 主ボタン（ヒーロー・締めの2つだけ）: 初めて見えた時に1回だけ光が走る */
+.btn.shiny { position: relative; overflow: hidden; }
+.btn.shiny::after { content: ""; position: absolute; top: -20%; bottom: -20%; left: -40%; width: 28%; background: linear-gradient(100deg, transparent, rgba(255, 241, 214, .65), transparent); transform: skewX(-18deg); opacity: 0; pointer-events: none; }
+.btn.shiny.shine::after { animation: shine 900ms cubic-bezier(.3, .6, .3, 1) 1; }
+@keyframes shine { 0% { opacity: 0; transform: skewX(-18deg) translateX(0); } 15% { opacity: 1; } 100% { opacity: 0; transform: skewX(-18deg) translateX(560%); } }
+#rail1 ul { animation-duration: 160s; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .try-next:not([hidden]) { animation: none; }
   .rail ul, .stage .ally, .hint { animation: none; }
   .ur-frame, .ur-shine { animation: none; }
+  .walker .wsp img, .band .stones, .band-march .track, .btn.shiny.shine::after { animation: none; }
+  .js .band-hero .walker { transform: none; transition: none; }
 }

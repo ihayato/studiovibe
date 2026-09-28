@@ -32,8 +32,7 @@
     const html = list.map(([k, n]) => `<li><img src="assets/img/card/${k}.webp" alt="${n}" loading="lazy" width="360" height="540"><span>${n}</span></li>`).join("");
     ul.innerHTML = html + html.replace(/alt="[^"]*"/g, 'alt="" aria-hidden="true"'); // 途切れず流れるように二周ぶん
   };
-  fill("rail1", ROSTER.slice(0, 15));
-  fill("rail2", ROSTER.slice(15));
+  fill("rail1", ROSTER); // 09-29: 2段目は「ちびの行進」に替えたので、札は1段に全員
 
   // ---- 出入り・画面に入った縦動画だけ再生 ----
   const io = new IntersectionObserver((entries) => {
@@ -292,4 +291,92 @@
     hit(f.left - r.left + f.width / 2, f.top - r.top + f.height / 2);
   });
   spawn();
+})();
+
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- ちびの行進（09-29）: コマ帯を CSS steps() で回す。見えている帯だけ .live＝画面外では止まる ----
+  const WALK = { emma: [12, 55], sakuya: [11, 68], oto: [12, 47], uka: [16, 54], nemu: [13, 53], yui: [13, 38], shion: [13, 51], izuna: [14, 53], tart: [15, 83], nekomata: [15, 80], kohaku: [13, 41], karura: [15, 49], sakuya_bancho: [21, 64] }; // [コマ数, 表示幅px]
+  const WNAME = { emma: "エマ", sakuya: "咲耶", oto: "於兎", uka: "宇迦", nemu: "ネム", yui: "結", shion: "紫苑", izuna: "イズナ", tart: "タルト", nekomata: "猫又", kohaku: "狐白", karura: "カルラ", sakuya_bancho: "花見番長" };
+  const WH = 96, FRAME = 90, GAP = 34;
+  const walker = (id, i, named) => {
+    const [n, w] = WALK[id];
+    const el = document.createElement("div");
+    el.className = "walker"; el.dataset.id = id; el.style.width = `${w}px`;
+    el.innerHTML = `<div class="wb"><i class="wsh"></i><div class="wsp" style="width:${w}px;height:${WH}px"><img data-src="assets/img/walk/${id}.webp" alt="" width="${w * n}" height="${WH}" style="width:${w * n}px;height:${WH}px;--n:${n};--dur:${n * FRAME}ms;--ph:-${((i * 37) % n) * FRAME}ms"></div></div>${named ? `<span class="wname">${WNAME[id]}</span>` : ""}`;
+    return el;
+  };
+  const bands = [...document.querySelectorAll(".band[data-walk]")];
+  bands.forEach((band) => {
+    const ids = band.dataset.walk.split(",");
+    const named = band.hasAttribute("data-names");
+    if (band.classList.contains("band-hero")) {
+      const troop = band.querySelector(".troop");
+      ids.forEach((id, i) => { const el = walker(id, i, named); el.style.transitionDelay = `${(ids.length - 1 - i) * 120}ms`; troop.appendChild(el); });
+      return;
+    }
+    const track = band.querySelector(".track");
+    const unit = ids.reduce((a, id) => a + WALK[id][1] + GAP, 0);
+    const reps = Math.max(1, Math.ceil(Math.max(innerWidth, 400) / unit)); // PC の広い画面でも途切れないように顔ぶれを繰り返す（スマホは1周）
+    for (let copy = 0; copy < reps * 2; copy++) ids.forEach((id, i) => track.appendChild(walker(id, i + copy * 3, named)));
+    const half = unit * reps;
+    track.style.setProperty("--mdur", `${(half / (50 * (parseFloat(band.dataset.speed) || 1))).toFixed(2)}s`);
+  });
+  // 近づいたら読み込み（全帯を最初から持たない）
+  const loadBand = (band) => { if (band.dataset.loaded) return; band.dataset.loaded = 1; band.querySelectorAll("img[data-src]").forEach((im) => { im.src = im.dataset.src; im.removeAttribute("data-src"); }); };
+  const near = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { loadBand(e.target); near.unobserve(e.target); } }), { rootMargin: "600px 0px" });
+  const live = new IntersectionObserver((es) => es.forEach((e) => {
+    e.target.classList.toggle("live", e.isIntersecting && !document.hidden && !reduce);
+    if (e.isIntersecting) { loadBand(e.target); e.target.classList.add("entered"); }
+  }), { rootMargin: "0px 0px -8% 0px" });
+  bands.forEach((b) => { near.observe(b); live.observe(b); });
+  // IO が来ない枠もあるので（既存の reveal と同じ理由）、スクロールのたびに位置でも判定する
+  const tick = () => bands.forEach((b) => {
+    const r = b.getBoundingClientRect(), H = innerHeight;
+    if (r.top < H + 600 && r.bottom > -600) loadBand(b);
+    const vis = r.top < H * 0.92 && r.bottom > 0;
+    if (vis) b.classList.add("entered");
+    b.classList.toggle("live", vis && !document.hidden && !reduce);
+  });
+  let wt = 0, wl = 0;
+  addEventListener("scroll", () => { const t = Date.now(); if (t - wl > 120) { wl = t; tick(); } clearTimeout(wt); wt = setTimeout(tick, 120); }, { passive: true });
+  addEventListener("resize", tick);
+  setTimeout(tick, 300);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) bands.forEach((b) => b.classList.remove("live")); else bands.forEach((b) => { const r = b.getBoundingClientRect(); if (!reduce && r.bottom > 0 && r.top < innerHeight) b.classList.add("live"); }); });
+  // タップ: 跳ねる＋吹き出し（名前か「小判！」）＋小判1枚
+  let bubAlt = 0;
+  const hop = (el) => {
+    const body = el.querySelector(".wb");
+    if (body.dataset.busy) return; body.dataset.busy = 1;
+    if (!reduce) {
+      body.animate([{ transform: "none" }, { transform: "scale(1.08,.9)", offset: .12 }, { transform: "translateY(-30px) scale(.94,1.08)", offset: .45 }, { transform: "scale(1.1,.9)", offset: .82 }, { transform: "none" }], { duration: 520, easing: "ease-out" });
+      el.querySelector(".wsh").animate([{ transform: "none" }, { transform: "scale(.6)", offset: .45 }, { transform: "none" }], { duration: 520 });
+    }
+    const b = document.createElement("span"); b.className = "wbub"; b.textContent = (bubAlt++ % 2) ? "小判！" : WNAME[el.dataset.id]; el.appendChild(b);
+    b.animate([{ opacity: 0, transform: "translate(-50%,6px) scale(.7)" }, { opacity: 1, transform: "translate(-50%,0) scale(1)", offset: .2 }, { opacity: 1, offset: .8 }, { opacity: 0, transform: "translate(-50%,-6px)" }], { duration: 1300, easing: "ease-out" }).onfinish = () => b.remove();
+    if (!reduce) {
+      const k = document.createElement("img"); k.className = "wkoban"; k.src = "assets/img/fx/koban.webp"; k.alt = ""; k.style.left = "50%"; k.style.bottom = "60%"; el.appendChild(k);
+      const dx = (Math.random() - .5) * 50;
+      k.animate([{ transform: "translate(-50%,0) rotate(0) scale(.5)", opacity: 1 }, { transform: `translate(calc(-50% + ${dx}px),-54px) rotate(200deg) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(calc(-50% + ${dx * 1.4}px),10px) rotate(420deg) scale(.9)`, opacity: 0 }], { duration: 760, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = () => k.remove();
+    }
+    setTimeout(() => delete body.dataset.busy, 540);
+  };
+  bands.forEach((band) => band.addEventListener("click", (e) => { const w = e.target.closest(".walker"); if (w) hop(w); }));
+
+  // ---- 主ボタン（ヒーロー・締めの2つだけ）: 初めて見えた時に1回だけ光・押すと小判 ----
+  const mains = [".hero .cta", ".closing .cta"].map((sel) => { const box = document.querySelector(sel); return box && [...box.querySelectorAll(".btn")].find((b) => b.offsetParent !== null); }).filter(Boolean);
+  const shineIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { shineIO.unobserve(e.target); if (!reduce) setTimeout(() => e.target.classList.add("shine"), 250); } }), { threshold: .8 });
+  mains.forEach((b) => { b.classList.add("shiny"); shineIO.observe(b); });
+  mains.forEach((b) => b.addEventListener("pointerdown", () => {
+    if (reduce) return;
+    const box = b.parentElement; if (getComputedStyle(box).position === "static") box.style.position = "relative";
+    const r = b.getBoundingClientRect(), pr = box.getBoundingClientRect();
+    for (let j = 0; j < 3; j++) {
+      const k = document.createElement("img"); k.className = "wkoban"; k.src = "assets/img/fx/koban.webp"; k.alt = "";
+      k.style.left = `${r.left - pr.left + r.width / 2}px`; k.style.top = `${r.top - pr.top}px`; box.appendChild(k);
+      const dx = (j - 1) * 46 + (Math.random() - .5) * 16;
+      k.animate([{ transform: "translate(-50%,0) scale(.5)", opacity: 1 }, { transform: `translate(calc(-50% + ${dx}px),-58px) rotate(${180 + j * 60}deg) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(calc(-50% + ${dx * 1.3}px),6px) rotate(${400 + j * 60}deg) scale(.9)`, opacity: 0 }], { duration: 720 + j * 60, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = () => k.remove();
+    }
+  }));
 })();
