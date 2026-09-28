@@ -1,186 +1,90 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html lang="ja" class="no-js">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>会社概要 | Studio VIBE</title>
-    <meta name="description" content="Studio VIBEの会社概要。合同会社日本の田舎は資本主義のフロンティアだ。AIアニメスタジオの運営会社情報。" />
-    <link rel="icon" type="image/png" href="/img/favicon.png">
-    <script type="module" src="/about.js"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
-        rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>会社概要｜Studio VIBE</title>
+  <meta name="description" content="Studio VIBE（合同会社日本の田舎は資本主義のフロンティアだ）の会社概要と代表メッセージ。" />
+  <link rel="canonical" href="https://vibe.co.jp/about" />
+  <meta property="og:title" content="会社概要｜Studio VIBE" />
+  <meta property="og:description" content="Studio VIBEの会社概要と代表メッセージ。" />
+  <meta property="og:url" content="https://vibe.co.jp/about" />
+  <!-- @head -->
+  <script type="module" src="/site/studio.js"></script>
 </head>
-
 <body>
-    <header id="header">
-        <div class="container">
-            <a href="/" class="logo">Studio VIBE</a>
-            <nav>
-                <ul>
-                    <li><a href="/#philosophy">Philosophy</a></li>
-                    <li><a href="/#works">Works</a></li>
-                    <li><a href="/#business">Business</a></li>
-                    <li><a href="/#team">Team</a></li>
-                    <li><a href="/about.html">Company</a></li>
-                    <li><a href="/blog.html">Blog</a></li>
-                    <li><a href="/#contact" class="btn-primary">Contact</a></li>
-                </ul>
-            </nav>
-            <button id="lang-toggle" class="lang-toggle" aria-label="Toggle language">EN</button>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+  <!-- @header about -->
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="wrap">
+        <h1 class="h-section">高知の山奥から、<br>世界に届く作品を。</h1>
+        <p class="lead">Studio VIBEは、ゲームとアニメをつくるクリエイティブスタジオです。高知県を拠点に、オリジナル作品の制作と受託制作を行っています。</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0" aria-labelledby="company-title">
+      <div class="wrap two-col">
+        <h2 class="h-section reveal" id="company-title">会社概要</h2>
+        <dl class="info-table reveal">
+          <div><dt>スタジオ名</dt><dd>Studio VIBE</dd></div>
+          <div><dt>会社名</dt><dd>合同会社日本の田舎は資本主義のフロンティアだ</dd></div>
+          <div><dt>代表</dt><dd>池田勇人（イケハヤ）</dd></div>
+          <div><dt>設立</dt><dd>2016年</dd></div>
+          <div><dt>所在地</dt><dd>高知県（打ち合わせはオンラインで行います）</dd></div>
+          <div><dt>事業内容</dt><dd>ゲーム開発（受託・自社）<br>アニメーション・MV・PV制作（受託・自社）<br>IP開発・プロデュース<br>クリエイターコミュニティの運営<br>研修・コンサルティング</dd></div>
+          <div><dt>お問い合わせ</dt><dd><a class="text-link" href="/contact">お問い合わせフォーム</a><br>info@vibe.co.jp</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="message-title">
+      <div class="wrap two-col">
+        <div class="reveal">
+          <h2 class="h-section" id="message-title">代表メッセージ</h2>
+          <img src="/studio/ikehaya.webp" alt="代表のイケハヤ" width="400" height="400" loading="lazy" decoding="async" style="width: 120px; height: 120px; border-radius: 50%; margin-top: 32px" />
+          <p style="margin-top: 16px; font-weight: 700">イケハヤ</p>
+          <p class="caption">Founder / Producer　<a href="https://x.com/IHayato" rel="noopener" target="_blank">@IHayato</a></p>
         </div>
-    </header>
-
-    <main>
-        <!-- Page Hero -->
-        <section class="page-hero">
-            <div class="container">
-                <h1 data-i18n="about.hero.title">Company</h1>
-                <p class="page-subtitle" data-i18n="about.hero.subtitle">会社概要</p>
-            </div>
-        </section>
-
-        <!-- Company Info -->
-        <section class="about-section">
-            <div class="container">
-                <div class="about-card">
-                    <table class="company-table">
-                        <tbody>
-                            <tr>
-                                <th data-i18n="about.company.name.label">会社名</th>
-                                <td data-i18n="about.company.name">合同会社日本の田舎は資本主義のフロンティアだ</td>
-                            </tr>
-                            <tr>
-                                <th data-i18n="about.company.rep.label">代表</th>
-                                <td data-i18n="about.company.rep">池田勇人（イケハヤ）</td>
-                            </tr>
-                            <tr>
-                                <th data-i18n="about.company.est.label">設立</th>
-                                <td data-i18n="about.company.est">2016年</td>
-                            </tr>
-                            <tr>
-                                <th data-i18n="about.company.biz.label">事業内容</th>
-                                <td data-i18n="about.company.biz">
-                                    AIアニメーション制作<br>
-                                    IP開発・プロデュース<br>
-                                    AIクリエイター育成・コミュニティ運営<br>
-                                    マーケティング企画<br>
-                                    研修・コンサルティング
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Founder Message -->
-        <section class="founder-section">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Founder Message</h2>
-                    <p data-i18n="about.founder.subtitle">代表メッセージ</p>
-                </div>
-                <div class="founder-content">
-                    <div class="founder-img-wrapper">
-                        <img src="/img/ikehaya.png" alt="イケハヤ" class="founder-img">
-                        <div class="founder-name">
-                            <h3>イケハヤ</h3>
-                            <p class="founder-role">Founder / Producer</p>
-                            <p class="founder-social"><a href="https://x.com/IHayato" target="_blank">@IHayato</a></p>
-                        </div>
-                    </div>
-                    <div class="founder-message">
-                        <p data-i18n="about.founder.msg1">
-                            「AIでアニメは作れない」——そんな声がまだ多かった頃から、ぼくたちは手を動かし続けてきました。
-                        </p>
-                        <p data-i18n="about.founder.msg2">
-                            ブロガー、NFTプロデューサーとして活動するなかで、いつも考えていたのは「テクノロジーで表現の民主化はどこまで進むのか？」ということ。
-                        </p>
-                        <p data-i18n="about.founder.msg3">
-                            2021年にプロデュースした「CryptoNinja」は、Web3の力でIPの常識を塗り替えるプロジェクトでした。二次創作を全面解放し、コミュニティの力でキャラクターを育てる。その経験は、Studio
-                            VIBEの思想に直結しています。
-                        </p>
-                        <p data-i18n="about.founder.msg4">
-                            そして2025年、AIの進化がアニメーション制作の景色を一変させました。
-                        </p>
-                        <p data-i18n="about.founder.msg5">
-                            もちろん、AIは万能ではありません。技術的制約も多い。でも「できないこと」を数えるのではなく、「今できること」を極めれば、AIだけでも人の心を動かすアニメが作れる。ぼくたちはそう信じています。
-                        </p>
-                        <p data-i18n="about.founder.msg6">
-                            MacBook Air
-                            1台から始まった制作は、いまやチーム体制へと進化しました。世界最長のAIアニメを生み出し、2000人超のクリエイターコミュニティを運営し、企業との協業も広がっています。
-                        </p>
-                        <p data-i18n="about.founder.msg7">
-                            高知の山奥から、世界に届くアニメを。<br>
-                            Studio VIBEは、制約を武器に、物語を紡ぎ続けます。
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Career -->
-        <section class="career-section">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Career</h2>
-                    <p data-i18n="about.career.subtitle">経歴</p>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-year">2009</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2009">早稲田大学政治経済学部卒業。半導体メーカー勤務を経て、ソーシャルメディアマーケティングの世界へ。</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2011</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2011">フリーランスとして独立。プロブロガーとしての活動を本格化。</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2014</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2014">高知県へ移住。「まだ東京で消耗してるの？」が話題に。</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2016</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2016">合同会社「日本の田舎は資本主義のフロンティアだ」設立。</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2021</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2021">NFTプロジェクト「CryptoNinja」をプロデュース。Web3時代のIP展開を牽引。</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2025</div>
-                        <div class="timeline-content">
-                            <p data-i18n="about.career.2025">Studio VIBE始動。AIアニメスタジオとして本格的な制作活動を開始。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-logo">Studio VIBE</div>
-            <p data-i18n="footer.copy">&copy; 2026 Studio VIBE. All rights reserved. ／ <a href="/licenses">Licenses</a></p>
+        <div class="prose reveal">
+          <p>「AIでアニメは作れない」——そんな声がまだ多かった頃から、ぼくたちは手を動かし続けてきました。</p>
+          <p>ブロガー、NFTプロデューサーとして活動するなかで、いつも考えていたのは「テクノロジーで表現の民主化はどこまで進むのか？」ということ。</p>
+          <p>2021年にプロデュースした「CryptoNinja」は、Web3の力でIPの常識を塗り替えるプロジェクトでした。二次創作を全面解放し、コミュニティの力でキャラクターを育てる。その経験は、Studio VIBEの思想に直結しています。</p>
+          <p>そして2025年、AIの進化がアニメーション制作の景色を一変させました。</p>
+          <p>もちろん、AIは万能ではありません。技術的制約も多い。でも「できないこと」を数えるのではなく、「今できること」を極めれば、AIだけでも人の心を動かすアニメが作れる。ぼくたちはそう信じています。</p>
+          <p>MacBook Air 1台から始まった制作は、いまやチーム体制へと進化しました。約20分のフルAIアニメ『ニンジャ犯科帳』を生み出し、2000人超のクリエイターコミュニティを運営し、企業との協業も広がっています。</p>
+          <p>高知の山奥から、世界に届くアニメを。</p>
+          <p>Studio VIBEは、制約を武器に、物語を紡ぎ続けます。</p>
         </div>
-    </footer>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="career-title">
+      <div class="wrap two-col">
+        <h2 class="h-section reveal" id="career-title">代表の経歴</h2>
+        <ol class="timeline reveal">
+          <li><time>2009</time><p>早稲田大学政治経済学部卒業。半導体メーカー勤務を経て、ソーシャルメディアマーケティングの世界へ。</p></li>
+          <li><time>2011</time><p>フリーランスとして独立。プロブロガーとしての活動を本格化。</p></li>
+          <li><time>2014</time><p>高知県へ移住。「まだ東京で消耗してるの？」が話題に。</p></li>
+          <li><time>2016</time><p>合同会社「日本の田舎は資本主義のフロンティアだ」設立。</p></li>
+          <li><time>2021</time><p>NFTプロジェクト「CryptoNinja」をプロデュース。</p></li>
+          <li><time>2025</time><p>Studio VIBE始動。AIアニメスタジオとして本格的な制作活動を開始。</p></li>
+          <li><time>2026</time><p>『月蝕綺譚』をiOS・Androidで配信。ゲームとアニメの両輪で制作を続ける。</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section closing" aria-labelledby="closing-title">
+      <div class="wrap reveal">
+        <h2 class="h-section" id="closing-title">つくりたいものを、<br>聞かせてください。</h2>
+        <div class="closing-actions">
+          <a class="btn btn-primary" href="/contact">制作を相談する<span class="arrow" aria-hidden="true">→</span></a>
+          <a class="text-link" href="/works">作品を見る<span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @footer -->
 </body>
-
 </html>

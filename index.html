@@ -1,419 +1,187 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html lang="ja" class="no-js">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio VIBE | AI Anime Studio</title>
-  <meta name="description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
-  <!-- OGP -->
-  <meta property="og:title" content="Studio VIBE | AI Anime Studio" />
-  <meta property="og:description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
-  <meta property="og:image" content="https://vibe.co.jp/img/og.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Studio VIBE｜ゲーム開発とアニメ・MV・PV制作のスタジオ</title>
+  <meta name="description" content="Studio VIBEは、オリジナルのゲームとアニメをつくるクリエイティブスタジオです。ゲーム開発・アニメ／MV／PV制作の受託は各30万円から。3営業日以内にお返事します。" />
+  <link rel="canonical" href="https://vibe.co.jp/" />
+  <meta property="og:title" content="Studio VIBE｜ゲームとアニメをつくるクリエイティブスタジオ" />
+  <meta property="og:description" content="オリジナルのゲームとアニメをつくるスタジオ。ゲーム開発・アニメ制作の受託は各30万円から。" />
   <meta property="og:url" content="https://vibe.co.jp/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Studio VIBE" />
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Studio VIBE | AI Anime Studio" />
-  <meta name="twitter:description" content="AIじゃできないを嘆くな、今AIでできることを極めろ。世界最長のAIアニメ体験を届ける新時代のスタジオ。" />
-  <meta name="twitter:image" content="https://vibe.co.jp/img/og.png" />
-  <link rel="icon" type="image/png" href="/img/favicon.png">
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <script type="module" src="/main.js"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
-    rel="stylesheet">
+  <!-- @head -->
+  <link rel="preload" as="image" href="/studio/video/reel-poster.webp" fetchpriority="high" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Studio VIBE",
+    "legalName": "合同会社日本の田舎は資本主義のフロンティアだ",
+    "url": "https://vibe.co.jp/",
+    "logo": "https://vibe.co.jp/img/favicon.png",
+    "email": "info@vibe.co.jp",
+    "address": { "@type": "PostalAddress", "addressRegion": "高知県", "addressCountry": "JP" },
+    "sameAs": ["https://www.youtube.com/@sakuya_aimusic"],
+    "founder": { "@type": "Person", "name": "池田勇人" }
+  }
+  </script>
+  <script type="module" src="/site/studio.js"></script>
 </head>
-
 <body>
-  <header id="header">
-    <div class="container">
-      <a href="#" class="logo">Studio VIBE</a>
-      <nav>
-        <ul>
-          <li><a href="#philosophy">Philosophy</a></li>
-          <li><a href="#works">Works</a></li>
-          <li><a href="#business">Business</a></li>
-          <li><a href="#team">Team</a></li>
-          <li><a href="/about.html">Company</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="#contact" class="btn-primary">Contact</a></li>
-        </ul>
-      </nav>
-      <button id="lang-toggle" class="lang-toggle" aria-label="Toggle language">EN</button>
-      <button class="mobile-menu-toggle" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </header>
+  <!-- @header home -->
 
-  <main>
-    <section id="hero">
-      <div class="hero-content">
-        <h1>
-          <span class="glitch" data-text="Studio VIBE">Studio VIBE</span><br />
-          <span class="jap" data-i18n="hero.tagline">コミュニティとともに<br class="sp-only">物語を紡ぐ</span>
-        </h1>
-        <p class="subtitle" data-i18n="hero.subtitle">「フルAIアニメ」特化型スタジオ</p>
-        <a href="#works" class="btn-outline" data-i18n="hero.cta">View Works</a>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="moon" aria-hidden="true">
+          <div class="moon-frame">
+          <div class="moon-ring"></div>
+          <div class="moon-disc">
+            <img src="/studio/video/reel-poster.webp" alt="" width="720" height="720" fetchpriority="high" />
+            <video muted loop playsinline preload="none" data-src="/studio/video/reel.mp4" poster="/studio/video/reel-poster.webp"></video>
+            <div class="moon-shadow"></div>
+          </div>
+          </div>
+          <p class="caption moon-caption">自社作品より　<span class="moon-title" data-reel-title>月蝕綺譚</span></p>
+        </div>
+        <div class="hero-copy">
+          <h1 class="hero-title" id="hero-title">衝動を、<br>世界に。<span class="en" lang="en">VIBES INTO WORLDS</span></h1>
+          <p class="lead">ゲームとアニメを、企画から配信まで自分たちでつくっているスタジオです。<em>その制作チームが、企業・アーティストのゲーム開発と、アニメ・MV・PVの制作をお受けしています。</em></p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/contact">制作を相談する<span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost" href="#pricing">料金を見る</a>
+          </div>
+          <p class="caption hero-note">ゲーム開発・アニメ制作 各30万円〜／企画が固まっていなくても大丈夫です。3営業日以内にお返事します</p>
+        </div>
       </div>
-      <div class="hero-bg">
-        <video autoplay muted loop playsinline class="bg-video">
-          <source src="/video/hero-bg.mp4" type="video/mp4">
-        </video>
-        <div class="overlay"></div>
-      </div>
+      <div class="scroll-cue" aria-hidden="true"></div>
     </section>
 
-    <section id="philosophy">
-      <div class="container">
-        <div class="section-title">
-          <h2>Philosophy</h2>
-          <p data-i18n="philosophy.subtitle">Our Core Value</p>
+    <section class="section" aria-labelledby="make-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="make-title">ゲームも、アニメも、<br>自分たちの手で。</h2>
+          <p class="lead">企画、キャラクター、シナリオ、実装、映像まで社内で手がけています。受託のご依頼も、同じチームが担当します。</p>
         </div>
-        <div class="philosophy-content">
-          <h3 class="philosophy-quote" data-i18n="philosophy.quote">
-            「AIじゃできない」を嘆くな<br />
-            「AIでできること」を極めろ
-          </h3>
-          <p class="philosophy-text" data-i18n="philosophy.text">
-            <strong>「AIアニメ」は完璧ではありません。</strong><br><br>
-            技術的な制約は多く、商業レベルの作品を作るのは困難です。<br><br>
-            しかし。<br><br>
-            私たちは「今のAIではできないこと」を数えるのではなく、<br>
-            今ある技術で最高峰のエンターテインメントを創り出したいと考えています。<br><br>
-            それがStudio VIBEの在り方です。
-          </p>
+        <div class="pillars">
+          <article class="pillar reveal" data-video="/studio/works/pillar-game.mp4">
+            <div class="pillar-media"><img src="/studio/works/pillar-game.webp" alt="百火繚乱3D、ツキオニ、月蝕綺譚（召喚画面）の実機の画面を3台並べたもの" width="1440" height="900" loading="lazy" decoding="async" /></div>
+            <div class="pillar-body">
+              <h3 class="pillar-kind"><small lang="en">GAME</small>オリジナルゲーム</h3>
+              <p class="lead">3D弾幕シューティング、タワーディフェンス、放置系クリッカー、パズルまで。iOS・Androidでの配信と、リリース後の運営・更新も自分たちで続けています。</p>
+              <ul class="pillar-titles" aria-label="主なゲーム">
+                <li>月蝕綺譚</li><li>百火繚乱3D</li><li>ツキオニ</li><li>どーぱみんくりっかー！</li><li>ツキアワセ</li>
+              </ul>
+            </div>
+          </article>
+          <article class="pillar reveal" data-video="/studio/works/pillar-anime.mp4">
+            <div class="pillar-media"><img src="/studio/works/pillar-anime.webp" alt="ニンジャ犯科帳のキービジュアル。団子を手に駆けてくる少女と、縁側の忍びたち" width="720" height="900" loading="lazy" decoding="async" /></div>
+            <div class="pillar-body">
+              <h3 class="pillar-kind"><small lang="en">ANIME / MV</small>アニメ・MV</h3>
+              <p class="lead">生成AIを使ったアニメーションで、短編シリーズ、MV、PVをつくっています。看板シリーズ『ニンジャ犯科帳』は、第10話までYouTubeで公開中です。</p>
+              <ul class="pillar-titles" aria-label="主なアニメ・MV">
+                <li>ニンジャ犯科帳</li><li>おばけのミタマと死にたがりの瀬織</li><li>咲耶 MV</li>
+              </ul>
+              <p><a class="text-link" href="#videos">映像を観る<span aria-hidden="true">→</span></a></p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="works">
-      <div class="container">
-        <div class="section-title">
-          <h2>Works</h2>
-          <p data-i18n="works.subtitle">Recent Creations</p>
+    <section class="section commission" id="pricing" aria-labelledby="commission-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="commission-title">サービスと料金</h2>
+          <p class="lead">自社作品と同じ制作チームが、ご依頼の作品を担当します。確定しているのは「各30万円〜」です。金額・期間・修正の範囲は、ご依頼ごとにお見積もりで決めます。</p>
         </div>
-
-        <!-- Swiper -->
-        <div class="swiper mySwiper">
-          <div class="swiper-wrapper">
-            <!-- Slide Blue Cat -->
-            <div class="swiper-slide">
-              <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/heBXjoUd4zw"
-                  title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="work-info">
-                <h3 data-i18n="works.slide_bluecat.title">短編アニメ「ニンジャ犯科帳『幸せの青い猫』」</h3>
-                <p data-i18n="works.slide_bluecat.desc">2026年2月公開。チーム制作2作目となる作品。公開時点でおそらく世界最長のフルAI短編ジャパニメーション作品です。</p>
-              </div>
-            </div>
-            <!-- Slide 1 -->
-            <div class="swiper-slide">
-              <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/_rhso7_7XRg"
-                  title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="work-info">
-                <h3 data-i18n="works.slide1.title">短編アニメ「ニンジャ犯科帳『強さの秘訣』」</h3>
-                <p data-i18n="works.slide1.desc">2026年1月公開。DaVinci Resolveを活用した、初のチーム制作作品。</p>
-              </div>
-            </div>
-            <!-- Slide 2 -->
-            <div class="swiper-slide">
-              <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/n3zeGql3YD8"
-                  title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="work-info">
-                <h3 data-i18n="works.slide2.title">フルAIミュージックビデオ「クォ・ヴァディス」</h3>
-                <p data-i18n="works.slide2.desc">2025年9月公開。Nano Bananaリリース直後から制作を開始。<br>国内ではもっとも早いNano
-                  Bananaを駆使したフルアニメMVです。</p>
-              </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="swiper-slide">
-              <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/-7GqBPlL9J8"
-                  title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="work-info">
-                <h3 data-i18n="works.slide3.title">短編アニメ「ニンジャ犯科帳『こわいまんじゅう』」</h3>
-                <p data-i18n="works.slide3.desc">2025年11月公開。おそらく世界初の10分尺の、フルAIジャパニメーション。<br>スタジオ代表イケハヤがMacBook
-                  Air（M2）1台で、37時間掛けて制作。</p>
-              </div>
-            </div>
-            <!-- Slide 4 -->
-            <div class="swiper-slide">
-              <div class="video-container">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/htHYiSUocOI"
-                  title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="work-info">
-                <h3 data-i18n="works.slide4.title">実写風MV「アンダルシアの犬」</h3>
-                <p data-i18n="works.slide4.desc">2025年10月公開。パブリックドメインの名画「アンダルシアの犬」をオマージュしたミュージックビデオ。制作時間は8時間。</p>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-pagination"></div>
+        <!-- @pricing compact -->
+        <div class="commission-note reveal">
+          <p class="lead">Web・LP制作、キャラクター制作、生成AIを使った制作体制づくりのご相談もお受けしています。</p>
+          <a class="text-link" href="/services">料金と進め方を詳しく<span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
 
-    <section id="strengths">
-      <div class="container">
-        <div class="section-title">
-          <h2>Our Strengths</h2>
-          <p data-i18n="strengths.subtitle">私たちの強み</p>
+    <section class="section" id="works" aria-labelledby="works-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="works-title">つくってきたもの</h2>
+          <p class="lead">すべて自社で企画から制作・配信まで手がけた作品です。ご依頼の作品も、この制作チームが担当します。</p>
         </div>
-        <div class="strengths-content">
-          <p class="strengths-lead" data-i18n="strengths.lead"><strong>Studio
-              VIBEの強みは、2021年から培っている「クリエイターコミュニティ」にあります。</strong></p>
-          <p data-i18n="strengths.p1">私たちのオリジナルIP「クリプトニンジャ」は、ファンアートクリエイターに対して「無許諾での商用利用」を許可する特異なライセンスを提供しています（<a
-              href="https://note.com/ihayato/n/ne2d4454ad816" target="_blank">ガイドライン</a>）。</p>
-          <p data-i18n="strengths.p2">これまでも、多くのクリエイターがクリプトニンジャを活用し、収益化に成功しています。</p>
-          <p data-i18n="strengths.p3">公式として「AI読み込み可能なイラスト素材」も提供し、こちらも多くのファン、クリエイターに利活用いただいています。</p>
-          <p data-i18n="strengths.salon">また、Studio VIBEが主宰する「AIクリエイティブサロン[<a href="https://aimusic.salon/"
-              target="_blank">https://aimusic.salon/</a>]」は、2000人以上の参加者が集まる業界最大手のコミュニティとなっています。</p>
-          <p data-i18n="strengths.p4">私たちは、AIは一部のプロのものではなく、「クリエイティブの民主化」を実現するツールだと確信しています。</p>
+        <div class="works-grid is-featured">
+          <!-- @works featured -->
+        </div>
+        <div class="works-more reveal">
+          <a class="text-link" href="/works">すべての作品を見る（{{worksCount}}作品）<span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/contact">この制作チームに相談する<span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
 
-    <section id="business-ip" class="business-section">
-      <div class="container">
-        <div class="business-content">
-          <div class="section-label">01 / IP Development</div>
-          <h2 data-i18n="biz.ip.title">自社IP育成</h2>
-          <h3 data-i18n="biz.ip.h3">Original Characters & Story</h3>
-          <p class="description" data-i18n="biz.ip.desc">
-            オリジナルIP「クリプトニンジャ」を中心とした、ストーリーアニメの開発。<br>AIを活用したスピーディーなアニメ制作を実現します。</p>
-          <div class="card-detail">
-            <p data-i18n="biz.ip.detail">Web3時代から構築を続ける強固なコミュニティ「Ninja DAO」を基盤に、AIをフル活用してアニメ、ゲーム、マンガ、イラストなどを展開中。</p>
-          </div>
-          <a href="https://www.youtube.com/@sakuya_aimusic" target="_blank" class="btn-outline btn-ip"
-            data-i18n="biz.ip.btn">YouTubeで作品を見る</a>
+    <section class="section videos-section" id="videos" aria-labelledby="videos-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="videos-title">映像を観る</h2>
+          <p class="lead">アニメシリーズとMVは、YouTubeで公開しています。サムネイルを押すと、この場で再生できます。</p>
         </div>
-        <div class="business-visual">
-          <img src="/img/kv.png" alt="IP Development Visual" class="visual-img">
+        <!-- @videos 3 -->
+        <div class="works-more reveal">
+          <a class="text-link" href="/works#videos">すべての映像を見る（{{videoTotal}}本）<span aria-hidden="true">→</span></a>
+          <a class="text-link" href="{{channelUrl}}" target="_blank" rel="noopener">YouTubeチャンネル<span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
 
-    <section id="business-edu" class="business-section alt-layout">
-      <div class="container">
-        <div class="business-visual">
-          <img src="/img/anime.png" alt="Education Visual" class="visual-img">
+    <section class="section" aria-labelledby="reasons-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="reasons-title">自分たちで出しているから、<br>わかること。</h2>
         </div>
-        <div class="business-content">
-          <div class="section-label">02 / Education</div>
-          <h2 data-i18n="biz.edu.title">教育・コミュニティ</h2>
-          <h3 data-i18n="biz.edu.h3">Creator Community</h3>
-          <p class="description" data-i18n="biz.edu.desc">AIクリエイターの育成とコミュニティ運営。<br>次世代の才能を発掘します。</p>
-          <div class="card-detail">
-            <p data-i18n="biz.edu.detail">2000人以上が参加する「<a href="https://aimusic.salon/"
-                target="_blank">AIクリエイティブサロン</a>」、1500部以上の販売実績がある「<a
-                href="https://brain-market.com/u/ikehaya/a/byMzMwMjMgoTZsNWa0JXY"
-                target="_blank">AIアニメの教科書</a>」などを通して、最新のAIアニメ制作技術を共有する取り組みを行っています。<br>共に学び、成長するエコシステムを提供し、新たなクリエイターを輩出します。
-            </p>
+        <dl class="reasons">
+          <div class="reason reveal">
+            <dt>企画から運営まで、<br>ひとつのチームで</dt>
+            <dd>企画、キャラクター、シナリオ、実装、映像、リリース後の運営まで社内で担当します。窓口がひとつなので、話が早く進みます。</dd>
           </div>
-          <a href="https://brain-market.com/u/ikehaya/a/byMzMwMjMgoTZsNWa0JXY" target="_blank"
-            class="btn-outline btn-ip" data-i18n="biz.edu.btn">AIアニメの教科書を購入する</a>
-        </div>
+          <div class="reason reveal">
+            <dt>早い段階で試作を見せ、<br>方向を合わせて仕上げる</dt>
+            <dd>自社作品で磨いてきた生成AIの制作手順を使います。少人数・短い期間でも、早い段階で動くものをお見せし、確認を重ねて仕上げます。</dd>
+          </div>
+          <div class="reason reveal">
+            <dt>世に出して、遊ばれて、<br>鍛えられた</dt>
+            <dd>スマホ向けに5本のゲーム・アプリを配信し、アニメとMVはYouTubeで16本を公開してきました。ストアの審査、配信後の更新、視聴者の反応まで、実際に届けてきた経験をご依頼の作品にも生かします。</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
-    <section id="business-mkt" class="business-section">
-      <div class="container">
-        <div class="business-content">
-          <div class="section-label">03 / Marketing</div>
-          <h2 data-i18n="biz.mkt.title">マーケティング企画</h2>
-          <h3 data-i18n="biz.mkt.h3">Viral Marketing</h3>
-          <p class="description" data-i18n="biz.mkt.desc">SNSを中心としたバイラルマーケティング。<br>AIコンテンツを活用したPR戦略。</p>
-          <div class="card-detail">
-            <p data-i18n="biz.mkt.detail">AI動画・AIアニメを活用したマーケティング企画の実施をサポート。<br>代表のアカウント（<a href="https://x.com/IHayato"
-                target="_blank">@IHayato</a>）を用いたインフルエンサーマーケティング、そしてコミュニティメンバーを巻き込んだUGCキャンペーンに強みがあります。</p>
-            <p data-i18n="biz.mkt.detail2">過去の実績：「<a href="https://x.com/IHayato/status/2020694085347266859"
-                target="_blank">AI魔法コンテスト</a>」(株式会社TORICO）</p>
-          </div>
+    <section class="section" aria-labelledby="steps-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2 class="h-section" id="steps-title">ご相談から納品まで</h2>
         </div>
-        <div class="business-visual">
-          <img src="/img/torico.png" alt="Marketing Visual" class="visual-img">
-        </div>
+        <ol class="steps reveal">
+          <li class="step"><h3>ご相談</h3><p>フォームから、つくりたいものを教えてください。3営業日以内にお返事します。</p></li>
+          <li class="step"><h3>お見積もり</h3><p>内容を伺い、進め方・期間・金額・修正の範囲をお見積もりに明記します。</p></li>
+          <li class="step"><h3>試作と制作</h3><p>試作を早めにお見せし、方向を合わせてから本制作に入ります。</p></li>
+          <li class="step"><h3>納品</h3><p>ご確認のうえで納品します。納品後の更新や運営のご相談も承ります。</p></li>
+        </ol>
       </div>
     </section>
 
-    <section id="business-csl" class="business-section alt-layout">
-      <div class="container">
-        <div class="business-visual">
-          <img src="/img/saji.png" alt="Consulting Visual" class="visual-img">
-        </div>
-        <div class="business-content">
-          <div class="section-label">04 / Consulting</div>
-          <h2 data-i18n="biz.csl.title">研修・コンサルティング</h2>
-          <h3 data-i18n="biz.csl.h3">AI Implementation Support</h3>
-          <p class="description" data-i18n="biz.csl.desc">AIアニメにまつわるコンサルティング、研修を実施。<br>最新のAIアニメ制作ノウハウをご提供します。</p>
-          <div class="card-detail">
-            <p data-i18n="biz.csl.detail">既存の制作フローにおけるAI活用の可能性、AIアニメ新規事業開発などをサポート。<br>ワークショップ、研修や講演も承っております。</p>
-            <p data-i18n="biz.csl.detail2">実績：「<a href="https://www.youtube.com/watch?v=RidYmq1QoE0"
-                target="_blank">AIご当地ソングワークショップ</a>」（佐治DAO）</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- @guide-banner -->
 
-    <section id="team">
-      <div class="container">
-        <div class="section-title">
-          <h2>Team</h2>
-          <p data-i18n="team.subtitle">Who We Are</p>
+    <section class="section closing" aria-labelledby="closing-title">
+      <div class="wrap reveal">
+        <h2 class="h-section" id="closing-title">つくりたいものを、<br>聞かせてください。</h2>
+        <div class="closing-actions">
+          <a class="btn btn-primary" href="/contact">制作を相談する<span class="arrow" aria-hidden="true">→</span></a>
+          <p class="caption">ゲーム開発・アニメ制作 各30万円〜<br>企画書がなくても大丈夫です。3営業日以内にお返事します</p>
         </div>
-        <div class="team-grid">
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/ikehaya.png" alt="イケハヤ" class="member-avatar">
-            </div>
-            <h3>イケハヤ</h3>
-            <p class="role">Founder / Producer</p>
-            <p class="social-link"><a href="https://x.com/IHayato" target="_blank">@IHayato</a></p>
-          </div>
-          <!-- Additional members can be added here -->
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/awo.png" alt="アヲアヒル" class="member-avatar">
-            </div>
-            <h3>アヲアヒル</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/awoahiru" target="_blank">@awoahiru</a></p>
-          </div>
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/mata.png" alt="またべえ" class="member-avatar">
-            </div>
-            <h3>またべえ</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/matabee_GTO" target="_blank">@matabee_GTO</a></p>
-          </div>
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/yohaku.png" alt="よはく" class="member-avatar">
-            </div>
-            <h3>よはく</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/yohaku_0to1" target="_blank">@yohaku_0to1</a></p>
-          </div>
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/yokappa.png" alt="よかっぱ" class="member-avatar">
-            </div>
-            <h3>よかっぱ</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/nagarekawa_" target="_blank">@nagarekawa_</a></p>
-          </div>
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/osushi.jpg" alt="お寿司職人" class="member-avatar">
-            </div>
-            <h3>お寿司職人</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/SushiNFTart/" target="_blank">@SushiNFTart</a></p>
-          </div>
-          <div class="team-member">
-            <div class="member-img">
-              <img src="/img/tk.jpg" alt="tk" class="member-avatar">
-            </div>
-            <h3>tk</h3>
-            <p class="role">Creator</p>
-            <p class="social-link"><a href="https://x.com/tkrock01/" target="_blank">@tkrock01</a></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TV Animation -->
-    <section id="tv-animation" class="business-section">
-      <div class="container">
-        <div class="section-title">
-          <h2>TV Animation</h2>
-          <p data-i18n="tv.subtitle">テレビアニメ制作実績</p>
-        </div>
-        <div class="tv-animation-content">
-          <div class="tv-visual">
-            <img src="/img/keyvisual.png" alt="忍ばない！クリプトニンジャ咲耶" class="tv-img">
-          </div>
-          <h3 data-i18n="tv.title">テレビアニメ「忍ばない！クリプトニンジャ咲耶」（1〜3期）</h3>
-          <p class="tv-meta" data-i18n="tv.meta">制作：ファンワークス ／ 原作：イケハヤ</p>
-          <p class="tv-description" data-i18n="tv.desc">
-            Studio VIBE代表のイケハヤは、テレビアニメの制作経験もあります。<br>
-            NFTを活用したクラウドファンディングで1億円以上を調達、現在3期まで放送しています。<br>
-            制作は株式会社ファンワークス、AI不使用の作品となっております。
-          </p>
-          <a href="https://www.amazon.co.jp/gp/video/detail/B0F83VFFC9/ref=atv_dp_share_cu_r" target="_blank"
-            class="btn-outline btn-ip" data-i18n="tv.btn">テレビアニメを観る（Amazonプライム）</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="container">
-        <div class="section-title">
-          <h2>Contact</h2>
-          <p data-i18n="contact.subtitle">Get in Touch</p>
-        </div>
-        <form class="contact-form">
-          <div class="form-group">
-            <label for="name" data-i18n="contact.name">Name</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div class="form-group">
-            <label for="email" data-i18n="contact.email">Email</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          <div class="form-group">
-            <label for="type" data-i18n="contact.type">Inquiry Type</label>
-            <select id="type" name="type">
-              <option value="production" data-i18n="contact.type.production">制作依頼</option>
-              <option value="speaking" data-i18n="contact.type.speaking">講演依頼</option>
-              <option value="recruitment" data-i18n="contact.type.recruitment">採用について</option>
-              <option value="other" data-i18n="contact.type.other">その他</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="message" data-i18n="contact.message">Message</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-          </div>
-          <div class="form-group turnstile-container">
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAACaXaMN9Bai0y96b" data-theme="dark"></div>
-          </div>
-          <div id="form-message" class="form-message"></div>
-          <button type="submit" class="btn-submit" data-i18n="contact.submit">Send Message</button>
-        </form>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <div class="footer-logo">Studio VIBE</div>
-      <p data-i18n="footer.copy">&copy; 2026 Studio VIBE. All rights reserved. ／ <a href="/licenses">Licenses</a></p>
-    </div>
-  </footer>
+  <!-- @footer -->
 </body>
-
 </html>

@@ -1,0 +1,17 @@
+# 月窓リールの台帳。名前|素材|開始秒 or still|切り抜き(円の中心に顔が来るように)|キャプション
+# 素材のパスは public/ からの相対。~ 始まりは絶対（百火繚乱3D・ツキオニは告知CMの実機素材 main/kitan-subbrand-cm/media）
+k1|kitan/op_title_loop.mp4|1.0|crop=720:720:0:0|月蝕綺譚
+m1|pv_mitaseo.mp4|48.8|crop=600:600:390:40|おばけのミタマと死にたがりの瀬織
+h1|../tools/reel/hankacho-kv.jpg|still|crop=900:900:23:600|ニンジャ犯科帳
+y1|~/Desktop/main/kitan-subbrand-cm/media/clip_hyakka_a.mp4|1.6|crop=1206:1206:0:760|百火繚乱3D
+s1|mv_sakuya.mp4|65.5|crop=520:520:380:60|咲耶 MV
+d1|dopamin/assets/video/emma_loop.mp4|0.5|crop=440:440:20:90|どーぱみんくりっかー！
+n1|~/Desktop/main/kitan-subbrand-cm/media/tsukioni_op.mp4|2.95|crop=680:680:20:180|ツキオニ
+t1|tsukiawase/movie/mede_warai.mp4|0.5|crop=600:600:60:160|ツキアワセ
+h2|../tools/reel/hankacho-ep05.jpg|still|crop=1100:1100:250:850|ニンジャ犯科帳
+y2|~/Desktop/main/kitan-subbrand-cm/media/hyakka_op.mp4|2.6|crop=720:720:0:110|百火繚乱3D
+k2|kitan/game_intro.mp4|2.5|crop=480:480:250:170|月蝕綺譚
+g1|../tools/reel/gachiho-og.jpg|still|crop=460:460:725:95|Gachiho
+n2|~/Desktop/main/kitan-subbrand-cm/media/clip_tsukioni_b.mp4|1.6|crop=1206:1206:0:500|ツキオニ
+s2|mv_sakuya.mp4|120|crop=620:620:330:20|咲耶 MV
+m2|pv_mitaseo.mp4|30.3|crop=640:640:320:40|おばけのミタマと死にたがりの瀬織
