@@ -2,6 +2,22 @@
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ---- 月見台への経路（?via=）: 置き場所ごとに dopamin-<場所>。?via=x-0928 で来た人は dopamin-hero.x-0928 のように流入元を足して渡す ----
+  const SLUG = /^[a-z0-9][a-z0-9._-]{0,47}$/;
+  const inVia = (new URLSearchParams(location.search).get("via") || "").toLowerCase();
+  document.querySelectorAll("a[data-via]").forEach((a) => {
+    let v = `dopamin-${a.dataset.via}`;
+    if (SLUG.test(inVia)) v = `${v}.${inVia}`.slice(0, 48).replace(/[._-]+$/, "");
+    const u = new URL(a.href); u.searchParams.set("via", v); u.searchParams.set("utm_source", "dopamin"); a.href = u.toString();
+  });
+  // Android では TestFlight を出さず、会員登録（配信の報せ）を主役にする
+  if (/Android/i.test(navigator.userAgent)) {
+    document.body.classList.add("is-android");
+    const tf = document.getElementById("joinTf"); if (tf) tf.remove();
+    const jh = document.getElementById("join-h"); if (jh) jh.textContent = "Android版は、もうすぐ。";
+    document.querySelectorAll("[data-os-note]").forEach((el) => { el.textContent = "iPhone版は先行テスト中。"; });
+  }
+
   // ---- 仲間30人（本編の名簿の名前・ゲームのカード絵） ----
   const ROSTER = [
     ["emma", "エマ"], ["sakuya", "咲耶"], ["oto", "於兎"], ["nemu", "ネム"], ["izuna", "イズナ"], ["shion", "紫苑"],
@@ -108,6 +124,16 @@
     for (const [s, v] of u) if (n >= v) return (n / v).toFixed(n / v < 10 ? 2 : n / v < 100 ? 1 : 0) + s;
     return Math.floor(n).toLocaleString("ja-JP");
   };
+  const statusEl = $("tryStatus"), nextEl = $("tryNext"), nightOut = $("tryNight");
+  const say = (t) => { if (statusEl) statusEl.textContent = t; };
+  let bossDown = false;
+  const offerNext = () => {
+    if (!nextEl) return;
+    if (nightOut) nightOut.textContent = st.night;
+    if (!nextEl.hidden || !(bossDown || st.kill >= 8)) return;
+    nextEl.hidden = false;
+    say("続きはアプリで遊べます");
+  };
   const st = { night: 1, kill: 0, hp: 0, max: 0, coins: 0, combo: 0, lastTap: 0, boss: false, bossEnd: 0, mob: 0, busy: false };
   let comboTimer = 0, timerTick = 0;
 
@@ -136,12 +162,12 @@
     timerEl.style.display = st.boss ? "block" : "none";
     if (st.boss) {
       st.bossEnd = performance.now() + 30000;
-      banner("大妖 見参！");
+      banner("大妖 見参！"); say(`第${st.night}夜、大妖が現れた。刻限は30秒`);
       play("se_doban", 0.5);
       const tick = () => {
         const left = Math.max(0, Math.ceil((st.bossEnd - performance.now()) / 1000));
         timerEl.textContent = `残り${left}秒`;
-        if (left <= 0) { clearInterval(timerTick); banner("大妖は退いた…"); st.night = Math.max(1, st.night - 1); setTimeout(spawn, 900); }
+        if (left <= 0) { clearInterval(timerTick); st.busy = true; banner("大妖は退いた…"); say("大妖は退いた"); st.night = Math.max(1, st.night - 1); setTimeout(() => { st.busy = false; spawn(); }, 900); }
       };
       tick(); timerTick = setInterval(tick, 250);
     }
@@ -178,8 +204,8 @@
         { transform: `translate(${tx - x}px,${ty - y}px) scale(.8)`, opacity: 0.9 },
       ], 700 + i * 60, "img");
     }
-    setTimeout(() => coinsEl.lastChild.nodeValue = fmt(st.coins), 650);
   };
+  const syncCoins = () => { coinsEl.lastChild.nodeValue = fmt(st.coins); };
 
   const hit = (x, y) => {
     if (st.busy) return;
@@ -195,6 +221,7 @@
     st.hp -= dmg;
     const gain = Math.max(1, Math.round(dmg * 0.6));
     st.coins += gain;
+    syncCoins();
 
     // 斬撃・数字・揺れ
     const sl = SLASH[st.combo % SLASH.length];
@@ -238,10 +265,12 @@
     foe.animate([{ opacity: 1 }, { opacity: 0, transform: "scale(.8)" }], { duration: 200, fill: "forwards" });
     const bonus = Math.round(st.max * (st.boss ? 2 : 0.8));
     st.coins += bonus;
+    syncCoins();
     coinFly(cx, cy, st.boss ? 10 : 4);
-    if (st.boss) { clearInterval(timerTick); banner("討伐！"); play("se_doban", 0.5); }
+    if (st.boss) { clearInterval(timerTick); banner("討伐！"); say("大妖を討伐した"); play("se_doban", 0.5); bossDown = true; }
     st.kill++;
     if (st.boss || st.kill % 3 === 0) st.night++;
+    offerNext();
     setTimeout(() => { foe.getAnimations().forEach((a) => a.cancel()); st.busy = false; spawn(); }, st.boss ? 900 : 380);
   };
 
@@ -256,6 +285,11 @@
     const r = stage.getBoundingClientRect(), f = foe.getBoundingClientRect();
     hit(f.left - r.left + f.width / 2 + (Math.random() - 0.5) * 30, f.top - r.top + f.height / 2);
   });
-  stage.addEventListener("click", (e) => e.preventDefault());
+  stage.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (e.detail !== 0) return; // 指・マウスは pointerdown で処理済み
+    const r = stage.getBoundingClientRect(), f = foe.getBoundingClientRect();
+    hit(f.left - r.left + f.width / 2, f.top - r.top + f.height / 2);
+  });
   spawn();
 })();
