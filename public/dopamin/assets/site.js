@@ -18,7 +18,7 @@
     document.querySelectorAll("[data-os-note]").forEach((el) => { el.textContent = "iPhone版は先行テスト中。"; });
   }
 
-  // ---- 仲間30人（本編の名簿の名前・ゲームのカード絵） ----
+  // ---- 仲間の列（本編の名簿の名前・ゲームのカード絵） ----
   const ROSTER = [
     ["emma", "エマ"], ["sakuya", "咲耶"], ["oto", "於兎"], ["nemu", "ネム"], ["izuna", "イズナ"], ["shion", "紫苑"],
     ["uka", "宇迦"], ["yui", "結"], ["karma", "カルマ"], ["dan", "断"], ["shinra", "シンラ"], ["tobari", "トバリ"],
@@ -55,7 +55,7 @@
 
   // ---- 文字のポップ（09-26 本人「スクロールで文字がポップする感じ」）----
   // 見出しを一文字ずつに割り、画面に入ったら跳ねて出す。跳ね終えたら元の組みに戻す（縁取りの重なりを残さない）。
-  const POP = ".catch, .catch2, .sec-head h2, .try-side h2, .hochi h2 .big, .hochi h2 .sub2, .play-text h3, .play-text .no, .idle-list b, .hanko b, .closing .say, .sister h2, .soon b, .clock b";
+  const POP = ".catch, .catch2, .sec-head h2, .try-side h2, .play-text h3, .play-text .no, .hanko b, .closing .say, .sister h2, .soon b, .clock b";
   if (!reduce) {
     const split = (node, st) => {
       for (const c of [...node.childNodes]) {
