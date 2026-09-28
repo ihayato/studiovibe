@@ -2,7 +2,8 @@
 
 ## 現在地
 - 作業木: `~/Desktop/dev/vibe-studio`（枝 `feat/studio-renewal`、本番枝 `codex/meikyo-island` の 62387c4 から分岐）
-- **未コミット・未配信**。本番 vibe.co.jp は旧来どおり島がトップのまま
+- **09-28 夜に本番配信済み（本人GO）**: vibe commit 2d40265（刷新）＋ 28588b9（本番枝のどーぱみん3件を取り込み）→ codex/meikyo-island を早送り・push済み。Worker Version f0659200。verify-deploy 全項目OK、/・/works・/services・/about・/contact・/report・/report/deck・/island が本番で200。トップは新スタジオサイト、島は /island
+- 以後の作業は本番枝 codex/meikyo-island（作業木 ~/Desktop/dev/vibe）で。feat/studio-renewal は配信済みの記録として残す
 - 実装済み: トップ（`index.html`）／作品一覧（`works.html`）／受託制作（`services.html`）／会社概要（`about.html`）／問い合わせ（`contact.html`）
 - `npx vite build` 成功（09-28 第2便後も）。スマホ3寸法（390×844・375×667・320×693）の収まり検査は全5ページ合格（`scripts/fit-check.js`）。デスクトップ1440幅も目視済み
 - 問い合わせフォームは、入力チェックと送信内容の組み立てを確認済み（fetchを差し替えて検証。本物の送信はしていない）。Turnstileは localhost では 110200 エラーになるが、本番ドメインでは従来と同じ sitekey なので動く想定
