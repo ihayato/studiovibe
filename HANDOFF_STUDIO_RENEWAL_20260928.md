@@ -234,3 +234,4 @@
 - **影響: メール通知を入れる（09-29 fb9a88ad）までは、Discord 失敗＝フォーム送信が 500（画面に「送信に失敗しました」）だった。移設以降の問い合わせ・資料請求は届かず失敗していた可能性が高い**。Turnstile 集計の siteverify 成功（送信まで進んだ回数）は 9/22〜9/28 で計 20件前後（本人テストを含む可能性）。中身はどこにも残っていない
 - 直し: worker バンドルで使う直前に末尾の空白・改行・「\n」「\r」を除去（hookUrl）。secret 自体は未修正（読み出せないため）。本来は Discord でウェブフック URL を確かめて `wrangler secret put WEBHOOK_URL`（末尾改行なし）で入れ直すのが正
 - ログ行（status と非OK時の本文先頭200字・URL は出さない）は監視用に残した。`wrangler tail vibe --format json --search "contact discord"` で見られる
+- 09-29 追記: 本人の再テストで Discord 204（成功）を確認。Discord 通知に @ikehaya メンション（content <@683456112409837750>＋allowed_mentions・定数 CONTACT_MENTION_USER）を追加して配信（Version d08a1af8）。ユーザーIDは結の目のログ（author=ikehaya）で確認
