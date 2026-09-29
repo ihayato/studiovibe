@@ -353,6 +353,32 @@ body.is-android .qr { display: none; }
 @keyframes shine { 0% { opacity: 0; transform: skewX(-18deg) translateX(0); } 15% { opacity: 1; } 100% { opacity: 0; transform: skewX(-18deg) translateX(560%); } }
 #rail1 ul { animation-duration: 160s; }
 
+
+/* 先駆けの証（09-29 本人「iOSテストプレイ＆会員連携でNFTプレゼント中！というのも入れよう」・受け取りは gachiho.ninja/sakigake） */
+.gift { position: absolute; z-index: 3; top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 7px 14px 7px 8px; width: max-content; max-width: calc(100% - 24px); border-radius: 14px; background: linear-gradient(100deg, #2e2540, var(--face)); box-shadow: 0 0 0 2px rgba(232, 184, 79, .55), 0 10px 24px rgba(0, 0, 0, .35); color: var(--cream); text-decoration: none; font-weight: 800; font-size: 15px; line-height: 1.45; }
+.gift img { flex: none; width: 34px; height: 47px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0, 0, 0, .5); transform: rotate(-6deg); }
+.gift b { color: var(--gold-hi); white-space: nowrap; }
+.gift::after { content: "›"; margin-left: 2px; font-size: 22px; line-height: 1; color: var(--gold); }
+.gift:active { transform: translateX(-50%) translateY(2px); }
+.gift span { display: flex; flex-wrap: wrap; column-gap: .3em; }
+.gift { background: linear-gradient(100deg, rgba(46, 37, 64, .92), rgba(32, 27, 49, .92)); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.join-card.sakigake { background: radial-gradient(ellipse 90% 70% at 20% 0%, rgba(227, 69, 45, .16), transparent 60%), linear-gradient(160deg, #2a2138 0%, var(--face) 70%); box-shadow: 0 0 0 2px rgba(232, 184, 79, .45), 0 24px 56px rgba(0, 0, 0, .45); display: grid; gap: 22px; }
+.sk-fan { position: relative; height: 230px; }
+.sk-fan img { position: absolute; top: 10px; left: 50%; width: 138px; height: auto; border-radius: 10px; box-shadow: 0 14px 30px rgba(0, 0, 0, .55); }
+.sk-fan .l { transform: translateX(-118%) rotate(-10deg); opacity: .92; }
+.sk-fan .r { transform: translateX(18%) rotate(10deg); opacity: .92; }
+.sk-fan .c { width: 150px; top: 0; transform: translateX(-50%); z-index: 1; box-shadow: 0 0 0 2px rgba(255, 233, 176, .35), 0 18px 36px rgba(0, 0, 0, .6); }
+.reveal.in .sk-fan .c { animation: skFloat 4.8s ease-in-out infinite; }
+@keyframes skFloat { 50% { transform: translateX(-50%) translateY(-6px); } }
+.sk-lead { margin: 0 0 16px; }
+.join-card.sakigake h3 { margin-bottom: 10px; }
+@media (max-width: 360px) { .sk-fan { height: 196px; } .sk-fan img { width: 116px; } .sk-fan .c { width: 128px; } }
+@media (min-width: 880px) {
+  .join-card.sakigake { grid-column: 1 / -1; grid-template-columns: 420px 1fr; column-gap: 40px; align-items: center; padding: 32px 36px; }
+  .sk-fan { height: 280px; }
+  .sk-fan img { width: 160px; } .sk-fan .c { width: 176px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
@@ -361,4 +387,5 @@ body.is-android .qr { display: none; }
   .ur-frame, .ur-shine { animation: none; }
   .walker .wsp img, .band .stones, .band-march .track, .btn.shiny.shine::after { animation: none; }
   .js .band-hero .walker { transform: none; transition: none; }
+  .reveal.in .sk-fan .c { animation: none; }
 }
