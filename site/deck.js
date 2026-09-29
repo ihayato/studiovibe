@@ -210,6 +210,9 @@ if (shot) {
   // &bare: 上部バーとページ送りも隠す（/report の中身見本の撮影用）
   if (new URLSearchParams(location.search).has('bare')) document.documentElement.classList.add('is-bare')
   slides.forEach((s) => { if (s.id !== shot) s.style.display = 'none'; else seen(s) })
+  // &more=<key>: 詳しく見るパネルを開いた状態で撮る
+  const m = new URLSearchParams(location.search).get('more')
+  if (m) addEventListener('load', () => openMore(m, new URLSearchParams(location.search).get('case')))
 }
 
 // ---- 最初のページ（#p05 などで来たらそこへ） ----
@@ -220,3 +223,24 @@ if (location.hash && document.querySelector(location.hash)) {
 
 // スマホで横スクロールになるグラフは、最新（右端）が見える位置から始める
 document.querySelectorAll('.chart-scroll').forEach((f) => { if (f.scrollWidth > f.clientWidth) f.scrollLeft = f.scrollWidth })
+
+// ---- 詳しく見る: 実物の素材パネル ----
+function openMore(key, caseId) {
+  const d = document.getElementById(`more-${key}`)
+  if (!d) return
+  d.showModal()
+  d.querySelectorAll('.more-case').forEach((c) => c.classList.toggle('is-target', c.id === `mc-${caseId}`))
+  const t = caseId && d.querySelector(`#mc-${caseId}`)
+  const body = d.querySelector('.more-body')
+  body.scrollTop = t ? t.offsetTop - 8 : 0
+  if (!reduceMotion) d.querySelectorAll('video').forEach((v) => { v.preload = 'auto'; v.play().catch(() => {}) })
+}
+document.addEventListener('click', (e) => {
+  const o = e.target.closest('[data-more]')
+  if (o) { openMore(o.dataset.more, o.dataset.moreCase); return }
+  const d = e.target.closest('dialog.more')
+  if (d && (e.target === d || e.target.closest('[data-more-close]'))) d.close()
+})
+document.querySelectorAll('dialog.more').forEach((d) => d.addEventListener('close', () => {
+  d.querySelectorAll('video, audio').forEach((m) => m.pause())
+}))

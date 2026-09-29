@@ -160,6 +160,31 @@ const ARCH_NODES = [
   ['OpenAI', 'キャラと話すAI（外部）', '軽量モデルをサーバー経由で呼び、端末ごと・1日あたりの回数に上限を設けています。'],
 ]
 
+// ---------- 詳しく見る（実物の素材を並べるパネル） ----------
+// スライドは結論、パネルは証拠。素材はすべて月蝕綺譚の制作で実際に出たもの（public/studio/report/more/）。
+// media: { img|video|audio: パス, tag: 札（生成したまま／直した後／見本 など）, w, h, alt }
+const MORE = '/studio/report/more'
+const media = (m) => {
+  const tag = m.tag ? `<span class="mm-tag${m.good ? ' is-good' : ''}">${esc(m.tag)}</span>` : ''
+  const cap = m.cap ? `<figcaption>${esc(m.cap)}</figcaption>` : ''
+  if (m.video) return `<figure class="mm is-video">${tag}<video src="${MORE}/${m.video}" ${m.poster ? `poster="${MORE}/${m.poster}" ` : ''}muted loop playsinline preload="none" width="${m.w}" height="${m.h}" aria-label="${esc(m.alt || m.tag || '')}"></video>${cap}</figure>`
+  if (m.audio) return `<figure class="mm is-audio">${tag}<audio src="${MORE}/${m.audio}" controls preload="none"></audio>${cap}</figure>`
+  return `<figure class="mm">${tag}<img src="${MORE}/${m.img}" alt="${esc(m.alt || '')}" width="${m.w}" height="${m.h}" loading="lazy" decoding="async" />${cap}</figure>`
+}
+// cases: [{ id, title, body, media: [...], cols }]
+const more = (key, title, cases) => `
+  <dialog class="more" id="more-${key}" aria-labelledby="more-${key}-t">
+    <div class="more-head"><div><p class="ds-kicker">詳しく見る</p><p class="more-title" id="more-${key}-t">${title}</p></div><button type="button" class="player-close" data-more-close aria-label="閉じる">×</button></div>
+    <div class="more-body" tabindex="-1" autofocus>
+      ${cases.map((c) => `<section class="more-case" id="mc-${c.id}">
+        <h3>${c.title}</h3>${c.body ? `<p>${c.body}</p>` : ''}
+        <div class="mm-row" style="--cols:${c.cols || c.media.length}">${c.media.map(media).join('')}</div>
+      </section>`).join('')}
+    </div>
+  </dialog>`
+const fitItem = (label, caseId) => `<button type="button" data-more="fit" data-more-case="${caseId}"><b>${label}</b></button>`
+const moreBtn = (key, label = '詳しく見る') => `<button type="button" class="btn btn-ghost more-open" data-more="${key}">${label}<span class="arrow" aria-hidden="true">→</span></button>`
+
 // ---------- スライド ----------
 // 型: 「Q. 読者の疑問」→ 答えの見出し → 図1つ → 一言。注記は数え方のページにまとめる。
 const S = []
@@ -200,30 +225,65 @@ S.push(add('実物を見る', `
         <div><b class="is-text">iOS<br>Android</b><span>配信中</span></div>
       </div>
       <p class="ds-note">2026年7月から社内で開発・運用している和風ファンタジーです。<a href="/luna-occulta" target="_blank" rel="noopener">公式サイト↗</a>　アニメの実績は<a href="/hankacho/" target="_blank" rel="noopener">ニンジャ犯科帳↗</a></p>
+      ${moreBtn('real', '画面を見る')}
     </div>
     <figure class="phone-video">
       <video data-autoplay muted loop playsinline preload="none" poster="/studio/report/kitan_play.webp" src="/studio/report/kitan_play.mp4" aria-label="月蝕綺譚の画面を収めた紹介映像"></video>
     </figure>
-  </div>`, { id: 'real' }))
+  </div>${more('real', '月蝕綺譚の画面', [
+    { id: 'screens', title: 'iPhoneで撮った実際の画面', cols: 4, media: [
+      { img: 'ss_home.webp', w: 390, h: 846, tag: 'ホーム', alt: 'ホーム画面。留守の間に集まった小判と経験値を受け取る' },
+      { img: 'ss_battle.webp', w: 390, h: 846, tag: '戦闘', alt: '戦闘画面。ダメージの数字と、必殺技を放つボタン' },
+      { img: 'ss_summon.webp', w: 390, h: 846, tag: '召喚', alt: '召喚の演出。月蝕の下で札を解放する' },
+      { img: 'ss_hensei.webp', w: 390, h: 846, tag: '編成', alt: '編成画面。キャラクターの能力と立ち絵' },
+    ] },
+  ])}`, { id: 'real' }))
 
 S.push(add('向き・不向き', `
   <div class="ds-in">
     ${h('ゲーム制作で、AIが苦手なことは？', '細かい動きと文字は苦手。試作で確かめます。')}
     <div class="fit">
       <div class="fit-col is-good"><p class="lane-label">AIが得意</p><ul>
-        <li><b>キャラクターの絵を数多く作る</b></li>
-        <li><b>短い演出動画をたくさん作る</b></li>
+        <li>${fitItem('キャラクターの絵を数多く作る', 'many')}</li>
+        <li>${fitItem('短い演出動画をたくさん作る', 'movie')}</li>
         <li><b>企画の段階で、素早く試作する</b></li>
-        <li><b>キャラクターごとに声をつける</b></li>
+        <li>${fitItem('キャラクターごとに声をつける', 'voice')}</li>
       </ul></div>
       <div class="fit-col is-care"><p class="lane-label">AIが苦手</p><ul>
-        <li><b>手や道具の細かい動き</b></li>
-        <li><b>既存キャラクターの厳密な再現</b></li>
+        <li>${fitItem('手や道具の細かい動き', 'hands')}</li>
+        <li>${fitItem('既存キャラクターの厳密な再現', 'likeness')}</li>
         <li><b>長く途切れない演技</b></li>
-        <li><b>絵の中の文字</b></li>
+        <li>${fitItem('絵の中の文字', 'text')}</li>
       </ul></div>
     </div>
-  </div>${illu('shiori_chibi_story')}`, { id: 'fit' }))
+    ${moreBtn('fit', '実例を見る')}
+  </div>${illu('shiori_chibi_story')}${more('fit', 'AIの得意・苦手を、実物で', [
+    { id: 'many', title: 'キャラクターの絵を数多く作る', body: '同じ画風で、仲間のキャラクターを描き分けています。ゲームで使っている立ち絵の一部です。', media: [
+      { img: 'lineup.webp', w: 1600, h: 840, alt: '月蝕綺譚のキャラクター16人の立ち絵を並べたもの' },
+    ] },
+    { id: 'movie', title: '短い演出動画をたくさん作る', body: '必殺技のカットインと、動く札の絵。どちらも数秒の動画です。', media: [
+      { video: 'cutin.mp4', poster: 'cutin_poster.webp', w: 540, h: 698, tag: '必殺技のカットイン' },
+      { video: 'gisho_anim.mp4', poster: 'gisho_poster.webp', w: 540, h: 748, tag: '動く札' },
+    ] },
+    { id: 'voice', title: 'キャラクターごとに声をつける', body: 'ゲームの中で流れている声です。', media: [
+      { audio: 'voice_oto.m4a', tag: '於兎' },
+      { audio: 'voice_shiori.m4a', tag: '栞' },
+    ] },
+    { id: 'hands', title: '手や道具の細かい動き', body: '手を合わせて祈るポーズのはずが、指が組み合わさっていました。手元だけ作り直して差し替えています。', media: [
+      { img: 'hands_before.webp', w: 600, h: 832, tag: '生成したまま', alt: '指が組み合わさった手' },
+      { img: 'hands_after.webp', w: 600, h: 832, tag: '直した後', good: true, alt: '手のひらを合わせた合掌' },
+    ] },
+    { id: 'likeness', title: '既存キャラクターの厳密な再現', body: 'サスラの眼鏡は、下の縁だけの形で、目はレンズの内側に入るのが正解。AIは目の下に四角い枠を描きました。於兎には牙がないのに、口元に牙が描かれています。', cols: 4, media: [
+      { img: 'glasses_before.webp', w: 560, h: 982, tag: '生成したまま', alt: '目の下に四角い枠がある眼鏡' },
+      { img: 'glasses_after.webp', w: 560, h: 982, tag: '直した後', good: true, alt: '目がレンズの内側に入った眼鏡' },
+      { img: 'fang_before.webp', w: 515, h: 870, tag: '生成したまま', alt: '口元に牙がある於兎' },
+      { img: 'fang_after.webp', w: 515, h: 870, tag: '直した後', good: true, alt: '牙のない於兎' },
+    ] },
+    { id: 'text', title: '絵の中の文字', body: '絵はAIで作り、文字の場所は空けておきます。文字は後からプログラムで載せるので、誤字が出ません。', media: [
+      { img: 'thumb_base.webp', w: 960, h: 540, tag: '文字を入れる前', alt: 'キャラクターの顔を並べ、右側を空けたサムネイル' },
+      { img: 'thumb_final.webp', w: 960, h: 540, tag: '文字を載せた完成版', good: true, alt: '「キャラクター紹介ムービー」の文字を載せたサムネイル' },
+    ] },
+  ])}`, { id: 'fit' }))
 
 S.push(add('AIの費用', `
   <div class="ds-in">
@@ -292,7 +352,18 @@ S.push(add('作り方', `
     </ol>
     <svg class="pipe-back" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true"><path d="M690,0 V34 H310 V6" /><path class="head" d="M302,14 L310,2 L318,14" /></svg>
     <p class="pipe-loop-label">不合格なら、見分け方を基準に足して作り直す</p>
-  </div>`, { id: 'pipeline' }))
+    ${moreBtn('pipeline', '実際の例を見る')}
+  </div>${more('pipeline', '栞の札の絵ができるまで', [
+    { id: 'gen', title: '生成：同じ見本から、候補を何枚も作る', body: '構図や手の形の違う候補を並べて、比べられるようにします。', media: [
+      { img: 'candidates.webp', w: 1400, h: 702, alt: '栞の札の絵の候補を並べた一覧' },
+    ] },
+    { id: 'check', title: '人の確認：拡大して、指を見る', body: '縮小した全体では気づきにくい指の破綻を、拡大して見つけました。', cols: 2, media: [
+      { img: 'hands_zoom.webp', w: 600, h: 642, tag: '拡大', alt: '指が組み合わさった手の拡大' },
+    ] },
+    { id: 'adopt', title: '採用：直した絵を、動く札に', body: '手元を直した絵を動画にして、札に使っています。', cols: 2, media: [
+      { video: 'gisho_anim.mp4', poster: 'gisho_poster.webp', w: 540, h: 748, tag: '採用', good: true },
+    ] },
+  ])}`, { id: 'pipeline' }))
 
 S.push(add('失敗から', `
   <div class="ds-in">
@@ -304,7 +375,17 @@ S.push(add('失敗から', `
         ['同じキャラの顔が、少しずつ変わる', '毎回、同じ見本の絵をAIに渡す'],
       ].map(([a, b]) => `<div class="fix"><div class="fix-a"><span class="lane-label">起きたこと</span><p>${a}</p></div><div class="fix-arrow" aria-hidden="true">↓</div><div class="fix-b"><span class="lane-label">いま</span><p>${b}</p></div></div>`).join('')}
     </div>
-  </div>`, { id: 'fixes' }))
+    ${moreBtn('fixes', 'ほかの例を見る')}
+  </div>${more('fixes', '見逃しから、検査を足した例', [
+    { id: 'head', title: 'パンダの頭に、黒い影が出た', body: '食べる動きの動画の一部のコマで、耳のまわりに黒い影が残っていました。確認では顔だけを見ていて、見逃しました。いまは、頭の輪郭の外にある黒い点も数えています。', media: [
+      { img: 'riri_before.webp', w: 480, h: 340, tag: '見逃したコマ', alt: '耳の後ろに黒い影があるパンダ' },
+      { img: 'riri_after.webp', w: 480, h: 340, tag: '直した後', good: true, alt: '影のないパンダ' },
+    ] },
+    { id: 'alpha', title: 'パンダの顔が、うっすら透けた', body: '背景を抜いた素材の顔が半透明になり、後ろの縞が透けていました。いまは、体の内側で透けている点の数を、ほかの素材と比べています。', media: [
+      { img: 'sasa_before.webp', w: 480, h: 412, tag: '見逃した素材', alt: '顔に背景の縞が透けたパンダ' },
+      { img: 'sasa_after.webp', w: 480, h: 412, tag: '直した後', good: true, alt: '透けのないパンダ' },
+    ] },
+  ])}`, { id: 'fixes' }))
 
 S.push(add('確認の流れ', `
   <div class="ds-in">

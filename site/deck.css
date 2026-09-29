@@ -700,3 +700,42 @@ html.is-bare .deck-bar, html.is-bare .deck-nav { display: none; }
 .cl-go:hover { background: #1c1c26; color: var(--text); }
 @media (max-width: 1000px) { .clist { grid-template-columns: 1fr; } }
 .cl-text { word-break: auto-phrase; }
+
+/* ---- 詳しく見る: 実物の素材パネル（スライドは結論、ここは証拠） ---- */
+.more-open { margin-top: 28px; }
+.more {
+  width: min(1120px, calc(100vw - 32px)); max-height: calc(100svh - 48px); padding: 0; border: 0; border-radius: 16px;
+  background: var(--surface); color: var(--text); overflow: hidden; display: none; flex-direction: column;
+}
+.more[open] { display: flex; }
+.more::backdrop { background: rgba(4, 4, 7, 0.86); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.more-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 24px 28px 16px; border-bottom: 1px solid #1d1d28; }
+.more-head .ds-kicker { margin-bottom: 6px; }
+.more-title { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.3rem, 1rem + 1vw, 1.8rem); line-height: 1.35; font-feature-settings: "palt" 1; }
+.more-body { overflow-y: auto; overscroll-behavior: contain; padding: 8px 28px 36px; }
+.more-case { padding: 28px 0; scroll-margin-top: 8px; }
+.more-case + .more-case { border-top: 1px solid #1d1d28; }
+.more-case h3 { font-weight: 700; font-size: 1.15rem; line-height: 1.5; }
+.more-case > p { margin-top: 8px; color: #cfcac1; font-size: 0.9375rem; line-height: 1.8; max-width: 44em; }
+.more-case.is-target h3 { color: #fff; }
+.mm-row { margin-top: 18px; display: grid; gap: 12px; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); align-items: start; }
+.mm { position: relative; margin: 0; border-radius: 10px; overflow: hidden; background: #0b0b11; }
+.mm img, .mm video { display: block; width: 100%; height: auto; }
+.mm.is-audio { padding: 40px 14px 14px; }
+.mm.is-audio audio { width: 100%; height: 40px; }
+.mm-tag { position: absolute; top: 10px; left: 10px; z-index: 1; padding: 4px 10px; border-radius: 999px; background: rgba(7, 7, 11, 0.82); color: var(--sub); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; }
+.mm-tag.is-good { background: var(--text); color: var(--bg); }
+.mm figcaption { padding: 10px 12px 12px; color: var(--sub); font-size: 0.8125rem; line-height: 1.6; }
+@media (max-width: 720px) {
+  .more { width: 100vw; max-width: 100vw; max-height: 100svh; height: 100svh; border-radius: 0; }
+  .more-head { padding: 16px 16px 12px; }
+  .more-body { padding: 0 16px 32px; }
+  .mm-row { grid-template-columns: repeat(min(var(--cols), 2), minmax(0, 1fr)); }
+}
+/* 一覧の項目から、その実例へ飛べる */
+.fit-col li button { all: unset; cursor: pointer; display: inline-flex; align-items: baseline; gap: 10px; border-radius: 6px; }
+.fit-col li button::after { content: "見る →"; font-size: 0.75rem; font-weight: 700; color: var(--sub); letter-spacing: 0.04em; transition: color var(--t) var(--ease); }
+.fit-col li button:hover::after, .fit-col li button:focus-visible::after { color: var(--text); }
+.fit-col li button:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+html.is-bare .more-open, html.is-bare .fit-col li button::after { display: none; }
+.more-body:focus { outline: none; }
