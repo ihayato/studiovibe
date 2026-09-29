@@ -211,3 +211,11 @@
 - 申込ページ: meta description の「制作会社に確かめる10の質問」／冒頭の「読むとわかること」→「発注前に決める12項目と、確認の流れ」／迷いの節「質問が浮かばない」→「何を決めておけばいいのか分からない」／発注の章の見出し「何を決めれば、発注できる？」・10の質問の行を削除・見本を agree.webp（p.18 決めること）に差し替え・checklist.webp を削除／FAQ「発注するつもりがなくても」を削除
 - **以後、このレポートは「うちに相談する前提」。他社比較・他社への質問リストの類は足さない**（本人裁定 09-29）
 - **09-29 第7便 本番配信済み**: vibe ce8c2cc・Worker Version c07f7260・verify-deploy 全項目OK・本番でチェックリスト消滅（全20ページ）／申込ページの「10の質問」0件／agree.webp 200を確認
+
+## 09-29 問い合わせフォームのメール通知（本人「メール nubonba@gmail.com にも飛ばしてほしい」・**本番配信済み Version fb9a88ad**）
+- 仕組み: /contact と /report の資料請求は、どちらも /api/contact（Turnstile 検証 → Discord ウェブフック通知＝secret WEBHOOK_URL）。**どのチャンネルかは記録に無く、secret は読み出せない**（本人に確認）
+- 追加: 本番 worker バンドル `worker.prod-20260918.js` の contactHandler に CF Email Service 送信を追加（from contact@vibe.co.jp「Studio VIBE お問い合わせ」・to 定数 CONTACT_NOTIFY_TO=nubonba@gmail.com・replyTo=問い合わせた人・件名【vibe.co.jp】種別：名前 様・資料請求は本文先頭【資料請求】で判定）。Discord とメールのどちらか届けば 200
+- `wrangler.jsonc` に `"send_email": [{ "name": "EMAIL" }]`（vibe.co.jp は Email Sending 有効を `wrangler email sending list` で確認済み）
+- **どちらも git 未追跡のファイル**。変更前の控え: `worker.prod-20260918.before-mail-20260929.js`・`wrangler.before-mail-20260929.jsonc`。以後の配信前照合は「本番＝今の worker.prod-20260918.js」で行う（控えではない）
+- api/contact.js（git 内）は Vercel 時代の元ソースで本番には使われていない（process.env 版）。直していない
+- 残り: 本人の実送信テストで Gmail 着信と迷惑メール判定を確認
