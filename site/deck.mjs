@@ -210,7 +210,7 @@ S.push(add('気になるところから', `
         ['ゲームの品質は？', [['real', '実物'], ['fit', '向き・不向き'], ['pipeline', '作り方'], ['botsu', 'ボツ素材']]],
         ['費用はいくら？', [['cost-gen', 'AIの費用'], ['cost-run', '公開後の費用'], ['cost-kinds', '発注の費用']]],
         ['公開後も安全？', [['arch', '構成'], ['security', 'セキュリティ'], ['restore', '止まったら']]],
-        ['何を決めれば発注できる？', [['approval', '確認の流れ'], ['agree', '決めること'], ['checklist', 'チェックリスト']]],
+        ['何を決めれば発注できる？', [['approval', '確認の流れ'], ['agree', '決めること']]],
       ].map(([qq, links]) => `<div class="role-card"><p class="role-name">${qq}</p><div class="role-links">${links.map(([id, l]) => go(id, `${l} →`)).join('')}</div></div>`).join('')}
     </div>
   </div>`, { id: 'roles' }))
@@ -563,35 +563,6 @@ S.push(add('決めること', `
     </div>
   </div>`, { id: 'agree' }))
 
-// 発注前チェックリスト: [済んだら入れられる文, 制作会社への質問（コピー用）, 解説ページ]
-const CHECK_GROUPS = [
-  ['相談のとき', [
-    ['その会社のゲームを、実際に遊んだ', '実際に作ったゲームを見せてもらえますか？', 'real'],
-    ['AIに向く企画かどうか、聞いた', 'この企画で、AIが苦手な部分はどこですか？', 'fit'],
-  ]],
-  ['見積もりのとき', [
-    ['費用が、制作・実費・運用・保守に分かれている', '費用を、制作費・実費・運用費・保守費に分けて出してもらえますか？', 'cost-kinds'],
-    ['公開後の月額と、AI利用料の上限がわかる', '公開後の月額と、AI利用料の上限はいくらですか？', 'cost-run'],
-    ['確認する時期（試作・途中・納品）が決まっている', 'どの段階で、何を確認できますか？', 'approval'],
-  ]],
-  ['契約の前に', [
-    ['ログインや不正対策の説明を受けた', 'ログインや不正対策は、どうしていますか？', 'security'],
-    ['テストや点検の結果を見せてもらった', 'テストや点検の結果を見せてもらえますか？', 'checks'],
-    ['障害時にどこまで戻せるか、聞いた', '障害が起きたら、データはどこまで戻せますか？', 'restore'],
-    ['権利とAIの使い方が、契約書にある', '権利とAIの使い方を、契約書に書いてもらえますか？', 'agree'],
-    ['担当者と、終了時の引き継ぎ方が決まっている', '担当者と、終了時の引き継ぎ方を決めてもらえますか？', 'agree'],
-  ]],
-]
-const CHECKS = CHECK_GROUPS.flatMap(([, items]) => items)
-S.push(add('チェックリスト', `
-  <div class="ds-in">
-    ${h('制作会社に、何を確かめればいい？', 'この10個を確かめてから、発注を。')}
-    <div class="clist" data-checklist>
-      ${(() => { let n = 0; return CHECK_GROUPS.map(([g, items]) => `<section class="cl-group"><p class="lane-label">${g}</p><ul>${items.map(([t, ask, pg]) => { const i = n++; return `<li><label class="cl-item"><input type="checkbox" data-q="${i}" data-ask="${esc(ask)}" /><span class="cl-box" aria-hidden="true"></span><span class="cl-text">${t}</span></label><button type="button" class="cl-go" data-go="#${pg}" aria-label="解説のページへ">→</button></li>` }).join('')}</ul></section>`).join('') })()}
-    </div>
-    <div class="q-actions"><span class="q-count" aria-live="polite">済み <b data-q-count>0</b> / ${CHECKS.length}</span><button type="button" class="btn btn-ghost" data-copy-questions>まだの項目を、質問としてコピー</button><span class="ds-note q-save">制作会社へのメールに、そのまま貼れます。</span></div>
-  </div>`, { id: 'checklist' }))
-
 S.push(add('ご相談', `
   <div class="ds-in split">
     <div>
@@ -616,7 +587,6 @@ S.push(add('数字の読み方', `
     </dl>
   </div>`, { id: 'method' }))
 
-export const DECK_CHECKS = CHECKS
 export const renderDeck = () => S.join('\n')
 export const renderDeckToc = () => slides.map((s, i) => `<li><a href="#${s.id}" data-toc="${s.id}"><span>${String(i + 1).padStart(2, '0')}</span>${esc(s.title)}</a></li>`).join('')
 export const DECK_COUNT = () => slides.length

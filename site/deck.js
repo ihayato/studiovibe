@@ -167,30 +167,6 @@ document.querySelectorAll('[data-stepper]').forEach((box) => {
   render()
 })
 
-// ---- 発注チェックリスト: チェックはこの端末に保存。まだの項目を質問としてコピー ----
-const QKEY = 'vibe_report_checklist_v3'
-const qBoxes = [...document.querySelectorAll('[data-checklist] input[type="checkbox"]')]
-const qCount = document.querySelector('[data-q-count]')
-const renderCount = () => { if (qCount) qCount.textContent = String(qBoxes.filter((b) => b.checked).length) }
-try {
-  const saved = JSON.parse(localStorage.getItem(QKEY) || '[]')
-  qBoxes.forEach((b, i) => { b.checked = saved[i] === 1 })
-} catch { /* noop */ }
-qBoxes.forEach((b) => b.addEventListener('change', () => {
-  renderCount()
-  try { localStorage.setItem(QKEY, JSON.stringify(qBoxes.map((x) => (x.checked ? 1 : 0)))) } catch { /* 保存できない環境では無視 */ }
-}))
-renderCount()
-document.querySelector('[data-copy-questions]')?.addEventListener('click', async (e) => {
-  const btn = e.currentTarget
-  const todo = qBoxes.filter((b) => !b.checked)
-  const list = (todo.length ? todo : qBoxes).map((b, i) => `${i + 1}. ${b.dataset.ask}`)
-  const text = `ご確認させてください。\n${list.join('\n')}\n\n（参考: Studio VIBE『月蝕綺譚 制作・運用レポート』 https://vibe.co.jp/report）`
-  const label = btn.textContent
-  try { await navigator.clipboard.writeText(text); btn.textContent = 'コピーしました' } catch { btn.textContent = 'コピーできませんでした' }
-  setTimeout(() => { btn.textContent = label }, 2000)
-})
-
 // ---- 画面に入ったら映像を再生、出たら止める ----
 const vids = [...document.querySelectorAll('video[data-autoplay]')]
 if (vids.length && 'IntersectionObserver' in window) {
