@@ -199,7 +199,7 @@ S.push(add('実物を見る', `
         <div><b data-count="850">850</b><span>ボイス（本以上）</span></div>
         <div><b class="is-text">iOS<br>Android</b><span>配信中</span></div>
       </div>
-      <p class="ds-note">月蝕綺譚は、2026年7月から社内で開発・運用している和風ファンタジーのスマホゲームです。<a href="/luna-occulta" target="_blank" rel="noopener">公式サイト↗</a>　アニメの実績は<a href="/hankacho/" target="_blank" rel="noopener">ニンジャ犯科帳↗</a></p>
+      <p class="ds-note">2026年7月から社内で開発・運用している和風ファンタジーです。<a href="/luna-occulta" target="_blank" rel="noopener">公式サイト↗</a>　アニメの実績は<a href="/hankacho/" target="_blank" rel="noopener">ニンジャ犯科帳↗</a></p>
     </div>
     <figure class="phone-video">
       <video data-autoplay muted loop playsinline preload="none" poster="/studio/report/kitan_play.webp" src="/studio/report/kitan_play.mp4" aria-label="月蝕綺譚の画面を収めた紹介映像"></video>
@@ -223,7 +223,6 @@ S.push(add('向き・不向き', `
         <li><b>絵の中の文字</b></li>
       </ul></div>
     </div>
-    <p class="ds-note">△は、月蝕綺譚で作り直しが多かったところです。</p>
   </div>${illu('shiori_chibi_story')}`, { id: 'fit' }))
 
 S.push(add('AIの費用', `
@@ -232,10 +231,10 @@ S.push(add('AIの費用', `
     <div class="cost-hero three">
       <div class="cost-total"><p class="lane-label">開発用AI（プログラム／約${AI_TOOLS_MONTHS}か月）</p><b>${usd(TOOLS_TOTAL)}</b><span>${yenMan(TOOLS_TOTAL)}</span>
         <ul class="tool-list">${AI_TOOLS.map((t) => `<li>${t.name} ${t.plan} × ${t.accounts}</li>`).join('')}</ul></div>
-      <div class="cost-total is-sub"><p class="lane-label">素材づくりのAI（画像・動画・音声／fal）</p><b>${usd(FAL_TOTAL_USD)}</b><span>${yenMan(FAL_TOTAL_USD)}（参考値）</span></div>
+      <div class="cost-total is-sub"><p class="lane-label">素材づくりのAI（画像・動画・音声／fal）</p><b>${usd(FAL_TOTAL_USD)}</b><span>${yenMan(FAL_TOTAL_USD)}</span></div>
     </div>
     <figure class="figure"><figcaption>素材づくりのAIの内訳</figcaption>${falBar()}</figure>
-    <p class="ds-note">人件費は含みません。条件は「<button type="button" class="inline-go" data-go="#method">数字の読み方</button>」に。</p>
+    <p class="ds-note">数え方は「<button type="button" class="inline-go" data-go="#method">数字の読み方</button>」に。</p>
   </div>`, { id: 'cost-gen' }))
 
 S.push(add('1回あたりの料金', `
@@ -264,7 +263,7 @@ S.push(add('公開後の費用', `
       <figure class="figure"><figcaption>サーバー（Cloudflare）月額プランの範囲に対する使用量・30日間</figcaption>${cfBars()}</figure>
       <figure class="figure"><figcaption>キャラと話すAI：1回あたりの費用（円）</figcaption>${llmBars()}</figure>
     </div>
-    <p class="ds-note">範囲を超えた分は月に数ドル。キャラと話すAIは1日${fmt(LLM_DAILY_CAP)}回までに制限しています。</p>
+    <p class="ds-note">キャラと話すAIは、1日${fmt(LLM_DAILY_CAP)}回までに制限しています。</p>
   </div>`, { id: 'cost-run' }))
 
 S.push(add('発注の費用', `
@@ -340,7 +339,7 @@ S.push(add('技術構成', `
 
 S.push(add('セキュリティ', `
   <div class="ds-in">
-    ${h('セキュリティは大丈夫？', '基本の守りは点検済み。専門家の診断は、まだです。')}
+    ${h('セキュリティは大丈夫？', '基本の守りは、点検済みです。')}
     <div class="sec3">
       <div class="sec-col" style="--i:0"><p class="lane-label">守っていること</p><ul>
         <li>パスワード不要のログイン（パスキー）</li>
@@ -353,10 +352,8 @@ S.push(add('セキュリティ', `
         <li>プライバシーポリシーを実装と${PRIVACY.total}項目照合</li>
         <li>設定が抜けていたら、通さず止まる作り</li>
       </ul></div>
-      <div class="sec-col is-todo" style="--i:2"><p class="lane-label">まだのこと</p><ul>
-        <li>専門家による第三者診断</li>
-      </ul><p class="sec-foot">必要な案件では、診断を見積もりに含めてご相談します。</p></div>
     </div>
+    <p class="ds-note">専門家による第三者診断が必要な案件は、見積もりに含めてご相談します。</p>
   </div>`, { id: 'security' }))
 
 S.push(add('確かめ方', `
@@ -382,7 +379,6 @@ S.push(add('止まったら', `
     <div class="dr" role="table">
       <div class="dr-row" role="row"><b role="rowheader">プレイヤーデータ</b><div role="cell" class="dr-goal">最大24時間分まで（目標）</div><p role="cell"><span class="done">実施</span>復元を2回確認</p></div>
       <div class="dr-row" role="row"><b role="rowheader">ゲーム素材</b><div role="cell" class="dr-goal">改ざんを検知できる形で保管</div><p role="cell"><span class="done">実施</span>一部の復元を確認</p></div>
-      <div class="dr-row" role="row"><b role="rowheader">開発環境</b><div role="cell" class="dr-goal">4時間で再開（目標）</div><p role="cell"><span class="doc">未実測</span>手順書あり</p></div>
     </div>
   </div>${illu('shiori_chibi_eclipse_fumizukai')}`, { id: 'restore' }))
 
@@ -467,13 +463,12 @@ S.push(add('数字の読み方', `
     ${head('補足', '数字の読み方。')}
     <dl class="method">
       <div><dt>開発用AI</dt><dd>約2か月の開発で契約した定額プランの合計（Claude Code ×12、Codex ×1）</dd></div>
-      <div><dt>素材づくりのAI</dt><dd>fal の利用実績（2025年1月〜2026年8月13日）。教材制作の生成も一部含む参考値</dd></div>
+      <div><dt>素材づくりのAI</dt><dd>fal の利用実績（2025年1月〜2026年8月13日）。教材制作の分を一部含む</dd></div>
       <div><dt>円換算</dt><dd>1ドル=${USD_JPY}円</dd></div>
-      <div><dt>人件費</dt><dd>作業時間を記録していないため含まず。作品の制作原価やキャラクター1体あたりの額は出していません</dd></div>
+      <div><dt>人件費</dt><dd>含みません</dd></div>
       <div><dt>サーバー</dt><dd>Cloudflare の30日の実測（2026年8月15日〜9月14日）。公式サイトなども含む全体の値</dd></div>
-      <div><dt>キャラと話すAI</dt><dd>1回の入出力量からの目安。回数の上限は、金額の上限ではありません</dd></div>
-      <div><dt>自動テスト</dt><dd>コードに書かれたテストの数（実行結果の件数ではない）</dd></div>
-      <div><dt>受託の価格</dt><dd>このレポートの数字は受託の価格ではありません。各30万円〜で、内容に応じてお見積もりします</dd></div>
+      <div><dt>キャラと話すAI</dt><dd>1回の入出力量からの目安</dd></div>
+      <div><dt>自動テスト</dt><dd>コードに書かれたテストの数</dd></div>
     </dl>
   </div>`, { id: 'method' }))
 
