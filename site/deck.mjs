@@ -445,13 +445,20 @@ S.push(add('確かめ方', `
         <div><b>4</b><span>自動で確かめる画面サイズ</span></div>
         <div><b data-count="19">19</b><span>点検・レビュー</span></div>
       </div>
+      ${moreBtn('checks', '実際の例を見る')}
     </div>
     <figure class="figure">
       <figcaption>点検・レビューの報告書（月別）</figcaption>
       <p class="legend"><span class="sw a"></span>別のAI（OpenAI Codex）<span class="sw b"></span>そのほか</p>
       ${stackedBars(REVIEWS_MONTHLY)}
     </figure>
-  </div>`, { id: 'checks' }))
+  </div>${more('checks', '画面サイズを変えて、自動で確かめる', [
+    { id: 'sizes', title: 'キーボードが出ても、閉じるボタンを押せるか', body: 'テストプレイで、キーボードが出たまま戻ると「受け取る」が隠れて、この画面を閉じられなくなりました。右上に閉じるボタンを付け、3つの画面サイズでキーボードが出た状態を再現して、ボタンがキーボードより上にあり押せることを自動テストで確かめています。灰色の帯がキーボードです。', media: [
+      { img: 'size_320x693.webp', w: 360, h: 708, tag: '拡大表示 320×693', alt: '幅320の画面。キーボードの上に閉じるボタンがある' },
+      { img: 'size_375x667.webp', w: 360, h: 568, tag: 'iPhone SE 375×667', alt: '幅375の画面。キーボードの上に閉じるボタンがある' },
+      { img: 'size_390x844.webp', w: 360, h: 708, tag: 'iPhone 12 390×844', alt: '幅390の画面。キーボードの上に閉じるボタンがある' },
+    ] },
+  ])}`, { id: 'checks' }))
 
 S.push(add('止まったら', `
   <div class="ds-in">
