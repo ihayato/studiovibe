@@ -232,7 +232,8 @@ function openMore(key, caseId) {
   d.querySelectorAll('.more-case').forEach((c) => c.classList.toggle('is-target', c.id === `mc-${caseId}`))
   const t = caseId && d.querySelector(`#mc-${caseId}`)
   const body = d.querySelector('.more-body')
-  body.scrollTop = t ? t.offsetTop - 8 : 0
+  body.scrollTop = t ? t.offsetTop - body.offsetTop - 8 : 0
+  if (t) t.querySelector('h3')?.focus({ preventScroll: true })
   if (!reduceMotion) d.querySelectorAll('video').forEach((v) => { v.preload = 'auto'; v.play().catch(() => {}) })
 }
 document.addEventListener('click', (e) => {

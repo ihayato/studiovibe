@@ -739,3 +739,5 @@ html.is-bare .deck-bar, html.is-bare .deck-nav { display: none; }
 .fit-col li button:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
 html.is-bare .more-open, html.is-bare .fit-col li button::after { display: none; }
 .more-body:focus { outline: none; }
+.more-case h3:focus { outline: none; }
+@media (max-width: 720px) { .fit-col li button { min-height: 44px; align-items: center; } }
