@@ -226,3 +226,4 @@
 - **どちらも git 未追跡のファイル**。変更前の控え: `worker.prod-20260918.before-mail-20260929.js`・`wrangler.before-mail-20260929.jsonc`。以後の配信前照合は「本番＝今の worker.prod-20260918.js」で行う（控えではない）
 - api/contact.js（git 内）は Vercel 時代の元ソースで本番には使われていない（process.env 版）。直していない
 - 残り: 本人の実送信テストで Gmail 着信と迷惑メール判定を確認
+- **09-29 第8便 本番配信済み**: vibe 80733bd・Worker Version 781f8df1（メール通知入りのバンドルのまま・env.EMAIL 付き）・verify-deploy 全項目OK・本番で fixes パネル消滅／ボツ8枚／眼鏡・牙まとめ／3サイズ表記を確認
