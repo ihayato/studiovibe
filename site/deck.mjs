@@ -182,7 +182,7 @@ const more = (key, title, cases) => `
       </section>`).join('')}
     </div>
   </dialog>`
-const fitItem = (label, caseId) => `<button type="button" data-more="fit" data-more-case="${caseId}"><b>${label}</b></button>`
+const fitItem = (label, caseId, panel = 'fit') => `<button type="button" data-more="${panel}" data-more-case="${caseId}"><b>${label}</b></button>`
 const moreBtn = (key, label = '詳しく見る') => `<button type="button" class="btn btn-ghost more-open" data-more="${key}">${label}<span class="arrow" aria-hidden="true">→</span></button>`
 
 // ---------- スライド ----------
@@ -250,8 +250,8 @@ S.push(add('向き・不向き', `
         <li>${fitItem('キャラクターごとに声をつける', 'voice')}</li>
       </ul></div>
       <div class="fit-col is-care"><p class="lane-label">AIが苦手</p><ul>
-        <li>${fitItem('手や道具の細かい形と動き', 'hands')}</li>
-        <li>${fitItem('既存キャラクターの厳密な再現', 'likeness')}</li>
+        <li>${fitItem('手や道具の細かい形と動き', 'fingers', 'botsu')}</li>
+        <li>${fitItem('既存キャラクターの厳密な再現', 'glasses', 'botsu')}</li>
         <li><b>長く途切れない演技</b></li>
         <li>${fitItem('絵の中の文字', 'text')}</li>
       </ul></div>
@@ -268,16 +268,6 @@ S.push(add('向き・不向き', `
     { id: 'voice', title: 'キャラクターごとに声をつける', body: 'ゲームの中で流れている声です。', media: [
       { audio: 'voice_oto.m4a', tag: '於兎' },
       { audio: 'voice_shiori.m4a', tag: '栞' },
-    ] },
-    { id: 'hands', title: '手や道具の細かい形と動き', body: '手を合わせて祈るポーズのはずが、指が組み合わさり、付け根がねじれていました。手元だけ作り直して差し替えました。', media: [
-      { img: 'hz_before.webp', w: 480, h: 480, tag: '修正前', alt: '指が組み合わさり、付け根がねじれた手' },
-      { img: 'hz_after.webp', w: 480, h: 480, tag: '直した後', good: true, alt: '手のひらを合わせた合掌' },
-    ] },
-    { id: 'likeness', title: '既存キャラクターの厳密な再現', body: 'サスラの眼鏡は、下の縁だけの形で、目はレンズの内側に入るのが正解。AIは目の下に四角い枠を描きました。於兎には牙がないのに、口元に牙が描かれています。', cols: 4, media: [
-      { img: 'glasses_before.webp', w: 560, h: 982, tag: '修正前', alt: '目の下に四角い枠がある眼鏡' },
-      { img: 'glasses_after.webp', w: 560, h: 982, tag: '直した後', good: true, alt: '目がレンズの内側に入った眼鏡' },
-      { img: 'fang_before.webp', w: 515, h: 870, tag: '修正前', alt: '口元に牙がある於兎' },
-      { img: 'fang_after.webp', w: 515, h: 870, tag: '直した後', good: true, alt: '牙のない於兎' },
     ] },
     { id: 'text', title: '絵の中の文字', body: '文字を入れる場所を空けた下地に、文言を指定してAIに文字を描かせます。誤字が出たり、指定していない場所まで描き直されたりするので、全行を目で照合してから使います。', media: [
       { img: 'thumb_base.webp', w: 960, h: 540, tag: '下地', alt: 'キャラクターの顔を並べ、右側を空けたサムネイル' },
@@ -389,13 +379,7 @@ S.push(add('失敗から', `
         ['同じキャラの顔が、少しずつ変わる', '毎回、同じ見本の絵をAIに渡す'],
       ].map(([a, b]) => `<div class="fix"><div class="fix-a"><span class="lane-label">起きたこと</span><p>${a}</p></div><div class="fix-arrow" aria-hidden="true">↓</div><div class="fix-b"><span class="lane-label">いま</span><p>${b}</p></div></div>`).join('')}
     </div>
-    ${moreBtn('fixes', '実際の例を見る')}
-  </div>${more('fixes', '見逃しから、検査を足した例', [
-    { id: 'head', title: 'パンダの頭に、黒い影が出た', body: '食べる動きの動画の一部のコマで、頭の上に黒い影が残っていました。確認では顔だけを見ていて、見逃しました。いまは、頭の輪郭の外にある黒い点も数えています。', media: [
-      { img: 'riri_before.webp', w: 480, h: 380, tag: '見逃したコマ', alt: '頭の上に黒い影があるパンダ' },
-      { img: 'riri_after.webp', w: 480, h: 380, tag: '直した後', good: true, alt: '同じコマの、影のないパンダ' },
-    ] },
-  ])}`, { id: 'fixes' }))
+  </div>`, { id: 'fixes' }))
 
 // ボツ素材: 実際にボツにした素材と、採用した版（出典は 旧Mac救出/deck-botsu-mokuroku_20260929/MOKUROKU.md と各記憶メモ）
 const BOTSU = [
@@ -408,21 +392,21 @@ const BOTSU = [
   { id: 'atoza', why: '牙がうまく描けず、設定から外した', kind: '設定の変更', thumb: 'bt_atoza_before.webp', pos: '50% 60%',
     title: '牙がうまく描けず、設定ごと外した', body: 'アトザは、口の端に小さな牙が1本ある設定でした。AIはこれを描き分けられず、牙が左右に並んでしまいます。牙そのものを設定から外して、見本を描き直しました。',
     cols: 4, media: [{ img: 'bt_atoza_before.webp', w: 420, h: 420, tag: 'ボツ', alt: '口を開けると牙が見えるアトザ' }, { img: 'bt_atoza_after.webp', w: 420, h: 420, tag: '採用', good: true, alt: '牙のないアトザ' }, { img: 'bt_atoza_m_before.webp', w: 420, h: 286, tag: 'ボツ・口元', alt: '上の歯の両端がとがった口元' }, { img: 'bt_atoza_m_after.webp', w: 420, h: 286, tag: '採用・口元', good: true, alt: '平らな歯の口元' }] },
-  { id: 'otofang', why: '直したはずの牙が、また生えた', kind: '見本とのずれ', thumb: 'bt_otofang_before.webp', pos: '50% 50%',
-    title: '直したはずの牙が、また生えた', body: '於兎に牙はありません。8月に一度直していましたが、この場面では発注文に「小さな牙」という一語が残っていて、また牙が描かれました。発注文を直して、描き直しました。',
-    media: [{ img: 'bt_otofang_before.webp', w: 600, h: 294, tag: 'ボツ', alt: '驚いて開いた口に牙がある於兎' }, { img: 'bt_otofang_after.webp', w: 600, h: 274, tag: '採用', good: true, alt: '牙のない於兎' }] },
+  { id: 'otofang', why: '直したはずの牙が、何度も生えた', kind: '見本とのずれ', thumb: 'bt_otofang_before.webp', pos: '50% 50%',
+    title: '直したはずの牙が、何度も生えた', body: '於兎に牙はありません。8月に直した後も、別の場面の絵に牙が残っていたり、新しく描かれたりしました。原因の一つは、発注文に残っていた「小さな牙」という一語です。見つけるたびに、発注文と絵を直しています。', cols: 4,
+    media: [{ img: 'bt_otofang_before.webp', w: 600, h: 294, tag: 'ボツ', alt: '驚いて開いた口に牙がある於兎' }, { img: 'bt_otofang_after.webp', w: 600, h: 274, tag: '採用', good: true, alt: '牙のない於兎' }, { img: 'fang_before.webp', w: 515, h: 870, tag: 'ボツ・ちび', alt: '口元に牙があるちびの於兎' }, { img: 'fang_after.webp', w: 515, h: 870, tag: '採用・ちび', good: true, alt: '牙のないちびの於兎' }] },
   { id: 'obi', why: '後ろ姿なのに、前の帯飾りが背中に', kind: '見本とのずれ', thumb: 'bt_obi_before.webp', pos: '40% 70%',
     title: '後ろ姿なのに、前の帯飾りが背中に', body: 'ツキアワセの絵日記です。体の前につける帯飾りが、背中側に描かれていました。いまは後ろ姿を描かせるとき、背中から見た見本も一緒に渡しています。',
     media: [{ img: 'bt_obi_before.webp', w: 560, h: 560, tag: 'ボツ', alt: '後ろ姿の帯の結び目に、前につける飾りがある絵' }, { img: 'bt_obi_after.webp', w: 560, h: 560, tag: '採用', good: true, alt: '後ろ姿の帯の結び目だけの絵' }] },
+  { id: 'glasses', why: '眼鏡の形が、見本と違う', kind: '見本とのずれ', thumb: 'glasses_before.webp', pos: '50% 45%',
+    title: '眼鏡の形が、見本と違う', body: 'サスラの眼鏡は、下の縁だけの形で、目はレンズの内側に入るのが正解です。AIは、目の下に四角い枠を描きました。',
+    media: [{ img: 'glasses_before.webp', w: 560, h: 982, tag: 'ボツ', alt: '目の下に四角い枠がある眼鏡' }, { img: 'glasses_after.webp', w: 560, h: 982, tag: '採用', good: true, alt: '目がレンズの内側に入った眼鏡' }] },
   { id: 'glassvid', why: '動かすと、眼鏡の形が変わった', kind: '動画の崩れ', thumb: 'bt_gv_2_5.webp', pos: '50% 50%',
     title: '動かすと、眼鏡の形が変わった', body: 'サスラの目元を動画にすると、途中で目の上に、元の絵にはない縁の線が描き足されました。2回作っても直らなかったため、動画にするのをやめ、止め絵にゆっくり寄る形にしています。', cols: 3,
     media: [{ img: 'bt_gv_0_3.webp', w: 420, h: 368, tag: '0秒', alt: '目の下に縁がある眼鏡' }, { img: 'bt_gv_2_5.webp', w: 420, h: 368, tag: '2.5秒・ボツ', alt: '目の上に縁の線が出てきた眼鏡' }, { video: 'bt_glassvid.mp4', poster: 'bt_glassvid_poster.webp', w: 360, h: 624, tag: 'ボツにした動画', alt: 'サスラの目元の動画' }] },
   { id: 'shadow', why: '動画の途中で、頭に黒い影', kind: '動画の崩れ', thumb: 'riri_before.webp', pos: '50% 20%',
-    title: '動画の途中で、頭に黒い影が出た', body: 'リーリーが食べる動きの動画です。一部のコマで、頭の上に黒い影が残っていました。同じコマで比べています。',
+    title: '動画の途中で、頭に黒い影が出た', body: 'リーリーが食べる動きの動画です。一部のコマで、頭の上に黒い影が残っていました。確認で顔だけを見ていて見逃したため、いまは頭の輪郭の外にある黒い点も数えています。',
     media: [{ img: 'riri_before.webp', w: 480, h: 380, tag: 'ボツ', alt: '頭の上に黒い影があるパンダ' }, { img: 'riri_after.webp', w: 480, h: 380, tag: '採用', good: true, alt: '影のないパンダ' }] },
-  { id: 'shield', why: '武器のデザインごと、作り替えた', kind: '方向の変更', thumb: 'bt_shield_before.webp', pos: '80% 40%',
-    title: '武器のデザインごと、作り替えた', body: 'タルトの武器は、最初は竜の頭がついた大きな盾でした。設計の途中で、宙に浮かぶ6枚の札に作り替えています。盾の絵は、すべてボツです。',
-    media: [{ img: 'bt_shield_before.webp', w: 400, h: 600, tag: 'ボツ', alt: '竜の頭がついた大きな盾を持つタルト' }, { img: 'bt_shield_after.webp', w: 400, h: 600, tag: '採用', good: true, alt: '宙に浮かぶ札をまとったタルト' }] },
 ]
 S.push(add('ボツ素材', `
   <div class="ds-in">
@@ -510,7 +494,7 @@ S.push(add('確かめ方', `
       ${stackedBars(REVIEWS_MONTHLY)}
     </figure>
   </div>${more('checks', '画面サイズを変えて、自動で確かめる', [
-    { id: 'sizes', title: 'キーボードが出ても、閉じるボタンを押せるか', body: 'テストプレイで、キーボードが出たまま戻ると「受け取る」が隠れて、この画面を閉じられなくなりました。右上に閉じるボタンを付け、3つの画面サイズでキーボードが出た状態を再現して、ボタンがキーボードより上にあり押せることを自動テストで確かめています。灰色の帯がキーボードです。', media: [
+    { id: 'sizes', title: 'キーボードが出ても、閉じるボタンを押せるか', body: 'テストプレイで、キーボードが出たまま戻ると「受け取る」が隠れて、この画面を閉じられなくなりました。右上に閉じるボタンを付けました。この確認では、3つの画面サイズでキーボードが出た状態を再現して、ボタンがキーボードより上にあり押せることを自動テストで確かめています。灰色の帯がキーボードです。', media: [
       { img: 'size_320x693.webp', w: 360, h: 708, tag: '拡大表示 320×693', alt: '幅320の画面。キーボードの上に閉じるボタンがある' },
       { img: 'size_375x667.webp', w: 360, h: 568, tag: 'iPhone SE 375×667', alt: '幅375の画面。キーボードの上に閉じるボタンがある' },
       { img: 'size_390x844.webp', w: 360, h: 708, tag: 'iPhone 12 390×844', alt: '幅390の画面。キーボードの上に閉じるボタンがある' },
