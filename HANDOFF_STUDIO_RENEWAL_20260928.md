@@ -219,3 +219,10 @@
 - 確かめ方パネル: スライドの「4 画面サイズ」とパネルの3サイズの食い違い→「この確認では、3つの画面サイズで」
 - 残した重なり（意図的）: 栞の指＝作り方パネル（工程の話）とボツ素材（ギャラリー）／Cloudflare の数字＝技術構成（選んだ理由）と公開後の費用（内訳）
 - 足りないものの候補（未実装・本人判断待ち）: 「企画の段階で、素早く試作する」の実物（試作の画面）／開発の期間と体制（何人・何か月）のページ
+## 09-29 問い合わせフォームのメール通知（本人「メール nubonba@gmail.com にも飛ばしてほしい」・**本番配信済み Version fb9a88ad**）
+- 仕組み: /contact と /report の資料請求は、どちらも /api/contact（Turnstile 検証 → Discord ウェブフック通知＝secret WEBHOOK_URL）。**どのチャンネルかは記録に無く、secret は読み出せない**（本人に確認）
+- 追加: 本番 worker バンドル `worker.prod-20260918.js` の contactHandler に CF Email Service 送信を追加（from contact@vibe.co.jp「Studio VIBE お問い合わせ」・to 定数 CONTACT_NOTIFY_TO=nubonba@gmail.com・replyTo=問い合わせた人・件名【vibe.co.jp】種別：名前 様・資料請求は本文先頭【資料請求】で判定）。Discord とメールのどちらか届けば 200
+- `wrangler.jsonc` に `"send_email": [{ "name": "EMAIL" }]`（vibe.co.jp は Email Sending 有効を `wrangler email sending list` で確認済み）
+- **どちらも git 未追跡のファイル**。変更前の控え: `worker.prod-20260918.before-mail-20260929.js`・`wrangler.before-mail-20260929.jsonc`。以後の配信前照合は「本番＝今の worker.prod-20260918.js」で行う（控えではない）
+- api/contact.js（git 内）は Vercel 時代の元ソースで本番には使われていない（process.env 版）。直していない
+- 残り: 本人の実送信テストで Gmail 着信と迷惑メール判定を確認
