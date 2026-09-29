@@ -144,7 +144,6 @@
 .rp-slide img { width: 100%; height: auto; border-radius: 8px; }
 .rp-slide figcaption { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 0 8px; font-size: 0.8125rem; font-weight: 700; }
 .rp-pg { color: var(--sub); font-weight: 400; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
-.rp-note { margin-top: 56px; color: var(--sub); }
 
 /* ---------- 書いた人 ---------- */
 .rp-who { background: var(--surface); }
@@ -157,10 +156,6 @@
 .rp-facts dd { margin: 4px 0 0; font-family: var(--f-display); font-weight: 800; font-size: 1.6rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
 .rp-facts dd small { font-family: var(--f-body); font-weight: 700; font-size: 0.8125rem; margin-left: 2px; }
 .rp-facts dd.is-text { font-size: 1.05rem; padding-top: 8px; }
-.rp-honest-title { margin-top: 56px; }
-.rp-honest { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
-.rp-honest li { display: flex; gap: 12px; line-height: 1.75; }
-.rp-honest li::before { content: "―"; color: var(--rule); flex: none; }
 .rp-phone { margin: 0; justify-self: center; width: min(280px, 72vw); }
 .rp-phone video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 28px; background: #000; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px #262634; }
 .rp-phone figcaption { margin-top: 14px; text-align: center; color: var(--sub); font-size: 0.8125rem; }
