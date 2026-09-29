@@ -207,7 +207,7 @@ S.push(add('気になるところから', `
     ${head('はじめに', '気になるところから、どうぞ。')}
     <div class="roles">
       ${[
-        ['ゲームの品質は？', [['real', '実物'], ['fit', '向き・不向き'], ['pipeline', '作り方']]],
+        ['ゲームの品質は？', [['real', '実物'], ['fit', '向き・不向き'], ['pipeline', '作り方'], ['botsu', 'ボツ素材']]],
         ['費用はいくら？', [['cost-gen', 'AIの費用'], ['cost-run', '公開後の費用'], ['cost-kinds', '発注の費用']]],
         ['公開後も安全？', [['arch', '構成'], ['security', 'セキュリティ'], ['restore', '止まったら']]],
         ['何を決めれば発注できる？', [['approval', '確認の流れ'], ['agree', '決めること'], ['checklist', 'チェックリスト']]],
@@ -396,6 +396,41 @@ S.push(add('失敗から', `
       { img: 'riri_after.webp', w: 480, h: 380, tag: '直した後', good: true, alt: '同じコマの、影のないパンダ' },
     ] },
   ])}`, { id: 'fixes' }))
+
+// ボツ素材: 実際にボツにした素材と、採用した版（出典は 旧Mac救出/deck-botsu-mokuroku_20260929/MOKUROKU.md と各記憶メモ）
+const BOTSU = [
+  { id: 'scythe', why: '鎌の柄が、頭の後ろで折れた', kind: '形の崩れ', thumb: 'bt_scythe_before.webp', pos: '50% 0%',
+    title: '鎌の柄が、頭の後ろで折れた', body: 'サスラの紹介動画の元の絵です。鎌の柄が頭の後ろを通り、途中で折れ曲がっていました。「柄は一本の直線で、体の後ろを通さない」と発注文に書き足して、描き直しました。',
+    media: [{ img: 'bt_scythe_before.webp', w: 420, h: 480, tag: 'ボツ', alt: '鎌の柄が頭の後ろで折れ曲がった絵' }, { img: 'bt_scythe_after.webp', w: 420, h: 480, tag: '採用', good: true, alt: '鎌の柄がまっすぐ頭の横を通る絵' }] },
+  { id: 'fingers', why: '指が、組み合わさった', kind: '形の崩れ', thumb: 'hz_before.webp', pos: '50% 40%',
+    title: '祈る手の指が、組み合わさった', body: '栞の札の絵です。手を合わせて祈るポーズのはずが、指が組み合わさり、付け根がねじれていました。手元だけを描き直しました。',
+    media: [{ img: 'hz_before.webp', w: 480, h: 480, tag: 'ボツ', alt: '指が組み合わさった手' }, { img: 'hz_after.webp', w: 480, h: 480, tag: '採用', good: true, alt: '手のひらを合わせた合掌' }] },
+  { id: 'atoza', why: '牙がうまく描けず、設定から外した', kind: '設定の変更', thumb: 'bt_atoza_before.webp', pos: '50% 60%',
+    title: '牙がうまく描けず、設定ごと外した', body: '阿都座は、口の端に小さな牙が1本ある設定でした。AIはこれを描き分けられず、牙が左右に並んでしまいます。牙そのものを設定から外して、見本を描き直しました。',
+    cols: 4, media: [{ img: 'bt_atoza_before.webp', w: 420, h: 420, tag: 'ボツ', alt: '口を開けると牙が見える阿都座' }, { img: 'bt_atoza_after.webp', w: 420, h: 420, tag: '採用', good: true, alt: '牙のない阿都座' }, { img: 'bt_atoza_m_before.webp', w: 420, h: 286, tag: 'ボツ・口元', alt: '上の歯の両端がとがった口元' }, { img: 'bt_atoza_m_after.webp', w: 420, h: 286, tag: '採用・口元', good: true, alt: '平らな歯の口元' }] },
+  { id: 'otofang', why: '直したはずの牙が、また生えた', kind: '見本とのずれ', thumb: 'bt_otofang_before.webp', pos: '50% 50%',
+    title: '直したはずの牙が、また生えた', body: '於兎に牙はありません。8月に一度直していましたが、この場面では発注文に「小さな牙」という一語が残っていて、また牙が描かれました。発注文を直して、描き直しました。',
+    media: [{ img: 'bt_otofang_before.webp', w: 600, h: 294, tag: 'ボツ', alt: '驚いて開いた口に牙がある於兎' }, { img: 'bt_otofang_after.webp', w: 600, h: 274, tag: '採用', good: true, alt: '牙のない於兎' }] },
+  { id: 'obi', why: '後ろ姿なのに、前の帯飾りが背中に', kind: '見本とのずれ', thumb: 'bt_obi_before.webp', pos: '40% 70%',
+    title: '後ろ姿なのに、前の帯飾りが背中に', body: 'ツキアワセの絵日記です。体の前につける帯飾りが、背中側に描かれていました。いまは後ろ姿を描かせるとき、背中から見た見本も一緒に渡しています。',
+    media: [{ img: 'bt_obi_before.webp', w: 560, h: 560, tag: 'ボツ', alt: '後ろ姿の帯の結び目に、前につける飾りがある絵' }, { img: 'bt_obi_after.webp', w: 560, h: 560, tag: '採用', good: true, alt: '後ろ姿の帯の結び目だけの絵' }] },
+  { id: 'glassvid', why: '動かすと、眼鏡の形が変わった', kind: '動画の崩れ', thumb: 'bt_gv_2_5.webp', pos: '50% 50%',
+    title: '動かすと、眼鏡の形が変わった', body: 'サスラの目元を動画にすると、途中で目の上に、元の絵にはない縁の線が描き足されました。2回作っても直らなかったため、動画にするのをやめ、止め絵にゆっくり寄る形にしています。', cols: 3,
+    media: [{ img: 'bt_gv_0_3.webp', w: 420, h: 368, tag: '0秒', alt: '目の下に縁がある眼鏡' }, { img: 'bt_gv_2_5.webp', w: 420, h: 368, tag: '2.5秒・ボツ', alt: '目の上に縁の線が出てきた眼鏡' }, { video: 'bt_glassvid.mp4', poster: 'bt_glassvid_poster.webp', w: 360, h: 624, tag: 'ボツにした動画', alt: 'サスラの目元の動画' }] },
+  { id: 'shadow', why: '動画の途中で、頭に黒い影', kind: '動画の崩れ', thumb: 'riri_before.webp', pos: '50% 20%',
+    title: '動画の途中で、頭に黒い影が出た', body: 'リーリーが食べる動きの動画です。一部のコマで、頭の上に黒い影が残っていました。同じコマで比べています。',
+    media: [{ img: 'riri_before.webp', w: 480, h: 380, tag: 'ボツ', alt: '頭の上に黒い影があるパンダ' }, { img: 'riri_after.webp', w: 480, h: 380, tag: '採用', good: true, alt: '影のないパンダ' }] },
+  { id: 'shield', why: '武器のデザインごと、作り替えた', kind: '方向の変更', thumb: 'bt_shield_before.webp', pos: '80% 40%',
+    title: '武器のデザインごと、作り替えた', body: 'タルトの武器は、最初は竜の頭がついた大きな盾でした。設計の途中で、宙に浮かぶ6枚の札に作り替えています。盾の絵は、すべてボツです。',
+    media: [{ img: 'bt_shield_before.webp', w: 400, h: 600, tag: 'ボツ', alt: '竜の頭がついた大きな盾を持つタルト' }, { img: 'bt_shield_after.webp', w: 400, h: 600, tag: '採用', good: true, alt: '宙に浮かぶ札をまとったタルト' }] },
+]
+S.push(add('ボツ素材', `
+  <div class="ds-in">
+    ${h('AIが作ったものは、そのまま使える？', 'そのままでは使えないものも多い。ボツにした実物です。')}
+    <div class="botsu-grid">
+      ${BOTSU.map((b) => `<button type="button" class="botsu-card" data-more="botsu" data-more-case="${b.id}"><img src="${MORE}/${b.thumb}" alt="" loading="lazy" decoding="async" style="object-position:${b.pos}" /><span class="botsu-meta"><em>${b.kind}</em><b>${b.why}</b></span></button>`).join('')}
+    </div>
+  </div>${more('botsu', 'ボツにした素材と、採用した版', BOTSU.map((b) => ({ id: b.id, title: b.title, body: b.body, cols: b.cols, media: b.media })))}`, { id: 'botsu' }))
 
 S.push(add('確認の流れ', `
   <div class="ds-in">

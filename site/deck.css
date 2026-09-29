@@ -758,3 +758,15 @@ html.is-bare .more-open, html.is-bare .fit-col li button::after { display: none;
   .arch-cost-facts div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; }
   .arch-cost-facts dd { margin: 0; font-size: 1.6rem; }
 }
+
+/* ボツ素材: 実物を並べ、押すと理由と採用版 */
+.botsu-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 1100px; }
+@media (max-width: 900px) { .botsu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.botsu-card { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: var(--surface); transition: transform var(--t) var(--ease), background-color var(--t) var(--ease); }
+.botsu-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #0b0b11; }
+.botsu-meta { display: grid; gap: 4px; padding: 10px 12px 12px; }
+.botsu-meta em { font-style: normal; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; color: var(--sub); }
+.botsu-meta b { font-size: 0.875rem; line-height: 1.5; }
+.botsu-card:hover { transform: translateY(-2px); background: var(--surface-2); }
+.botsu-card:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .botsu-card:hover { transform: none; } }
