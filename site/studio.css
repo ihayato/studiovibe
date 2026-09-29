@@ -419,11 +419,9 @@ html.is-player-open { overflow: hidden; }
 }
 @media (min-width: 900px) { .trial { grid-template-columns: minmax(0, 1fr) auto; padding: 32px 40px; gap: 40px; } }
 .trial .lead { margin-top: 8px; }
-.trial-badge { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; color: var(--shu); margin-bottom: 6px; }
 .trial-price { margin-left: 16px; font-family: var(--f-display); font-size: 1.5rem; white-space: nowrap; }
 .trial-price small { font-family: var(--f-body); font-size: 0.8125rem; color: var(--sub); margin-left: 6px; font-weight: 700; }
 .terms { margin: 24px 0 0; padding-left: 1.2em; color: var(--sub); font-size: 0.9375rem; display: grid; gap: 4px; }
-.terms-short { margin-top: 16px; }
 .hero-note { margin-top: 16px; max-width: 34em; }
 .works-more { display: flex; flex-wrap: wrap; gap: 4px 32px; }
 

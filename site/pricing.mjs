@@ -30,7 +30,7 @@ export const MENUS = [
 
 export const TRIAL = {
   title: 'まずは試作から',
-  lead: '本制作の前に、小さな試作で絵柄や手触りを確かめることもできます。',
+  lead: '本制作の前に、小さな試作で絵柄や手触りを確かめられます。',
   note: '試作の内容・費用・期間と、本制作に進むかを決める条件は、ご相談のうえでお見積もりします。',
 }
 
@@ -61,14 +61,13 @@ export const renderPricing = (mode) => {
   const trial = `
 <aside class="trial reveal" aria-labelledby="trial-${mode}">
   <div>
-    <p class="trial-badge">まずは小さく</p>
     <h3 class="h-item" id="trial-${mode}">${esc(TRIAL.title)}</h3>
-    <p class="lead">${esc(TRIAL.lead)}${esc(TRIAL.note)}</p>
+    <p class="lead">${esc(TRIAL.lead)}${mode === 'full' ? esc(TRIAL.note) : ''}</p>
   </div>
   <a class="btn btn-ghost" href="/contact?kind=trial">試作から相談する<span class="arrow" aria-hidden="true">→</span></a>
 </aside>`
   const terms = mode === 'full'
     ? `<ul class="terms reveal">${TERMS.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`
-    : `<p class="caption terms-short reveal">「30万円〜」は最小の目安です。金額・期間・修正の範囲は、ご依頼ごとにお見積もりで決めます。</p>`
+    : ''
   return `<div class="menus">${menus}</div>${trial}${terms}`
 }

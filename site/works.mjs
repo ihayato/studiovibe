@@ -7,25 +7,25 @@ export const WORKS = [
   {
     slug: 'luna-occulta', href: '/luna-occulta', cat: 'game', kind: 'ゲーム', status: 'live', statusLabel: '配信中',
     title: '月蝕綺譚 -Luna Occulta-',
-    desc: '月が蝕まれる夜を舞台にした、和風ファンタジーゲーム。iOS・Androidで配信中。',
+    desc: '月が蝕まれる夜を舞台にした、和風ファンタジーゲーム。',
     video: true, featured: 1, size: 'l',
   },
   {
     slug: 'hankacho', href: '/hankacho/', cat: 'anime', kind: 'アニメ', status: 'live', statusLabel: 'YouTubeで配信中',
     title: 'ニンジャ犯科帳',
-    desc: '忍びの日常は、今日も騒がしい。フルAIでつくる短編アニメシリーズ。第10話までYouTubeで公開中。',
+    desc: '忍びの日常は、今日も騒がしい。フルAIでつくる短編アニメシリーズ。',
     video: true, featured: 2,
   },
   {
     slug: 'hyakka', href: 'https://hyakka.vibe.co.jp/', cat: 'game', kind: 'ゲーム', status: 'live', statusLabel: '配信中',
     title: '百火繚乱3D',
-    desc: '赤い月の夜空を、折り紙の紙飛行機で翔ける。指一本で舞う和風3D弾幕シューティング。iOS・Androidで配信中。',
+    desc: '赤い月の夜空を、折り紙の紙飛行機で翔ける。指一本で舞う和風3D弾幕シューティング。',
     video: true, featured: 3,
   },
   {
     slug: 'tsukioni', href: 'https://hyakki.vibe.co.jp/', cat: 'game', kind: 'ゲーム', status: 'live', statusLabel: '配信中',
     title: 'ツキオニ 〜月夜のおにおくり〜',
-    desc: '御霊を台座に置いて、里の灯を守り抜く。和風あやかしタワーディフェンス。iOS・Androidで配信中。',
+    desc: '御霊を台座に置いて、里の灯を守り抜く。和風あやかしタワーディフェンス。',
     video: true, featured: 4,
   },
   {
@@ -37,7 +37,7 @@ export const WORKS = [
   {
     slug: 'sakuya', href: '/sakuya/', cat: 'anime', kind: 'MV', status: 'live', statusLabel: 'YouTubeで公開',
     title: '咲耶 — 緋桜の夜庭',
-    desc: 'ダーク文学を歌うアーティスト・咲耶。MV6本をYouTubeで公開中。',
+    desc: 'ダーク文学を歌うアーティスト・咲耶のMV。',
     video: true, featured: 6,
   },
   {
@@ -49,7 +49,7 @@ export const WORKS = [
   {
     slug: 'tsukiawase', href: '/tsukiawase/', cat: 'game', kind: 'ゲーム', status: 'live', statusLabel: '配信中',
     title: 'ツキアワセ 〜月夜の絵あわせ〜',
-    desc: '同じ絵札を三枚そろえて山を崩す、一日一局の絵あわせパズル。App Store・Google Playで配信中。',
+    desc: '同じ絵札を三枚そろえて山を崩す、一日一局の絵あわせパズル。',
     featured: 8,
   },
   {
