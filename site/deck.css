@@ -741,3 +741,20 @@ html.is-bare .more-open, html.is-bare .fit-col li button::after { display: none;
 .more-body:focus { outline: none; }
 .more-case h3:focus { outline: none; }
 @media (max-width: 720px) { .fit-col li button { min-height: 44px; align-items: center; } }
+
+/* 技術構成: Cloudflare を選んだ理由（費用） */
+.arch-cost { margin-top: 28px; display: grid; gap: 20px 40px; align-items: center; padding: 22px 26px; border-radius: 14px; background: var(--surface); }
+@media (min-width: 960px) { .arch-cost { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.arch-cost-text p:not(.lane-label) { color: #cfcac1; font-size: 0.9375rem; line-height: 1.8; }
+.arch-cost-text .arch-cost-lead { color: var(--text); font-family: var(--f-display); font-weight: 800; font-size: 1.35rem; line-height: 1.4; margin-bottom: 6px; }
+.arch-cost-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.arch-cost-facts div { border-top: 1px solid #2a2a38; padding-top: 10px; }
+.arch-cost-facts dt { color: var(--sub); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; }
+.arch-cost-facts dd { margin: 4px 0 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.arch-cost-facts dd small { font-family: var(--f-body); font-size: 0.8125rem; font-weight: 700; margin-left: 2px; color: var(--sub); }
+@media (max-width: 400px) {
+  .arch-cost { padding: 18px 16px; }
+  .arch-cost-facts { grid-template-columns: 1fr; gap: 0; }
+  .arch-cost-facts div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; }
+  .arch-cost-facts dd { margin: 0; font-size: 1.6rem; }
+}

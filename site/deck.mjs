@@ -305,6 +305,7 @@ S.push(add('1回あたりの料金', `
         <tbody>${UNIT_COSTS.map((u) => `<tr><th>${u.what}</th><td>${u.yen}<small>$${u.usd}</small></td></tr>`).join('')}</tbody>
       </table>
       <p class="ds-note">総額を左右するのは、単価より作り直しの回数です。</p>
+      ${moreBtn('cost-unit', '実際の例を見る')}
     </div>
     <div class="saving">
       <p class="lane-label">費用を抑える工夫</p>
@@ -314,7 +315,17 @@ S.push(add('1回あたりの料金', `
         <li><b>構図と合格の基準を先に決める</b></li>
       </ol>
     </div>
-  </div>`, { id: 'cost-unit' }))
+  </div>${more('cost-unit', '料金と、作り直しの実物', [
+    { id: 'video', title: '5秒の動画を、480pで作る', body: 'タルトの紹介動画です。動画の料金は画素の数に比例するので、480pで作ると720pの半分ほどで済みます。ゲームに入れる素材は、これを手元で拡大して使います。', cols: 2, media: [
+      { video: 'tart_480p.mp4', poster: 'tart_480p_poster.webp', w: 496, h: 864, tag: '480p・5秒', alt: 'タルトの紹介動画' },
+    ] },
+    { id: 'retake', title: '作り直しの回数：タルトの見た目は、8版目で決まった', body: '1枚の単価が安くても、作り直すほど総額は増えます。キャラクターの見た目は、何版も作って比べてから決めています。', cols: 4, media: [
+      { img: 'tart_v1.webp', w: 360, h: 540, tag: '1版目', alt: '大きな盾を持つ、短い髪のタルト' },
+      { img: 'tart_v3.webp', w: 360, h: 540, tag: '3版目', alt: '長い髪になったタルト' },
+      { img: 'tart_v6.webp', w: 360, h: 540, tag: '6版目', alt: '羽衣が加わったタルト' },
+      { img: 'tart_v8.webp', w: 360, h: 540, tag: '8版目・採用', good: true, alt: '盾をやめ、浮かぶ札をまとったタルト' },
+    ] },
+  ])}`, { id: 'cost-unit' }))
 
 S.push(add('公開後の費用', `
   <div class="ds-in">
@@ -414,7 +425,18 @@ S.push(add('技術構成', `
         <p class="arch-detail" aria-live="polite">${ARCH_NODES[0][2]}</p>
       </div>
     </div>
-    <p class="ds-note">独自の特殊な基盤ではなく、広く使われているサービスで組んでいます。</p>
+    <div class="arch-cost">
+      <div class="arch-cost-text">
+        <p class="lane-label">Cloudflareを選んだ理由</p>
+        <p class="arch-cost-lead">費用を、大きく抑えられるからです。</p>
+        <p>サーバーを借りて常に動かしておく必要がなく、使った分だけの料金です。素材の配信料もかかりません。ご依頼の案件でも、基本はこの構成をおすすめしています。</p>
+      </div>
+      <dl class="arch-cost-facts">
+        <div><dt>月の定額</dt><dd>5<small>ドル</small></dd></div>
+        <div><dt>30日のアクセス</dt><dd>2,020<small>万回</small></dd></div>
+        <div><dt>素材の配信料</dt><dd>0<small>円</small></dd></div>
+      </dl>
+    </div>
   </div>`, { id: 'arch' }))
 
 S.push(add('セキュリティ', `
@@ -553,7 +575,7 @@ S.push(add('数字の読み方', `
       <div><dt>素材づくりのAI</dt><dd>fal の利用実績（2025年1月〜2026年8月13日）。教材制作の分を一部含む</dd></div>
       <div><dt>円換算</dt><dd>1ドル=${USD_JPY}円</dd></div>
       <div><dt>人件費</dt><dd>含みません</dd></div>
-      <div><dt>サーバー</dt><dd>Cloudflare の30日の実測（2026年8月15日〜9月14日）。公式サイトなども含む全体の値</dd></div>
+      <div><dt>サーバー</dt><dd>Cloudflare の30日の実測（2026年8月15日〜9月14日）。公式サイトなども含む全体の値。月の定額は Workers の有料プラン</dd></div>
       <div><dt>キャラと話すAI</dt><dd>1回の入出力量からの目安</dd></div>
       <div><dt>自動テスト</dt><dd>コードに書かれたテストの数</dd></div>
     </dl>
