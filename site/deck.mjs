@@ -366,7 +366,7 @@ S.push(add('作り方', `
     ${moreBtn('pipeline', '実際の例を見る')}
   </div>${more('pipeline', '作り方を、実物で', [
     { id: 'sample', title: '見本：キャラクターごとに、基準の絵を決めておく', body: '正面・横・後ろの姿と表情をまとめた見本です。絵を作るたびに、これをAIに渡します。', media: [
-      { img: 'atoza_sheet.webp', w: 1024, h: 768, alt: '阿都座の正面・横・後ろの姿と、表情4種をまとめた見本' },
+      { img: 'atoza_sheet.webp', w: 1024, h: 768, alt: 'アトザの正面・横・後ろの姿と、表情4種をまとめた見本' },
     ] },
     { id: 'notice', title: '人の確認：公開後に、指の崩れが見つかった', body: '栞の札の絵です。縮小した全体では気づきにくい崩れ方で、公開後に見つかりました。拡大して確かめています。', cols: 2, media: [
       { img: 'hands_zoom.webp', w: 600, h: 642, tag: '拡大', alt: '指が組み合わさった手の拡大' },
@@ -406,8 +406,8 @@ const BOTSU = [
     title: '祈る手の指が、組み合わさった', body: '栞の札の絵です。手を合わせて祈るポーズのはずが、指が組み合わさり、付け根がねじれていました。手元だけを描き直しました。',
     media: [{ img: 'hz_before.webp', w: 480, h: 480, tag: 'ボツ', alt: '指が組み合わさった手' }, { img: 'hz_after.webp', w: 480, h: 480, tag: '採用', good: true, alt: '手のひらを合わせた合掌' }] },
   { id: 'atoza', why: '牙がうまく描けず、設定から外した', kind: '設定の変更', thumb: 'bt_atoza_before.webp', pos: '50% 60%',
-    title: '牙がうまく描けず、設定ごと外した', body: '阿都座は、口の端に小さな牙が1本ある設定でした。AIはこれを描き分けられず、牙が左右に並んでしまいます。牙そのものを設定から外して、見本を描き直しました。',
-    cols: 4, media: [{ img: 'bt_atoza_before.webp', w: 420, h: 420, tag: 'ボツ', alt: '口を開けると牙が見える阿都座' }, { img: 'bt_atoza_after.webp', w: 420, h: 420, tag: '採用', good: true, alt: '牙のない阿都座' }, { img: 'bt_atoza_m_before.webp', w: 420, h: 286, tag: 'ボツ・口元', alt: '上の歯の両端がとがった口元' }, { img: 'bt_atoza_m_after.webp', w: 420, h: 286, tag: '採用・口元', good: true, alt: '平らな歯の口元' }] },
+    title: '牙がうまく描けず、設定ごと外した', body: 'アトザは、口の端に小さな牙が1本ある設定でした。AIはこれを描き分けられず、牙が左右に並んでしまいます。牙そのものを設定から外して、見本を描き直しました。',
+    cols: 4, media: [{ img: 'bt_atoza_before.webp', w: 420, h: 420, tag: 'ボツ', alt: '口を開けると牙が見えるアトザ' }, { img: 'bt_atoza_after.webp', w: 420, h: 420, tag: '採用', good: true, alt: '牙のないアトザ' }, { img: 'bt_atoza_m_before.webp', w: 420, h: 286, tag: 'ボツ・口元', alt: '上の歯の両端がとがった口元' }, { img: 'bt_atoza_m_after.webp', w: 420, h: 286, tag: '採用・口元', good: true, alt: '平らな歯の口元' }] },
   { id: 'otofang', why: '直したはずの牙が、また生えた', kind: '見本とのずれ', thumb: 'bt_otofang_before.webp', pos: '50% 50%',
     title: '直したはずの牙が、また生えた', body: '於兎に牙はありません。8月に一度直していましたが、この場面では発注文に「小さな牙」という一語が残っていて、また牙が描かれました。発注文を直して、描き直しました。',
     media: [{ img: 'bt_otofang_before.webp', w: 600, h: 294, tag: 'ボツ', alt: '驚いて開いた口に牙がある於兎' }, { img: 'bt_otofang_after.webp', w: 600, h: 274, tag: '採用', good: true, alt: '牙のない於兎' }] },
