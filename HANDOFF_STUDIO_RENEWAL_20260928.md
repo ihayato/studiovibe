@@ -227,3 +227,10 @@
 - api/contact.js（git 内）は Vercel 時代の元ソースで本番には使われていない（process.env 版）。直していない
 - 残り: 本人の実送信テストで Gmail 着信と迷惑メール判定を確認
 - **09-29 第8便 本番配信済み**: vibe 80733bd・Worker Version 781f8df1（メール通知入りのバンドルのまま・env.EMAIL 付き）・verify-deploy 全項目OK・本番で fixes パネル消滅／ボツ8枚／眼鏡・牙まとめ／3サイズ表記を確認
+
+## 09-29 Discord に問い合わせが届かなかった件（**根治の配信済み Version c8e4500d・本人の再テスト待ち**）
+- 本人の Safari テストでメールは着信、Discord は来ず。ログ（console.log "contact discord" を追加・6ba7fda6）で Discord が **400 `{"webhook_service": ["Value \"n\" is not a valid enum value."]}`** を返していると判明
+- 原因: secret `WEBHOOK_URL` の末尾に **「\n」が文字のまま**混入（URL の「\」が「/」と解釈され …/token/n になり、Discord が n を webhook_service と読んで 400）。Vercel→Workers 移設（09-13ごろ）で secret を入れ直したときの混入と推定
+- **影響: メール通知を入れる（09-29 fb9a88ad）までは、Discord 失敗＝フォーム送信が 500（画面に「送信に失敗しました」）だった。移設以降の問い合わせ・資料請求は届かず失敗していた可能性が高い**。Turnstile 集計の siteverify 成功（送信まで進んだ回数）は 9/22〜9/28 で計 20件前後（本人テストを含む可能性）。中身はどこにも残っていない
+- 直し: worker バンドルで使う直前に末尾の空白・改行・「\n」「\r」を除去（hookUrl）。secret 自体は未修正（読み出せないため）。本来は Discord でウェブフック URL を確かめて `wrangler secret put WEBHOOK_URL`（末尾改行なし）で入れ直すのが正
+- ログ行（status と非OK時の本文先頭200字・URL は出さない）は監視用に残した。`wrangler tail vibe --format json --search "contact discord"` で見られる
