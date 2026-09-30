@@ -1,0 +1,113 @@
+/* どーぱみんくりっかー！ 攻略帖 — 方向宣言は tools/dopamin-guide/DESIGN_DIRECTION.md
+   site.css のトークンだけを使う。器は縁なしの面＋二層影。金は数値の強調・現在地・主導線だけ */
+.guide { --hb-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .32); --read: 40rem; }
+.guide .head { border-bottom: 0; }
+.brand-guide { font-family: var(--pop); font-size: 20px; color: var(--cream); -webkit-text-stroke: 4px var(--navy); paint-order: stroke fill; letter-spacing: .04em; white-space: nowrap; }
+
+/* 頁の切り替え（上の帯）: 現在地は文字色＋面差。線は引かない */
+.g-nav { border-top: 1px solid rgba(243, 237, 224, .06); }
+.g-nav .wrap { display: flex; justify-content: flex-start; height: auto; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 6px 0; -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
+.g-nav .wrap::-webkit-scrollbar { display: none; }
+.g-nav a { flex: none; color: var(--moon-2); text-decoration: none; font-weight: 700; font-size: 15px; letter-spacing: .04em; padding: 8px 12px; min-height: 40px; display: inline-flex; align-items: center; border-radius: 10px; transition: background-color 120ms var(--ease); }
+.g-nav a:hover { background: rgba(243, 237, 224, .05); color: var(--moon); }
+.g-nav a[aria-current="page"] { color: var(--gold-hi); background: rgba(243, 237, 224, .08); }
+@media (min-width: 880px) { .g-nav .wrap { -webkit-mask-image: none; mask-image: none; } }
+
+.g-main { padding: 18px 0 64px; }
+.g-col { max-width: 880px; }
+.crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--moon-2); margin: 4px 0 14px; }
+.crumb a { color: var(--moon-2); }
+.g-title { font-size: clamp(28px, 7.4vw, 40px); margin: 0 0 18px; }
+
+/* 読書列: 本文は約40字で折る。表・計算機は全幅 */
+.g-main p, .g-main ul, .g-main ol { max-width: var(--read); }
+.g-main p, .g-main li { font-size: 16px; line-height: 1.85; margin: 0 0 12px; }
+.g-main ul, .g-main ol { padding-left: 1.3em; margin: 0 0 14px; }
+.g-main li { margin-bottom: 6px; }
+.g-main li::marker { color: var(--gold); }
+.muted { color: var(--moon-2); }
+b.n, .g-main b { color: var(--gold-hi); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* 目次 */
+.g-toc { margin: 0 0 8px; }
+.g-toc ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; max-width: none; }
+.g-toc li { margin: 0; }
+.g-toc a { display: inline-flex; align-items: center; min-height: 36px; padding: 4px 14px; border-radius: 999px; background: var(--face); box-shadow: var(--hb-shadow); color: var(--moon); text-decoration: none; font-weight: 700; font-size: 14px; letter-spacing: .04em; }
+.g-toc a:hover { background: var(--face-2); color: var(--gold-hi); }
+
+/* 節 */
+.g-sec { margin-top: 56px; scroll-margin-top: 120px; }
+.g-sec h2 { font-family: var(--round); font-weight: 800; font-size: 22px; line-height: 1.4; color: var(--cream); margin: 0 0 16px; letter-spacing: .04em; }
+.g-sec h2::before { content: "◆"; color: var(--gold); font-size: .7em; margin-right: .5em; vertical-align: .12em; }
+.g-sec h3 { font-weight: 800; font-size: 18px; color: var(--cream); margin: 28px 0 10px; letter-spacing: .03em; }
+.rd { font-size: 13px; color: var(--moon-2); font-weight: 500; }
+
+/* 先に答え */
+.answer { background: var(--face); border-radius: 18px; box-shadow: var(--hb-shadow); padding: 18px 20px 8px; margin: 0 0 16px; max-width: 46rem; }
+.answer-q { font-weight: 800; font-size: 17px; color: var(--gold-hi); margin: 0 0 8px; }
+.answer-q::before { content: "Q"; display: inline-grid; place-items: center; width: 1.6em; height: 1.6em; border-radius: 50%; background: var(--red); color: var(--cream); font-family: var(--round); font-weight: 800; font-size: 14px; margin-right: .6em; vertical-align: .1em; }
+.tbl-hint { font-size: 13px !important; color: var(--moon-2); margin: -10px 0 18px !important; }
+@media (min-width: 700px) { .tbl-hint { display: none; } }
+
+/* 式 */
+.formula { background: var(--deep); border-radius: 14px; box-shadow: inset 0 0 0 1px rgba(243, 237, 224, .06); padding: 14px 16px; margin: 0 0 16px; overflow-x: auto; }
+.f-line { font-weight: 700; font-size: 16px; line-height: 1.8; color: var(--moon); font-variant-numeric: tabular-nums; padding: 4px 0; }
+.nw { white-space: nowrap; font-weight: 700; }
+.formula .f-line + .f-line { border-top: 1px dashed rgba(243, 237, 224, .08); }
+.f-note { font-size: 13px !important; color: var(--moon-2); margin: 8px 0 0 !important; line-height: 1.7 !important; white-space: normal; }
+sup { font-size: .72em; line-height: 0; }
+
+/* 表: 横にはみ出す表は器の中だけでスクロール（頁は横に揺れない） */
+.tbl-wrap { overflow-x: auto; margin: 0 0 18px; border-radius: 14px; background: var(--face); box-shadow: var(--hb-shadow); -webkit-overflow-scrolling: touch; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.7; }
+.tbl th { font-size: 13px; font-weight: 800; letter-spacing: .06em; color: var(--moon-2); text-align: left; padding: 10px 14px; white-space: nowrap; background: var(--face-2); }
+.tbl td { padding: 9px 14px; border-top: 1px solid rgba(243, 237, 224, .06); vertical-align: top; }
+.tbl.num td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl tbody tr:hover td { background: rgba(243, 237, 224, .03); }
+.tbl.gear td { white-space: nowrap; }
+.tbl td { vertical-align: middle; }
+.tbl.allies { min-width: 600px; }
+.tbl.allies td { vertical-align: middle; }
+.tbl.allies td:nth-child(n+4) { text-align: right; }
+/* 横に送っても名前が見えるよう、なかまの列は左に留める */
+.tbl.allies th:first-child, .tbl.allies td:first-child { position: sticky; left: 0; z-index: 1; background: var(--face); box-shadow: 8px 0 12px -10px rgba(0, 0, 0, .7); }
+.tbl.allies th:first-child { background: var(--face-2); }
+.tbl.allies tbody tr:hover td:first-child { background: var(--face); }
+.tbl.allies th:nth-child(n+4) { text-align: right; }
+.who { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
+.who img { width: 36px; height: 36px; border-radius: 50%; background: var(--face-2); object-fit: cover; }
+.rar { display: inline-block; min-width: 3.2em; text-align: center; font-weight: 800; font-size: 13px; letter-spacing: .04em; border-radius: 6px; padding: 1px 6px; background: rgba(243, 237, 224, .07); color: var(--moon); }
+.rar.r-ur { background: var(--gold); color: var(--night); }
+.rar.r-ssr { color: var(--gold-hi); background: rgba(232, 184, 79, .14); }
+
+/* 入口の扉（攻略帖のトップ） */
+.doors { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 22px 0 8px; }
+@media (min-width: 640px) { .doors { grid-template-columns: 1fr 1fr; } }
+.door { position: relative; display: block; background: var(--face); border-radius: 18px; box-shadow: var(--hb-shadow); padding: 18px 44px 18px 20px; text-decoration: none; color: var(--moon); transition: background-color 120ms var(--ease); }
+.door:hover { background: var(--face-2); }
+.door-t { display: block; font-weight: 800; font-size: 19px; color: var(--cream); letter-spacing: .04em; }
+.door-d { display: block; font-size: 14px; color: var(--moon-2); margin-top: 4px; line-height: 1.7; }
+.door-go { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 26px; color: var(--gold); }
+
+/* 押しどき計算機 */
+.calc { background: var(--face); border-radius: 18px; box-shadow: var(--hb-shadow); padding: 18px 20px; margin: 8px 0 18px; }
+.calc h3 { margin-top: 0; }
+.calc-in { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 420px) { .calc-in { grid-template-columns: 1fr 1fr; } .calc-in label:last-child { grid-column: 1 / -1; } }
+.calc label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700; color: var(--moon-2); min-width: 0; }
+.calc input { width: 100%; min-height: 44px; font: inherit; font-size: 20px; font-weight: 800; color: var(--cream); background: var(--deep); border: 0; border-radius: 10px; padding: 6px 12px; font-variant-numeric: tabular-nums; box-shadow: inset 0 0 0 1px rgba(243, 237, 224, .08); }
+.calc input:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
+.calc-out { margin: 14px 0 6px !important; font-size: 17px !important; font-weight: 700; }
+.calc-out .big { font-size: 34px; font-family: var(--dot); font-weight: 400; color: var(--gold-hi); margin-left: .2em; }
+
+/* よくある質問 */
+.faq { background: var(--face); border-radius: 16px; box-shadow: var(--hb-shadow); margin: 0 0 12px; max-width: 46rem; }
+.faq summary { cursor: pointer; list-style: none; padding: 16px 44px 16px 20px; font-weight: 800; font-size: 17px; color: var(--cream); position: relative; min-height: 44px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "＋"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--gold); font-weight: 800; }
+.faq[open] summary::after { content: "−"; }
+.faq-a { padding: 0 20px 8px; }
+
+.g-updated { margin-top: 56px !important; font-size: 13px !important; color: var(--moon-2); }
+
+@media (prefers-reduced-motion: reduce) { .g-nav a, .door, .g-toc a { transition: none; } }

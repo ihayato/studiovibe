@@ -1,0 +1,1970 @@
+{
+  "meta": {
+    "commit": "8dc2df6c",
+    "exportedAt": "2026-09-30T19:01:54.825457"
+  },
+  "night": {
+    "killsPerNight": 20,
+    "bossEvery": 10,
+    "chapterEvery": 50,
+    "bossTime": 30.0,
+    "bossHpMult": 24.0,
+    "chapHpMul": 1.5,
+    "chapCoinMul": 3.0,
+    "hpBase": 10.0,
+    "hpGrow": 1.1,
+    "hpEarlyK": 0.5,
+    "hpEarlyUntil": 100,
+    "hpLateFrom": 2000,
+    "hpLateGrow": 1.06,
+    "dropRatio": 0.35,
+    "bossDropMult": 10.0,
+    "bossMinSec": 27.0,
+    "bossMinSecCleared": 8.0,
+    "chapterWallMul": 3.0,
+    "miniEnabled": false,
+    "bossWallMax": 16.0,
+    "kinds": [
+      {
+        "name": "常",
+        "read": "つね",
+        "effect": ""
+      },
+      {
+        "name": "堅甲",
+        "read": "けんこう",
+        "effect": "タップダメージが半分。必殺技と奥義は二倍"
+      },
+      {
+        "name": "韋駄天",
+        "read": "いだてん",
+        "effect": "体力が一・五倍。祓いの小判は三倍"
+      },
+      {
+        "name": "月喰",
+        "read": "つきばみ",
+        "effect": "蝕の間は全ての力が二倍、蝕の外では七割"
+      },
+      {
+        "name": "怨霊",
+        "read": "おんりょう",
+        "effect": "柱の力が半分。タップダメージは二倍"
+      },
+      {
+        "name": "宝持ち",
+        "read": "たからもち",
+        "effect": "品を二つ落とし、討てば宝鬼が湧く"
+      }
+    ],
+    "chapters": [
+      "待の鬼",
+      "焦の鬼",
+      "飢の鬼",
+      "誓の鬼",
+      "渇の鬼"
+    ],
+    "hpRows": [
+      {
+        "night": 1,
+        "hp": "10",
+        "bossHp": "240",
+        "drop": "3.5",
+        "bossDrop": "35"
+      },
+      {
+        "night": 10,
+        "hp": "15.3",
+        "bossHp": "368",
+        "drop": "5.3",
+        "bossDrop": "53.7"
+      },
+      {
+        "night": 50,
+        "hp": "103",
+        "bossHp": "10.3K",
+        "drop": "36.1",
+        "bossDrop": "361"
+      },
+      {
+        "night": 100,
+        "hp": "1.11K",
+        "bossHp": "217K",
+        "drop": "391",
+        "bossDrop": "3.91K"
+      },
+      {
+        "night": 200,
+        "hp": "15.4M",
+        "bossHp": "5.92G",
+        "drop": "5.39M",
+        "bossDrop": "53.9M"
+      },
+      {
+        "night": 500,
+        "hp": "40.3E",
+        "bossHp": "15.5Z",
+        "drop": "14.1E",
+        "bossDrop": "141E"
+      },
+      {
+        "night": 1000,
+        "hp": "20.0AC",
+        "bossHp": "7.70AD",
+        "drop": "7.02AC",
+        "bossDrop": "70.2AC"
+      },
+      {
+        "night": 1500,
+        "hp": "9.97AJ",
+        "bossHp": "3.82AK",
+        "drop": "3.48AJ",
+        "bossDrop": "34.8AJ"
+      },
+      {
+        "night": 2000,
+        "hp": "4.95AQ",
+        "bossHp": "1.90AR",
+        "drop": "1.73AQ",
+        "bossDrop": "17.3AQ"
+      },
+      {
+        "night": 2500,
+        "hp": "22.2AU",
+        "bossHp": "8.55AV",
+        "drop": "7.79AU",
+        "bossDrop": "77.9AU"
+      },
+      {
+        "night": 3000,
+        "hp": "100AY",
+        "bossHp": "38.4AZ",
+        "drop": "35.0AY",
+        "bossDrop": "350AY"
+      }
+    ]
+  },
+  "tap": {
+    "dmgGrow": 1.035,
+    "costGrow": 1.0545,
+    "milestones": [
+      10,
+      25,
+      50,
+      100,
+      200,
+      400,
+      800,
+      1600,
+      3200
+    ],
+    "milestoneStep": 1.62,
+    "tapLinkRatio": 0.03,
+    "heroTapFloor": 0.03,
+    "heroTapCeil": 0.1,
+    "heroTapDecay": 0.98,
+    "heroTapBase": 100.0,
+    "heroTapGrow": 1.05,
+    "critPct": 3.0,
+    "critMul": 1.6,
+    "mikiriMul": 1.2,
+    "mikiriWindowSec": 0.45,
+    "comboMaxMul": 1.25,
+    "comboGainPerTap": 0.04,
+    "comboHoldSec": 3.0,
+    "feverTapMul": 3.0,
+    "feverSec": 30.0,
+    "feverIntervalSec": 330.0,
+    "feverFirstSec": 90.0,
+    "feverWindowSec": 14.0,
+    "feverCoinMul": 3.0,
+    "trainMaxPerPress": 100
+  },
+  "team": {
+    "partyMax": 9,
+    "starterCount": 10,
+    "benchSupport": 0.2,
+    "joinMul": [
+      1.6,
+      2.0,
+      2.6,
+      3.2
+    ],
+    "elemAdv": 1.3,
+    "elemDis": 0.85,
+    "statStep": 1.12,
+    "statNorm": 1.5,
+    "statTechStep": 1.25,
+    "statTechCdStep": 1.08,
+    "spdKoStep": 0.93,
+    "rarityStartStar": [
+      0,
+      1,
+      2,
+      5
+    ],
+    "wazaCdSec": 36.0,
+    "wazaSec": 0.2,
+    "ougiSec": 4.8,
+    "ougiMaxCharges": 10,
+    "ougiWazaGain": 0.03,
+    "ougiTapGain": 0.005,
+    "ougiVolleyGapSec": 0.35,
+    "feverGaugeMul": 3.0,
+    "bossKoFromNight": 20,
+    "bossAtkFirstSec": 4.0,
+    "tapRate": 5.0,
+    "ougi": [
+      {
+        "name": "一閃",
+        "night": 1,
+        "heroLv": 0,
+        "power": 0.25,
+        "cuts": 1,
+        "trait": "速",
+        "traitText": "溜まり ×1.3"
+      },
+      {
+        "name": "双月斬",
+        "night": 10,
+        "heroLv": 5,
+        "power": 0.32,
+        "cuts": 2,
+        "trait": "連",
+        "traitText": "二段斬り 会心"
+      },
+      {
+        "name": "三日月",
+        "night": 30,
+        "heroLv": 12,
+        "power": 0.4,
+        "cuts": 3,
+        "trait": "凍",
+        "traitText": "妖が止まる 3秒"
+      },
+      {
+        "name": "月輪",
+        "night": 60,
+        "heroLv": 20,
+        "power": 0.48,
+        "cuts": 3,
+        "trait": "護",
+        "traitText": "気絶しない 6秒"
+      },
+      {
+        "name": "天風",
+        "night": 100,
+        "heroLv": 30,
+        "power": 0.56,
+        "cuts": 4,
+        "trait": "掃",
+        "traitText": "雑魚を一掃"
+      },
+      {
+        "name": "紅蓮",
+        "night": 180,
+        "heroLv": 45,
+        "power": 0.64,
+        "cuts": 4,
+        "trait": "燃",
+        "traitText": "追い打ち 5秒"
+      },
+      {
+        "name": "雷光",
+        "night": 300,
+        "heroLv": 60,
+        "power": 0.73,
+        "cuts": 5,
+        "trait": "落",
+        "traitText": "育成経験×2 10秒"
+      },
+      {
+        "name": "星落ち",
+        "night": 500,
+        "heroLv": 80,
+        "power": 0.82,
+        "cuts": 6,
+        "trait": "降",
+        "traitText": "六筋の流星"
+      },
+      {
+        "name": "月蝕",
+        "night": 800,
+        "heroLv": 100,
+        "power": 0.91,
+        "cuts": 6,
+        "trait": "蝕",
+        "traitText": "小判 ×1.5 10秒"
+      },
+      {
+        "name": "暁天",
+        "night": 1200,
+        "heroLv": 120,
+        "power": 1.0,
+        "cuts": 6,
+        "trait": "暁",
+        "traitText": "溜まり ×2"
+      }
+    ],
+    "ougiHasteMul": 1.3,
+    "ougiDawnMul": 2.0,
+    "bossAtkEverySec": 8.0,
+    "bossKoCount": 3,
+    "bossKoSec": 6.0,
+    "katsu": {
+      "木": "土",
+      "土": "水",
+      "水": "火",
+      "火": "金",
+      "金": "木"
+    }
+  },
+  "allies": [
+    {
+      "seat": 0,
+      "id": "emma",
+      "name": "エマ",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": true,
+      "atk": 7,
+      "spd": 9,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.762,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "夢路・星こぼし",
+        "夢路・蹄あそび",
+        "蝕夢・角むすび",
+        "蝕夢・流れ星",
+        "幻月・一角の目醒め"
+      ],
+      "face": "assets/img/face_emma.webp"
+    },
+    {
+      "seat": 1,
+      "id": "oto",
+      "name": "於兎",
+      "rarity": "R",
+      "elem": "土",
+      "starter": true,
+      "atk": 7,
+      "spd": 2,
+      "tech": 3,
+      "normalMul": 0.747,
+      "swingRate": 0.797,
+      "wazaMul": 0.8,
+      "wazaCdMul": 1.08,
+      "ult": [
+        "うさぎどーん！",
+        "うさぎどどーん！",
+        "うさぎどっかーん！",
+        "月兎・宵月どっかーん！",
+        "月兎・満月どーん！"
+      ],
+      "face": "assets/img/face_oto.webp"
+    },
+    {
+      "seat": 2,
+      "id": "nemu",
+      "name": "ネム",
+      "rarity": "R",
+      "elem": "水",
+      "starter": true,
+      "atk": 3,
+      "spd": 6,
+      "tech": 3,
+      "normalMul": 0.747,
+      "swingRate": 1.254,
+      "wazaMul": 0.8,
+      "wazaCdMul": 1.08,
+      "ult": [
+        "動植綵絵",
+        "蓮池遊魚図",
+        "旭日鳳凰図",
+        "白象群獣図",
+        "鳥獣花木図屏風"
+      ],
+      "face": "assets/img/face_nemu.webp"
+    },
+    {
+      "seat": 3,
+      "id": "izuna",
+      "name": "イズナ",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": true,
+      "atk": 6,
+      "spd": 6,
+      "tech": 9,
+      "normalMul": 1.049,
+      "swingRate": 1.254,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "飯綱の法",
+        "飯綱の法・狐火灯し",
+        "飯綱の法・眷属総出",
+        "飯綱権現・影向",
+        "飯綱大権現・降臨"
+      ],
+      "face": "assets/img/face_izuna.webp"
+    },
+    {
+      "seat": 4,
+      "id": "shion",
+      "name": "紫苑",
+      "rarity": "SR",
+      "elem": "木",
+      "starter": true,
+      "atk": 4,
+      "spd": 7,
+      "tech": 4,
+      "normalMul": 0.937,
+      "swingRate": 1.405,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "木遁・野あざみ",
+        "木遁・鬼薊",
+        "木遁・夜叉薊",
+        "夜叉薊・茨獄",
+        "夜叉秘奥・薊の彼岸"
+      ],
+      "face": "assets/img/face_shion.webp"
+    },
+    {
+      "seat": 5,
+      "id": "uka",
+      "name": "宇迦",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": true,
+      "atk": 9,
+      "spd": 6,
+      "tech": 6,
+      "normalMul": 1.474,
+      "swingRate": 1.254,
+      "wazaMul": 1.563,
+      "wazaCdMul": 0.857,
+      "ult": [
+        "九尾の焔",
+        "狐火七華",
+        "狐火百華",
+        "空狐千華",
+        "天狐九曜・大焔環"
+      ],
+      "face": "assets/img/face_uka.webp"
+    },
+    {
+      "seat": 6,
+      "id": "yui",
+      "name": "結",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": true,
+      "atk": 5,
+      "spd": 7,
+      "tech": 9,
+      "normalMul": 1.049,
+      "swingRate": 1.405,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "桜吹雪",
+        "序の舞・桜吹雪",
+        "舞扇・桜嵐",
+        "大詰・花嵐",
+        "千秋楽・花吹雪"
+      ],
+      "face": "assets/img/face_yui.webp"
+    },
+    {
+      "seat": 7,
+      "id": "anne",
+      "name": "餡音",
+      "rarity": "SR",
+      "elem": "木",
+      "starter": true,
+      "atk": 4,
+      "spd": 5,
+      "tech": 6,
+      "normalMul": 0.747,
+      "swingRate": 1.12,
+      "wazaMul": 1.563,
+      "wazaCdMul": 0.857,
+      "ult": [
+        "団子忍術・串千本",
+        "団子忍術・串三千本",
+        "団子忍術・串万本",
+        "団子大忍術・串百万本",
+        "団子秘奥義・月見尽くし"
+      ],
+      "face": "assets/img/offline_anne_face_anne_loop_v2.webp"
+    },
+    {
+      "seat": 8,
+      "id": "xiaolan",
+      "name": "シャオラン",
+      "rarity": "R",
+      "elem": "土",
+      "starter": true,
+      "atk": 6,
+      "spd": 2,
+      "tech": 4,
+      "normalMul": 0.667,
+      "swingRate": 0.797,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "口寄せ・リーリー",
+        "リーリーと頁の渦",
+        "肩ならべ双掌打",
+        "荒ぶる大リーリー",
+        "大きく描かれた頁"
+      ],
+      "face": "assets/img/offline_xiaolan_face_xiaolan_loop_v2.webp"
+    },
+    {
+      "seat": 9,
+      "id": "sakuya",
+      "name": "咲耶",
+      "rarity": "R",
+      "elem": "火",
+      "starter": true,
+      "atk": 6,
+      "spd": 3,
+      "tech": 3,
+      "normalMul": 0.747,
+      "swingRate": 0.893,
+      "wazaMul": 0.8,
+      "wazaCdMul": 1.08,
+      "ult": [
+        "桜花一閃",
+        "緋桜一閃",
+        "緋桜乱舞",
+        "緋桜繚乱",
+        "緋桜繚乱・夜天満開"
+      ],
+      "face": "assets/img/face_sakuya.webp"
+    },
+    {
+      "seat": 10,
+      "id": "benten",
+      "name": "弁天",
+      "rarity": "SR",
+      "elem": "水",
+      "starter": false,
+      "atk": 5,
+      "spd": 4,
+      "tech": 6,
+      "normalMul": 0.747,
+      "swingRate": 1.0,
+      "wazaMul": 1.563,
+      "wazaCdMul": 0.857,
+      "ult": [
+        "祝詞・寿ぎの調べ",
+        "祝詞・瀬音の二重奏",
+        "祝詞・大川の段",
+        "祝詞・八雲立つ調べ",
+        "弁才天女・妙音降臨"
+      ],
+      "face": "assets/img/offline_benten_face_benten_loop_v2.webp"
+    },
+    {
+      "seat": 11,
+      "id": "shiba",
+      "name": "柴",
+      "rarity": "SR",
+      "elem": "水",
+      "starter": false,
+      "atk": 4,
+      "spd": 7,
+      "tech": 4,
+      "normalMul": 0.937,
+      "swingRate": 1.405,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "体術・瀬走り",
+        "体術・川千鳥",
+        "水遁・渦車",
+        "水遁・鉄砲水",
+        "変化奥義・月夜の遠吠え"
+      ],
+      "face": "assets/img/offline_shiba_face_shiba_loop_v2.webp"
+    },
+    {
+      "seat": 12,
+      "id": "naruka",
+      "name": "ナルカ",
+      "rarity": "SR",
+      "elem": "木",
+      "starter": false,
+      "atk": 5,
+      "spd": 7,
+      "tech": 3,
+      "normalMul": 1.049,
+      "swingRate": 1.405,
+      "wazaMul": 0.8,
+      "wazaCdMul": 1.08,
+      "ult": [
+        "鷹爪・風切り",
+        "鷹爪・逆落とし",
+        "天翔・羽時雨",
+        "天翔・空鳴り",
+        "鷹狩秘奥・天墜"
+      ],
+      "face": "assets/img/offline_naruka_face_naruka_loop_v2.webp"
+    },
+    {
+      "seat": 13,
+      "id": "hinanojo",
+      "name": "雛之丞",
+      "rarity": "SR",
+      "elem": "火",
+      "starter": false,
+      "atk": 7,
+      "spd": 4,
+      "tech": 4,
+      "normalMul": 0.937,
+      "swingRate": 1.0,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "焙烙・ひとつ玉",
+        "焙烙・雛あられ",
+        "花火・火入れ",
+        "花火・千輪",
+        "焙烙・満開"
+      ],
+      "face": "assets/img/offline_hinanojo_face_hinanojo_loop_v2.webp"
+    },
+    {
+      "seat": 14,
+      "id": "janome",
+      "name": "蛇ノ目",
+      "rarity": "R",
+      "elem": "木",
+      "starter": false,
+      "atk": 4,
+      "spd": 5,
+      "tech": 3,
+      "normalMul": 0.747,
+      "swingRate": 1.12,
+      "wazaMul": 0.8,
+      "wazaCdMul": 1.08,
+      "ult": [
+        "露払い",
+        "雨宿り",
+        "白露抜き打ち",
+        "毒雫",
+        "蛇の目開眼・毒の大雨"
+      ],
+      "face": "assets/img/offline_janome_face_janome_loop_v2.webp"
+    },
+    {
+      "seat": 15,
+      "id": "oen",
+      "name": "おえん",
+      "rarity": "SR",
+      "elem": "土",
+      "starter": false,
+      "atk": 4,
+      "spd": 5,
+      "tech": 6,
+      "normalMul": 0.747,
+      "swingRate": 1.12,
+      "wazaMul": 1.563,
+      "wazaCdMul": 0.857,
+      "ult": [
+        "糸脈・見立て",
+        "糸脈・縫い止め",
+        "糸脈・通し鍼",
+        "糸脈・千糸の繕い",
+        "糸脈・命縒り『万病退散』"
+      ],
+      "face": "assets/img/offline_oen_face_oen_loop_v2.webp"
+    },
+    {
+      "seat": 16,
+      "id": "kohaku",
+      "name": "狐白",
+      "rarity": "SR",
+      "elem": "火",
+      "starter": false,
+      "atk": 4,
+      "spd": 7,
+      "tech": 4,
+      "normalMul": 0.937,
+      "swingRate": 1.405,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "狐ノ印",
+        "狐火・ひとつ",
+        "狐火・みっつ",
+        "狐火・いつつ",
+        "五遁・狐渡り"
+      ],
+      "face": "assets/img/offline_kohaku_face_kohaku_loop_v2.webp"
+    },
+    {
+      "seat": 17,
+      "id": "karura",
+      "name": "カルラ",
+      "rarity": "SR",
+      "elem": "水",
+      "starter": false,
+      "atk": 8,
+      "spd": 3,
+      "tech": 4,
+      "normalMul": 0.937,
+      "swingRate": 0.893,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "払イ環",
+        "六環鳴らし",
+        "雷ノ九字",
+        "山鳴り",
+        "迦楼羅雷"
+      ],
+      "face": "assets/img/offline_karura_face_karura_loop_v2.webp"
+    },
+    {
+      "seat": 18,
+      "id": "karma",
+      "name": "カルマ",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": false,
+      "atk": 10,
+      "spd": 6,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.254,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "業独楽",
+        "お迎え鎖",
+        "緋眼の見据え",
+        "罪業の輪舞",
+        "領域・罪業「緋月輪」"
+      ],
+      "face": "assets/img/offline_karma_face_karma_loop_v2.webp"
+    },
+    {
+      "seat": 19,
+      "id": "nekomata",
+      "name": "猫又",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": false,
+      "atk": 8,
+      "spd": 8,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.574,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "妖刀・猫騙し",
+        "妖刀・二叉薙ぎ",
+        "影分身・三毛時雨",
+        "影分身・百猫夜行",
+        "村正開眼・化け猫三日月"
+      ],
+      "face": "assets/img/offline_nekomata_face_nekomata_loop_v2.webp"
+    },
+    {
+      "seat": 20,
+      "id": "atoza",
+      "name": "アトザ",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": false,
+      "atk": 9,
+      "spd": 7,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.405,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "鬼鉄・地均し",
+        "鬼鉄・陣払い",
+        "逢魔刻・影踏み",
+        "逢魔刻・誰そ彼",
+        "逢魔刻・宵紅"
+      ],
+      "face": "assets/img/offline_atoza_face_atoza_loop_v2.webp"
+    },
+    {
+      "seat": 21,
+      "id": "aun",
+      "name": "アウン",
+      "rarity": "SSR",
+      "elem": "土",
+      "starter": false,
+      "atk": 6,
+      "spd": 10,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.974,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "白絹・振り初め",
+        "白絹・庇い立ち",
+        "阿吽・結び解き",
+        "阿吽・山鳴らし",
+        "阿形転身・仁王撃"
+      ],
+      "face": "assets/img/offline_aun_face_aun_loop_v2.webp"
+    },
+    {
+      "seat": 22,
+      "id": "orochi",
+      "name": "オロチ",
+      "rarity": "SSR",
+      "elem": "水",
+      "starter": false,
+      "atk": 6,
+      "spd": 5,
+      "tech": 10,
+      "normalMul": 0.937,
+      "swingRate": 1.12,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "鎌首",
+        "蛇籠",
+        "叢雲抜き放ち",
+        "水牙",
+        "大蛇顕現・八重の大波"
+      ],
+      "face": "assets/img/offline_orochi_face_orochi_loop_v2.webp"
+    },
+    {
+      "seat": 23,
+      "id": "torika",
+      "name": "酉花",
+      "rarity": "R",
+      "elem": "木",
+      "starter": false,
+      "atk": 3,
+      "spd": 4,
+      "tech": 5,
+      "normalMul": 0.595,
+      "swingRate": 1.0,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "毒花手裏剣",
+        "鳥兜の一刺し",
+        "毒花八重咲き",
+        "鳥兜千輪",
+        "附子開花・月下花畑"
+      ],
+      "face": "assets/img/offline_torika_face_torika_loop_v2.webp"
+    },
+    {
+      "seat": 24,
+      "id": "rotton",
+      "name": "呂屯",
+      "rarity": "SSR",
+      "elem": "木",
+      "starter": false,
+      "atk": 10,
+      "spd": 4,
+      "tech": 7,
+      "normalMul": 1.316,
+      "swingRate": 1.0,
+      "wazaMul": 1.953,
+      "wazaCdMul": 0.794,
+      "ult": [
+        "呪禁・転べ",
+        "呪禁・枯れよ",
+        "忌詞・北枕",
+        "忌詞・五寸釘",
+        "抜け首・野辺送り"
+      ],
+      "face": "assets/img/offline_rotton_face_rotton_loop_v2.webp"
+    },
+    {
+      "seat": 25,
+      "id": "dan",
+      "name": "断",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": false,
+      "atk": 10,
+      "spd": 6,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.254,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "閃刀・横一文字",
+        "閃刀・袈裟断チ",
+        "機巧・縫イ止メ",
+        "機巧・月貫キ",
+        "断チ・縦一文字"
+      ],
+      "face": "assets/img/offline_dan_face_dan_loop_v2.webp"
+    },
+    {
+      "seat": 26,
+      "id": "tart",
+      "name": "タルト",
+      "rarity": "SSR",
+      "elem": "水",
+      "starter": false,
+      "atk": 9,
+      "spd": 4,
+      "tech": 8,
+      "normalMul": 1.175,
+      "swingRate": 1.0,
+      "wazaMul": 2.441,
+      "wazaCdMul": 0.735,
+      "ult": [
+        "亀甲・札はじき",
+        "亀甲・六つ巡り",
+        "竜宮・波紋がえし",
+        "竜宮・泡の帳",
+        "万年竜宮・玉手びらき"
+      ],
+      "face": "assets/img/offline_tart_face_tart_loop_v2.webp"
+    },
+    {
+      "seat": 27,
+      "id": "magoichi",
+      "name": "孫市",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": false,
+      "atk": 9,
+      "spd": 5,
+      "tech": 7,
+      "normalMul": 1.316,
+      "swingRate": 1.12,
+      "wazaMul": 1.953,
+      "wazaCdMul": 0.794,
+      "ult": [
+        "火薬・口火の一服",
+        "雑賀・二丁流し",
+        "海鳴り・潮目撃ち",
+        "火薬・轟の狼煙",
+        "必中・八咫烏"
+      ],
+      "face": "assets/img/offline_magoichi_face_magoichi_loop_v2.webp"
+    },
+    {
+      "seat": 28,
+      "id": "shinra",
+      "name": "シンラ",
+      "rarity": "SSR",
+      "elem": "土",
+      "starter": false,
+      "atk": 9,
+      "spd": 7,
+      "tech": 5,
+      "normalMul": 1.651,
+      "swingRate": 1.405,
+      "wazaMul": 1.25,
+      "wazaCdMul": 0.926,
+      "ult": [
+        "試作・火薬増シ",
+        "試作・二連砲",
+        "機巧・自動迎撃",
+        "機巧・多機展開",
+        "機巧奥義・森羅万象"
+      ],
+      "face": "assets/img/offline_shinra_face_shinra_loop_v2.webp"
+    },
+    {
+      "seat": 29,
+      "id": "tobari",
+      "name": "トバリ",
+      "rarity": "SSR",
+      "elem": "水",
+      "starter": false,
+      "atk": 6,
+      "spd": 6,
+      "tech": 9,
+      "normalMul": 1.049,
+      "swingRate": 1.254,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "帳・宵闇ノ幕",
+        "帳・夜更ケノ子守唄",
+        "夢路・浅キ眠リ",
+        "夢路・深キ眠リ",
+        "帳奥義・常夜ノ庇護"
+      ],
+      "face": "assets/img/offline_tobari_face_tobari_loop_v3.webp"
+    },
+    {
+      "seat": 30,
+      "id": "sasura",
+      "name": "サスラ",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": false,
+      "atk": 10,
+      "spd": 5,
+      "tech": 6,
+      "normalMul": 1.474,
+      "swingRate": 1.12,
+      "wazaMul": 1.563,
+      "wazaCdMul": 0.857,
+      "ult": [
+        "神事・一ノ鎌",
+        "神事・未練断チ",
+        "邪気眼・封印緩メ",
+        "邪気眼・黄泉路開キ",
+        "封印奥義・左眼開眼"
+      ],
+      "face": "assets/img/offline_sasura_face_sasura_loop_v2.webp"
+    },
+    {
+      "seat": 31,
+      "id": "mami",
+      "name": "マミ",
+      "rarity": "SSR",
+      "elem": "木",
+      "starter": false,
+      "atk": 5,
+      "spd": 6,
+      "tech": 10,
+      "normalMul": 0.937,
+      "swingRate": 1.254,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "化け札・ひとひら",
+        "狸囃子・化かし打ち",
+        "桜扇・木の葉がえし",
+        "大化け・写し身",
+        "八化末広"
+      ],
+      "face": "assets/img/offline_mami_face_mami_loop_v2.webp"
+    },
+    {
+      "seat": 32,
+      "id": "makami",
+      "name": "マカミ",
+      "rarity": "SSR",
+      "elem": "金",
+      "starter": false,
+      "atk": 7,
+      "spd": 5,
+      "tech": 9,
+      "normalMul": 1.049,
+      "swingRate": 1.12,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "護符・火防ノ札",
+        "護符・憑キ物落トシ",
+        "大口・片顎",
+        "大口・阿吽",
+        "大口奥義・真神ノ顎"
+      ],
+      "face": "assets/img/offline_makami_face_makami_loop.webp"
+    },
+    {
+      "seat": 33,
+      "id": "gokou",
+      "name": "ゴコウ",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": false,
+      "atk": 8,
+      "spd": 9,
+      "tech": 4,
+      "normalMul": 1.849,
+      "swingRate": 1.762,
+      "wazaMul": 1.0,
+      "wazaCdMul": 1.0,
+      "ult": [
+        "毒牙・一閃",
+        "毒牙・乱レ撃チ",
+        "百足ノ足・影縫イ",
+        "百足ノ足・十二足",
+        "蜈蚣奥義・千足裂キ"
+      ],
+      "face": "assets/img/offline_gokou_face_gokou_loop_v2.webp"
+    },
+    {
+      "seat": 34,
+      "id": "sekishusai",
+      "name": "石舟斎",
+      "rarity": "SSR",
+      "elem": "火",
+      "starter": false,
+      "atk": 8,
+      "spd": 5,
+      "tech": 8,
+      "normalMul": 1.175,
+      "swingRate": 1.12,
+      "wazaMul": 2.441,
+      "wazaCdMul": 0.735,
+      "ult": [
+        "無刀・柳ノ手",
+        "無刀・千度受ケ",
+        "熾火・移リ火",
+        "熾火・灰化粧",
+        "無刀取リ・仕舞イノ一刀"
+      ],
+      "face": "assets/img/offline_sekishusai_face_sekishusai_loop.webp"
+    },
+    {
+      "seat": 35,
+      "id": "sakuya_bancho",
+      "name": "番長咲耶",
+      "rarity": "UR",
+      "elem": "火",
+      "starter": false,
+      "atk": 10,
+      "spd": 9,
+      "tech": 8,
+      "normalMul": 2.319,
+      "swingRate": 1.762,
+      "wazaMul": 2.441,
+      "wazaCdMul": 0.735,
+      "ult": [
+        "番長・花吹雪",
+        "番長・夜桜ぶっ込み",
+        "喧嘩桜・百人抜き",
+        "総長・花見大乱闘",
+        "天下御免・夜天満開"
+      ],
+      "face": "assets/img/face_sakuya_bancho.webp"
+    },
+    {
+      "seat": 36,
+      "id": "shinra_senju",
+      "name": "千手シンラ",
+      "rarity": "UR",
+      "elem": "土",
+      "starter": false,
+      "atk": 9,
+      "spd": 8,
+      "tech": 10,
+      "normalMul": 1.849,
+      "swingRate": 1.574,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "千手・一ノ手",
+        "千手・百手打チ",
+        "機巧観音・光背展開",
+        "機巧観音・千手千眼",
+        "森羅万象・千手大供養"
+      ],
+      "face": "assets/img/face_shinra_senju.webp"
+    },
+    {
+      "seat": 37,
+      "id": "izuna_gongen",
+      "name": "権現イズナ",
+      "rarity": "UR",
+      "elem": "金",
+      "starter": false,
+      "atk": 8,
+      "spd": 9,
+      "tech": 10,
+      "normalMul": 1.849,
+      "swingRate": 1.762,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "管狐・総出",
+        "白狐・天駆ケ",
+        "権現・剣ト羂索",
+        "大権現・影向",
+        "飯綱大権現・眷属万来"
+      ],
+      "face": "assets/img/face_izuna_gongen.webp"
+    },
+    {
+      "seat": 38,
+      "id": "shion_yasha",
+      "name": "夜叉紫苑",
+      "rarity": "UR",
+      "elem": "木",
+      "starter": false,
+      "atk": 10,
+      "spd": 9,
+      "tech": 8,
+      "normalMul": 2.319,
+      "swingRate": 1.762,
+      "wazaMul": 2.441,
+      "wazaCdMul": 0.735,
+      "ult": [
+        "夜叉薊・黒羽",
+        "夜叉薊・六臂",
+        "大明王・茨獄",
+        "大明王・薊曼荼羅",
+        "夜叉薊大明王・彼岸顕現"
+      ],
+      "face": "assets/img/face_shion_yasha.webp"
+    },
+    {
+      "seat": 39,
+      "id": "tart_express",
+      "name": "特急タルト",
+      "rarity": "UR",
+      "elem": "水",
+      "starter": false,
+      "atk": 8,
+      "spd": 10,
+      "tech": 9,
+      "normalMul": 2.071,
+      "swingRate": 1.974,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "特急・発車しま〜す",
+        "特急・亀甲ブースト",
+        "超特急・竜宮大波乗り",
+        "超特急・六枚噴射",
+        "竜宮超特急・急がばまわれ"
+      ],
+      "face": "assets/img/face_tart_express.webp"
+    },
+    {
+      "seat": 40,
+      "id": "nemu_gasei",
+      "name": "画聖ネム",
+      "rarity": "UR",
+      "elem": "水",
+      "starter": false,
+      "atk": 8,
+      "spd": 9,
+      "tech": 10,
+      "normalMul": 1.849,
+      "swingRate": 1.762,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "画聖・一筆",
+        "画聖・金箔屏風",
+        "極彩色・鳳凰飛翔",
+        "極彩色・百獣繚乱",
+        "画聖・鳥獣花木大屏風"
+      ],
+      "face": "assets/img/face_nemu_gasei.webp"
+    },
+    {
+      "seat": 41,
+      "id": "oto_getto",
+      "name": "月神於兎",
+      "rarity": "UR",
+      "elem": "土",
+      "starter": false,
+      "atk": 10,
+      "spd": 9,
+      "tech": 8,
+      "normalMul": 2.319,
+      "swingRate": 1.762,
+      "wazaMul": 2.441,
+      "wazaCdMul": 0.735,
+      "ult": [
+        "月兎・金の肉球",
+        "月兎・満月どーん！",
+        "大明神・月光百裂",
+        "大明神・肉球流星群",
+        "月兎大明神・満月どっかーん！"
+      ],
+      "face": "assets/img/face_oto_getto.webp"
+    },
+    {
+      "seat": 42,
+      "id": "uka_tenko",
+      "name": "天狐宇迦",
+      "rarity": "UR",
+      "elem": "火",
+      "starter": false,
+      "atk": 9,
+      "spd": 8,
+      "tech": 10,
+      "normalMul": 1.849,
+      "swingRate": 1.574,
+      "wazaMul": 3.815,
+      "wazaCdMul": 0.63,
+      "ult": [
+        "天狐・狐火九つ",
+        "天狐・九尾開扇",
+        "九曜・大焔環",
+        "九曜・天狐炎舞",
+        "天狐九曜・大焔曼荼羅"
+      ],
+      "face": "assets/img/face_uka_tenko.webp"
+    },
+    {
+      "seat": 43,
+      "id": "orochi_yamata",
+      "name": "八岐オロチ",
+      "rarity": "UR",
+      "elem": "水",
+      "starter": false,
+      "atk": 9,
+      "spd": 9,
+      "tech": 9,
+      "normalMul": 2.071,
+      "swingRate": 1.762,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "八岐・鎌首八つ",
+        "八岐・叢雲の雷",
+        "八重の大波・大海嘯",
+        "八重の大波・八首乱舞",
+        "八岐大蛇・叢雲天降リ"
+      ],
+      "face": "assets/img/face_orochi_yamata.webp"
+    },
+    {
+      "seat": 44,
+      "id": "sasura_yomi",
+      "name": "黄泉サスラ",
+      "rarity": "UR",
+      "elem": "金",
+      "starter": false,
+      "atk": 10,
+      "spd": 8,
+      "tech": 9,
+      "normalMul": 2.071,
+      "swingRate": 1.574,
+      "wazaMul": 3.052,
+      "wazaCdMul": 0.681,
+      "ult": [
+        "黄泉送り・一ノ大鎌",
+        "黄泉送り・灯籠流し",
+        "左眼開眼・封印解キ",
+        "左眼開眼・千蝶の黄泉路",
+        "黄泉送り大神・終ノ神事"
+      ],
+      "face": "assets/img/face_sasura_yomi.webp"
+    }
+  ],
+  "summon": {
+    "cost": 1,
+    "rPct": 0.89,
+    "srPct": 0.08,
+    "urPct": 0.0001,
+    "urMulMax": 6.0,
+    "puShareMax": 0.8,
+    "pity": 100,
+    "pitySr": 50,
+    "hundredSsrMin": 3,
+    "freeTenDays": 30,
+    "dupeShards": [
+      20,
+      40,
+      60,
+      150
+    ],
+    "urDupeTomo": 50,
+    "shardsPerMochizuki": 5,
+    "mochizukiRateSummon": 2,
+    "mochizukiToTomo": 2,
+    "awakenCost": [
+      60,
+      120,
+      240,
+      480,
+      960
+    ],
+    "starMax": 5,
+    "starDmgMul": 1.25,
+    "starNormalMul": 1.2,
+    "bossShards": 1,
+    "bossShardsFirstMul": 2,
+    "bossShardsChapMul": 3
+  },
+  "gear": {
+    "slots": [
+      {
+        "name": "刀",
+        "main": "タップダメージ",
+        "items": [
+          "数打ち",
+          "夜討ち",
+          "三日月",
+          "蝕月斬",
+          "天叢雲剣",
+          "月喰・無明"
+        ]
+      },
+      {
+        "name": "面",
+        "main": "会心の率と威力",
+        "items": [
+          "木彫面",
+          "狐面",
+          "般若",
+          "夜叉羅刹",
+          "大天狗",
+          "蝕王・羅刹"
+        ]
+      },
+      {
+        "name": "装束",
+        "main": "大妖を弱める",
+        "items": [
+          "麻装束",
+          "忍び装束",
+          "夜鴉",
+          "黒影縫",
+          "天羽衣",
+          "常闇・蝕天衣"
+        ]
+      },
+      {
+        "name": "帯",
+        "main": "柱の威力",
+        "items": [
+          "荒縄",
+          "組紐",
+          "朱帯",
+          "封魔帯",
+          "昇龍帯",
+          "八咫・天結"
+        ]
+      },
+      {
+        "name": "御守",
+        "main": "小判の実入り",
+        "items": [
+          "紙守",
+          "招福守",
+          "金運守",
+          "金剛守",
+          "弁財天",
+          "如意宝珠・満月"
+        ]
+      },
+      {
+        "name": "草鞋",
+        "main": "蝕と必殺技の間合い",
+        "items": [
+          "藁草鞋",
+          "早駆け",
+          "韋駄天",
+          "疾風迅雷",
+          "風神足",
+          "天翔・神速"
+        ]
+      },
+      {
+        "name": "提灯",
+        "main": "留守の実入り",
+        "items": [
+          "紙提灯",
+          "吊り提灯",
+          "常夜灯",
+          "狐火百灯",
+          "不知火",
+          "月読・照魔灯"
+        ]
+      },
+      {
+        "name": "手裏剣",
+        "main": "技と奥義の威力",
+        "items": [
+          "石礫",
+          "棒手裏剣",
+          "十字",
+          "流星刃",
+          "風魔輪",
+          "星喰・八咫烏"
+        ]
+      },
+      {
+        "name": "巻物",
+        "main": "月蝕の力",
+        "items": [
+          "反故紙",
+          "忍びの書",
+          "秘伝書",
+          "蝕月秘録",
+          "月読神咒",
+          "天蝕・無量経"
+        ]
+      }
+    ],
+    "ranks": [
+      "N",
+      "R",
+      "SR",
+      "SSR",
+      "UR",
+      "MR"
+    ],
+    "rankPct": [
+      15.0,
+      35.0,
+      65.0,
+      100.0,
+      145.0,
+      200.0
+    ],
+    "affixPct": [
+      0,
+      0,
+      0,
+      10,
+      15,
+      20
+    ],
+    "affixCount": [
+      0,
+      0,
+      0,
+      1,
+      2,
+      2
+    ],
+    "affixNames": [
+      "蝕中のタップ",
+      "大妖への威力",
+      "小判の実入り",
+      "技と奥義の威力",
+      "留守の実入り",
+      "会心の威力"
+    ],
+    "conv": {
+      "menCritPt": 10,
+      "menCritMul": 0.5,
+      "shozokuSec": 10,
+      "warajiDiv": 4,
+      "warajiMax": 0.5,
+      "warajiOver": 1.0
+    },
+    "gradeMax": 99,
+    "mrGradeTop": 1.4,
+    "uniquePct": 40,
+    "fragScale": 0.25,
+    "forgeDaily": 3,
+    "forgeLevelsBase": 5,
+    "forgeLevelsMax": 10,
+    "uniques": [
+      {
+        "name": "月喰の太刀・朔",
+        "slot": "刀",
+        "affix": "蝕中のタップ",
+        "lore": "蝕の夜にだけ研がれる刃"
+      },
+      {
+        "name": "鬼哭丸",
+        "slot": "刀",
+        "affix": "大妖への威力",
+        "lore": "大妖が泣くと伝わる太刀"
+      },
+      {
+        "name": "泣き般若",
+        "slot": "面",
+        "affix": "会心の威力",
+        "lore": "涙の跡が急所を教える"
+      },
+      {
+        "name": "翁の面・常世",
+        "slot": "面",
+        "affix": "留守の実入り",
+        "lore": "留守の間も見張る翁"
+      },
+      {
+        "name": "蝕影の羽織",
+        "slot": "装束",
+        "affix": "蝕中のタップ",
+        "lore": "蝕の影を纏う"
+      },
+      {
+        "name": "黄金の陣羽織",
+        "slot": "装束",
+        "affix": "小判の実入り",
+        "lore": "小判を呼ぶ金糸"
+      },
+      {
+        "name": "八雲の緒",
+        "slot": "帯",
+        "affix": "技と奥義の威力",
+        "lore": "奥義に雲を巻く"
+      },
+      {
+        "name": "討鬼の帯",
+        "slot": "帯",
+        "affix": "大妖への威力",
+        "lore": "鬼を討つ者の帯"
+      },
+      {
+        "name": "福狐の小袋",
+        "slot": "御守",
+        "affix": "小判の実入り",
+        "lore": "狐が小判を運ぶ"
+      },
+      {
+        "name": "夜明けの守り",
+        "slot": "御守",
+        "affix": "留守の実入り",
+        "lore": "朝まで蓄えを守る"
+      },
+      {
+        "name": "韋駄天の履",
+        "slot": "草鞋",
+        "affix": "技と奥義の威力",
+        "lore": "奥義へ駆ける足"
+      },
+      {
+        "name": "蝕走り",
+        "slot": "草鞋",
+        "affix": "蝕中のタップ",
+        "lore": "蝕の中を走り抜ける"
+      },
+      {
+        "name": "不知火の灯",
+        "slot": "提灯",
+        "affix": "留守の実入り",
+        "lore": "留守の夜を照らす火"
+      },
+      {
+        "name": "鬼火提灯",
+        "slot": "提灯",
+        "affix": "大妖への威力",
+        "lore": "大妖の弱みを照らす"
+      },
+      {
+        "name": "八咫の羽",
+        "slot": "手裏剣",
+        "affix": "会心の威力",
+        "lore": "三本足の烏の羽"
+      },
+      {
+        "name": "流星・蝕",
+        "slot": "手裏剣",
+        "affix": "技と奥義の威力",
+        "lore": "奥義に流星を添える"
+      },
+      {
+        "name": "無明の経",
+        "slot": "巻物",
+        "affix": "蝕中のタップ",
+        "lore": "蝕の闇を読む経"
+      },
+      {
+        "name": "月読の暦",
+        "slot": "巻物",
+        "affix": "小判の実入り",
+        "lore": "月が小判の日を教える"
+      }
+    ],
+    "uniqueOdds": 10000,
+    "uniquePity": 30000,
+    "kaiFromRank": "SSR",
+    "kaiMarks": [
+      25,
+      50,
+      75,
+      99
+    ],
+    "kaiMax": 12,
+    "kaiDefs": [
+      {
+        "name": "連打の刃",
+        "what": "タップの一撃",
+        "value": "+6%"
+      },
+      {
+        "name": "大妖斬り",
+        "what": "大妖への一撃",
+        "value": "+6%"
+      },
+      {
+        "name": "必殺の冴え",
+        "what": "技と奥義の威力",
+        "value": "+6%"
+      },
+      {
+        "name": "会心の目",
+        "what": "会心の出やすさ",
+        "value": "+1pt"
+      },
+      {
+        "name": "急所打ち",
+        "what": "会心の威力",
+        "value": "+8%"
+      },
+      {
+        "name": "柱の加護",
+        "what": "柱の威力",
+        "value": "+4%"
+      },
+      {
+        "name": "招き小判",
+        "what": "小判の実入り",
+        "value": "+6%"
+      },
+      {
+        "name": "留守の灯",
+        "what": "留守の実入り",
+        "value": "+6%"
+      },
+      {
+        "name": "刻の延べ",
+        "what": "大妖の刻限",
+        "value": "+1秒"
+      },
+      {
+        "name": "疾風",
+        "what": "技の間合い",
+        "value": "−2%"
+      }
+    ],
+    "kaiChoices": {
+      "刀": [
+        "連打の刃",
+        "大妖斬り",
+        "必殺の冴え"
+      ],
+      "面": [
+        "会心の目",
+        "急所打ち",
+        "大妖斬り"
+      ],
+      "装束": [
+        "刻の延べ",
+        "大妖斬り",
+        "柱の加護"
+      ],
+      "帯": [
+        "柱の加護",
+        "必殺の冴え",
+        "留守の灯"
+      ],
+      "御守": [
+        "招き小判",
+        "留守の灯",
+        "連打の刃"
+      ],
+      "草鞋": [
+        "疾風",
+        "必殺の冴え",
+        "連打の刃"
+      ],
+      "提灯": [
+        "留守の灯",
+        "招き小判",
+        "柱の加護"
+      ],
+      "手裏剣": [
+        "必殺の冴え",
+        "急所打ち",
+        "大妖斬り"
+      ],
+      "巻物": [
+        "招き小判",
+        "柱の加護",
+        "必殺の冴え"
+      ]
+    }
+  },
+  "eclipse": {
+    "unlockNight": 100,
+    "fragBase": 14.0,
+    "fragExpGrow": 1.055,
+    "fragExpStep": 4.5,
+    "fragAnchor": 100,
+    "fragDmgPer": 0.1,
+    "per10": 1.1263,
+    "fudaDmgPer": 1.035,
+    "reliefSec": 1800.0,
+    "reliefRatio": 0.9,
+    "beyondBest": true,
+    "gekkaOnBest": 3,
+    "tomoOnBest": 5,
+    "dashMinKillSec": 15.0,
+    "dashCapRatio": 0.8,
+    "fragRows": [
+      {
+        "night": 100,
+        "frags": "14",
+        "fragsRaw": 14.0
+      },
+      {
+        "night": 150,
+        "frags": "25.3",
+        "fragsRaw": 25.4
+      },
+      {
+        "night": 200,
+        "frags": "46",
+        "fragsRaw": 46.0
+      },
+      {
+        "night": 300,
+        "frags": "151",
+        "fragsRaw": 151.2
+      },
+      {
+        "night": 400,
+        "frags": "496",
+        "fragsRaw": 496.9
+      },
+      {
+        "night": 500,
+        "frags": "1.63K",
+        "fragsRaw": 1633.1
+      },
+      {
+        "night": 700,
+        "frags": "17.6K",
+        "fragsRaw": 17638.3
+      },
+      {
+        "night": 1000,
+        "frags": "626K",
+        "fragsRaw": 626065.8
+      },
+      {
+        "night": 1500,
+        "frags": "240M",
+        "fragsRaw": 240008481.0
+      },
+      {
+        "night": 2000,
+        "frags": "92.0G",
+        "fragsRaw": 92009615188.2
+      },
+      {
+        "night": 2500,
+        "frags": "35.2T",
+        "fragsRaw": 35272792238484.7
+      },
+      {
+        "night": 3000,
+        "frags": "13.5P",
+        "fragsRaw": null
+      }
+    ]
+  },
+  "dawn": {
+    "every": 10,
+    "offlineAddSec": 7200.0,
+    "offlineMaxSec": 86400.0,
+    "carryPer": 0.05,
+    "carryMax": 0.75,
+    "feverSubSec": 3.0,
+    "feverSubMax": 30.0,
+    "dailyGekkaAt": 5,
+    "gekkaOnce": 5
+  },
+  "offline": {
+    "capSec": 28800.0,
+    "dropEverySec": 7200.0,
+    "dropMax": 3,
+    "tomoPerHour": 0.75
+  },
+  "quests": {
+    "daily": [
+      "妖を200体討つ",
+      "大妖を3体討つ",
+      "蝕を2度つかむ",
+      "蝕の間に大妖を討つ",
+      "奥義を10度放つ",
+      "ログインする",
+      "召喚の儀を行う",
+      "妖を100体討つ"
+    ],
+    "dailyFullGekka": 2,
+    "meguri": [
+      "妖を三百体",
+      "蝕を三度",
+      "宝鬼を二体",
+      "奥義を二十度",
+      "召喚を十連",
+      "三日ログイン",
+      "タップを二千回",
+      "大妖を五体",
+      "見切りを二十度",
+      "技を五十度"
+    ],
+    "meguriGoals": [
+      300,
+      3,
+      2,
+      20,
+      10,
+      3,
+      2000,
+      5,
+      20,
+      50
+    ],
+    "meguriGekka": 2,
+    "meguriFullGekka": 10
+  },
+  "big": {
+    "example": [
+      {
+        "exp": 3,
+        "text": "1.00K"
+      },
+      {
+        "exp": 6,
+        "text": "1.00M"
+      },
+      {
+        "exp": 9,
+        "text": "1.00G"
+      },
+      {
+        "exp": 12,
+        "text": "1.00T"
+      },
+      {
+        "exp": 15,
+        "text": "1.00P"
+      },
+      {
+        "exp": 18,
+        "text": "1.00E"
+      },
+      {
+        "exp": 21,
+        "text": "1.00Z"
+      },
+      {
+        "exp": 24,
+        "text": "1.00Y"
+      },
+      {
+        "exp": 27,
+        "text": "1.00R"
+      },
+      {
+        "exp": 30,
+        "text": "1.00Q"
+      },
+      {
+        "exp": 33,
+        "text": "1.00AA"
+      },
+      {
+        "exp": 36,
+        "text": "1.00AB"
+      },
+      {
+        "exp": 60,
+        "text": "1.00AJ"
+      }
+    ]
+  }
+}
