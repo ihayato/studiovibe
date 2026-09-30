@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>どーぱみんくりっかー！攻略帖｜仕組みと数字のまとめ</title>
-<meta name="description" content="どーぱみんくりっかー！の攻略帖。月蝕の押しどき、倍率の式、なかまの能力値、絵巻の率と天井、装備と開眼まで、ゲームの定数から書き出した数字でまとめています。">
-<meta name="theme-color" content="#15121F">
+<title>どーぱみん 攻略帖｜どーぱみんくりっかー！公式攻略</title>
+<meta name="description" content="どーぱみんくりっかー！の公式攻略。月蝕の押しどき、倍率の式、なかまの攻・速・技、絵巻の率と天井、装備と開眼まで、ゲームの定数から写した数字でまとめています。">
+<meta name="theme-color" content="#f5f3ec">
 <link rel="canonical" href="https://vibe.co.jp/dopamin/guide/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="どーぱみんくりっかー！">
-<meta property="og:title" content="どーぱみんくりっかー！攻略帖｜仕組みと数字のまとめ">
-<meta property="og:description" content="どーぱみんくりっかー！の攻略帖。月蝕の押しどき、倍率の式、なかまの能力値、絵巻の率と天井、装備と開眼まで、ゲームの定数から書き出した数字でまとめています。">
+<meta property="og:title" content="どーぱみん 攻略帖｜どーぱみんくりっかー！公式攻略">
+<meta property="og:description" content="どーぱみんくりっかー！の公式攻略。月蝕の押しどき、倍率の式、なかまの攻・速・技、絵巻の率と天井、装備と開眼まで、ゲームの定数から写した数字でまとめています。">
 <meta property="og:url" content="https://vibe.co.jp/dopamin/guide/">
 <meta property="og:image" content="https://vibe.co.jp/dopamin/assets/img/ogp.jpg?v=20260928">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,35 +18,31 @@
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20260929e">
-<link rel="stylesheet" href="../assets/guide.css?v=20260930a">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/guide.css?v=20260930b">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "どーぱみんくりっかー！", "item": "https://vibe.co.jp/dopamin/"}, {"@type": "ListItem", "position": 2, "name": "攻略帖", "item": "https://vibe.co.jp/dopamin/guide/"}]}</script>
 </head>
-<body class="guide">
-<div class="sky" aria-hidden="true"></div>
-<header class="head">
-  <div class="wrap">
-    <a class="brand" href="./" aria-label="攻略帖のトップへ">
-      <img class="icon" src="../assets/img/icon.png" alt="" width="34" height="34">
-      <span class="brand-guide">攻略帖</span>
-    </a>
-    <a class="soon-pill" href="https://testflight.apple.com/join/e11TtzhJ" rel="noopener" data-analytics-event="cta_click" data-analytics-item="testflight" data-analytics-context="guide_header">先行プレイ</a>
+<body class="guide-root">
+<header class="g-head">
+  <div class="g-head-in">
+    <a class="g-brand" href="./"><img src="../assets/img/icon.png" alt="" width="30" height="30"><span>どーぱみん 攻略帖</span></a>
+    <a class="g-play" href="https://testflight.apple.com/join/e11TtzhJ" rel="noopener" data-analytics-event="cta_click" data-analytics-item="testflight" data-analytics-context="guide_header">先行プレイ</a>
   </div>
-  <nav class="g-nav" aria-label="攻略帖の頁"><div class="wrap"><a href="hajimekata/">はじめ方</a><a href="gesshoku/">月蝕・暁</a><a href="nakama/">なかま・装備</a><a href="komatta/">困ったとき</a></div></nav>
+  <nav class="g-nav" aria-label="攻略帖の頁"><div class="g-nav-in"><a href="./" aria-current="page">ホーム</a><a href="hajimekata/">はじめかた</a><a href="gesshoku/">月蝕・暁</a><a href="nakama/">なかま・装備</a><a href="komatta/">困ったとき</a></div></nav>
 </header>
 <main class="g-main">
-  <div class="wrap g-col">
-    <nav class="crumb" aria-label="現在地"><a href="../">公式サイト</a><span aria-hidden="true">›</span><span>攻略帖</span></nav>
-    <h1 class="pop g-title">攻略帖</h1>
+  <article class="g-article">
     
-    <p>どーぱみんくりっかー！の仕組みと数字を、ゲームの中身そのままにまとめた攻略帖です。画面には出ない数字（月蝕の蝕片など）も、式ごと載せています。</p><div class="doors"><a class="door" href="hajimekata/"><span class="door-t">はじめ方・最初の1日</span><span class="door-d">画面の見方、夜と大妖、タップと育成、放置のしくみ。</span><span class="door-go" aria-hidden="true">›</span></a><a class="door" href="gesshoku/"><span class="door-t">月蝕・暁の攻略</span><span class="door-d">押しどき、倍率の式、失うもの・残るもの、暁の恵み。</span><span class="door-go" aria-hidden="true">›</span></a><a class="door" href="nakama/"><span class="door-t">なかま・絵巻・装備</span><span class="door-d">全なかまの能力値、絵巻の率と天井、覚醒、装備と開眼。</span><span class="door-go" aria-hidden="true">›</span></a><a class="door" href="komatta/"><span class="door-t">困ったとき・よくある質問</span><span class="door-d">夜が進まない、大妖に勝てない、引き継ぎ、数字の読み方。</span><span class="door-go" aria-hidden="true">›</span></a></div><section class="g-sec" id="yoku" aria-labelledby="yoku-h"><h2 id="yoku-h">よく聞かれること</h2><div class="answer"><p class="answer-q">月蝕は、押せるようになったらすぐ押すべき？</p><div class="answer-a"><p>1回の月蝕でもらえる分は、すぐ押さない方が大きくなります。月蝕の盆の「◯倍」のうち1を超えた分（上乗せ分）は、今の巡りでいちばん深く進んだ夜で決まり、10夜深く潜るごとに約<b class="n">×1.13</b>になります。</p><p>ただ、潜るほど夜の進みは遅くなります。時間あたりで得かどうかは進む速さしだいなので、目安は「夜の進みが目に見えて鈍ったら押す」です。<a href="gesshoku/#oshidoki">押しどき計算機へ</a></p></div></div><div class="answer"><p class="answer-q">お金はかかる？</p><div class="answer-a"><p>ダウンロード無料、アプリ内課金はありません。</p></div></div><div class="answer"><p class="answer-q">何人のなかまがいる？</p><div class="answer-a"><p>いま <b class="n">45</b>人です。一覧と能力値は<a href="nakama/#ichiran">なかまの頁</a>に。</p></div></div></section>
-    <p class="g-updated">数字は 2026年9月30日 時点のゲームの中身から書き出しています。テスト版のため、調整で変わることがあります。</p>
-  </div>
+    <h1>どーぱみん 攻略帖</h1>
+    <p class="g-updated">最終更新: <time>2026-09-30</time></p>
+    <p class="lead">運営による公式攻略。数値はゲームの中身そのまま、画面に出ない数字も式ごと載せています。</p><aside class="shiori-note"><img class="shiori-chibi" src="../assets/img/guide/shiori_chibi.webp" alt="" width="308" height="560"><p class="shiori-label">栞の一言</p><p class="shiori-text">上から順にどうぞ。月蝕の押しどきは「月蝕・暁」の頁に計算機がございます。</p></aside><div class="shelves"><a class="shelf" href="hajimekata/"><span class="shelf-n">一</span><span class="shelf-b"><span class="shelf-t">はじめかた</span><span class="shelf-d">画面の見方、夜と大妖、タップと育成、放置のしくみ</span></span></a><a class="shelf" href="gesshoku/"><span class="shelf-n">二</span><span class="shelf-b"><span class="shelf-t">月蝕・暁</span><span class="shelf-d">押しどき計算機、失うもの・残るもの、暁の恵み</span></span></a><a class="shelf" href="nakama/"><span class="shelf-n">三</span><span class="shelf-b"><span class="shelf-t">なかま・絵巻・装備</span><span class="shelf-d">全なかまの攻・速・技、絵巻の率と天井、装備と開眼</span></span></a><a class="shelf" href="komatta/"><span class="shelf-n">四</span><span class="shelf-b"><span class="shelf-t">困ったとき</span><span class="shelf-d">夜が進まない、大妖に勝てない、引き継ぎ</span></span></a></div><section class="g-sec" id="yoku" aria-labelledby="yoku-h"><h2 id="yoku-h"><span class="dia" aria-hidden="true">◆ </span>よく聞かれること</h2><aside class="kaname"><p class="kaname-label">◆ 先に答え</p><ul><li><span class="kn" aria-hidden="true">一、</span><span>月蝕は、押せるようになってすぐより、進みが鈍るまで潜ってから。上乗せ分は10夜で約×1.13（<a href="gesshoku/#oshidoki">押しどき</a>）</span></li><li><span class="kn" aria-hidden="true">二、</span><span>お金はかかりません。ダウンロード無料、アプリ内課金なし</span></li><li><span class="kn" aria-hidden="true">三、</span><span>なかまはいま45人（<a href="nakama/#ichiran">一覧</a>）</span></li></ul></aside></section>
+    
+  </article>
 </main>
-<footer class="foot">
-  <nav class="foot-nav" aria-label="サイト情報"><a href="../">公式サイト</a><a href="./">攻略帖</a><a href="../terms/">利用規約</a><a href="../privacy/">プライバシーポリシー</a><a href="../support/">サポート</a></nav>
-  <p class="foot-copy">© 2026 CryptoNinja</p>
+<footer class="g-foot">
+  <p>運営による公式攻略。数値はゲーム本体の定数から自動で写しています。テスト版のため、調整で変わることがあります。</p>
+  <nav aria-label="サイト情報"><a href="../">公式サイト</a><a href="../terms/">利用規約</a><a href="../privacy/">プライバシーポリシー</a><a href="../support/">サポート</a></nav>
+  <p class="g-copy">© Studio VIBE — どーぱみんくりっかー！</p>
 </footer>
 
 </body>

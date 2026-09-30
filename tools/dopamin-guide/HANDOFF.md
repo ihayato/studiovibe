@@ -16,7 +16,15 @@
 4. 方向宣言 `tools/dopamin-guide/DESIGN_DIRECTION.md`
 5. 公式サイトのトップ（public/dopamin/index.html）の上の帯に「攻略」、足元に「攻略帖」のリンクを足した
 
-## 現在地（09-30）
+## 09-30 第2版（本人「月蝕綺譚の攻略サイトにあわせて。デザインやフォント。図解が少なくてわかりにくいな」）
+- 見た目を月蝕綺譚 攻略帖の昼（生成り・Shippori Mincho B1＋Zen Kaku Gothic New・羽二重・栞の一言・◆先に答え・目次）へ作り直した。方向宣言 DESIGN_DIRECTION.md 第2版（第1版＝宵闇ポップは廃止）
+- 部品と図は `tools/dopamin-guide/guide_parts.py`（SVG・数字は guide_data.json 直結）。図15種＋実画面5枚（番号と凡例つき）
+- 実画面: kitan-clicker `app/test/tool_shot_guide_test.dart`（`GUIDE_SHOTS=<vibe>/tools/dopamin-guide/shots flutter test …`）→ build_guide.py が cwebp で `public/dopamin/assets/img/guide/shot_*.webp` に。shots/ は git に入れない。戦場は ninmu_0..3 の4コマから技の帯が写っていないものを ninmu.png にして組む
+- 収まり: 320幅で全5頁はみ出し0・本文12px未満0・図の字は最小10.3px（相剋の環の小字だけ9.6px）
+- 装備の育ちはゲーム画面の表記に合わせて「Lv」（鍛冶場の画面だけ「段」）
+- **Astra の事実点検は第1版の文面で3巡済み。第2版で足した図は同じ数字から描いているが、図そのものの点検はまだ**
+
+## 現在地（09-30・第1版の時点）
 - 5頁を組んだ（作業木 dev/vibe-wt-guide・枝 feat/dopamin-guide＝本番枝 codex/meikyo-island の cfaff11 から）。コミット済み・**未配信**（本人の目視待ち）
 - 収まり検査: 390×844／375×667／320×693 で全5頁 はみ出し0・12.5px未満の文字0・式の横スクロール0
 - Astra（Codex）の事実点検3巡: `~/Desktop/旧Mac救出/dopamin-guide_20260930/astra_fact_audit{,_r2,_r3}.md`。1巡目28件（出荷不可18）→2巡目 残6→3巡目 残2（宿の陰りの条件・計算機の説明式）→ Astra の直し案どおりに直した（4巡目は回していない）
