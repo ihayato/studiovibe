@@ -1,6 +1,6 @@
 # どーぱみんくりっかー！ 攻略帖 HANDOFF
 
-公開先（予定）: https://vibe.co.jp/dopamin/guide/ （公式サイトの下・静的HTML）
+公開先: https://vibe.co.jp/dopamin/guide/ （公式サイトの下・静的HTML）**09-30 本番配信済み**
 始まり: 2026-09-30 本人「どぱくりに攻略サイトも作ろうか。月蝕綺譚みたいに」→ 裁定: 置き場=公式サイトの下／数字=**式も全部出す**／最初の頁=はじめ方・月蝕暁・なかま絵巻装備・困ったとき
 
 ## しくみ（数字は手書きしない）
@@ -15,6 +15,11 @@
 3. 見た目 `public/dopamin/assets/guide.css`（site.css のトークンだけ）・押しどき計算機 `assets/guide.js`（式の定数は頁の data-grow / data-step）
 4. 方向宣言 `tools/dopamin-guide/DESIGN_DIRECTION.md`
 5. 公式サイトのトップ（public/dopamin/index.html）の上の帯に「攻略」、足元に「攻略帖」のリンクを足した
+
+## 09-30 本番配信（本人GO「5頁と公式トップの導線をまとめて出す」）
+- vibe ae904b1（feat/dopamin-guide を本番枝 codex/meikyo-island へ早送り・push 済み）・Worker Version af70b175・verify-deploy 全項目OK・5頁と guide.css/js・顔・画面写真・栞が 200、公式トップの「攻略」リンク2つを本番で確認
+- 配信前の照合: 本番 worker に今の worker.prod-20260918.js が丸ごと含まれる（取得 3.65MB）＝一致。dist 1383件のうち差は新しい攻略帖の頁と素材、公式トップの導線2行だけ。**本番の HTML はどれも +367 バイト＝Cloudflare Web Analytics の beacon の注入**（差に見えるが正常）
+- 直して出し直すとき: build_guide.py → vibe-wt-guide でコミット → dev/vibe（本番枝）で早送り → 上の照合 → `wrangler deploy worker.prod-20260918.js --no-bundle --no-autoconfig --keep-vars` → `bash scripts/verify-deploy.sh`
 
 ## 09-30 第2版（本人「月蝕綺譚の攻略サイトにあわせて。デザインやフォント。図解が少なくてわかりにくいな」）
 - 見た目を月蝕綺譚 攻略帖の昼（生成り・Shippori Mincho B1＋Zen Kaku Gothic New・羽二重・栞の一言・◆先に答え・目次）へ作り直した。方向宣言 DESIGN_DIRECTION.md 第2版（第1版＝宵闇ポップは廃止）
@@ -44,6 +49,6 @@
 - 配信は vibe の型（memory vibe-site-deploy-new-mac）: 本番枝へ取り込み→dist 突き合わせ→wrangler deploy。**本人の GO を取ってから**
 
 ## 次にやること
-1. Astra の指摘を直す → 本人に見てもらう → GO で本番枝へ取り込み・配信
+1. （済）本番配信。第2版の図そのものの Astra 点検はまだ＝次に直すときに一緒に
 2. 書き出し器を本線（feat/ally-stats-20260923）へ合流
 3. 次の頁候補: 月の通い路（tomoshibi.dart の kShuku/kShijin/kStars をそのまま表に）・月例試練・番付・一点物の集め方
