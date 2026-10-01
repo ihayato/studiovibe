@@ -22503,8 +22503,10 @@ __name(serveAsset, "serveAsset");
 __name2(serveAsset, "serveAsset");
 function buildReqHeaders(request) {
   return {
-    origin: request.headers.get("origin") || "",
-    referer: request.headers.get("referer") || "",
+    // Preserve absence: the origin gate may then check the same-site Referer.
+    // An explicitly empty or invalid Origin must still be rejected.
+    origin: request.headers.get("origin"),
+    referer: request.headers.get("referer"),
     authorization: request.headers.get("authorization") || ""
   };
 }

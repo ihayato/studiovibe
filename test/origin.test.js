@@ -11,8 +11,12 @@ function bundled(name){
  const start=source.indexOf(`async function ${name}(`);
  const end=source.indexOf(`\n__name(${name},`,start);
  assert.ok(start>=0&&end>start);
- const context=vm.createContext({URL,Response,ALLOWED_ORIGINS:allowed,allowedRequestOrigin, __name2:f=>f,
+ const context=vm.createContext({URL,Response,Headers,ALLOWED_ORIGINS:allowed,allowedRequestOrigin, __name2:f=>f,
   fetch:async()=>{throw new Error('external requests forbidden in test');}});
+ const headersStart=source.indexOf('function buildReqHeaders(');
+ const headersEnd=source.indexOf('\n__name(buildReqHeaders,',headersStart);
+ assert.ok(headersStart>=0&&headersEnd>headersStart);
+ vm.runInContext(source.slice(headersStart,headersEnd),context);
  vm.runInContext(source.slice(start,end),context);return context[name];
 }
 function res(){return {code:200,status(n){this.code=n;return this;},json(value){this.value=value;return this;}};}
@@ -43,4 +47,23 @@ test('allowed contact origin passes origin gate and still requires fields',async
 test('bundled helper and module helper stay behaviorally identical',()=>{
  const end=source.indexOf('\n}\n')+3;const context=vm.createContext({URL});vm.runInContext(source.slice(0,end),context);
  for(const origin of [...allowed,...invalid])assert.equal(context.allowedRequestOrigin({origin},allowed),allowedRequestOrigin({origin},allowed));
+});
+
+// Exercise the deployed Request -> Vercel-shaped adapter, not just the helper.
+// Missing Origin must remain distinct from a supplied empty/invalid Origin.
+for(const name of ['contactHandler','lusterClaimHandler','rondoApplyHandler','rondoReserveHandler','rondoReportHandler'])
+test(`${name}: production adapter preserves legitimate Referer fallback`,async()=>{
+ const run=bundled('runVercelHandler'),handler=bundled(name),url=new URL('https://vibe.co.jp/api/test');
+ const cases=[
+  [{referer:'https://vibe.co.jp/rondo.html'},400],
+  [{origin:'https://vibe.co.jp'},400],
+  [{origin:'',referer:'https://vibe.co.jp/rondo.html'},403],
+  [{origin:'https://vibe.co.jp.attacker.invalid',referer:'https://vibe.co.jp/'},403],
+  [{referer:'https://vibe.co.jp@attacker.invalid/'},403],
+  [{},403],
+ ];
+ for(const [headers,status] of cases){
+  const response=await run(handler,new Request(url,{method:'POST',headers,body:'{}'}),{},url);
+  assert.equal(response.status,status,JSON.stringify(headers));
+ }
 });
