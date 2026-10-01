@@ -1,3 +1,5 @@
+import { allowedRequestOrigin } from './_allowed-origin.js';
+
 export default async function handler(req, res) {
     // Only allow POST
     if (req.method !== 'POST') {
@@ -5,9 +7,8 @@ export default async function handler(req, res) {
     }
 
     // CORS: only allow same-origin
-    const origin = req.headers.origin || req.headers.referer || '';
     const allowedOrigins = ['https://vibe.co.jp', 'http://localhost:5173', 'http://localhost:3000'];
-    if (!allowedOrigins.some(o => origin.startsWith(o))) {
+    if (!allowedRequestOrigin(req.headers, allowedOrigins)) {
         return res.status(403).json({ error: 'Forbidden' });
     }
 

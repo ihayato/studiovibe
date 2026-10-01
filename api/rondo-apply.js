@@ -1,3 +1,5 @@
+import { allowedRequestOrigin } from './_allowed-origin.js';
+
 // Rondo先行販売(審査制)の申込フォームの受け口(vibe.co.jp/rondo-apply)。
 // Turnstileをvibe自身の鍵(CF_SECRET_KEY)で検証してから、
 // rondo Worker の審査API(/api/sales/apply)へ専用Bearerで転送する。
@@ -11,9 +13,8 @@ export default async function handler(req, res) {
     }
 
     // CORS: only allow same-origin (api/rondo-reserve.js と同型)
-    const origin = req.headers.origin || req.headers.referer || '';
     const allowedOrigins = ['https://vibe.co.jp', 'http://localhost:5173', 'http://localhost:3000'];
-    if (!allowedOrigins.some(o => origin.startsWith(o))) {
+    if (!allowedRequestOrigin(req.headers, allowedOrigins)) {
         return res.status(403).json({ error: 'Forbidden' });
     }
 

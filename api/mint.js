@@ -1,3 +1,5 @@
+import { allowedRequestOrigin } from './_allowed-origin.js';
+
 import {
     BaseError,
     ContractFunctionRevertedError,
@@ -269,8 +271,7 @@ async function handlePost(req, res) {
 
 export default async function handler(req, res) {
     // CORS: 同一オリジンのみ許可
-    const origin = req.headers.origin || req.headers.referer || '';
-    if (!allowedOrigins.some((o) => origin.startsWith(o))) {
+    if (!allowedRequestOrigin(req.headers, allowedOrigins)) {
         return res.status(403).json({ error: 'forbidden' });
     }
 
