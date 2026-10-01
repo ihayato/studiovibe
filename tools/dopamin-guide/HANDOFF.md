@@ -16,6 +16,10 @@
 4. 方向宣言 `tools/dopamin-guide/DESIGN_DIRECTION.md`
 5. 公式サイトのトップ（public/dopamin/index.html）の上の帯に「攻略」、足元に「攻略帖」のリンクを足した
 
+## 10-02 月神於兎の顔を杵の版へ（本人「攻略帖差し替えで」）
+- ゲームで於兎URを肉球→黄金の杵へ作り直した（clicker ea8e2cfa）のに合わせ、`public/dopamin/assets/img/face/oto_getto.webp` だけ差し替え。本番枝 vibe e1eed22・Worker Version af44229c・dist 照合の差は顔1枚・verify-deploy 全項目OK。
+- **本番 worker は 10-01 のセキュリティ修正版**（vibe c322999〜e116fc5・Origin 照合）。出し直すときは dev/vibe の HEAD の worker.prod-20260918.js を使う（古い写しで出すと修正が巻き戻る）。
+
 ## 09-30 本番配信（本人GO「5頁と公式トップの導線をまとめて出す」）
 - vibe ae904b1（feat/dopamin-guide を本番枝 codex/meikyo-island へ早送り・push 済み）・Worker Version af70b175・verify-deploy 全項目OK・5頁と guide.css/js・顔・画面写真・栞が 200、公式トップの「攻略」リンク2つを本番で確認
 - 配信前の照合: 本番 worker に今の worker.prod-20260918.js が丸ごと含まれる（取得 3.65MB）＝一致。dist 1383件のうち差は新しい攻略帖の頁と素材、公式トップの導線2行だけ。**本番の HTML はどれも +367 バイト＝Cloudflare Web Analytics の beacon の注入**（差に見えるが正常）
