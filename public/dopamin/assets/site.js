@@ -10,12 +10,11 @@
     if (SLUG.test(inVia)) v = `${v}.${inVia}`.slice(0, 48).replace(/[._-]+$/, "");
     const u = new URL(a.href); u.searchParams.set("via", v); u.searchParams.set("utm_source", "dopamin"); a.href = u.toString();
   });
-  // Android では TestFlight を出さず、会員登録（配信の報せ）を主役にする
+  // 10-03: Android もテスト版（Google Play）を配信中。スマホでは自分の機種のボタンだけ出し、パソコンでは両方を出す
   if (/Android/i.test(navigator.userAgent)) {
     document.body.classList.add("is-android");
-    const tf = document.getElementById("joinTf"); if (tf) tf.remove();
-    const jh = document.getElementById("join-h"); if (jh) jh.textContent = "Android版は、もうすぐ。";
-    document.querySelectorAll("[data-os-note]").forEach((el) => { el.textContent = "iPhone版は先行テスト中。"; });
+  } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1)) {
+    document.body.classList.add("is-ios");
   }
 
   // ---- 仲間の列（本編の名簿の名前・ゲームのカード絵） ----

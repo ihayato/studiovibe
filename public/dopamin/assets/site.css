@@ -180,10 +180,12 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--gold-hi); outli
 .qr { display: none; margin: 0; text-align: center; }
 .qr img { width: 112px; height: 112px; border-radius: 10px; box-shadow: 0 0 0 4px var(--cream); image-rendering: pixelated; }
 .qr figcaption { margin-top: 8px; font-size: 12px; font-weight: 700; line-height: 1.5; color: var(--moon-2); }
-@media (min-width: 880px) and (hover: hover) { .qr { display: block; } .join-act .btn { flex: 0 1 auto; } }
+@media (min-width: 880px) and (hover: hover) { .qr { display: block; } .join-act .btn { flex: 0 1 auto; min-width: 240px; } }
 .fine { margin: 16px 0 0; font-size: 13px; line-height: 1.7; color: var(--moon-2); }
-body.is-android [data-tf] { display: none; }
-body.is-android .qr { display: none; }
+.join-act + .join-act { margin-top: 16px; }
+body.is-android [data-tf], body.is-android .join-act.tf { display: none; }
+body.is-ios [data-gp], body.is-ios .join-act.gp { display: none; }
+body.is-android .qr, body.is-ios .qr { display: none; }
 
 /* あそびかた */
 .play { display: grid; gap: 64px; }
