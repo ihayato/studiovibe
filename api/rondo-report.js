@@ -31,7 +31,8 @@ export default async function handler(req, res) {
     if (!email || email.length > 254 || !emailRegex.test(email)) {
         return res.status(400).json({ error: 'メールアドレスをご確認ください。' });
     }
-    if (!body || String(body).trim().length < 10) {
+    // 「導入できました」報告(category=done・Rondo v0.9〜)は一言なしでも受ける
+    if (category !== 'done' && (!body || String(body).trim().length < 10)) {
         return res.status(400).json({ error: '報告内容を10文字以上で入力してください。' });
     }
     if (!turnstileToken) {

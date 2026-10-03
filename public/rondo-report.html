@@ -107,6 +107,7 @@
           <option value="line">LINE配信</option>
           <option value="admin">管理画面</option>
           <option value="other" selected>その他</option>
+          <option value="done">導入できました（配信開始まで到達）</option>
         </select>
 
         <label class="t" for="rp-body">報告内容</label>
@@ -138,6 +139,21 @@
 <footer><span>© 2026 Studio VIBE / Rondo</span></footer>
 
 <script>
+// 「導入できました」は一言なしで送れる(本文を任意に切り替える)
+(function(){
+  var cat = document.getElementById('rp-cat');
+  var bodyEl = document.getElementById('rp-body');
+  var ph = bodyEl.placeholder;
+  function sync(){
+    var done = cat.value === 'done';
+    bodyEl.required = !done;
+    if (done) bodyEl.removeAttribute('minlength'); else bodyEl.setAttribute('minlength', '10');
+    bodyEl.placeholder = done ? '（任意）ひとことあればどうぞ。例: 3日で最初の1通が届きました' : ph;
+  }
+  cat.addEventListener('change', sync);
+  if (location.hash === '#done') { cat.value = 'done'; }
+  sync();
+})();
 document.getElementById('rp-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var form = this;
