@@ -235,3 +235,6 @@
 - 直し: worker バンドルで使う直前に末尾の空白・改行・「\n」「\r」を除去（hookUrl）。secret 自体は未修正（読み出せないため）。本来は Discord でウェブフック URL を確かめて `wrangler secret put WEBHOOK_URL`（末尾改行なし）で入れ直すのが正
 - ログ行（status と非OK時の本文先頭200字・URL は出さない）は監視用に残した。`wrangler tail vibe --format json --search "contact discord"` で見られる
 - 09-29 追記: 本人の再テストで Discord 204（成功）を確認。Discord 通知に @ikehaya メンション（content <@683456112409837750>＋allowed_mentions・定数 CONTACT_MENTION_USER）を追加して配信（Version d08a1af8）。ユーザーIDは結の目のログ（author=ikehaya）で確認
+
+## 10-01 フッター整理
+フッターから「ブログ」「夜空の島」「ライセンス」を除去（本人: いらない）。site/partials/footer.html・commit 4dbf092・Worker cda083dc・全項目OK。/blog /island /licenses のページ自体は残っている（リンクを外しただけ）。**フッターに戻さない。**

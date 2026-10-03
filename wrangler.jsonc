@@ -1,0 +1,45 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "vibe",
+    "main": "worker.prod-20260918.js",
+    "compatibility_date": "2026-08-12",
+    "compatibility_flags": ["nodejs_compat"],
+    "routes": [
+        { "pattern": "vibe.co.jp", "custom_domain": true },
+        { "pattern": "www.vibe.co.jp", "custom_domain": true }
+    ],
+    "assets": {
+        "directory": "dist",
+        "binding": "ASSETS",
+        "html_handling": "auto-trailing-slash",
+        "not_found_handling": "404-page",
+        "run_worker_first": true
+    },
+    "durable_objects": {
+        "bindings": [
+            {
+                "name": "MINT_QUEUE",
+                "class_name": "MintQueue"
+            }
+        ]
+    },
+    "migrations": [
+        {
+            "tag": "v1",
+            "new_sqlite_classes": ["MintQueue"]
+        }
+    ],
+    // rewrites先の他Workerはfetch()で直接*.workers.devを叩けない(Cloudflareの制約。
+    // Worker間はService Bindingが必要)ため、7本すべてbinding経由にする。
+    // 問い合わせフォームのメール通知（CF Email Service・from は vibe.co.jp 直下のみ有効）。2026-09-29
+    "send_email": [{ "name": "EMAIL" }],
+    "services": [
+        { "binding": "SVC_SAKUYA", "service": "sakuya-site" },
+        { "binding": "SVC_HANKACHO", "service": "ninja-hankacho-site" },
+        { "binding": "SVC_MITASEO", "service": "mitama-seori-site" },
+        { "binding": "SVC_IKKYO", "service": "ikkyo-web" },
+        { "binding": "SVC_OCHANOMA", "service": "ochanoma-news-site" },
+        { "binding": "SVC_CNKITAN", "service": "cn-kitan-web" },
+        { "binding": "SVC_SAGETSU", "service": "sagetsu-web" }
+    ]
+}
