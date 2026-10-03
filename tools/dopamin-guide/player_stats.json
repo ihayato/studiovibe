@@ -1,0 +1,118 @@
+{
+ "asOf": "2026-10-03 15:16",
+ "goal": 2000,
+ "players": 121,
+ "count": {
+  "1000": 49,
+  "1500": 29,
+  "2000": 7
+ },
+ "reached": [
+  {
+   "days": 3.6,
+   "dawns": 4
+  },
+  {
+   "days": 4.0,
+   "dawns": 5
+  },
+  {
+   "days": 4.9,
+   "dawns": 5
+  },
+  {
+   "days": 5.0,
+   "dawns": 1
+  },
+  {
+   "days": 5.0,
+   "dawns": 5
+  },
+  {
+   "days": 5.4,
+   "dawns": 3
+  },
+  {
+   "days": 5.7,
+   "dawns": 3
+  }
+ ],
+ "dawnsAt1500": {
+  "top": {
+   "median": 2,
+   "min": 1,
+   "max": 4
+  },
+  "near": {
+   "median": 1.0,
+   "min": 0,
+   "max": 5
+  }
+ },
+ "dawnsNow": {
+  "top": {
+   "median": 5,
+   "min": 2,
+   "max": 11
+  },
+  "near": {
+   "median": 1.0,
+   "min": 0,
+   "max": 6
+  }
+ },
+ "nearCount": 22,
+ "lead": {
+  "best": 3078,
+  "walk": [
+   {
+    "dawn": 0,
+    "night": 142
+   },
+   {
+    "dawn": 1,
+    "night": 686
+   },
+   {
+    "dawn": 2,
+    "night": 1275
+   },
+   {
+    "dawn": 3,
+    "night": 1440
+   },
+   {
+    "dawn": 4,
+    "night": 1640
+   },
+   {
+    "dawn": 5,
+    "night": 1950
+   },
+   {
+    "dawn": 6,
+    "night": 2100
+   },
+   {
+    "dawn": 7,
+    "night": 2310
+   },
+   {
+    "dawn": 8,
+    "night": 2470
+   },
+   {
+    "dawn": 9,
+    "night": 2620
+   },
+   {
+    "dawn": 10,
+    "night": 2832
+   },
+   {
+    "dawn": 11,
+    "night": 2970
+   }
+  ]
+ }
+}

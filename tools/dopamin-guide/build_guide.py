@@ -20,7 +20,7 @@ from pathlib import Path
 
 from guide_parts import (ELEM, GOLD_BR, SHOKKO, b, e, elem_chip, fig, formula, hours, html_chain, html_ladder, html_party,
                          html_pity, html_rate_bar, html_stat_bars, kaname, more, num, p, pct, sec, shiori, shot, steps, subh,
-                         svg_awaken, svg_bar_steps, svg_cycle, svg_gogyo, svg_growth, svg_night_road, svg_number_line, svg_train_curve, table,
+                         svg_awaken, svg_bar_steps, svg_hbars, svg_cycle, svg_gogyo, svg_growth, svg_night_road, svg_number_line, svg_train_curve, table,
                          toc, ul)
 
 HERE = Path(__file__).resolve().parent
@@ -31,16 +31,18 @@ IMG = SITE / 'assets' / 'img' / 'guide'
 BASE_URL = 'https://vibe.co.jp/dopamin/guide/'
 TF_URL = 'https://testflight.apple.com/join/e11TtzhJ'
 V = '20260930b'
+TOMO_ECLIPSE = json.loads((HERE / 'measured.json').read_text())['tomoEclipse']['v']  # 灯の単位が変わった（guide_data の tomoOnBest は旧単位）
 
 PAGES = [
     ('hajimekata', 'はじめかた', 'はじめかた 最初の一日', '画面の見方、夜と大妖、タップと育成、放置のしくみ'),
     ('gesshoku', '月蝕・暁', '月蝕・暁 押しどきと倍率の式', '押しどき計算機、失うもの・残るもの、暁の恵み'),
+    ('nisen', '第2000夜', '第2000夜の越え方 早い人のやり方', '番付の記録と運営の計測から、月蝕の押しどき・叩き方・毎日のこと'),
     ('nakama', 'なかま・装備', 'なかま・絵巻・装備', '全なかまの攻・速・技、絵巻の率と天井、装備と開眼'),
     ('komatta', '困ったとき', '困ったとき よくある質問', '夜が進まない、大妖に勝てない、引き継ぎ'),
 ]
 
 
-def layout(slug, title, desc, body, updated, jsonld=None, script=False):
+def layout(slug, title, desc, body, updated, jsonld=None, script=False, foot=None):
     here = f'{BASE_URL}{slug + "/" if slug else ""}'
     up = '../' if slug else ''
     site = '../../' if slug else '../'
@@ -100,7 +102,7 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False):
   </article>
 </main>
 <footer class="g-foot">
-  <p>運営による公式攻略。数値はゲーム本体の定数から自動で写しています。テスト版のため、調整で変わることがあります。</p>
+  <p>{foot or '運営による公式攻略。数値はゲーム本体の定数から自動で写しています。テスト版のため、調整で変わることがあります。'}</p>
   <nav aria-label="サイト情報"><a href="{site}">公式サイト</a><a href="{site}terms/">利用規約</a><a href="{site}privacy/">プライバシーポリシー</a><a href="{site}support/">サポート</a></nav>
   <p class="g-copy">© Studio VIBE — どーぱみんくりっかー！</p>
 </footer>
@@ -113,7 +115,7 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False):
 # ---------- 頁 ----------
 def page_index(d, updated):
     ec = d['eclipse']
-    shelf = ''.join(f'<a class="shelf" href="{s}/"><span class="shelf-n">{"一二三四"[i]}</span><span class="shelf-b"><span class="shelf-t">{t.split(" ")[0]}</span><span class="shelf-d">{desc}</span></span></a>'
+    shelf = ''.join(f'<a class="shelf" href="{s}/"><span class="shelf-n">{"一二三四五六"[i]}</span><span class="shelf-b"><span class="shelf-t">{t.split(" ")[0]}</span><span class="shelf-d">{desc}</span></span></a>'
                     for i, (s, _, t, desc) in enumerate(PAGES))
     body = (
         p('運営による公式攻略。数値はゲームの中身そのまま、画面に出ない数字も式ごと載せています。', 'lead')
@@ -122,6 +124,7 @@ def page_index(d, updated):
         + sec('yoku', 'よく聞かれること',
               kaname([
                   f'月蝕は、押せるようになってすぐより、進みが鈍るまで潜ってから。上乗せ分は10夜で約×{num(ec["per10"], 2)}（<a href="gesshoku/#oshidoki">押しどき</a>）',
+                  '第2000夜を早く越える人のやり方は、番付の記録と運営の計測から<a href="nisen/">第2000夜の越え方</a>にまとめました',
                   'お金はかかりません。ダウンロード無料、アプリ内課金なし',
                   f'なかまはいま{len(d["allies"])}人（<a href="nakama/#ichiran">一覧</a>）',
               ])))
@@ -260,7 +263,7 @@ def page_gesshoku(d, updated):
               + table(['失う', '残る', '得る'], [[
                   '夜・小判・なかまのLv（鍛錬）',
                   '主人公レベル・迎えたなかま・覚醒★・装備・絵巻・月の通い路の星',
-                  f'全ダメージの倍率（ずっと）。最深を更新した月蝕なら絵巻+{ec["gekkaOnBest"]}・灯+{ec["tomoOnBest"]}',
+                  f'全ダメージの倍率（ずっと）。最深を更新した月蝕なら絵巻+{ec["gekkaOnBest"]}・灯+{TOMO_ECLIPSE}',
               ]])
               + p(f'月蝕のあとは、なかまが妖1体に{num(ec["dashMinKillSec"])}秒以上かかる夜まで一気に駆け抜けます（最大で月蝕した夜の{pct(ec["dashCapRatio"], 0)}まで）。戻り道は思ったより短いです。'))
         + sec('oseru', '押せる夜',
@@ -309,6 +312,155 @@ def page_gesshoku(d, updated):
               p('2回目からの月蝕では、陰っている宿が3つ未満なら、加護が灯っていて、まだ陰っておらず、位1・2の星が残る宿が1つ陰り、その星の効き目が止まります（最初の月蝕では陰りません）。位3の星は陰りません。宿の加護・四神・紫微垣の効き目は止まりません。陰った星は灯し直せて、灯し直すと星の位が上がります。'))
     )
     return layout('gesshoku', '月蝕・暁 押しどきと倍率の式', 'どーぱみんくりっかー！の月蝕の押しどき。蝕片と全ダメージ倍率の式、押しどき計算機、失うもの・残るもの、札と巻物、暁の恵みまで。', body, updated, script=True)
+
+
+def page_nisen(d, updated, ps, ms):
+    """第2000夜の越え方。番付の記録（player_stats.json＝pull_player_stats.py）と運営の計測（measured.json）から。
+    言葉は「はじめて読む人」に合わせてかみくだく（10-03 本人「言葉がわかりにくい。実際の画像も見せてもっと丁寧に」）"""
+    ec, dw, sm, n, tm, g0 = d['eclipse'], d['dawn'], d['summon'], d['night'], d['team'], d['gear']
+    rs, st, goal = ms['rush'], ms['stall'], ps['goal']
+    tomo = ms['tomoEclipse']['v']
+    grow, step = ec['fragExpGrow'], ec['fragExpStep']
+    reached = ps['reached']
+    days = [r['days'] for r in reached]
+    many = sum(r['dawns'] >= 3 for r in reached)
+    sums = [(s, 1 / (1 - grow ** (-s / step))) for s in (200, 100, 50, 20, 10)]
+    ecl50 = 50
+    gekka50 = ecl50 * ec['gekkaOnBest'] + ecl50 // dw['every'] * dw['gekkaOnce']
+    a15, an = ps['dawnsAt1500'], ps['dawnsNow']
+
+    def dn(v):
+        return num(float(v), 1)
+    pt = ms['byPlaytime']
+    pt_rows = [[f'<b>{r["short"]}</b>'] + [f'{v}' if v else '—' for v in r['v'][1:]] for r in pt['rows']]
+    light = next(r for r in pt['rows'] if r['label'] == '1日30分')['v']
+    sp = pt['spread']
+    rush_rows = [(nm, tp, f'{tp}回で ×{mu}') for nm, mu, tp in zip(rs['names'], rs['mul'], rs['taps'])]
+    ts = ms['tapStyle']
+    tap_rows = [(r['short'], (r['lo'] + r['hi']) / 2, f'第{r["night"]}夜') for r in ts['rows']]
+    img = '../../assets/img/guide/'
+    body = (
+        shiori(f'第{goal}夜まで数日で届く方もいれば、第1500夜あたりで足が止まる方もおられます。どこが違うのか、番付の記録と運営の計測から、順にご案内いたします。')
+        + toc([('saki', '先に答え'), ('kotoba', 'この頁の言葉'), ('kiroku', '番付の記録'), ('hiraku', '開いているあいだだけ進む'), ('oharae', '叩いて大祓'),
+               ('gesshoku', '月蝕を押すところ'), ('mainichi', '毎日のこと'), ('kabe', f'第{goal}夜の坂'), ('ichinichi', '一日の回し方')])
+        + sec('saki', '先に答え',
+              kaname([
+                  f'早く届く人は、月蝕の回数が多い。第{goal}夜の記録が届いた{len(reached)}人のうち{many}人は、その時点で暁が3つ以上（＝前の最深を越える月蝕を30回以上）',
+                  '夜が進むのは、アプリを開いているあいだだけ。閉じているあいだは小判などが貯まるだけで、夜は1つも進まない',
+                  f'月蝕は「前の最深を越えて、そこで進みが止まったら」押す。止まったと見る目安は、長く遊ぶ人で{st["heavyMin"]}分、1日30分ほどの人で{st["lightMin"]}分',
+              ]))
+        + sec('kotoba', 'この頁の言葉',
+              p('先に、よく出てくる言葉をそろえておきます。')
+              + table(['言葉', '意味'], [
+                  ['<b>夜</b>', '今いる場所。画面の左上に出ている数字です。'],
+                  ['<b>最深</b>', '今の巡り（前の月蝕から今まで）で、いちばん深く進んだ夜。「前の最深」は、これまでに月蝕したなかでいちばん深い夜のことです。'],
+                  ['<b>月蝕</b>', '夜を第1夜に戻すかわりに、全ダメージがずっと上がる仕組み。下の「月蝕」から起こします。'],
+                  ['<b>蝕片</b>', '月蝕でもらえる力のもと。画面には数として出ませんが、月蝕の盆の「全ダメージ ×◯」に入っています。'],
+                  ['<b>暁</b>', f'前の最深を越える月蝕を{dw["every"]}回するごとに来る、夜明けのごほうび。'],
+                  ['<b>大祓</b>', '叩き続けると始まる、斬撃が何倍にもなる時間。'],
+              ], stack=False))
+        + sec('kiroku', '番付の記録',
+              p(f'番付には、その月にいちばん深く進んだ夜と、暁の数が届きます。{ps["asOf"]}の時点で記録のある{ps["players"]}台の端末を、名前を伏せて数えました（この頁の「人」は端末1台を1人として数えています）。')
+              + fig(f'第{goal}夜の記録が初めて届くまでの日数（左は、そのとき届いた暁の数）',
+                    svg_hbars([(f'暁{r["dawns"]}', r['days'], f'{num(r["days"], 1)}日') for r in reached], max(days) * 1.05, accent={0}), 460)
+              + table(['暁の数', '越えた人', '手前の人'], [
+                  ['第1500夜の記録が届いたとき', f'{dn(a15["top"]["median"])}つ', f'{dn(a15["near"]["median"])}つ'],
+                  ['いま', f'{dn(an["top"]["median"])}つ', f'{dn(an["near"]["median"])}つ'],
+              ], stack=False)
+              + p(f'数はどれも真ん中の人の値です。「越えた人」は第{goal}夜を越えた{len(reached)}人、「手前の人」は第1500〜{goal - 1}夜にいる{ps["nearCount"]}人。')
+              + ul([f'日数は、起点の日から、第{goal}夜以上の記録が初めて届いた日まで。起点は「番付に登録した日」「最初の記録が届いた日」「届いた夜の深さから見積もった日」のうち、いちばん早い日です。実際に遊び始めた日とは限りません。',
+                    '暁の数は、記録が届いたときのものです。月蝕の回数そのものは番付に届かないので、暁から「少なくとも何回」と読んでいます。',
+                    '番付からわかるのはここまでで、叩いた回数や遊んだ時間は届きません。その先は運営の計測で補います。']))
+        + sec('hiraku', '開いているあいだだけ進む',
+              p('アプリを閉じているあいだ（留守）は、夜は進みません。戻ってきたときに受け取れるのは、小判・灯・落とし物だけです。')
+              + shot(img + 'shot_n_rusu.webp', '留守から戻ったときの画面', [
+                  (1, 9, 40.5, '留守のあいだに貯まった小判と灯。夜の数は増えていない', (82, 33.5)),
+                  (2, 2.5, 7.2, '夜は、閉じる前と同じ第1531夜のまま', (27, 4.6)),
+              ])
+              + p('夜を進めるのは、画面を開いている時間です。眺めているあいだに画面が暗くならないよう、設定で「画面を消さない」を入にできます。')
+              + shot(img + 'shot_n_settei.webp', '設定の画面', [
+                  (1, 87, 13.6, '右上の歯車で設定を開く', (9.5, 4.4)),
+                  (2, 55, 33.6, '「画面と電池」を押す', (26, 4)),
+                  (3, 14, 66.4, '「画面を消さない」を入にする', (72, 5.2)),
+              ])
+              + fig(f'一日中開いたままにした{ts["day"]}日目に届いた夜（運営の計測・2026年9月30日の仕様。{ts["trials"]}）',
+                    svg_hbars(tap_rows, 2400, accent={len(tap_rows) - 1}, label_w=84), 460)
+              + p(f'どれも「{st["heavyMin"]}分止まったら月蝕」の同じ遊び方で、違うのは叩き方だけです。開いていても叩かないと、4日目で第{ts["rows"][0]["night"]}夜でした。'))
+        + sec('oharae', '叩いて大祓',
+              p('叩き続けると「大祓」が始まり、斬撃が何倍にもなります。叩けば叩くほど段が上がります。ここの回数や秒数は、強化していないときの基本の値です（月の通い路や装備で、時間がのびたり、始まるまでの回数が減ったりします）。')
+              + shot(img + 'shot_n_rush.webp', '大祓の最中（百鬼祓）', [
+                  (1, 3, 80.6, '今の段と倍率（百鬼祓 ×10）。数字は「今の回数／次の段までの回数」', (75, 5)),
+                  (2, 81, 77.8, '奥義の札。光ったら押す。長押しで奥義の画面が開く', (17, 8)),
+              ])
+              + fig('大祓の段と、そこまでに要る斬撃の回数（大祓が始まるたびに最初の段から数え直し）', svg_hbars(rush_rows, rs['taps'][-1] * 1.45, accent={len(rush_rows) - 1}, label_w=70), 460)
+              + ul([f'効いた斬撃が基本{b(rs["taps"][0])}回たまると大祓が始まり、斬撃が×{rs["mul"][0]}になります。',
+                    f'残り時間は基本{rs["sec"]}秒。何もしないと1秒に1秒ずつ減り、叩くと1回ごとに{num(rs["tapSec"], 1)}秒戻ります。段が上がると、また満タンに戻ります。',
+                    f'<b>1秒に8回ほど叩けば、いちばん上の月蝕祓まで届きます。</b>指を当てたままの長押しでも1秒に{rs["holdTapRate"]}回出るので届きます。',
+                    f'月蝕祓になると、叩いても時間はもう延びません。大祓ぜんたいでも{rs["maxSec"]}秒までです。',
+                    f'大妖との戦いでは×{rs["bossMulMax"]}まで。大祓が終わると、{num(rs["cooldownSec"] / 60)}分は次の大祓がたまりません。',
+                    f'空に月の欠片が漂ったら触れてください。基本{num(d["tap"]["feverSec"])}秒のあいだ、タップが×{num(d["tap"]["feverTapMul"])}になります。']))
+        + sec('gesshoku', '月蝕を押すところ',
+              shot(img + 'shot_n_gesshoku.webp', '月蝕の盆（下の「月蝕」）', [
+                  (1, 29, 27.6, '全ダメージが「今 → 月蝕のあと」で何倍になるか', (42, 19.4)),
+                  (2, 3, 51.4, '失うもの（夜・小判・なかまのLv）', (46, 14.6)),
+                  (3, 51, 51.4, '残るもの', (46, 23)),
+                  (4, 3, 75.6, f'次の暁までの点。点が{dw["every"]}つたまると暁', (94, 3.2)),
+                  (5, 21, 80.6, '月蝕を起こす', (58, 5.4)),
+              ])
+              + subh('押すまでの流れ')
+              + steps([
+                  ('前の最深より先の、大妖の夜まで進む', '押せるのは、前の最深より先の大妖の夜（10の倍数の夜）から。前の最深が第1510夜なら、第1520夜からです。'),
+                  ('進みが止まったら押す', f'最深がしばらく伸びなくなったら押しどき。長く遊ぶ人は{st["heavyMin"]}分、1日30分ほどの人は{st["lightMin"]}分が目安です（短い人が早く押しすぎると、戻り道に時間を使ってしまうため）。'),
+                  ('押す前に、小判を鍛錬に使い切る', '下の「育成」を開き、「隊を鍛錬」で小判を使ってから月蝕します。小判は月蝕で0になります。なかまのLvは、暁の「持ち越し」の分だけ残ります（<a href="../gesshoku/#akatsuki">暁</a>）。'),
+                  ('月蝕のあとは自動で先へ', f'なかまの強さに見合う夜まで、自動で飛ばして進みます（いちばん先でも月蝕した夜の{pct(ec["dashCapRatio"], 0)}まで）。そこから叩いて、前の最深を越えにいきます。'),
+              ])
+              + subh('細かく重ねると何がいいか')
+              + p('月蝕でもらえる蝕片は、月蝕のたびに足し算で貯まります。同じ夜にたどり着いたとしても、少しずつ何度も月蝕してきた人のほうが、貯まった蝕片は多くなります。')
+              + fig('何夜ごとに月蝕してきたかと、貯まった蝕片（最後の1回ぶんを1としたとき）',
+                    svg_bar_steps([f'{s}夜' for s, _ in sums], [v for _, v in sums], '貯まった蝕片（倍）', sums[-1][1] * 1.15, fmt=lambda v: f'×{num(v, 1)}'), 460)
+              + p(f'さらに、前の最深を越えた月蝕には絵巻{ec["gekkaOnBest"]}枚と灯{tomo}が付き、{dw["every"]}回ごとの暁では絵巻{dw["gekkaOnce"]}枚が付きます。前の最深を越える月蝕を{ecl50}回すれば、絵巻だけで{b(gekka50)}枚です。')
+              + ul([f'画面を開いたまま{num(ec["reliefSec"] / 60)}分、最深が伸びないと、押せる夜が「前の最深の約九割」まで下がります（九割の月蝕・<a href="../gesshoku/#oseru">押せる夜</a>）。ただし前の最深を越えずに起こした月蝕には、暁・絵巻・灯は付きません（蝕片は入ります）。詰まりをほどく手で、重ねても暁は増えません。',
+                    '細かく重ねると蝕片は増えます。ただ、運営の計測では、これだけで大きく差がつくわけではありませんでした。いちばん効くのは、開いて叩いている時間です。'])
+              + more('蝕片の合計の式', formula(f'蝕片の合計 ≒ 最後の1回 ÷ (1 − {num(grow, 3)}<sup>−刻み ÷ {num(step)}</sup>)',
+                                            note='「刻み」は何夜ごとに月蝕するか。巻物の倍率を変えず、同じ刻みで十分な回数を重ねたときの近似です（<a href="../gesshoku/#shiki">倍率の式</a>）。')))
+        + sec('mainichi', '毎日のこと',
+              p('時間に関係なくもらえるものは、毎日取りこぼさないのがいちばんの近道です。')
+              + shot(img + 'shot_shoukan.webp', '召喚の画面', [
+                  (1, 45, 79, f'十連。始めた日から{sm["freeTenDays"]}日は毎日1回無料（繰り越しなし）', (46.5, 6.6)),
+              ])
+              + shot(img + 'shot_soubi.webp', '装備の画面', [
+                  (1, 22, 41.6, f'鍛冶場。1日{g0["forgeDaily"]}回、装備のLvを上げられる', (26.5, 5.6)),
+                  (2, 50.5, 41.6, '開眼。できる数が出ていたら選ぶ', (28.5, 5.6)),
+              ])
+              + shot(img + 'shot_n_ougi.webp', '奥義の画面（奥義の札を長押し）', [
+                  (1, 15, 33.8, '今使っている奥義', (70, 11.4)),
+                  (2, 15, 46.2, '奥義の段。右下ほど新しく強い', (70, 24.8)),
+              ])
+              + ul([f'依頼の3題を済ませると絵巻{d["quests"]["dailyFullGekka"]}枚。',
+                    '奥義は、新しい段が開くと、次に溜め始めたときに自動で持ち替わります。ただし、この画面で古い段を自分で選ぶと、その段のままになります。選んだ覚えがあれば、いちばん新しい段を選び直してください。']))
+        + sec('kabe', f'第{goal}夜の坂',
+              p(f'妖の体力は、第{n["hpLateFrom"]}夜までは1夜ごとに×{num(n["hpGrow"])}、その先は×{num(n["hpLateGrow"])}で増えます。<b>第{goal}夜の手前がいちばんきつい坂</b>で、第1500夜あたりから進みが重くなるのはこのためです。越えると登りはゆるみます。')
+              + p('坂を越える助けになるのは、次のような「一度で効く掛け算」です。')
+              + table(['掛け算', '効き目'], [
+                  ['新しいなかま', f'開始組のほかのなかまを1人迎えるごとに、隊の力が ×{num(tm["joinMul"][0])}（R）〜×{num(tm["joinMul"][-1])}（UR）'],
+                  ['夜の属性', f'その夜に克つなかまは ×{num(tm["elemAdv"])}、克たれるなかまは ×{num(tm["elemDis"])}。隊を「おまかせ」にしておけば、属性が替わる10夜ごとに自動で組み直します'],
+                  ['月蝕の重ね', '貯まった蝕片（上の図）'],
+                  ['装備', '帯＝なかまの力、巻物＝蝕片、刀＝タップ'],
+              ])
+              + subh('遊ぶ時間ごとの見込み')
+              + table(['遊び方'] + pt['cols'][1:], pt_rows, 'num', stack=False)
+              + p(f'数は届いた夜（運営の計測・2026年9月30日の仕様）。{pt["note"]}。1日30分なら30日目で第{light[2]}夜、90日目で第{light[3]}夜ほどが目安です。')
+              + p(f'召喚の運でも差がつきます。同じ遊び方でも、{sp["label"]}は第{sp["lo"]}〜{sp["hi"]}夜と幅がありました。'))
+        + sec('ichinichi', '一日の回し方',
+              steps([
+                  ('開いたら、毎日のぶんを受け取る', f'無料の十連・依頼・鍛冶場{g0["forgeDaily"]}回。'),
+                  ('遊ぶあいだは叩く', '指か長押しで大祓を回す。月の欠片が出たら触れる。奥義の札が光ったら押す。'),
+                  ('前の最深を越えて止まったら月蝕', f'長く遊ぶ人は{st["heavyMin"]}分、1日30分ほどの人は{st["lightMin"]}分が目安。押す前に小判を鍛錬に使い切る。'),
+                  ('閉じるときは留守に任せる', f'小判・灯・落とし物が貯まります（はじめは{hours(d["offline"]["capSec"])}まで。暁で延びる）。夜は進みません。'),
+              ]))
+    )
+    return layout('nisen', f'第{goal}夜の越え方 早い人のやり方', f'どーぱみんくりっかー！で第{goal}夜を早く越える人のやり方。番付の記録と運営の計測から、月蝕の押しどき・叩き方・毎日のこと・第{goal}夜の坂まで、実際の画面つきで。', body, updated,
+                  foot='運営による公式攻略。数値はゲーム本体の定数・番付の集計・運営の計測に基づいています。テスト版のため、調整で変わることがあります。')
 
 
 def page_nakama(d, updated, faces):
@@ -457,7 +609,7 @@ def copy_assets(d, clicker, kitan_web):
     if src.exists():
         shutil.copyfile(src, IMG / 'shiori_chibi.webp')
     # 画面写真（tool_shot_guide_test の書き出し）→ webp
-    for name in ('ninmu', 'ikusei', 'soubi', 'shoukan', 'gesshoku'):
+    for name in ('ninmu', 'ikusei', 'soubi', 'shoukan', 'gesshoku', 'n_rush', 'n_gesshoku', 'n_rusu', 'n_ougi', 'n_settei'):
         png = HERE / 'shots' / f'{name}.png'
         if png.exists():
             subprocess.run(['cwebp', '-quiet', '-q', '80', str(png), '-o', str(IMG / f'shot_{name}.webp')], check=True)
@@ -482,7 +634,10 @@ def main():
     day = datetime.date.fromisoformat(d['meta']['exportedAt'][:10])
     updated = day.isoformat()
     faces = copy_assets(d, args.clicker, args.kitan_web)
+    ps = json.loads((HERE / 'player_stats.json').read_text())
+    ms = json.loads((HERE / 'measured.json').read_text())
     pages = {'': page_index(d, updated), 'hajimekata': page_hajimekata(d, updated), 'gesshoku': page_gesshoku(d, updated),
+             'nisen': page_nisen(d, ps['asOf'][:10], ps, ms),
              'nakama': page_nakama(d, updated, faces), 'komatta': page_komatta(d, updated)}
     for slug, text in pages.items():
         dst = OUT / slug / 'index.html' if slug else OUT / 'index.html'

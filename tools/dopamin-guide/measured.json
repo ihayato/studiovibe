@@ -1,0 +1,128 @@
+{
+ "_about": "ゲーム本体を早回しした運営の計測（kitan-clicker の tools/fixtures/*probe*.dart）と、書き出し器にまだ無い定数。頁「第2000夜の越え方」が読む。数字を変えるときは src を開いて写し直す",
+ "rush": {
+  "src": "kitan-clicker balance/lib/balance.dart 128-139（大祓）・56（長押し）・app/lib/tap_guard.dart（指の上限）・139（全体の上限）",
+  "names": [
+   "大祓",
+   "百鬼祓",
+   "千本祓",
+   "月蝕祓"
+  ],
+  "taps": [
+   150,
+   400,
+   700,
+   1000
+  ],
+  "mul": [
+   5,
+   10,
+   25,
+   100
+  ],
+  "sec": 15,
+  "tapSec": 0.1,
+  "cooldownSec": 180,
+  "bossMulMax": 10,
+  "holdTapRate": 8,
+  "fingerMax": 12,
+  "maxSec": 150
+ },
+ "byPlaytime": {
+  "src": "kitan-clicker docs/BALANCE.md 53-58（09-30 夜の測り直し・種10本、24時間は種3本・中央値）",
+  "cols": [
+   "1日目",
+   "7日目",
+   "30日目",
+   "90日目"
+  ],
+  "rows": [
+   {
+    "label": "1日10分",
+    "v": [
+     451,
+     860,
+     1660,
+     2200
+    ],
+    "short": "10分/日"
+   },
+   {
+    "label": "1日30分",
+    "v": [
+     590,
+     1290,
+     1800,
+     2870
+    ],
+    "short": "30分/日"
+   },
+   {
+    "label": "1日3時間・叩く",
+    "v": [
+     1260,
+     1710,
+     2800,
+     3850
+    ],
+    "short": "3時間/日"
+   },
+   {
+    "label": "一日中・叩く",
+    "v": [
+     1530,
+     3180,
+     4020,
+     null
+    ],
+    "short": "一日中"
+   }
+  ],
+  "note": "どの行も、遊ぶあいだは叩き、無料十連・日次・鍛冶場・開眼も使った計測。1日30分は10分×3回。数は10回試した真ん中あたり（小さい方から6番目）、一日中は3回の真ん中",
+  "spread": {
+   "label": "1日3時間・30日目",
+   "lo": 2030,
+   "hi": 3130,
+   "src": "docs/BALANCE.md 57"
+  }
+ },
+ "tapStyle": {
+  "src": "~/Desktop/旧Mac救出/dopamin-eclipse-reward_20260930/REPORT.md 計測3（一日中開いたまま・3分止まったら月蝕・4日目）",
+  "day": 4,
+  "rows": [
+   {
+    "label": "叩かず開いているだけ",
+    "night": "1520",
+    "short": "叩かない",
+    "lo": 1520,
+    "hi": 1520
+   },
+   {
+    "label": "長押し（毎秒8打）",
+    "night": "1750〜1900",
+    "short": "長押し",
+    "lo": 1750,
+    "hi": 1900
+   },
+   {
+    "label": "指で毎秒12打",
+    "night": "2040",
+    "short": "指で12打",
+    "lo": 2040,
+    "hi": 2040
+   }
+  ],
+  "trials": "叩かない・指12打は各1回、長押しは2回の試算"
+ },
+ "stall": {
+  "src": "kitan-clicker docs/BALANCE.md 75-86（月蝕の間合い・種3/11/29）",
+  "heavyMin": 3,
+  "lightMin": 10,
+  "heavyNote": "1日3時間の人は「3分」のほうが序盤（1〜30日）に先へ進んだ",
+  "lightNote": "1日30分の人は「3分」だと30日目から約110夜遅れた（短い時間を登り直しに使うため）"
+ },
+ "tomoEclipse": {
+  "v": 75,
+  "src": "kitan-clicker balance/lib/balance.dart 174（tomoEclipse = 5 × 灯の単位15。09-30 に灯の単位が変わった＝guide_data.json の tomoOnBest 5 は旧単位）"
+ }
+}

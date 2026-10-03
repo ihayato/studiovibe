@@ -364,3 +364,21 @@ def svg_awaken(costs, star_waza):
             g.append(f'<text x="{x + sw / 2:.1f}" y="{y - 8}" text-anchor="middle" font-size="14" font-weight="700" fill="{GOLD}">欠片{costs[i - 1]}</text>')
     g.append(f'<text x="{W / 2}" y="{H - 6}" text-anchor="middle" font-size="14" fill="{INK_SOFT}">段の上＝その段へ上がるのに要る欠片</text>')
     return f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="覚醒の段と要る欠片" class="svg">{"".join(g)}</svg>'
+
+
+def svg_hbars(rows, vmax, unit='', accent=None, label_w=56):
+    """横棒（人ごと・遊び方ごとの比べ）。rows=[(左の札, 値, 棒の先の字)]。accent=強調する行の番号の集合"""
+    W, R, rh = 380, 64, 34
+    L = label_w
+    top = 26 if unit else 4
+    H = top + 6 + rh * len(rows)
+    g = [f'<text x="6" y="16" font-size="14" fill="{INK_SOFT}">{unit}</text>'] if unit else []
+    for i, (lab, v, txt) in enumerate(rows):
+        y = top + i * rh
+        w = (W - L - R) * v / vmax
+        hot = accent is not None and i in accent
+        g.append(f'<text x="{L - 8}" y="{y + 21}" text-anchor="end" font-size="14" fill="{INK}">{lab}</text>')
+        g.append(f'<rect x="{L}" y="{y + 6}" width="{max(w, 2):.1f}" height="20" rx="3" fill="{SHOKKO if hot else GOLD_BR}" opacity="{1 if hot else .85}"/>')
+        g.append(f'<text x="{L + w + 6:.1f}" y="{y + 21}" font-size="14" font-weight="700" fill="{INK}">{txt}</text>')
+    return f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="{e(unit)}" class="svg">{"".join(g)}</svg>'
+
