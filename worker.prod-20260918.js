@@ -22485,6 +22485,12 @@ function withSecurityHeaders(response, pathname) {
   if (pathname.startsWith(BOTID_PREFIX)) {
     headers.set("X-Frame-Options", "SAMEORIGIN");
     headers.set("Content-Security-Policy", "frame-ancestors 'self'");
+  } else if (/^\/luna-occulta\/media\/models\/[a-z][a-z0-9_-]*-\d{8}\/(?:index\.html)?$/.test(pathname)) {
+    // The 3D gallery embeds only these versioned public viewers on this origin.
+    headers.set("X-Frame-Options", "SAMEORIGIN");
+    const directives = (headers.get("Content-Security-Policy") || "").split(";").map((value) => value.trim()).filter((value) => value && !/^frame-ancestors\s/i.test(value));
+    directives.push("frame-ancestors 'self'");
+    headers.set("Content-Security-Policy", directives.join("; "));
   }
   return new Response(response.body, {
     status: response.status,
