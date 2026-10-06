@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ja" data-guide="update">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F5F6F8">
+  <meta name="description" content="Rondoの新しい版が届いたときに、AIへ依頼して安全に更新を適用するためのユーザーガイドと変更履歴。">
+  <title>更新の適用ガイド | Rondo</title>
+  <link rel="canonical" href="https://vibe.co.jp/rondo-guides/update">
+  <meta property="og:title" content="更新の適用ガイド | Rondo">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
+  <meta property="og:site_name" content="Studio VIBE">
+  <script src="https://rondo.nubonba.workers.dev/heat.js" data-page="rondo-guide-update" defer></script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/guide.css">
+  <script src="assets/guide.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-rondo-label="スキップ 本文へ移動">本文へ移動</a>
+  <p id="guide-status" class="sr-only" role="status" aria-live="polite"></p>
+
+  <header class="site-head" data-rondo-click-sec="header">
+    <div class="head-inner">
+      <a class="brand" href="/rondo-guides/update" aria-label="Rondo 更新の適用ガイド" data-rondo-label="ヘッダー ガイドホーム">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>Rondo guides</span>
+      </a>
+      <nav class="guide-nav" aria-label="ガイド">
+        <a href="/rondo-guides/setup" data-rondo-label="ヘッダー 初回セットアップ">初回セットアップ</a>
+        <a href="/rondo-guides/settings" data-rondo-label="ヘッダー 導入後の設定">導入後の設定</a>
+        <a href="/rondo-guides/update" aria-current="page" data-rondo-label="ヘッダー 更新の適用">更新の適用</a>
+        <a href="/rondo">Rondoとは</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="page-title" data-sec="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">更新の適用・AIと一緒に</p>
+          <h1 id="page-title">新しい版も、<br>AIに頼んで適用する。</h1>
+          <p class="lead">
+            Rondoの更新は、新しい配布フォルダを受け取って、AIに適用を頼むだけです。
+            あなたの設定と原稿は上書きされません。あなたがするのは、展開と、最後の確認だけです。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="rail" aria-label="更新進捗" data-rondo-click-sec="rail">
+        <div class="progress-card">
+          <div class="progress-top">
+            <span class="progress-label">更新の適用</span>
+            <span class="progress-value">0 / 3</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="更新の進捗"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div class="progress-bar"></div>
+          </div>
+          <p class="progress-note">チェック状態はこのブラウザに保存されます。</p>
+        </div>
+        <nav class="toc" aria-label="このページの目次">
+          <a href="#extract" data-rondo-label="目次 展開">新しい版を展開する</a>
+          <a href="#ask-ai" data-rondo-label="目次 AIへ依頼">AIへ依頼する</a>
+          <a href="#verify" data-rondo-label="目次 確認">一緒に確認する</a>
+          <a href="#history" data-rondo-label="目次 変更履歴">変更履歴</a>
+        </nav>
+      </aside>
+
+      <div class="guide-content">
+        <section class="intro" aria-label="役割分担" data-sec="intro">
+          <div class="intro-item">
+            <b>AIがすること</b>
+            <span>控えの作成、差し替え、検査、本番反映</span>
+          </div>
+          <div class="intro-item">
+            <b>あなたがすること</b>
+            <span>新しい版の展開と、最後の確認</span>
+          </div>
+          <div class="intro-item">
+            <b>守られるもの</b>
+            <span>あなたの設定、原稿、読者データ</span>
+          </div>
+        </section>
+
+        <section class="step" id="extract" aria-labelledby="extract-title" data-sec="extract">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">01</span>
+            <div>
+              <span class="step-kicker">受け取ったら</span>
+              <h2 id="extract-title">新しい版を展開する</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            届いた圧縮ファイル（rondo-dist）をダブルクリックで展開し、フォルダの場所を控えてください。
+            いま運用中のRondoフォルダは、まだ触らなくて大丈夫です。
+          </p>
+          <div class="step-body">
+            <label class="task">
+              <input class="task-check" id="update-extract" type="checkbox" data-rondo-label="完了 展開">
+              <span class="task-copy">
+                <strong>新しい版を展開し、場所を控えた</strong>
+                <span>例: ダウンロードフォルダの中の rondo-dist。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title" data-sec="ask-ai">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">02</span>
+            <div>
+              <span class="step-kicker">まずこれだけ</span>
+              <h2 id="ask-ai-title">この依頼文をAIへ渡す</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            運用中のRondoフォルダを開いているClaude CodeやCodexなどの作業AIへ、下の文章をそのまま渡してください。
+            かっこの中だけ、あなたの展開先に書き換えます。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block">
+              <div class="prompt-head">
+                <span>AIへの更新適用依頼文</span>
+                <button class="copy-button" type="button" aria-label="更新適用依頼文をコピー" data-rondo-label="CTA 更新依頼文コピー" data-rondo-cta="copy">コピー</button>
+              </div>
+              <pre><code>Rondoの新しい版を受け取りました。展開したフォルダは（ここに展開先の場所を書く）です。
+
+展開した新しい版のフォルダにあるSETUP.md（いま運用中のフォルダの古いSETUP.mdではなく）の「更新の適用」の節を全文読み、その手順どおりに、いま運用中のこのRondoへ新しい版を適用してください。
+
+守ってほしいこと：
+- コマンドはすべてあなたが実行し、私には打たせないでください
+- 適用の前に、いまのフォルダの控えとデータベースの控えを必ず取ってください
+- 私の設定ファイルと原稿は、新しい版のサンプルで上書きしないでください
+- テストが全部緑になるまで、本番への反映はしないでください
+- 終わったら、健康診断の表示で版番号が新しくなっていることと、管理画面が正常なことを見せてください
+
+作業中は、いま何をしているかと、私が次にすることだけを短く案内してください。</code></pre>
+            </div>
+            <div class="callout safe">
+              <strong>設定と原稿は守られます</strong>
+              <p>あなたが埋めた設定ファイルと、あなたの原稿、読者のデータは更新で上書きされません。手順書がそのように書かれていて、AIはそれに従います。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="update-ask-ai" type="checkbox" data-rondo-label="完了 更新依頼">
+              <span class="task-copy">
+                <strong>依頼文をRondoの作業AIへ渡した</strong>
+                <span>AIがSETUP.mdの「更新の適用」を読んだことを確認します。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="verify" aria-labelledby="verify-title" data-sec="verify">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">03</span>
+            <div>
+              <span class="step-kicker">最後の確認</span>
+              <h2 id="verify-title">AIと一緒に確認する</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            AIから完了報告が来たら、次の3点を一緒に確認してください。どれかが欠けていたら、そのまま伝えれば大丈夫です。
+          </p>
+          <div class="step-body">
+            <ul>
+              <li>テストが全部緑だったという報告があること</li>
+              <li>健康診断の表示に、新しい版番号が出ていること</li>
+              <li>管理画面のダッシュボードがいつもどおり表示されること</li>
+            </ul>
+            <label class="task">
+              <input class="task-check" id="update-verify" type="checkbox" data-rondo-label="完了 更新確認">
+              <span class="task-copy">
+                <strong>3点そろったのを確認した</strong>
+                <span>これで更新は完了です。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="history" aria-labelledby="history-title" data-sec="history" data-latest-version="1.0.0">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">＋</span>
+            <div>
+              <span class="step-kicker">変更履歴</span>
+              <h2 id="history-title">この版で変わったこと</h2>
+            </div>
+          </div>
+          <div class="step-body">
+            <p><strong>v1.0.0（2026-10）</strong>　v0.8 からの大きな更新です。v0.9 は配布せず、その中身ごと v1.0 にまとめました。</p>
+            <p><strong>更新の手順</strong>　新しい migration（0028〜0053）が増えます。<strong>Worker を更新する前に</strong>、いつもの手順（SETUP.md「更新の適用」）で適用してください（使わない機能の分も必要です。適用しないと配信が止まります）。v0.8 からの更新では、手順書の「v0.8以前からの更新では」「v1.0で増えた設定」の項を飛ばさないでください。</p>
+            <p><strong>LINE（Lステップ相当の機能）</strong></p>
+            <ul>
+              <li><strong>タグ・友だち情報・計測リンク</strong>: 押したリンク・ボタン・答えでタグや友だち情報を付け、タグの組み合わせ（AND/OR/NOT）で一斉配信や分岐ができます。リンクは誰が押したかを記録します。手順は SETUP.md §10</li>
+              <li><strong>複数のシナリオ・分岐・リマインダ</strong>: シナリオをいくつでも持て、タグで本文の節を出し分けられます。日付の友だち情報（例: セミナーの日）を起点に「3日前・前日・当日」に送るリマインダも作れます</li>
+              <li><strong>リッチメニュー・流入経路</strong>: タグで切り替わるリッチメニュー、どの導線から友だちになったかを数える経路URL（/in/&lt;経路&gt;）を追加しました</li>
+              <li><strong>1:1トーク・回答フォーム</strong>: 友だちとの個別のやり取りを管理画面で読み、返信できます（要対応・未読の絞り込み）。LINE内で答えられるフォームも作れます</li>
+              <li><strong>AI返事（任意）</strong>: キーワードで答えられなかった質問に、自分の発信をもとにAIが返します。返金・解約などの話や命に関わる言葉は人に回し、送る前に2段階で検査します。最初は「案を置くだけ」の試運転から始められます。使うにはAIのAPIキーと、プライバシーポリシーへの追記が必要です</li>
+              <li><strong>Lステップからの引っ越し</strong>: LステップのCSVからタグ・友だち情報を取り込み、名前で照合した候補を人が確かめて結びます</li>
+              <li>既知の制限: リッチメニューの自動の付け替え・手で選んだメニュー・タブ切替が同時に重なると、ごくまれに意図と違うメニューが残ることがあります（SETUP.md §10-9 の手順で揃え直せます。後の版で直します）</li>
+            </ul>
+            <p><strong>LINE の画像・動画・分析</strong>　LINE で文字以外のメッセージを送れるようになりました。</p>
+            <ul>
+              <li><strong>画像・動画・カルーセル・リッチメッセージ</strong>: 原稿に <code>@image</code>・<code>@video</code>・<code>@carousel</code>・<code>@richmsg</code> と書くと、画像や横にめくれるカード、押せる範囲のある画像を送れます。カードにも画像を付けられます。素材は自分の Cloudflare（R2）に置き、配信の前に大きさや形を検問します。使うには R2 のバケットを1つ作ります（SETUP.md §10-15）</li>
+              <li><strong>トークの画像</strong>: 管理画面のトークから画像を送れます。友だちから届いた画像も管理画面で見られます（届いてから180日で自動で消えます）</li>
+              <li><strong>分析</strong>: 管理画面の「LINE → 分析」で、どの入口（流入経路）の友だちが成果（指定したタグ）につながったか、どの配信の計測リンクが押されたか、友だちの増え方を、期間を切り替えて見られます（SETUP.md §10-16）</li>
+              <li><strong>試し送り</strong>: 原稿を自分にだけ1通送って見え方を確かめられます（AIに「この原稿を自分に試し送りして」と頼めば、SETUP.md §10-15 の手順で送ります）</li>
+            </ul>
+            <p><strong>予約ページ（個別相談・セミナー）</strong>　LINE の友だち・メールの読者・誰でもから、個別相談とセミナーの予約を受けられるようになりました。手順は SETUP.md §10-18</p>
+            <ul>
+              <li><strong>予約ページ</strong>: 曜日ごとの受付時間と1枠の長さを設定に書くと、友だちが LINE の「予約する」ボタンから空き枠を選び、質問に答えて予約できます。1枠1人で、同時に押しても二重予約になりません</li>
+              <li><strong>変更・取り消し・リマインド</strong>: 締切までは友だちが自分で別の日時に変えたり取り消したりできます。前日と直前（設定で変えられます）に、日時と参加URLを LINE で知らせます</li>
+              <li><strong>管理画面</strong>: サイドバーの「予約」で予約の一覧・質問の答え・カレンダーに入れるファイル（.ics）・取り消し・枠を閉じる（休みの時間）ができます。新しい予約はいつもの通知にも届きます。セミナーは回ごとの参加者・CSV・カレンダー（.ics）も出せます</li>
+              <li><strong>誰でも申し込める予約ページ</strong>: 予約ページのURL（/r/キー）を LP や SNS に貼ると、名前とメールで申し込めます。確認メールのリンクで確定し、30分確認されなければ自動で取り消します。使うには Turnstile の公開鍵 TURNSTILE_SITE_KEY を設定に足します（SETUP.md §10-18）。メールの本文にも %booking:キー% で読者ごとの予約リンクを入れられます</li>
+              <li><strong>募集ページの雛形</strong>: 予約ページが、表紙・要点・こんな方に・当日の流れ・講師・参加した方の声・よくある質問・下に貼り付く「申し込む」の帯つきの募集ページになりました。中身は bookings.config.mjs の detail に書くだけ（書かなかった節は出ません）。書き方は SETUP.md §10-18</li>
+              <li><strong>セミナー</strong>: 開催の回を並べて、回ごとに定員つきで受けられます。予約ページに内容・講師・場所・画像と「残り○席」を出し、満席の回はキャンセル待ちに並べられます（空きが出ると自動で繰り上がり、本人に知らせます）。書き方は SETUP.md §10-18</li>
+              <li><strong>設定</strong>: 新しい設定ファイル bookings.config.mjs（最初は空）が増えます。使うときは <code>BOOKINGS</code> に書きます（AIに頼めます）。名前とメールで誰でも申し込める入口は、Turnstile の鍵（TURNSTILE_SECRET と TURNSTILE_SITE_KEY）をそろえたときだけ開きます</li>
+            </ul>
+            <p><strong>LINE の A/Bテスト</strong>　LINE の文面を2通り試して、どちらが効くかを比べられるようになりました。手順は SETUP.md §10-17</p>
+            <ul>
+              <li><strong>A/Bテスト</strong>: ステップや一斉配信の原稿に <code>@ab A</code> / <code>@ab B</code> の節を書くと、友だちを半分ずつに分けて別の文面を送り、「LINE → 分析 → A/Bテスト」で押した人・ブロック・成果を比べられます。両方の文面に計測リンクを入れてください</li>
+              <li><strong>決め方</strong>: 押した人の率の差が偶然ではなさそうかを一言で出します（A・B 各30人から）。途中で何度も見て決めると偶然の差を選びやすいので、決める日（目安1週間後）を先に決めてください。勝った側だけを残して原稿を出し直すと終わります</li>
+            </ul>
+            <p><strong>Instagram自動応答（任意）</strong></p>
+            <ul>
+              <li>InstagramのDM・ストーリーへの返信の言葉に反応して、DMで特典やLINEへの案内を返せるようになりました。手順は SETUP.md §10A</li>
+              <li><strong>リール・投稿へのコメントにも反応できます</strong>: キーワード入りのコメントをした人へDMで案内を返し、コメントにも「DMでお送りしました」のような短い返信ができます（コメント欄にはリンクを出しません）。SETUP.md §10A 手順13</li>
+              <li><strong>「Instagramと接続する」ボタン</strong>: 管理画面からInstagramにログインして許可するだけで、アクセストークンが入ります（手で貼る方法も残しています）</li>
+              <li><strong>ストーリーのキャンペーン</strong>: 規則に表示名・期間・対象のストーリーやリールを書けます。管理画面「返信ごとの成果」で、ストーリーごとの返信・案内リンクの到達を比べられます。作り方・点検・計測の手順は guides/instagram-story-campaign.md</li>
+              <li><strong>ストーリーでのメンションへのお礼</strong>: ストーリーでこちらをメンションしてくれた人へ、DMでお礼と案内を送れます（同じ人へは1回だけ）。SETUP.md §10A 手順14</li>
+              <li><strong>DMメニュー</strong>: 初めてDMを開いた人に出る質問ボタン（4つまで）と、会話の下の常設メニュー（5つまで）を設定し、管理画面の「DMメニューを反映」でInstagramに載せられます。質問ボタンが押されると、その規則の案内を送ります。常設メニューは「リンク型」で、項目を押すと LINE の経路URLや外のページがその場で開きます（常設メニューのボタンは押されても Instagram から通知が届かないため・2026-10 に実測）。SETUP.md §10A 手順15</li>
+              <li><strong>文面の出し分け</strong>: 案内・送り直し・コメントへの公開返信などの文面を最大5通り書くと、受信ごとに順に替わります（同じ文面の繰り返しはスパムと見られやすいため）</li>
+              <li>「いらない」「停止」などの断りの言葉を含む返信・コメントには、自動では何も送りません。キーワードの無いストーリー返信には案内を返しません</li>
+              <li>Instagram・Facebook・Threadsのアプリ内ブラウザから経路URLを開いた人は、LIFFを通さずLINEの友だち追加へ直接送ります（LINEログイン画面で止まるのを防ぐため）</li>
+            </ul>
+            <p><strong>メールの一斉配信</strong>　メールの一斉配信を、毎回の手作業なしで組めるようにしました。手順は SETUP.md §8「メールの一斉配信」</p>
+            <ul>
+              <li><strong>宛先の絞り込み式</strong>: LINE と同じ AND/OR/NOT で、「この講座の読者のうち、〇〇の購入者と別の配信スタンドの読者を除く」のように書けます。従来の書き方もそのまま使えます</li>
+              <li><strong>名簿の取り込み</strong>: 他の配信スタンドから書き出した CSV を名簿にして、絞り込みに使えます（取り込みはAIに頼めます）。名簿が古い・空のときは送らずに止まります</li>
+              <li><strong>予定人数とテスト送信</strong>: 送る前に何人に届くかを確かめられ、管理画面のボタンかコマンドで自分宛てにテスト送信できます（件名に【テスト】・本番の集計に入りません）。設定 TEST_EMAILS に自分のアドレスを入れてください</li>
+            </ul>
+            <p><strong>押したら動くリンク・本文の分岐</strong>　メールでも、押した人に合わせて自動で動かせるようになりました。手順は SETUP.md §8「押したら動くリンク・本文の分岐・この講座だけ止める」</p>
+            <ul>
+              <li><strong>押したら動くリンク</strong>: 本文のリンクを初めて押した人に、タグを付ける・外す、講座を始める・止める（別の講座へ移す）を自動で行えます。誰が押したかも記録します。リンクを開くだけの安全チェック（会社のメールなど）では動かない作りです（ページの中のプログラムまで実行する安全チェックでは、押したのと同じに数えられることがあります）。使うには鍵（MAIL_LINK_SECRET）を1つ入れます（AIに頼めます）</li>
+              <li><strong>本文の分岐</strong>: ステップメールの1通の中で、タグや購入の有無などで読者ごとに本文を出し分けられます。どれにも当てはまらない人には、その通を送らずに次の通へ進みます</li>
+              <li><strong>この講座だけ止める</strong>: 講座ごとに「この講座だけ止める」リンクを付けられます。押した人も、ほかの講座と一斉配信はこれまでどおり受け取れます</li>
+            </ul>
+            <p><strong>購入で動く・人のタグ</strong>　購入で、タグ付け・メール講座の開始と停止・LINE のシナリオとメニューの切り替えが自動で動くようになりました（5分ごとの処理で反映。購入が続けて入ったときは次の回以降）。講座と LINE を動かすのは Stripe の決済の通知で入った購入だけで、CSV で取り込んだ購入にはタグだけ付きます。</p>
+            <ul>
+              <li><strong>人のタグ</strong>: メールの読者と LINE の友だちが同じ人としてつながっていれば、どちらの絞り込みでも同じタグ（例: 〇〇講座の購入者）を使えます</li>
+              <li><strong>購入者自身の Stripe</strong>: 支払いリンクの決済を購入台帳に入れられます（支払いリンクと商品名の対応を設定に書きます）</li>
+              <li><strong>過去の購入者へのタグ</strong>: 人数を確かめてから、タグだけをまとめて付けられます（AIに頼めます）</li>
+            </ul>
+            <p><strong>管理画面</strong></p>
+            <ul>
+              <li>サイドバーとダッシュボードを整理しました。主の数字は既定のシナリオの読者に、宛先リスト全体は補助の1行にしています</li>
+              <li>計算がずれていたCVRの表示をやめました（注文は全販路の数で、教材クリックで割ると100%を超えていました）。開封率は「届いた通数のうち開封された通数」（ステップ配信＋一斉配信・直近30日）で数えるように直しました</li>
+            </ul>
+            <p><strong>メール・全体（配信の土台）</strong></p>
+            <ul>
+              <li><strong>Cloudflareは有料のWorkers Paid（月$5）が必須になりました。</strong>無料プランは1回の処理で使えるデータベース問い合わせが50件までで、朝の配信時刻に読者が3人以上重なると処理が途中で止まり、配信が遅れたり、v0.8以前では同じメールが何度も届いたりすることがありました。Workers Paidへ切り替えたうえで、更新時にAIが設定の1回あたりの送信数（SEND_BATCH_MAX）を50へ上げます（1日14,400通まで送れます）</li>
+              <li>配信が遅れたとき、遅れた分が数分おきに続けて届いてしまう問題を修正しました（テスター報告に対応）。遅れた便のあとは次の配信時刻まで間をあけ、同じ講座は1人に1日1通までに抑えます</li>
+              <li>講座（読者リスト）を複数持てるようになりました。同じ読者が複数の講座に登録でき、講座ごとに確認メールで本人確認します。手順はSETUP.md §8</li>
+              <li>2つの講座へ続けて登録したとき、2件目の確認メールが届かないことがある問題を修正（テスター報告に対応）</li>
+              <li>購入者リストのCSV取り込みを同梱しました（MyASP・UTAGE・Stripe・Brainなどの書き出しをそのまま読めます。メールは送られません）</li>
+              <li>消した原稿を配信DBから安全に片付ける機能を追加（一覧を確認してから停止。まだ届く予定の読者がいる便は止めません）</li>
+              <li>Codexでも導入・運用できるよう、入口の案内（AGENTS.md）を同梱しました</li>
+              <li>手順書に、テスターの方が実際に詰まった点を追記（CloudflareのDNSは「DNSのみ」に・Resend無料プランは1ドメイン・自サイトのCSP設定・確認メールの講座名の出どころ・更新時に自分の改修を消さない手順）</li>
+              <li>配布ファイルの名前に版番号が入るようになりました（例: rondo-dist-v1.0.0.zip）</li>
+              <li>管理画面（分析・計器盤）を開いたときや毎晩の休眠判定で、CloudflareのD1の読み取り量が大きく膨らむ問題を修正しました（1回で数千万行を読むことがありました）。データベースに検索用の索引を追加します。更新手順のmigration適用で自動的に入ります</li>
+              <li>LINEの配信が止まった後に再開したとき、遅れた分が数分おきに続けて届いてしまう問題を修正しました（メールと同じく、次の配信時刻まで間をあけます）</li>
+              <li>通信が途切れたときなどに、同じメール・LINEが二重に届く可能性を大幅に減らしました（送信サービスの重複防止キーを使い、結果が分からない送信は同じ内容でしか送り直しません。24時間たっても決着しないものは自動では送らず、管理画面の打ち止め一覧でお知らせします）</li>
+              <li>再試行の上限に達した送信が、まれに処理されないまま残り続けることがある問題を修正しました</li>
+              <li>DiscordやFiNANCiEの集計に失敗したとき、5分おきに最初からやり直していたのを、間隔をあけて取り直すようにしました</li>
+              <li>LPの計測タグ（ヒートマップ）の受け口に上限を設けました（無料プランのデータベース書き込み枠を計測だけで使い切らないように。上限は HEAT_DAILY_WRITE_MAX で変えられます）</li>
+              <li><strong>顧客スコア</strong>: 顧客が数千人いると、その日最初の定時処理（5分ごと）で再採点の書き込みが1回の上限（Cloudflare D1 の1回あたり1,000件）を超え、同じ回の後ろの処理が失敗することがありました。再採点は配信の後に残った枠の中で少しずつ進め、何回かの定時処理で全員を採点し終えるようにしました（3,000人なら配信の無い時間帯で40分ほど）。採点の基準は前と同じです（採点の途中で購入の訂正や名寄せがあった人は、翌日の採点でそろいます）。設定の変更は要りません</li>
+            </ul>
+            <p><strong>v0.8.0（2026-08-21）</strong></p>
+            <ul>
+              <li>LINEのあいさつ（1通目）が友だち追加の直後にその場で届くようになりました（従来は5分毎の定期処理待ちで最大5分の遅れがありました。誤送信ガードは従来どおり全層有効です）</li>
+              <li>ローカル動作確認（wrangler dev）が起動できない環境がある問題を修正（テスター報告に対応）</li>
+            </ul>
+            <p><strong>v0.7.0（2026-08-12）</strong></p>
+            <ul>
+              <li>Windowsに対応（テスト実行・公開前検査・原稿のデプロイと照合が正しく動くようになりました）</li>
+              <li>Windowsのエディタで保存した原稿・設定ファイル（CRLF改行・BOM付きUTF-8）を受け付けるようになりました</li>
+              <li>公開前検査が設定ファイルのコメント例文を誤って指摘する問題を修正</li>
+              <li>ThreadsとInstagramを他チャネルと同じ手順で接続できるようになりました</li>
+              <li>メール設定（Resend）の自動DNS登録を使う場合の注意を手順書に追記</li>
+            </ul>
+            <p><strong>v0.6.0（2026-08-10）</strong></p>
+            <ul>
+              <li>開封・クリック計測の設定検査を追加（設定漏れがあると監査画面が名指しで教えます）</li>
+              <li>一斉配信の送信を安定化</li>
+              <li>配信健康率の集計を統一</li>
+              <li>コミュニティ観測の安定化</li>
+              <li>設定テンプレートのシークレット一覧を補完</li>
+            </ul>
+            <p><strong>v0.5.0以前</strong></p>
+            <ul>
+              <li>発売前のテスター版です。変更履歴はv0.6.0から記載しています</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-foot" data-sec="footer">
+    <div class="foot-inner">
+      <span>Rondo user guide</span>
+      <span>技術手順は作業AIがSETUP.mdを読みます</span>
+    </div>
+  </footer>
+</body>
+</html>
