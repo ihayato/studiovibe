@@ -17,26 +17,25 @@
   <script src="assets/guide.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content" data-rondo-label="スキップ 本文へ移動">本文へ移動</a>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
   <p id="guide-status" class="sr-only" role="status" aria-live="polite"></p>
 
-  <header class="site-head" data-rondo-click-sec="header">
+  <header class="site-head">
     <div class="head-inner">
-      <a class="brand" href="/rondo-guides/setup" aria-label="Rondo 初回セットアップガイド" data-rondo-label="ヘッダー ガイドホーム">
+      <a class="brand" href="/rondo-guides/setup" aria-label="Rondo 初回セットアップガイド">
         <span class="brand-mark" aria-hidden="true">R</span>
         <span>Rondo guides</span>
       </a>
       <nav class="guide-nav" aria-label="ガイド">
-        <a href="/rondo-guides/setup" aria-current="page" data-rondo-label="ヘッダー 初回セットアップ">初回セットアップ</a>
-        <a href="/rondo-guides/settings" data-rondo-label="ヘッダー 導入後の設定">導入後の設定</a>
-        <a href="/rondo-guides/update" data-rondo-label="ヘッダー 更新の適用">更新の適用</a>
+        <a href="/rondo-guides/setup" aria-current="page">初回セットアップ</a>
+        <a href="/rondo-guides/settings">導入後の設定</a>
         <a href="/rondo">Rondoとは</a>
       </nav>
     </div>
   </header>
 
   <main id="main-content">
-    <section class="hero" aria-labelledby="page-title" data-sec="hero">
+    <section class="hero" aria-labelledby="page-title">
       <div class="hero-grid">
         <div>
           <p class="eyebrow">初回セットアップ・AIと一緒に</p>
@@ -45,7 +44,7 @@
             難しい設定、コマンド入力、ログイン後の画面操作はAIに任せます。あなたがするのは、
             必要なサービスへのログインと、最後のテスト登録だけです。
           </p>
-          <a class="start-link" href="#ask-ai" data-rondo-label="ヒーロー 最初の手順へ">AIへの依頼文をコピーする <span aria-hidden="true">↓</span></a>
+          <a class="start-link" href="#ask-ai">AIへの依頼文をコピーする <span aria-hidden="true">↓</span></a>
           <div class="promise" aria-label="このガイドの特徴">
             <span>コマンドはAIが実行</span>
             <span>画面操作もAI</span>
@@ -64,7 +63,7 @@
     </section>
 
     <div class="workspace">
-      <aside class="rail" aria-label="セットアップ進捗" data-rondo-click-sec="rail">
+      <aside class="rail" aria-label="セットアップ進捗">
         <div class="progress-card">
           <div class="progress-top">
             <span class="progress-label">初回セットアップ</span>
@@ -83,16 +82,16 @@
           <p class="progress-note">チェック状態はこのブラウザに保存されます。</p>
         </div>
         <nav class="toc" aria-label="このページの目次">
-          <a href="#ask-ai" data-rondo-label="目次 AIへ依頼">AIへ依頼する</a>
-          <a href="#answer" data-rondo-label="目次 質問に回答">質問に答える</a>
-          <a href="#login" data-rondo-label="目次 ログイン">ログインだけ行う</a>
-          <a href="#approve" data-rondo-label="目次 公開前確認">公開前に確認する</a>
-          <a href="#first-run" data-rondo-label="目次 最初の1通">最初の1通を試す</a>
+          <a href="#ask-ai">AIへ依頼する</a>
+          <a href="#answer">質問に答える</a>
+          <a href="#login">ログインだけ行う</a>
+          <a href="#approve">公開前に確認する</a>
+          <a href="#first-run">最初の1通を試す</a>
         </nav>
       </aside>
 
       <div class="guide-content">
-        <section class="intro" aria-label="役割分担" data-sec="intro">
+        <section class="intro" aria-label="役割分担">
           <div class="intro-item">
             <b>AIがすること</b>
             <span>ブラウザ操作、設定、検査、公開作業</span>
@@ -107,7 +106,7 @@
           </div>
         </section>
 
-        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title" data-sec="ask-ai">
+        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">01</span>
             <div>
@@ -122,7 +121,7 @@
             <div class="ai-prompt copy-block">
               <div class="prompt-head">
                 <span>AIへの初回セットアップ依頼文</span>
-                <button class="copy-button" type="button" aria-label="初回セットアップ依頼文をコピー" data-rondo-label="CTA 初回依頼文コピー" data-rondo-cta="copy">コピー</button>
+                <button class="copy-button" type="button" aria-label="初回セットアップ依頼文をコピー">コピー</button>
               </div>
               <pre><code>このRondoを初回セットアップしてください。
 
@@ -147,7 +146,7 @@
               <p>AIが調査し、必要な場面だけ質問します。コマンド入力や管理画面の手動設定を求められたら、この依頼文のルールをもう一度伝えてください。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="setup-ask-ai" type="checkbox" data-rondo-label="完了 初回依頼">
+              <input class="task-check" id="setup-ask-ai" type="checkbox">
               <span class="task-copy">
                 <strong>依頼文をRondoの作業AIへ渡した</strong>
                 <span>AIがSETUP.mdを読んだことを確認します。</span>
@@ -156,7 +155,7 @@
           </div>
         </section>
 
-        <section class="step" id="answer" aria-labelledby="answer-title" data-sec="answer">
+        <section class="step" id="answer" aria-labelledby="answer-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">02</span>
             <div>
@@ -171,7 +170,6 @@
             <div class="subsection">
               <h3>聞かれる内容</h3>
               <ul>
-                <li>CloudflareがWorkers Paid（月$5）になっているか（無料プランのままなら、切り替えをお願いされます）</li>
                 <li>自分が管理するドメイン（持っていない場合はCloudflareで取得を推奨）</li>
                 <li>読者に表示する発行者名</li>
                 <li>送信元に使いたいメールアドレス</li>
@@ -184,7 +182,7 @@
               <p>AIに選択肢と違いを説明してもらい、決めてから先へ進めます。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="setup-answer" type="checkbox" data-rondo-label="完了 質問への回答">
+              <input class="task-check" id="setup-answer" type="checkbox">
               <span class="task-copy">
                 <strong>基本情報への回答を終えた</strong>
                 <span>秘密値は通常のチャット回答へ含めません。</span>
@@ -193,7 +191,7 @@
           </div>
         </section>
 
-        <section class="step" id="login" aria-labelledby="login-title" data-sec="login">
+        <section class="step" id="login" aria-labelledby="login-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">03</span>
             <div>
@@ -217,7 +215,7 @@
             <div class="ai-prompt copy-block compact">
               <div class="prompt-head">
                 <span>ログイン後にAIへ渡す依頼文</span>
-                <button class="copy-button" type="button" aria-label="ログイン後のブラウザ操作依頼文をコピー" data-rondo-label="CTA ログイン後依頼文コピー" data-rondo-cta="copy">コピー</button>
+                <button class="copy-button" type="button" aria-label="ログイン後のブラウザ操作依頼文をコピー">コピー</button>
               </div>
               <pre><code>ログインできました。ここから先の設定は、ブラウザ操作機能で進めてください。特にGoogle Cloud ConsoleのOAuth設定と、Cloudflare／ResendのDNS設定は、私に手動設定させず、あなたが画面操作してください。パスワード、2段階認証、CAPTCHA、決済、最終承認が必要な場面だけ止めて私を呼んでください。</code></pre>
             </div>
@@ -230,7 +228,7 @@
               <p>パスワード、2段階認証コード、決済情報は自分で入力します。AIへ読み上げたり、チャットへ貼り付けたりしません。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="setup-login" type="checkbox" data-rondo-label="完了 ログイン">
+              <input class="task-check" id="setup-login" type="checkbox">
               <span class="task-copy">
                 <strong>必要なサービスへのログインを終えた</strong>
                 <span>ブラウザを閉じず、上の依頼文をAIへ渡します。</span>
@@ -239,7 +237,7 @@
           </div>
         </section>
 
-        <section class="step" id="approve" aria-labelledby="approve-title" data-sec="approve">
+        <section class="step" id="approve" aria-labelledby="approve-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">04</span>
             <div>
@@ -266,7 +264,7 @@
               <p>最初はメールと管理画面だけで公開できます。任意機能は導入後の設定ガイドで追加します。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="setup-approve" type="checkbox" data-rondo-label="完了 公開前確認">
+              <input class="task-check" id="setup-approve" type="checkbox">
               <span class="task-copy">
                 <strong>検査結果と公開内容を確認し、公開を承認した</strong>
                 <span>分からない警告がある場合は、意味と影響をAIへ質問します。</span>
@@ -275,7 +273,7 @@
           </div>
         </section>
 
-        <section class="step" id="first-run" aria-labelledby="first-run-title" data-sec="first-run">
+        <section class="step" id="first-run" aria-labelledby="first-run-title">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">05</span>
             <div>
@@ -302,7 +300,7 @@
               <p>次は読者へ見せる文章や配信ペースを、AIと一緒に自分の事業へ合わせます。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="setup-first-run" type="checkbox" data-rondo-label="完了 最初の1通">
+              <input class="task-check" id="setup-first-run" type="checkbox">
               <span class="task-copy">
                 <strong>確認メールから最初の1通まで確認した</strong>
                 <span>技術設定ではなく、読者として違和感がないかを見ます。</span>
@@ -311,18 +309,18 @@
           </div>
         </section>
 
-        <section class="next-guide" aria-labelledby="next-title" data-sec="next">
+        <section class="next-guide" aria-labelledby="next-title">
           <div>
             <h2 id="next-title">次は、AIと中身を整える。</h2>
-            <p>SNS・LINE連携、配信の型、原稿、安全上限、特典などを、会話しながら自分の運用へ合わせます。</p>
+            <p>講座名、原稿、安全上限、LINE、特典などを、会話しながら自分の運用へ合わせます。</p>
           </div>
-          <a class="next-link" href="/rondo-guides/settings" data-rondo-label="次へ 導入後の設定ガイド">導入後の設定ガイドへ</a>
+          <a class="next-link" href="/rondo-guides/settings">導入後の設定ガイドへ</a>
         </section>
       </div>
     </div>
   </main>
 
-  <footer class="page-foot" data-sec="footer">
+  <footer class="page-foot">
     <div class="foot-inner">
       <span>Rondo user guide</span>
       <span>技術手順は作業AIがSETUP.mdを読みます</span>

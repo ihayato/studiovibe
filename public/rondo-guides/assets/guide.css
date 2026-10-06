@@ -788,51 +788,6 @@ p {
   border-bottom: 0;
 }
 
-.choice {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fafbfc;
-  overflow: hidden;
-}
-
-.choice-item {
-  min-width: 0;
-  padding: 16px;
-  border-right: 1px solid var(--line);
-}
-
-.choice-item:last-child {
-  border-right: 0;
-}
-
-.choice-tag {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--note);
-  font-size: 0.68rem;
-  font-weight: 650;
-}
-
-.choice-item b {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 0.8rem;
-}
-
-.choice-item p {
-  color: var(--dim);
-  font-size: 0.75rem;
-  line-height: 1.6;
-}
-
-.choice-item p + p {
-  margin-top: 6px;
-  color: var(--note);
-  font-size: 0.71rem;
-}
-
 .flow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1011,19 +966,6 @@ p {
   }
 
   .intro-item:last-child {
-    border-bottom: 0;
-  }
-
-  .choice {
-    grid-template-columns: 1fr;
-  }
-
-  .choice-item {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .choice-item:last-child {
     border-bottom: 0;
   }
 }
