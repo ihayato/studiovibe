@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo | Codex/Claude Codeユーザーのための、マーケティングOS</title>
-<meta name="description" content="CodexやClaude Codeを使う人のための買い切りマーケティングOS。ステップメール、LINE配信、SNS、売上、顧客台帳を1つのダッシュボードに統合し、あなたのAIで運用する。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta name="description" content="CodexやClaude Codeを使う人のための買い切りマーケティングOS。ステップメール、LINE配信、Instagram、予約ページ、売上、顧客台帳を1つのダッシュボードに統合し、あなたのAIで運用する。正式版 v1.0・買い切り¥9,800。">
 <meta property="og:title" content="Rondo | Codex/Claude Codeユーザーのための、マーケティングOS">
-<meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・予約ページ・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。正式版 v1.0・¥9,800。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <meta property="og:image:width" content="1200">
@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Studio VIBE">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Rondo | Codex/Claude Codeユーザーのための、マーケティングOS">
-<meta name="twitter:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。βテスター先行販売¥4,980（正式版価格¥9,800予定）。">
+<meta name="twitter:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・予約ページ・自動見張りまで同梱、CodexやClaude Codeで作り込む買い切り。正式版 v1.0・¥9,800。">
 <meta name="twitter:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <link rel="icon" href="/rondo-assets/rondo-icon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
@@ -657,6 +657,335 @@
       grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:0 10px}
     #dist-tree .dt-children span{word-break:break-all}
   }
+  /* ---- 乗り換え 3ブロック（v1.0・見本） ---- */
+  .sw-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 auto 8px}
+  .sw-tabs a{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;background:var(--glass-strong);border:1px solid var(--hair);border-radius:999px;padding:8px 16px;box-shadow:var(--hi)}
+  .sw-tabs a:hover{background:#fff}
+  .sw-tabs a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sw-tabs i{width:8px;height:8px;border-radius:50%}
+  .sw-block{display:grid;grid-template-columns:1fr 1.02fr;gap:56px;align-items:start;margin-top:88px;scroll-margin-top:88px}
+  .sw-block.rev .sw-copy{order:2}
+  .sw-copy{min-width:0}
+  .sw-kicker{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:12px}
+  .sw-dot{width:9px;height:9px;border-radius:50%}
+  .sw-from{font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px}
+  .sw-h{font-size:clamp(22px,3vw,27px);font-weight:700;line-height:1.5;letter-spacing:.01em;margin-bottom:14px}
+  .sw-lead{color:var(--dim);font-size:15px;line-height:1.85;margin-bottom:22px}
+  .sw-map{display:grid;gap:0;border-top:1px solid var(--hair)}
+  .sw-row{display:grid;grid-template-columns:11em 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--hair)}
+  .sw-row dt{font-weight:600;font-size:14.5px;line-height:1.6}
+  .sw-row dd{margin:0;font-size:14.5px;color:var(--dim);line-height:1.75}
+  .sw-row dd b{color:var(--ink)}
+  .sw-h .ph,#switch h2 .ph{display:inline-block}
+  @media(max-width:520px){ .sw-h br,#switch h2 br{display:none} }
+  .sw-honest{margin-top:16px;font-size:13px;color:var(--note);line-height:1.7;padding-left:14px;border-left:2px solid var(--hair-strong)}
+  .sw-visual{margin:0;background:var(--glass-strong);min-width:0;position:sticky;top:96px}
+  @media(max-width:900px){
+    .sw-block{grid-template-columns:1fr;gap:28px;margin-top:64px}
+    .sw-block.rev .sw-copy{order:0}
+    .sw-visual{position:static}
+  }
+  @media(max-width:520px){ .sw-row{grid-template-columns:1fr;gap:2px} }
+
+  /* Instagram DM */
+  .ig-thread{padding:16px 16px 10px;display:grid;gap:10px}
+  .ig-who{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--hair)}
+  .ig-who b{display:block;font-size:13px}
+  .ig-who span{font-size:11px;color:var(--note)}
+  .ig-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#F2A541,#C2255C 60%,#7A3FD1)}
+  .ig-msg{max-width:84%;font-size:13px;line-height:1.65;padding:9px 13px;border-radius:18px}
+  .ig-msg.in{background:#EEF0F4;justify-self:start;border-bottom-left-radius:6px}
+  .ig-msg.out{background:#3B6BF0;color:#fff;justify-self:end;border-bottom-right-radius:6px}
+  .ig-quote{display:block;font-size:11px;color:var(--note);border-left:2px solid var(--hair-strong);padding-left:8px;margin-bottom:6px}
+  .ig-link{display:block;font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.18);border-radius:8px;padding:4px 8px;margin:6px 0;word-break:break-all}
+  .ig-card{justify-self:end;display:flex;align-items:center;gap:10px;max-width:84%;background:#fff;border:1px solid var(--hair);border-radius:14px;padding:10px 12px;box-shadow:var(--hi)}
+  .ig-card b{display:block;font-size:12.5px}
+  .ig-card span{font-size:11px;color:var(--note)}
+  .ig-card-ic{width:28px;height:28px;flex:none;border-radius:8px;background:#06C755;color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}
+  .ig-meta{justify-self:end;font-family:var(--mono);font-size:10.5px;color:var(--note)}
+  .ig-flow{display:flex;align-items:stretch;gap:6px;padding:12px 16px 16px;border-top:1px solid var(--hair);background:rgba(255,255,255,.45)}
+  .ig-step{flex:1;min-width:0;background:rgba(255,255,255,.7);border:1px solid var(--hair);border-radius:12px;padding:8px 10px;box-shadow:var(--hi)}
+  .ig-step .k{display:block;font-size:10.5px;color:var(--note);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ig-step .v{font-family:var(--mono);font-size:17px;font-weight:600}
+  .ig-step.hl{border-color:rgba(23,138,80,.35);background:var(--ok-soft)}
+  .ig-step.hl .v{color:var(--ok)}
+  .ig-ar{align-self:center;color:var(--note);font-family:var(--mono)}
+  @media(max-width:400px){ .ig-step .k{white-space:normal;overflow:visible} .ig-flow{gap:4px;padding:12px} .ig-ar{display:none} }
+
+  /* LINE 友だち */
+  .ln-body{padding:16px;display:grid;gap:12px}
+  .ln-prof{display:flex;align-items:center;gap:10px}
+  .ln-av{width:36px;height:36px;border-radius:50%;background:#E6F4EC;color:#178A50;font-weight:700;display:grid;place-items:center;flex:none}
+  .ln-id{min-width:0;flex:1}
+  .ln-id b{display:block;font-size:14px}
+  .ln-id span{font-size:11px;color:var(--note)}
+  .ln-state{font-size:11px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:3px 10px;flex:none}
+  .ln-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .ln-tags .t{font-size:11.5px;border:1px solid var(--hair);border-radius:999px;padding:3px 10px;color:var(--note);background:rgba(255,255,255,.6)}
+  .ln-tags .t.on{color:#126B3E;background:var(--ok-soft);border-color:rgba(23,138,80,.25)}
+  .ln-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ln-cell{background:rgba(255,255,255,.6);border:1px solid var(--hair);border-radius:10px;padding:8px 10px;box-shadow:var(--hi);min-width:0}
+  .ln-cell .k{display:block;font-size:10.5px;color:var(--note)}
+  .ln-cell .v{font-size:13px;font-weight:600}
+  .ln-path{background:rgba(255,255,255,.6);border:1px solid var(--hair);border-radius:12px;padding:10px 12px;box-shadow:var(--hi)}
+  .ln-path-h{font-size:11.5px;font-weight:600;margin-bottom:6px}
+  .ln-path ol{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+  .ln-path li{display:flex;gap:8px;font-size:12px;color:var(--dim);align-items:baseline}
+  .ln-path li::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid var(--hair-strong);flex:none;transform:translateY(1px)}
+  .ln-path li.done::before{background:var(--ok);border-color:var(--ok)}
+  .ln-path li.now{color:var(--ink);font-weight:600}
+  .ln-path li.now::before{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .ln-path .d{font-family:var(--mono);font-size:10.5px;color:var(--note);width:36px;flex:none;font-weight:400}
+  .ln-menu{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:12px}
+  .ln-menu .k{color:var(--note);font-size:11px;margin-right:2px}
+  .ln-menu .m{border:1px solid var(--hair);border-radius:8px;padding:3px 10px;color:var(--note);background:rgba(255,255,255,.6)}
+  .ln-menu .m.on{color:#fff;background:#178A50;border-color:#178A50;font-weight:600}
+  .ln-menu .why{font-size:11px;color:var(--note)}
+
+  /* ステップメール */
+  .ml-body{padding:16px;display:grid;gap:12px}
+  .ml-tl{background:rgba(255,255,255,.6);border:1px solid var(--hair);border-radius:12px;overflow:hidden;box-shadow:var(--hi)}
+  .ml-st{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;padding:9px 12px;border-top:1px solid var(--hair);font-size:12.5px}
+  .ml-st:first-child{border-top:none}
+  .ml-st .d{font-family:var(--mono);font-size:10.5px;color:var(--note)}
+  .ml-st .t{min-width:0;line-height:1.6}
+  .ml-st .t em{font-style:normal;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--note);border:1px solid var(--hair-strong);border-radius:4px;padding:0 4px;margin-right:4px}
+  .ml-st .t em.win{color:var(--accent);border-color:var(--accent)}
+  .ml-st .r{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;white-space:nowrap}
+  .ml-st .r small{display:block;font-size:10px;color:var(--note)}
+  .ml-st .r .win{color:var(--accent)}
+  .ml-st.ab{background:var(--accent-soft)}
+  .ml-st.more{color:var(--note)}
+  .ml-guard{background:rgba(255,255,255,.6);border:1px solid var(--hair);border-radius:12px;padding:10px 12px;box-shadow:var(--hi)}
+  .ml-guard-h{font-size:12px;color:var(--dim);margin-bottom:8px}
+  .ml-guard-h b{font-family:var(--mono);color:var(--ink)}
+  .ml-layers{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+  .ml-layers span{font-size:10.5px;text-align:center;color:#126B3E;background:var(--ok-soft);border-radius:6px;padding:5px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* 乗り換えの流れ */
+  .sw-move{margin-top:96px;background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow),var(--hi);padding:32px 32px 28px}
+  .sw-move-h{text-align:center;font-weight:700;font-size:18px;margin-bottom:22px}
+  .sw-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .sw-steps li{display:flex;gap:12px;align-items:flex-start;min-width:0}
+  .sw-steps .n{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:13px;color:var(--accent);background:var(--accent-soft)}
+  .sw-steps b{display:block;font-size:14.5px;margin-bottom:4px}
+  .sw-steps p{font-size:14px;color:var(--dim);line-height:1.75}
+  @media(max-width:900px){ .sw-steps{grid-template-columns:1fr;gap:16px} .sw-move{padding:24px 20px} }
+
+  /* 月額の目安 */
+  .sw-cost{margin-top:0;display:grid;grid-template-columns:1fr 56px 1fr;gap:16px;align-items:stretch}
+  .sw-cost-col{background:rgba(255,255,255,.42);border:1px dashed var(--hair-strong);border-radius:14px;padding:18px 20px;min-width:0}
+  .sw-cost-col.rondo{background:var(--glass-strong);border:1px solid var(--hair);box-shadow:var(--shadow),var(--hi)}
+  .sw-cost-h{font-weight:700;font-size:15px;margin-bottom:10px}
+  .sw-cost-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid var(--hair);font-size:13.5px}
+  .sw-cost-row span{color:var(--dim);min-width:0}
+  .sw-cost-row small{display:block;font-size:12px;color:var(--note)}
+  .sw-cost-row b{font-family:var(--mono);font-size:14px;white-space:nowrap}
+  .sw-cost-col.rondo .sw-cost-row b{color:var(--accent)}
+  @media(max-width:520px){ .sw-cost-row{flex-wrap:wrap;gap:2px 12px} .sw-cost-row span{flex-basis:100%} .sw-cost-row b{margin-left:auto} }
+  .sw-cost-arrow{display:grid;place-items:center;color:var(--accent);font-family:var(--mono);font-size:26px}
+  .sw-cost-note{grid-column:1/-1;font-size:12.5px;color:var(--note);text-align:center;line-height:1.7}
+  @media(max-width:860px){ .sw-cost{grid-template-columns:1fr} .sw-cost-arrow{transform:rotate(90deg);padding:2px 0} }
+
+  .sw-cap{font-size:11px;color:var(--note);text-align:right;padding:0 16px 12px}
+  @media(max-width:520px){
+    .ml-layers{grid-template-columns:repeat(3,1fr)}
+    .ml-st{grid-template-columns:40px 1fr}
+    .ml-st .r{grid-column:2;text-align:left;white-space:normal}
+  }
+
+
+  /* かゆいところ台帳の図解（v4）: 色は既存トークン＋チャネル色。見込みの黄 #C99A2E のみ追加 */
+  .itch-list{max-width:1000px}
+  .itch-row{grid-template-columns:1fr 1fr;gap:16px 44px;align-items:center}
+  .itch-txt .itch-q{margin-bottom:12px}
+  .itch-fig{margin:0;background:#F7F9FC;border-radius:14px;padding:16px 18px;min-width:0;font-size:12.5px;color:var(--dim)}
+  .itch-fig b{color:var(--ink);font-weight:600}
+  .fig-lines{width:100%;height:100%;display:block}
+  .fig-lines path{fill:none;stroke:var(--hair-strong);stroke-width:1.5}
+  .fig-merge{display:grid;grid-template-columns:minmax(0,1.5fr) 36px minmax(0,1fr);height:192px;align-items:stretch}
+  .fm-src{display:grid;grid-template-rows:repeat(4,1fr);align-items:center;min-width:0}
+  .fm-chip{display:flex;align-items:center;gap:6px;background:#fff;border-radius:8px;padding:5px 9px;box-shadow:0 1px 2px rgba(38,56,110,.08);min-width:0;white-space:nowrap;color:var(--ink);font-weight:600;font-size:12px}
+  .fm-chip i,.fs-leg i{width:7px;height:7px;border-radius:50%;flex:none}
+  .fm-chip em{font-style:normal;font-weight:400;color:var(--note);font-family:var(--mono);font-size:11px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .fm-person{align-self:center;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;background:#fff;border-radius:12px;padding:14px 8px;box-shadow:var(--shadow)}
+  .fm-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:700}
+  .fm-n{font-size:11px;color:var(--note)}
+  .fs-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .fs-bar{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden}
+  .fs-leg{display:grid;grid-template-columns:repeat(4,auto);justify-content:space-between;gap:6px;margin-top:10px}
+  .fs-leg span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .fs-leg b{margin-left:2px}
+  .fs-calc{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--hair)}
+  .fs-calc span{background:#fff;border-radius:6px;padding:2px 8px;box-shadow:0 1px 2px rgba(38,56,110,.08)}
+  .fs-calc .eq{background:none;box-shadow:none;padding:0 0 0 2px;color:var(--ink)}
+  .fs-calc .eq b{color:var(--accent);font-size:14px}
+  .fig-fork{display:grid;grid-template-columns:minmax(0,.8fr) 36px minmax(0,1.3fr);height:182px;align-items:stretch}
+  .ff-src{align-self:center;display:flex;flex-direction:column;gap:2px;background:#fff;border-radius:10px;padding:12px;box-shadow:var(--shadow)}
+  .ff-src .mono{font-size:11px;color:var(--note)}
+  .ff-outs{display:grid;grid-template-rows:repeat(3,1fr);align-items:center;min-width:0}
+  .ff-out{display:flex;flex-direction:column;background:#fff;border-radius:8px;padding:5px 10px;box-shadow:0 1px 2px rgba(38,56,110,.08);min-width:0}
+  .ff-who{font-size:11px;color:var(--note)}
+  .ff-what{color:var(--ink);font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fig-fnl{display:grid;gap:6px}
+  .fn-row{display:grid;grid-template-columns:6.5em 1fr 4.5em;align-items:center;gap:10px}
+  .fn-row .b{height:14px;border-radius:4px;background:#EDF0F6;overflow:hidden}
+  .fn-row .b i{display:block;height:100%;min-width:4px;background:var(--accent);opacity:.78;border-radius:4px}
+  .fn-row .v{text-align:right;color:var(--ink)}
+  .fn-row.sum{padding-top:6px;border-top:1px solid var(--hair)}
+  .fn-row.sum .b{background:none}
+  .fn-row.sum .v{font-weight:600}
+  .fn-drop{padding-left:calc(6.5em + 10px);color:var(--bad);font-size:12px}
+  .fn-drop b{color:var(--bad)}
+  .fn-drop span::before{content:"↓ "}
+  .fw-tl{position:relative;height:58px;margin:4px 6px 12px;border-bottom:2px solid var(--hair-strong)}
+  .fw-ev{position:absolute;bottom:-6px;transform:translateX(-50%);display:flex;flex-direction:column-reverse;align-items:center;gap:4px}
+  .fw-ev:first-child{transform:none;align-items:flex-start}
+  .fw-ev:last-child{transform:translateX(-100%);align-items:flex-end}
+  .fw-ev i{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px #F7F9FC}
+  .fw-ev.bad i{background:var(--bad)}
+  .fw-ev em{font-style:normal;font-size:10.5px;line-height:1.35;text-align:center;color:var(--note);white-space:nowrap}
+  .fw-ev:first-child em{text-align:left}
+  .fw-ev:last-child em{text-align:right}
+  .fw-ev.bad em{color:var(--bad);font-weight:600}
+  .fw-alert{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);border-left:3px solid #5865F2}
+  .fw-ic{width:22px;height:22px;flex:none;border-radius:6px;display:grid;place-items:center;background:var(--bad);color:#fff;font-weight:700;font-size:13px}
+  .fw-alert div{display:flex;flex-direction:column;min-width:0}
+  .fw-alert b{font-size:12.5px}
+  @media(max-width:760px){
+    .itch-row{grid-template-columns:1fr;align-items:start}
+    .itch-fig{padding:14px}
+  }
+  @media(max-width:400px){
+    .fs-leg{grid-template-columns:repeat(2,auto);justify-content:start;gap:6px 16px}
+    .fn-row{grid-template-columns:5.6em 1fr 3.8em;gap:8px}
+    .fn-drop{padding-left:calc(5.6em + 8px)}
+    .fig-merge{grid-template-columns:minmax(0,1.4fr) 26px minmax(0,1fr)}
+    .fig-fork{grid-template-columns:minmax(0,.8fr) 26px minmax(0,1.3fr);height:204px}
+    .ff-what{white-space:normal;line-height:1.35}
+    .ff-src{padding:10px}
+    .fn-row{grid-template-columns:6.4em 1fr 3.6em;gap:8px}
+    .fn-row .l{font-size:12px;white-space:nowrap}
+    .fn-drop{padding-left:0}
+    .fw-ev:nth-child(2) em{display:none}
+    .fw-ev.bad{left:53%!important}
+    .fw-ev:last-child{left:100%!important}
+  }
+  @media(max-width:360px){
+    .fig-fork{height:236px}
+  }
+  @media(max-width:520px){
+    .fig-merge{grid-template-columns:1fr;height:auto}
+    .fig-merge .fig-lines{display:none}
+    .fm-src{grid-template-columns:1fr 1fr;grid-template-rows:auto;gap:6px}
+    .fm-chip{flex-wrap:wrap;row-gap:0;padding:6px 9px}
+    .fm-chip em{flex-basis:100%;padding-left:13px;word-break:break-all;white-space:normal;line-height:1.35}
+    .fm-person{position:relative;margin-top:30px;flex-direction:row;justify-content:center;gap:10px;padding:10px}
+    .fm-person::before{content:"↓ 1人に束ねる";position:absolute;top:-24px;left:0;right:0;text-align:center;font-size:11px;color:var(--note)}
+    .fm-av{width:30px;height:30px}
+    .fm-person b,.fm-n{white-space:nowrap}
+  }
+  /* ---- 予約ページ（v1.0）: 色は既存トークン＋見込みの黄 #C99A2E ---- */
+  .bk-kicker{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
+  #booking h2 .ph{display:inline-block}
+  .bk-main{display:grid;grid-template-columns:340px 1fr;gap:56px;align-items:start}
+  .bk-phone{margin:0;position:sticky;top:96px}
+  .bk-phone-frame{background:#17181C;border-radius:40px;padding:10px;box-shadow:var(--shadow-big)}
+  .bk-phone-frame img{display:block;width:100%;height:auto;border-radius:31px;aspect-ratio:780/1560;object-fit:cover;object-position:top;max-height:640px}
+  .bk-phone figcaption{margin-top:16px;font-size:13px;color:var(--dim);line-height:1.75;text-align:center}
+  .bk-phone figcaption b{color:var(--ink)}
+  .bk-date{font-size:11.5px;color:var(--note)}
+  .bk-kinds{display:grid;gap:20px;min-width:0}
+  .bk-kind{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow),var(--hi);padding:24px 26px 18px}
+  .bk-kind-h{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:18px;font-weight:700;margin-bottom:10px}
+  .bk-kind-h small{font-size:12.5px;font-weight:500;color:var(--note)}
+  .bk-ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#8A6716;background:rgba(201,154,46,.14)}
+  .bk-list{list-style:none;margin:0;padding:0}
+  .bk-list li{padding:11px 0;border-top:1px solid var(--hair);font-size:14px;color:var(--dim);line-height:1.75}
+  .bk-list li:first-child{border-top:none}
+  .bk-list b{display:block;color:var(--ink);font-size:14.5px;font-weight:600;margin-bottom:1px}
+  .bk-doors{margin-top:56px;display:grid;grid-template-columns:auto repeat(3,1fr);gap:12px;align-items:stretch}
+  .bk-doors-h{align-self:center;font-weight:700;font-size:15px;padding-right:8px}
+  .bk-door{background:rgba(255,255,255,.55);border:1px solid var(--hair);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--dim);line-height:1.65;box-shadow:var(--hi);min-width:0}
+  .bk-door-k{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px;color:var(--ink);margin-bottom:2px}
+  .bk-door-k::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+  .bk-mocks{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+  .bk-mock{margin:0;background:var(--glass-strong);min-width:0}
+  /* 予約の後の画面 */
+  .bm-body{padding:14px;display:grid;gap:10px;background:#F6F4EE}
+  .bm-note{display:flex;gap:10px;align-items:center;background:#fff;border-radius:14px;padding:10px 12px}
+  .bm-note b{display:block;font-size:13px}
+  .bm-note span{font-size:11px;color:var(--note)}
+  .bm-ok{width:26px;height:26px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--ok-soft);color:var(--ok);font-weight:700;font-size:13px}
+  .bm-card{background:#fff;border-radius:16px;padding:14px 14px 12px;display:grid;gap:6px}
+  .bm-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--note);font-weight:600}
+  .bm-pill{color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 9px}
+  .bm-date{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1.1;color:var(--ink)}
+  .bm-date small{font-size:15px}
+  .bm-time{font-size:12px;color:var(--dim);margin-bottom:4px}
+  .bm-btn{display:block;text-align:center;font-size:12.5px;font-weight:600;border-radius:12px;padding:9px 8px;border:1px solid var(--hair-strong);color:var(--ink);background:#fff}
+  .bm-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .bm-links{display:flex;justify-content:center;gap:16px;font-size:11px;color:var(--note);padding-top:2px}
+  /* LINE 個別相談 */
+  .bs-body{padding:14px;display:grid;gap:8px;background:#EEF1F5}
+  .bs-h{background:#fff;border-radius:14px;padding:10px 12px}
+  .bs-h b{display:block;font-size:13.5px}
+  .bs-h span{font-size:11px;color:var(--note)}
+  .bs-day{font-size:11.5px;font-weight:600;color:var(--dim);padding:2px 2px 0}
+  .bs-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .bs-slots span{text-align:center;font-family:var(--mono);font-size:12px;background:#fff;border:1px solid var(--hair);border-radius:10px;padding:7px 0;color:var(--ink)}
+  .bs-slots span.on{background:#178A50;border-color:#178A50;color:#fff;font-weight:600}
+  .bs-slots span.off{color:#B4BAC4;background:transparent;text-decoration:line-through;border-style:dashed}
+  .bs-remind{margin-top:4px;background:#fff;border-radius:14px 14px 14px 4px;padding:9px 12px;font-size:12px;line-height:1.6;color:var(--ink);max-width:92%}
+  .bs-remind-k{display:block;font-family:var(--mono);font-size:10px;color:var(--note)}
+  /* 管理画面 予約 */
+  .ba-body{padding:14px;display:grid;gap:10px}
+  .ba-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .ba-h b{font-size:13.5px}
+  .ba-h span{font-family:var(--mono);font-size:11px;color:var(--note);white-space:nowrap}
+  .ba-gauge{height:10px;border-radius:999px;background:#EDF0F6;overflow:hidden}
+  .ba-gauge i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  .ba-row{font-size:11.5px;color:var(--note);display:flex;align-items:baseline;gap:4px}
+  .ba-row .mono{font-size:14px;font-weight:600;color:var(--ink)}
+  .ba-row .mono+.mono,.ba-row .mono:nth-of-type(2){margin-left:10px}
+  .ba-list{list-style:none;margin:0;padding:0;border:1px solid var(--hair);border-radius:10px;background:rgba(255,255,255,.6);overflow:hidden}
+  .ba-list li{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;font-size:11.5px;border-top:1px solid var(--hair);min-width:0}
+  .ba-list li:first-child{border-top:none}
+  .ba-list span{font-family:var(--mono);color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .ba-list em{font-style:normal;font-size:11px;font-weight:600;color:var(--ok);flex:none}
+  .ba-list em.w{color:var(--warn)}
+  .ba-acts{display:flex;flex-wrap:wrap;gap:6px}
+  .ba-acts span{font-size:11px;border:1px solid var(--hair-strong);border-radius:8px;padding:3px 9px;background:#fff;color:var(--dim)}
+  @media(max-width:960px){
+    .bk-main{grid-template-columns:1fr;gap:32px}
+    .bk-phone{position:static;max-width:320px;margin:0 auto}
+    .bk-doors{grid-template-columns:1fr}
+    .bk-doors-h{text-align:center;padding:0}
+    .bk-mocks{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:620px){
+    .bk-mocks{grid-template-columns:1fr;max-width:400px;margin-left:auto;margin-right:auto}
+    .bk-kind{padding:20px 18px 14px}
+    .bk-phone{max-width:280px}
+  }
+  /* ---- 任せきりにできる守り（v1.0） ---- */
+  #care h2 .ph,#itch h2 .ph{display:inline-block}
+  .care-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .care-card{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow),var(--hi);padding:22px 22px 20px;min-width:0}
+  .care-k{display:inline-block;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px;margin-bottom:12px}
+  .care-card h3{font-size:17px;line-height:1.55;margin-bottom:8px}
+  .care-card p{font-size:13.5px;color:var(--dim);line-height:1.8}
+  @media(max-width:900px){ .care-grid{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:600px){ .care-grid{grid-template-columns:1fr} .care-card h3 br{display:none} }
+  /* ---- 購入（正式版 v1.0） ---- */
+  .buy-price{display:flex;justify-content:center;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .buy-price .now{font-family:var(--mono);font-size:44px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .buy-price .tag{font-size:13px;color:var(--dim)}
+  .buy-check{list-style:none;margin:22px auto 0;padding:0;max-width:560px;text-align:left;display:grid;gap:8px}
+  .buy-check li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.7;color:var(--dim)}
+  .buy-check li::before{content:"";width:16px;height:16px;flex:none;margin-top:4px;border-radius:5px;border:1.5px solid var(--hair-strong);background:#fff}
+  .buy-check-h{max-width:560px;margin:22px auto 0;font-weight:700;font-size:15px;text-align:left}
+
 </style>
 </head>
 <body>
@@ -666,12 +995,13 @@
     <a class="logo" href="#top" data-rondo-label="ヘッダー ロゴ"><img class="logo-mark" src="/rondo-assets/rondo-icon.svg" alt="" width="28" height="28">Rondo</a>
     <nav class="head-nav">
       <a href="#flips" data-rondo-label="ヘッダー 特徴">特徴</a>
-      <a href="#cover" data-rondo-label="ヘッダー できること">できること</a>
-      <a href="#manifest" data-rondo-label="ヘッダー 同梱物">同梱物</a>
+      <a href="#switch" data-rondo-label="ヘッダー できること">できること</a>
+      <a href="#booking" data-rondo-label="ヘッダー 予約">予約</a>
+      <a href="#dist-tree" data-rondo-label="ヘッダー 同梱物">同梱物</a>
       <a href="#price" data-rondo-label="ヘッダー 価格">価格</a>
       <a href="#faq" data-rondo-label="ヘッダー FAQ">FAQ</a>
     </nav>
-    <a class="btn primary head-cta" href="#reserve" data-rondo-label="CTA ヘッダー先行販売" data-rondo-cta="reserve">先行販売に申し込む</a>
+    <a class="btn primary head-cta" href="#reserve" data-rondo-label="CTA ヘッダー購入" data-rondo-cta="reserve">購入する</a>
   </div>
 </header>
 
@@ -680,12 +1010,12 @@
   <!-- ヒーロー（v14: プロダクト・シアター） -->
   <section class="hero" data-sec="hero">
     <div class="wrap">
-      <span class="hero-pill">βテスター先行販売（審査制）・買い切り <span class="mono">¥4,980</span>・正式版価格 <span class="mono">¥9,800</span> 予定</span>
+      <span class="hero-pill">正式版 <span class="mono">v1.0</span>・買い切り <span class="mono">¥9,800</span>・月額なし</span>
       <h1><span class="nb">Codex/Claude Code</span><span class="nb">ユーザーのための、</span><br><span class="nb">マーケティングOS。</span></h1>
-      <p class="hero-sub"><span class="ph">ステップメール、LINE、SNS、売上、</span><span class="ph">顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">CodexやClaude Codeで運用する、</span><span class="ph">あなたの資産です。</span></p>
+      <p class="hero-sub"><span class="ph">ステップメール、LINE、Instagram、</span><span class="ph">予約、売上、顧客台帳を1画面に。</span><br><span class="ph">買い切りで所有し、</span><span class="ph">CodexやClaude Codeで運用する、</span><span class="ph">あなたの資産です。</span></p>
       <div class="hero-ctas">
-        <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー先行販売" data-rondo-cta="reserve">先行販売の審査に申し込む</a>
-        <a class="btn ghost" href="#cover" data-rondo-label="ヒーロー できること">できることを見る</a>
+        <a class="btn primary" href="#reserve" data-rondo-label="CTA ヒーロー購入" data-rondo-cta="reserve">購入する（¥9,800）</a>
+        <a class="btn ghost" href="#switch" data-rondo-label="ヒーロー できること">できることを見る</a>
       </div>
       <p class="hero-caution"><span class="hc-t">サポート窓口のない、<span class="nb">開発AIを使いこなす</span><span class="nb">上級者向け製品です。</span></span><a href="#shindan" data-rondo-label="ヒーロー 適性診断">30秒の適性診断で確かめる</a></p>
       <p class="hero-note">Cloudflareの月5ドルのプランで動作。<br><span style="display:inline-block">CodexもClaude Codeも、</span><span style="display:inline-block">月3,000円ほどのプランから</span><span style="display:inline-block">始められます。</span><br>イケハヤの実務で本番稼働中。</p>
@@ -801,12 +1131,12 @@
                 <div class="hm-page">
                   <div class="hm-mast">
                     <span class="hm-logo"><i></i>Rondo</span>
-                    <span class="hm-mini">先行販売・審査制</span>
+                    <span class="hm-mini">正式版 v1.0</span>
                   </div>
                   <div class="hm-line" style="width:72%"></div>
                   <div class="hm-line" style="width:58%"></div>
                   <div class="hm-line" style="width:40%;height:6px;background:#EDF0F6;margin-top:10px"></div>
-                  <span class="hm-cta">先行販売に申し込む</span>
+                  <span class="hm-cta">購入する</span>
                   <div class="hm-line" style="width:30%;height:6px;background:#EDF0F6"></div>
                   <div style="border-top:1px solid #EDF0F6;margin-top:14px;padding-top:4px">
                     <div class="hm-line" style="width:52%"></div>
@@ -958,7 +1288,7 @@
                 <p>承知しました。原稿を更新します。</p>
                 <div class="cc-steps">
                   <div class="cc-step"><span class="ck">✓</span><span>原稿を編集 <span class="path">contents/step/001.md</span></span></div>
-                  <div class="cc-step"><span class="ck">✓</span><span>自動テスト 1,789件 すべて合格</span></div>
+                  <div class="cc-step"><span class="ck">✓</span><span>自動テスト 1,970件 すべて合格</span></div>
                   <div class="cc-step"><span class="ck">✓</span><span>本番に反映</span></div>
                 </div>
                 <p>完了しました。次回の配信から新しい件名になります。</p>
@@ -979,116 +1309,388 @@
     </div>
   </section>
 
-  <!-- MyASP・Lステップ代替 -->
-  <section id="cover" data-sec="cover" style="padding-top:0">
+  <!-- 乗り換え（配信スタンド・LINE拡張ツール・Instagram自動化ツール・予約ツールの仕事を1つに） -->
+  <section id="switch" data-sec="switch" style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center">いまの配信スタンドの仕事は、<br>そのまま引き受けます。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">イケハヤ自身が配信スタンドから移行するために作ったので、<br>大手配信スタンド型SaaS（MyASP、Lステップなど）の基本業務は最初からひと通りそろっています。</p>
-      <div class="swap">
-        <div class="swap-old">
-          <div class="swap-tool">
-            <div class="st-head">メール配信スタンド <span class="st-sub">でやっていたこと</span></div>
-            <div class="st-chips">
-              <span>登録フォーム</span>
-              <span>ダブルオプトイン</span>
-              <span>ステップメール 628通</span>
-              <span>一斉・予約配信</span>
-              <span>ステータス別出し分け</span>
-              <span>配信停止・バウンス処理</span>
-              <span>開封・クリック計測</span>
-              <span>件名A/B</span>
-              <span>到達率ケア</span>
-            </div>
-          </div>
-          <div class="swap-tool">
-            <div class="st-head">LINE配信ツール <span class="st-sub">でやっていたこと</span></div>
-            <div class="st-chips">
-              <span>友だち追加からのステップ配信</span>
-              <span>一斉・予約配信</span>
-              <span>診断レベル別出し分け</span>
-              <span>キーワード自動応答</span>
-              <span>リッチメニュー</span>
-              <span>分岐する診断シナリオ</span>
-              <span>友だち台帳・名寄せ</span>
-              <span>タグ・友だち情報</span>
-              <span>流入経路分析</span>
-              <span>1:1トーク</span>
-              <span>回答フォーム</span>
-              <span>リマインダ</span>
-              <span>画像・カルーセル</span>
-              <span>A/Bテスト</span>
-            </div>
-          </div>
-          <div class="swap-tool">
-            <div class="st-head">予約・DM応答ツール <span class="st-sub">でやっていたこと</span></div>
-            <div class="st-chips">
-              <span>個別相談・セミナーの予約</span>
-              <span>定員とキャンセル待ち</span>
-              <span>予約のリマインド</span>
-              <span>Instagram DMの自動応答</span>
-              <span>ストーリー返信・メンションへのお礼</span>
-            </div>
-          </div>
+      <h2 style="text-align:center"><span class="ph">メール・LINE・Instagram・予約の</span><span class="ph">ツールから、</span><br><span class="ph">乗り換えられます。</span></h2>
+      <p class="lede" style="text-align:center;margin:0 auto 28px">イケハヤ自身が、配信スタンドから移るために作りました。<br>ばらばらに契約していた月額ツールの主な仕事を、1つの基盤へ。</p>
+      <nav class="sw-tabs" aria-label="乗り換えの4つの領域">
+        <a href="#sw-mail" data-rondo-label="乗り換え タブ メール"><i style="background:#2E5CE6"></i>ステップメール</a>
+        <a href="#sw-line" data-rondo-label="乗り換え タブ LINE"><i style="background:#178A50"></i>LINEの高度な配信</a>
+        <a href="#sw-ig" data-rondo-label="乗り換え タブ Instagram"><i style="background:#C2255C"></i>Instagram自動化</a>
+        <a href="#booking" data-rondo-label="乗り換え タブ 予約"><i style="background:#C99A2E"></i>予約・セミナー</a>
+      </nav>
+
+      <!-- 1. ステップメール -->
+      <article class="sw-block" id="sw-mail">
+        <div class="sw-copy">
+          <p class="sw-kicker"><span class="sw-dot" style="background:#2E5CE6"></span>ステップメール<span class="sw-from">メール配信スタンドから</span></p>
+          <h3 class="sw-h"><span class="ph">628通の講座を、</span><span class="ph">毎日、</span><br><span class="ph">重ねず、</span><span class="ph">止めずに届ける。</span></h3>
+          <p class="sw-lead">イケハヤの講座を毎日動かしているエンジンです。事故を起こさないための守りを厚くしました。</p>
+          <dl class="sw-map">
+            <div class="sw-row"><dt>複数の講座と本人確認</dt><dd>講座はいくつでも。講座ごとに確認メールで本人確認します。</dd></div>
+            <div class="sw-row"><dt>一斉配信の絞り込み</dt><dd>「この講座の読者のうち、購入者を除く」のように<b>AND・OR・NOT</b>で宛先を決め、送る前に人数とテスト送信で確かめます。</dd></div>
+            <div class="sw-row"><dt>押したら動くリンク</dt><dd>本文のリンクを押した人にタグを付け、別の講座へ移せます。1通の中で、読者ごとに本文を出し分けることもできます。</dd></div>
+            <div class="sw-row"><dt>購入で動く</dt><dd>Stripeの決済が入ったら、タグ付け・講座の開始と停止・LINEの切り替えまで自動で動きます。</dd></div>
+            <div class="sw-row"><dt>件名A/Bの自動判定</dt><dd>差がはっきりしたら、勝った件名へ寄せます。</dd></div>
+            <div class="sw-row"><dt>誤送信ガード5層</dt><dd>1人1日の上限から緊急停止まで。<b>どれかが引っかかれば送りません</b>。</dd></div>
+          </dl>
+          <p class="sw-honest">読者はCSVで引っ越せます。解除・不達の人は停止の台帳へ入り、旧ツールの登録日から「続きの通」で始まります。まず数人で試してから全員を入れます。</p>
         </div>
-        <div class="swap-arrow"><span class="ar">→</span>まとめて</div>
-        <figure class="swap-rondo shot" style="margin:0">
-          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin</span></div>
-          <div class="swap-r-body">
-            <div class="swap-r-row"><span class="nm">メール配信エンジン</span><span class="d">ステップ628通を実運用中</span></div>
-            <div class="swap-r-row"><span class="nm">LINEステップエンジン</span><span class="d">タグ・フォーム・1:1トークまで込み</span></div>
-            <div class="swap-r-row"><span class="nm">予約ページ</span><span class="d">LINEとメールの両方から受付</span></div>
-            <div class="swap-r-row"><span class="nm">Instagram自動応答</span><span class="d">DMの規則で特典やLINEへ案内</span></div>
-            <div class="swap-r-row"><span class="nm">顧客台帳と4セグメント</span><span class="d">メール・LINEを名寄せ</span></div>
-            <div class="swap-r-row"><span class="nm">1つのダッシュボード</span><span class="d">計測・A/B・到達率ケアも集約</span></div>
-            <div class="swap-r-plus">Stripe APIをつなげば、決済・サブスク管理まで統合できます。<br>購入した人だけへのフォローアップやアップセル配信も、この台帳が受け止めます。</div>
+        <figure class="sw-visual shot">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 講座「senseki」</span></div>
+          <div class="ml-body">
+            <div class="ml-tl">
+              <div class="ml-st"><span class="d">登録</span><span class="t">確認メール</span><span class="r">開封 92%</span></div>
+              <div class="ml-st"><span class="d">1日目</span><span class="t">第1講 なぜ「所有」なのか</span><span class="r">開封 61%</span></div>
+              <div class="ml-st ab"><span class="d">3日目</span><span class="t"><em>A</em> 配信の設計図を見せます<br><em class="win">B</em> 628通を毎日送る仕組み</span><span class="r"><b class="win">B 採用</b><small>B 58% / A 49%</small></span></div>
+              <div class="ml-st"><span class="d">5日目</span><span class="t">第3講 AIに「外注」する練習</span><span class="r">クリック 12.9%</span></div>
+              <div class="ml-st more"><span class="d">…</span><span class="t">第628通まで</span><span class="r"></span></div>
+            </div>
+            <div class="ml-guard">
+              <div class="ml-guard-h">今日の送信 <b>4,812</b> 通 · ガード 5層すべて正常</div>
+              <div class="ml-layers"><span>1人1日</span><span>全体上限</span><span>人数の門</span><span>設定検問</span><span>停止栓</span></div>
+            </div>
           </div>
+          <figcaption class="sw-cap">画面は見本です。数字は例です。</figcaption>
         </figure>
+      </article>
+
+      <!-- 2. LINE -->
+      <article class="sw-block rev" id="sw-line">
+        <div class="sw-copy">
+          <p class="sw-kicker"><span class="sw-dot" style="background:#178A50"></span>LINEの高度な配信<span class="sw-from">LINE拡張ツールから</span></p>
+          <h3 class="sw-h"><span class="ph">タグ、分岐、</span><span class="ph">リッチメニュー。</span><br><span class="ph">LINE拡張ツールの主な仕事を、</span><span class="ph">Rondoで。</span></h3>
+          <p class="sw-lead">押したボタン、答え、来た経路で友だちを分け、それぞれに違う道を用意できます。</p>
+          <dl class="sw-map">
+            <div class="sw-row"><dt>タグと分岐</dt><dd>押したボタンや答えでタグを付け、<b>AND・OR・NOT</b>で配信や本文を出し分けます。</dd></div>
+            <div class="sw-row"><dt>リマインダ配信</dt><dd>セミナーの日などを起点に「3日前・前日・当日」に送れます。</dd></div>
+            <div class="sw-row"><dt>リッチメニューと流入経路</dt><dd>タグでメニューが替わり、<b>どの入口から来た友だちが成果につながったか</b>まで数えます。</dd></div>
+            <div class="sw-row"><dt>画像・動画・カルーセル</dt><dd>横にめくれるカードや押せる画像も、原稿に1行書くだけで送れます。</dd></div>
+            <div class="sw-row"><dt>A/Bテストと分析</dt><dd>文面を2通り送り分け、押した人・ブロック・成果を比べます。</dd></div>
+            <div class="sw-row"><dt>1:1トークとフォーム</dt><dd>個別のやり取りを管理画面で返信。LINEの中で答えるフォームも作れます。</dd></div>
+            <div class="sw-row"><dt>AIの返事（任意）</dt><dd>キーワードで返せない質問にAIが返します。返金・解約の話は人に回します。</dd></div>
+          </dl>
+          <p class="sw-honest">ステップ配信は「◯日後の◯時」の単位です。LステップのCSVからタグと友だち情報を持ち込めますが、友だちとの結び付けは人が確かめます。</p>
+        </div>
+        <figure class="sw-visual shot">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · LINE 友だち</span></div>
+          <div class="ln-body">
+            <div class="ln-prof">
+              <span class="ln-av">さ</span>
+              <div class="ln-id"><b>さくら</b><span>経路：プロフィールのリンク · 10/02 追加</span></div>
+              <span class="ln-state">要対応</span>
+            </div>
+            <div class="ln-tags">
+              <span class="t on">診断Lv2</span><span class="t on">特典受取</span><span class="t on">セミナー申込</span><span class="t">購入者</span>
+            </div>
+            <div class="ln-grid">
+              <div class="ln-cell"><span class="k">セミナーの日</span><span class="v">10/12（日）</span></div>
+              <div class="ln-cell"><span class="k">業種</span><span class="v">美容サロン</span></div>
+            </div>
+            <div class="ln-path">
+              <div class="ln-path-h">この人の道すじ</div>
+              <ol>
+                <li class="done"><span class="d">10/02</span>あいさつ（診断へ）</li>
+                <li class="done"><span class="d">10/03</span>診断の結果 → <b>Lv2の節</b>を送信</li>
+                <li class="now"><span class="d">10/09</span>リマインダ「セミナー3日前」</li>
+                <li><span class="d">10/11</span>リマインダ「前日」</li>
+              </ol>
+            </div>
+            <div class="ln-menu">
+              <span class="k">リッチメニュー</span>
+              <span class="m">入門</span><span class="m on">実務</span><span class="m">上級</span>
+              <span class="why">← タグ「診断Lv2」で切替</span>
+            </div>
+          </div>
+          <figcaption class="sw-cap">画面は見本です。</figcaption>
+        </figure>
+      </article>
+
+      <!-- 3. Instagram -->
+      <article class="sw-block" id="sw-ig">
+        <div class="sw-copy">
+          <p class="sw-kicker"><span class="sw-dot" style="background:#C2255C"></span>Instagram自動化<span class="sw-from">Instagram自動化ツールから</span></p>
+          <h3 class="sw-h"><span class="ph">DMで「特典」と</span><span class="ph">送ってきた人に、</span><br><span class="ph">その場で返す。</span><span class="ph">そのままLINEへ。</span></h3>
+          <p class="sw-lead">「DMで『特典』と送ってください」の導線を動かせます。LINEに来た後の数字まで、同じ管理画面で追えます。</p>
+          <dl class="sw-map">
+            <div class="sw-row"><dt>DMのキーワード自動返信</dt><dd>言葉ごとに、返す文面とボタンを決められます。文面は最大5通りを順に替えます。</dd></div>
+            <div class="sw-row"><dt>ストーリー返信・コメント</dt><dd>ストーリーへの返信や、リール・投稿へのコメントにもDMで返します。</dd></div>
+            <div class="sw-row"><dt>メンションへのお礼とDMメニュー</dt><dd>ストーリーで紹介してくれた人へお礼を送り、DMの質問ボタンと常設メニューも載せられます。</dd></div>
+            <div class="sw-row"><dt>LINEへの誘導と計測</dt><dd><b>どの呼びかけから何人がLINEを開いたか</b>を数えます。</dd></div>
+            <div class="sw-row"><dt>キャンペーンと送りすぎない仕組み</dt><dd>期間と対象の投稿を決めて成果を比べます。「停止」などの言葉には送りません。</dd></div>
+          </dl>
+          <p class="sw-honest">Metaの開発者サイトでアプリ登録が要ります（接続は管理画面のボタンから）。コメントへの返信は、Metaの審査とビジネス認証が通ってから動きます。</p>
+        </div>
+        <figure class="sw-visual shot">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Instagram · DM</span></div>
+          <div class="ig-thread">
+            <div class="ig-who"><span class="ig-av">は</span><div><b>haruto_marketing</b><span>ストーリーに返信しました</span></div></div>
+            <div class="ig-msg in"><span class="ig-quote">ストーリー：無料の配信設計シート</span>特典ほしいです！</div>
+            <div class="ig-msg out">ありがとうございます。配信設計シートは、LINEでお渡ししています👇</div>
+            <div class="ig-card"><span class="ig-card-ic">L</span><div><b>LINEで受け取る</b><span>友だち追加で、シートと解説の1通目が届きます</span></div></div>
+            <div class="ig-meta">自動返信</div>
+          </div>
+          <div class="ig-flow">
+            <div class="ig-step"><span class="k">DM・返信</span><span class="v">412</span></div>
+            <span class="ig-ar">→</span>
+            <div class="ig-step"><span class="k">特典を返信</span><span class="v">389</span></div>
+            <span class="ig-ar">→</span>
+            <div class="ig-step hl"><span class="k">LINEへ</span><span class="v">203</span></div>
+          </div>
+          <figcaption class="sw-cap">画面は見本です。数字は例です。</figcaption>
+        </figure>
+      </article>
+
+      <!-- 乗り換えの流れ -->
+      <div class="sw-move">
+        <p class="sw-move-h">乗り換えは、3ステップ</p>
+        <ol class="sw-steps">
+          <li><span class="n">1</span><div><b>データを持ち込む</b><p>読者・タグ・友だち情報・購入者リストをCSVで取り込みます。</p></div></li>
+          <li><span class="n">2</span><div><b>設定と原稿を移す</b><p>シナリオや原稿の移し替えを、開発AIに日本語で頼みます。</p></div></li>
+          <li><span class="n">3</span><div><b>切り替える</b><p>切り替える日を決め、その日の配信時刻から。解約は届くのを確かめてから。</p></div></li>
+        </ol>
       </div>
-      <p class="gallery-note" style="margin-top:28px">ここに無い機能が必要なら、CodexやClaude Codeに「作って」と言えば足せます。<br>それがOSである理由です。</p>
     </div>
   </section>
 
-  <!-- かゆいところ台帳 -->
+  <!-- 予約ページ（セミナー・個別相談） -->
+  <section id="booking" data-sec="booking" style="padding-top:0">
+    <div class="wrap">
+      <p class="bk-kicker"><span class="sw-dot" style="background:#C99A2E"></span>予約・セミナー<span class="sw-from">予約ツールから</span></p>
+      <h2 style="text-align:center"><span class="ph">セミナーも個別相談も、</span><br><span class="ph">予約ページまで自前で。</span></h2>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">募集ページ、定員、リマインド、当日の案内、終わった後のアーカイブまで。<br>予約ツールの月額を払わずに、読者と同じ台帳で動きます。</p>
+
+      <div class="bk-main">
+        <figure class="bk-phone">
+          <div class="bk-phone-frame">
+            <img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページの実画面。10月17日のAI動画編集と動画生成の実演セミナーの募集ページで、申し込み状況のゲージに296人が申し込み済み、残り204席と出ている" width="780" height="1560" loading="lazy">
+          </div>
+          <figcaption><b>実物です。</b>イケハヤの10/17のセミナーは、このページで募集しています。<br><span class="bk-date">2026年10月7日に撮影</span></figcaption>
+        </figure>
+
+        <div class="bk-kinds">
+          <article class="bk-kind">
+            <p class="bk-kind-h"><span class="bk-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>セミナー<small>回を並べて、定員つきで</small></p>
+            <ul class="bk-list">
+              <li><b>申し込み状況のゲージ</b>何人が申し込んだかと残りの席を出し、満席になるたびに席を自動で増やせます。</li>
+              <li><b>キャンセル待ちと繰り上げ</b>空きが出ると自動で繰り上がり、本人に知らせます。</li>
+              <li><b>申し込みの形を選べる</b>メールだけで受ける・確認メールなしで確定する・先に済ませてほしいこと（配信先への登録など）を1段目に出す。</li>
+              <li><b>終わった後のご案内</b>回が終わったら、予約していた人全員にアーカイブの案内を1通送ります。</li>
+              <li><b>募集ページの雛形</b>表紙・こんな方に・当日の流れ・講師・参加者の声・よくある質問。設定に書いた節だけ出ます。</li>
+            </ul>
+          </article>
+          <article class="bk-kind">
+            <p class="bk-kind-h"><span class="bk-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>個別相談・面談<small>空き枠から1人ずつ</small></p>
+            <ul class="bk-list">
+              <li><b>受付時間を書くだけ</b>曜日ごとの受付時間と1枠の長さを決めると、空き枠が並びます。</li>
+              <li><b>二重予約にならない</b>1枠1人。同時に押されても、片方だけが入ります。</li>
+              <li><b>自分で変更・取り消し</b>締切までは、予約した人が別の日時に変えたり取り消したりできます。</li>
+              <li><b>前日と直前にお知らせ</b>日時と参加URLをLINEで届けます。予約の前に質問へ答えてもらうこともできます。</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="bk-doors">
+        <p class="bk-doors-h">申し込みの入口は3つ</p>
+        <div class="bk-door"><span class="bk-door-k" style="--c:#178A50">LINEの友だち</span><span>リッチメニューやメッセージの「予約する」ボタンから。</span></div>
+        <div class="bk-door"><span class="bk-door-k" style="--c:#2E5CE6">メールの読者</span><span>本文に読者ごとの予約リンクを差し込めます。</span></div>
+        <div class="bk-door"><span class="bk-door-k" style="--c:#C99A2E">誰でも</span><span>ページのURLをLPやSNSに貼るだけ。名前とメールで申し込めます。</span></div>
+      </div>
+
+      <div class="bk-mocks">
+        <figure class="shot bk-mock">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">予約の後の画面</span></div>
+          <div class="bm-body">
+            <div class="bm-note"><span class="bm-ok" aria-hidden="true">✓</span><div><b>ご予約が確定しました。</b><span>確定のメールをお送りしました。</span></div></div>
+            <div class="bm-card">
+              <div class="bm-top"><span>あなたの予約</span><span class="bm-pill">予約済み</span></div>
+              <div class="bm-date">10/17<small>（土）</small></div>
+              <div class="bm-time">10:00〜11:00 · オンライン</div>
+              <span class="bm-btn primary">参加ページを開く</span>
+              <span class="bm-btn">Googleカレンダーに追加</span>
+              <div class="bm-links"><span>別の回に変える</span><span>取り消す</span></div>
+            </div>
+          </div>
+          <figcaption class="sw-cap">確定・変更のメールにも、カレンダーに追加するリンクが付きます。<br>画面は見本です。</figcaption>
+        </figure>
+        <figure class="shot bk-mock">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">LINE · 個別相談の予約</span></div>
+          <div class="bs-body">
+            <div class="bs-h"><b>30分の個別相談</b><span>空いている枠を選んでください</span></div>
+            <div class="bs-day">10/14（火）</div>
+            <div class="bs-slots"><span>10:00</span><span class="off">10:30</span><span>11:00</span><span class="on">13:30</span><span>14:00</span><span class="off">14:30</span></div>
+            <div class="bs-day">10/15（水）</div>
+            <div class="bs-slots"><span class="off">10:00</span><span>10:30</span><span>15:00</span><span>15:30</span></div>
+            <div class="bs-remind"><span class="bs-remind-k">前日 20:00</span>明日 13:30 から個別相談です。参加URLはこちら</div>
+          </div>
+          <figcaption class="sw-cap">埋まった枠は押せません。<br>画面は見本です。</figcaption>
+        </figure>
+        <figure class="shot bk-mock">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 予約</span></div>
+          <div class="ba-body">
+            <div class="ba-h"><b>AI動画セミナー</b><span>10/17（土）10:00</span></div>
+            <div class="ba-gauge"><i style="width:59%"></i></div>
+            <div class="ba-row"><span class="mono">296</span>確定<span class="mono">12</span>キャンセル待ち</div>
+            <ul class="ba-list">
+              <li><span>sato***@gmail.com</span><em>確定</em></li>
+              <li><span>LINE: はると</span><em>確定</em></li>
+              <li><span>tana***@icloud.com</span><em class="w">待ち 3</em></li>
+            </ul>
+            <div class="ba-acts"><span>CSV</span><span>カレンダー（.ics）</span><span>枠を閉じる</span></div>
+          </div>
+          <figcaption class="sw-cap">新しい予約はいつもの通知にも届きます。<br>名前と数字は例です。</figcaption>
+        </figure>
+      </div>
+      <p class="gallery-note" style="margin-top:24px">参加費の決済は含みません。<br>誰でも申し込める入口は、bot対策（Cloudflare Turnstile）の鍵を設定したときだけ開きます。</p>
+    </div>
+  </section>
+
+  <!-- かゆいところ台帳（図解つき） -->
   <section id="itch" data-sec="itch" style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center">マーケターのかゆいところに、<br>手が届く。</h2>
+      <h2 style="text-align:center"><span class="ph">マーケターの</span><span class="ph">かゆいところに、</span><br><span class="ph">手が届く。</span></h2>
       <p class="lede" style="text-align:center;margin:0 auto 48px">実務で毎日困っていることから作ったので、答えが具体的です。</p>
 
       <div class="itch-list">
         <div class="itch-row">
-          <div class="itch-q">メールとLINEとDiscordに同じ人がいるのに、別人として数えている</div>
-          <div class="itch-a">
-            <div class="name">顧客の名寄せ</div>
-            <p>メール・LINE・Discord・購入履歴を<b>同一人物として自動で束ね</b>、「人」の単位で時系列に追えます。</p>
+          <div class="itch-txt">
+            <div class="itch-q">メールとLINEとDiscordに同じ人がいるのに、別人として数えている</div>
+            <div class="itch-a">
+              <div class="name">顧客の名寄せ</div>
+              <p>メール・LINE・Discord・購入履歴を<b>同一人物として自動で束ね</b>、「人」の単位で時系列に追えます。</p>
+            </div>
           </div>
+          <figure class="itch-fig fig-merge" role="img" aria-label="メール・LINE・Discord・購入の4つの記録が、1人の顧客に束ねられる図">
+            <div class="fm-src">
+              <span class="fm-chip"><i style="background:#2E5CE6"></i>メール<em>sato***@gmail.com</em></span>
+              <span class="fm-chip"><i style="background:#178A50"></i>LINE<em>さと</em></span>
+              <span class="fm-chip"><i style="background:#5865F2"></i>Discord<em>sato_21</em></span>
+              <span class="fm-chip"><i style="background:#17181C"></i>購入<em>3件</em></span>
+            </div>
+            <svg class="fig-lines" viewBox="0 0 40 160" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M0 20C22 20 18 80 40 80M0 60C22 60 18 80 40 80M0 100C22 100 18 80 40 80M0 140C22 140 18 80 40 80"/></svg>
+            <div class="fm-person"><span class="fm-av">さ</span><b>佐藤さん</b><span class="fm-n">1人として数える</span></div>
+          </figure>
         </div>
+
         <div class="itch-row">
-          <div class="itch-q">誰が熱心な顧客なのか、感覚でしか語れない</div>
-          <div class="itch-a">
-            <div class="name">顧客スコアと4セグメント</div>
-            <p>購入・反応・接続・新しさで自動採点し、<b>コア/常連/見込み/休眠</b>に仕分けます。</p>
+          <div class="itch-txt">
+            <div class="itch-q">誰が熱心な顧客なのか、感覚でしか語れない</div>
+            <div class="itch-a">
+              <div class="name">顧客スコアと4セグメント</div>
+              <p>購入・反応・接続・新しさで自動採点し、<b>コア/常連/見込み/休眠</b>に仕分けます。</p>
+            </div>
           </div>
+          <figure class="itch-fig fig-seg" role="img" aria-label="顧客3,328人が、コア214人・常連892人・見込み1,306人・休眠916人に仕分けられた帯グラフ">
+            <div class="fs-head"><span>顧客</span><b class="mono">3,328人</b></div>
+            <div class="fs-bar" aria-hidden="true"><i style="flex:214;background:#2E5CE6"></i><i style="flex:892;background:#178A50"></i><i style="flex:1306;background:#C99A2E"></i><i style="flex:916;background:#C3C9D4"></i></div>
+            <div class="fs-leg">
+              <span><i style="background:#2E5CE6"></i>コア<b class="mono">214</b></span>
+              <span><i style="background:#178A50"></i>常連<b class="mono">892</b></span>
+              <span><i style="background:#C99A2E"></i>見込み<b class="mono">1,306</b></span>
+              <span><i style="background:#C3C9D4"></i>休眠<b class="mono">916</b></span>
+            </div>
+            <div class="fs-calc"><span>購入</span><span>反応</span><span>接続</span><span>新しさ</span><span class="eq">→ スコア <b class="mono">86</b> = コア</span></div>
+          </figure>
         </div>
+
         <div class="itch-row">
-          <div class="itch-q">全員に同じ配信を送るしかない</div>
-          <div class="itch-a">
-            <div class="name">セグメント配信</div>
-            <p><b>購入商品・登録経路・反応履歴</b>で読者を分け、それぞれへ<b>同じ日の同じ時刻に別内容で</b>出し分けます。</p>
+          <div class="itch-txt">
+            <div class="itch-q">全員に同じ配信を送るしかない</div>
+            <div class="itch-a">
+              <div class="name">セグメント配信</div>
+              <p><b>購入商品・登録経路・反応履歴</b>で読者を分け、それぞれへ<b>同じ日の同じ時刻に別内容で</b>出し分けます。</p>
+            </div>
           </div>
+          <figure class="itch-fig fig-fork" role="img" aria-label="同じ時刻の1回の配信が、購入者・Xから登録した人・30日開いていない人の3通りの内容に分かれる図">
+            <div class="ff-src"><span class="mono">10/12 20:00</span><b>今夜の配信</b></div>
+            <svg class="fig-lines" viewBox="0 0 40 150" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M0 75C22 75 18 25 40 25M0 75H40M0 75C22 75 18 125 40 125"/></svg>
+            <div class="ff-outs">
+              <div class="ff-out"><span class="ff-who">購入者</span><span class="ff-what">次の講座のご案内</span></div>
+              <div class="ff-out"><span class="ff-who">Xから登録</span><span class="ff-what">Xで話した続き</span></div>
+              <div class="ff-out"><span class="ff-who">30日 未開封</span><span class="ff-what">お久しぶりです</span></div>
+            </div>
+          </figure>
         </div>
+
         <div class="itch-row">
-          <div class="itch-q">LPから購入まで、どこで人が落ちているのか分からない</div>
-          <div class="itch-a">
-            <div class="name">ファネル分析</div>
-            <p>流入元→LP訪問→教材クリック→注文→売上を、<b>同じ定義の数字で一気通貫</b>。</p>
+          <div class="itch-txt">
+            <div class="itch-q">LPから購入まで、どこで人が落ちているのか分からない</div>
+            <div class="itch-a">
+              <div class="name">ファネル分析</div>
+              <p>流入元→LP訪問→教材クリック→注文→売上を、<b>同じ定義の数字で一気通貫</b>。</p>
+            </div>
           </div>
+          <figure class="itch-fig fig-fnl" role="img" aria-label="LP訪問6,947、教材クリック4,185、注文241と細くなるファネル。教材クリックから注文で94%が離れている">
+            <div class="fn-row"><span class="l">LP訪問</span><span class="b"><i style="width:100%"></i></span><span class="v mono">6,947</span></div>
+            <div class="fn-row"><span class="l">教材クリック</span><span class="b"><i style="width:60%"></i></span><span class="v mono">4,185</span></div>
+            <div class="fn-drop"><span>ここで <b class="mono">94%</b> が離れている</span></div>
+            <div class="fn-row"><span class="l">注文</span><span class="b"><i style="width:6%"></i></span><span class="v mono">241</span></div>
+            <div class="fn-row sum"><span class="l">売上</span><span class="b"></span><span class="v mono">¥6.18M</span></div>
+          </figure>
         </div>
+
         <div class="itch-row">
-          <div class="itch-q">コンテンツの自動配信基盤が夜中に壊れても、朝まで誰も気づかない</div>
-          <div class="itch-a">
-            <div class="name">自動の見張り番</div>
-            <p>定時ジョブの監視・障害記録・毎朝の送達テスト・緊急停止栓。<br><b>異常はDiscordに即通知</b>されます。</p>
+          <div class="itch-txt">
+            <div class="itch-q">コンテンツの自動配信基盤が夜中に壊れても、朝まで誰も気づかない</div>
+            <div class="itch-a">
+              <div class="name">自動の見張り番</div>
+              <p>定時ジョブの監視・障害記録・毎朝の送達テスト・毎日のバックアップ。<br><b>異常はDiscordに即通知</b>されます。</p>
+            </div>
           </div>
+          <figure class="itch-fig fig-watch" role="img" aria-label="夜中0時から朝7時までの見張りの記録。3時12分に定時ジョブの停止を見つけ、Discordにすぐ通知した図">
+            <div class="fw-tl" aria-hidden="true">
+              <span class="fw-ev ok" style="left:3%"><i></i><em>00:10<br>バックアップ</em></span>
+              <span class="fw-ev ok" style="left:28%"><i></i><em>02:00<br>定時ジョブ</em></span>
+              <span class="fw-ev bad" style="left:46%"><i></i><em>03:12<br>停止を検知</em></span>
+              <span class="fw-ev ok" style="left:93%"><i></i><em>06:30<br>送達テスト</em></span>
+            </div>
+            <div class="fw-alert"><span class="fw-ic">!</span><div><b>Rondo 見張り番 <span class="mono">03:12</span></b><span>定時ジョブが止まっています。障害記録に残しました。</span></div></div>
+          </figure>
+        </div>
+      </div>
+      <p class="gallery-note" style="margin-top:20px">図の名前と数字は例です。</p>
+    </div>
+  </section>
+
+  <!-- 任せきりにできる守り（v1.0） -->
+  <section id="care" data-sec="care" style="padding-top:0">
+    <div class="wrap">
+      <h2 style="text-align:center"><span class="ph">AIに任せきりにできる、</span><span class="ph">守りの仕組み。</span></h2>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">壊れても気づける。戻せる。送りすぎない。<br>自分の基盤を持つときの不安を、仕組みで先に潰しました。</p>
+      <div class="care-grid">
+        <div class="care-card">
+          <span class="care-k">戻せる</span>
+          <h3>毎日のバックアップと、<br>復元の練習</h3>
+          <p>データベースを毎日書き出して、手元と自分のクラウドに保管。週に1回、使い捨てのデータベースへ実際に戻して、全部の表の件数が合うかを確かめます。</p>
+        </div>
+        <div class="care-card">
+          <span class="care-k">気づける</span>
+          <h3>つながりの健康診断</h3>
+          <p>メールの配信結果の通知、LINEの鍵、Instagramの期限、bot対策の鍵。切れる前と切れた直後に監査が赤になり、通知も届きます。手元で動かす定時ジョブも、止まれば分かります。</p>
+        </div>
+        <div class="care-card">
+          <span class="care-k">送りすぎない</span>
+          <h3>誤送信ガードと<br>緊急停止栓</h3>
+          <p>1人1日の上限から全体の上限まで、5層のどれかが引っかかれば送りません。メールとLINEはボタン1つでまとめて止められます。</p>
+        </div>
+        <div class="care-card">
+          <span class="care-k">重ねない</span>
+          <h3>二重に届かない送信</h3>
+          <p>通信が途切れて結果が分からない送信は、同じ内容でしか送り直しません。決着しないものは自動では送らず、管理画面でお知らせします。</p>
+        </div>
+        <div class="care-card">
+          <span class="care-k">膨らまない</span>
+          <h3>Cloudflareの利用料を<br>抑える作り</h3>
+          <p>5分ごとの処理は、その回の仕事だけを読みます。古い機械の記録は少しずつ掃除し、容量は監査で見張ります。トーク本文や購入の記録は消しません。</p>
+        </div>
+        <div class="care-card">
+          <span class="care-k">出す前に止める</span>
+          <h3>公開前の検査</h3>
+          <p>書き忘れた設定、足りない鍵、送信ドメインのSPF・DKIM・DMARCまで。どれかが欠けていれば、公開の前に機械が止めて、何を足せばいいかを示します。</p>
         </div>
       </div>
     </div>
@@ -1113,6 +1715,7 @@
             <span>ステップメール628通を搭載して本番稼働</span>
             <span>顧客3,328人を名寄せして運用中</span>
             <span>LINEの診断・特典・セグメント配信も運用中</span>
+            <span>セミナーの募集もRondoの予約ページで</span>
           </div>
         </div>
         <div class="gallery">
@@ -1139,31 +1742,6 @@
     </div>
   </section>
 
-  <!-- 同梱物 -->
-  <section id="manifest" data-sec="manifest">
-    <div class="wrap">
-      <h2 style="text-align:center">同梱物</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは完成品のアプリではなく、<br>あなたの事業に合わせてAIと育てる「設計図一式」です。</p>
-      <div class="manifest">
-        <div class="mani-head"><span class="t">MANIFEST — Rondo v1</span><span class="s">すべてソースコード込み</span></div>
-        <div class="mani-row"><span class="mani-no">1</span><span class="mani-name">メール配信エンジン</span><span class="mani-desc">Resend接続。ダブルオプトイン・二重送信ガード込み。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">2</span><span class="mani-name">ステップメール機構</span><span class="mani-desc">原稿はMarkdownが正本。gitと配信DBの全一致を機械検証。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">3</span><span class="mani-name">LINEステップ配信エンジン</span><span class="mani-desc">ステップ配信・タグ・回答フォーム・1:1トーク・リッチメニュー・A/Bテスト。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">4</span><span class="mani-name">顧客CRM</span><span class="mani-desc">メール・LINE・Discord・購入履歴を名寄せ。4セグメント自動仕分け。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">5</span><span class="mani-name">セグメント配信</span><span class="mani-desc">購入商品別・セグメント別の出し分け。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">6</span><span class="mani-name">統合ダッシュボード</span><span class="mani-desc">チャネルと売上を1画面に。局面検知レコメンドつき。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">7</span><span class="mani-name">ファネル分析</span><span class="mani-desc">流入元→訪問→クリック→注文→売上を同じ定義で一気通貫。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">8</span><span class="mani-name">改善エンジン</span><span class="mani-desc">件名A/B自動判定・成績の還流・週次調律レポート。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">9</span><span class="mani-name">監査と自動見張り</span><span class="mani-desc">ジョブ健康監視・障害記録・送達テスト・緊急停止栓。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">10</span><span class="mani-name">予約ページ</span><span class="mani-desc">個別相談・セミナー。定員・キャンセル待ち・リマインドつき。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">11</span><span class="mani-name">Instagram自動応答</span><span class="mani-desc">DM・ストーリー返信・メンションへのお礼を規則で自動化。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">12</span><span class="mani-name">テスト一式</span><span class="mani-desc">自動テスト1,789件。AIが安全に改造できる土台。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-row"><span class="mani-no">13</span><span class="mani-name">イケハヤAI（診断AI）</span><span class="mani-desc">判断基準23項目の診断スキル。数字を読んで診断し、承認した処方は実装まで代行。</span><span class="mani-ok">✓</span></div>
-        <div class="mani-foot">導入手順書（SETUP.md）つき。AIに丸ごと渡せば、セットアップ自体も任せられます。<br>進め方は<a href="/rondo-guides/setup" data-rondo-label="マニフェスト 初回セットアップガイド">初回セットアップガイド</a>と<a href="/rondo-guides/settings" data-rondo-label="マニフェスト 導入後設定ガイド">導入後の設定ガイド</a>で公開中です。</div>
-      </div>
-    </div>
-  </section>
-
   <!-- 同梱物ツリー（配布zipの実測。zip更新のたびに数字を実測で更新する） -->
   <section id="dist-tree" data-sec="dist-tree" style="padding-top:0">
     <div class="wrap">
@@ -1185,30 +1763,30 @@
           <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">EULA.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">利用条件</span></div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="true" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">97 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・管理画面</span></button>
+            <button class="dt-row" data-dir aria-expanded="true" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">103 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・管理画面</span></button>
             <div class="dt-children" id="dt-ch-src">
-              <span>admin-ui.mjs</span><span>alert-config.mjs</span><span>appstore-stats.mjs</span><span>auth.mjs</span><span>booking-page.mjs</span><span>bookings.config.mjs</span><span>bookings.mjs</span><span>confirm-mail.mjs</span><span>contents.mjs</span><span>d1-budget.mjs</span><span>daily-claim.mjs</span><span>dashboard.mjs</span><span>discord-link.mjs</span><span>discord-stats.mjs</span><span>dormancy.mjs</span><span>engine.mjs</span><span>episode-feed-audit.mjs</span><span>financie-stats.mjs</span><span>footer.config.mjs</span><span>guard.mjs</span><span>health.mjs</span><span>heat-client.mjs</span><span>heat.mjs</span><span>ig-api.mjs</span><span>ig-config.mjs</span><span>ig-engine.mjs</span><span>ig-menu.mjs</span><span>ig-oauth.mjs</span><span>ig-rules.mjs</span><span>ig-stats.mjs</span><span>ig-webhook.mjs</span><span>ig.config.mjs</span><span>ikehaya-mitate.mjs</span><span>jst.mjs</span><span>line-ai.mjs</span><span>line-analytics.mjs</span><span>line-bookings.mjs</span><span>line-branch.mjs</span><span>line-casts.mjs</span><span>line-chat.mjs</span><span>line-contents.mjs</span><span>line-crm-config.mjs</span><span>line-crm.mjs</span><span>line-diag.mjs</span><span>line-engine.mjs</span><span>line-forms.mjs</span><span>line-import.mjs</span><span>line-inflow.mjs</span><span>line-media-inbox.mjs</span><span>line-media-serve.mjs</span><span>line-media.mjs</span><span>line-menus.mjs</span><span>line-profiles.mjs</span><span>line-quota.mjs</span><span>line-reminder.mjs</span><span>line-render.mjs</span><span>line-richmenu.mjs</span><span>line-segment.mjs</span><span>line.config.mjs</span><span>line.mjs</span><span>mail-casts.mjs</span><span>mail-html.mjs</span><span>mail-links.mjs</span><span>mail-lists.mjs</span><span>mail-segment.mjs</span><span>mail-stats.mjs</span><span>mail-tracking.mjs</span><span>mail.config.mjs</span><span>mobile-icons.mjs</span><span>mobile-ui.mjs</span><span>person-tags.mjs</span><span>personalize.mjs</span><span>persons.mjs</span><span>privacy-page.mjs</span><span>project-profiles.mjs</span><span>project-stats.mjs</span><span>purchase-rules.config.mjs</span><span>purchase-rules.mjs</span><span>purchases.mjs</span><span>requeue.mjs</span><span>sales.mjs</span><span>scenarios.config.mjs</span><span>score.mjs</span><span>security.mjs</span><span>segment-expr.mjs</span><span>send-idem.mjs</span><span>sender.mjs</span><span>test-send.mjs</span><span>themes.js</span><span>threads-insights-audit.mjs</span><span>timing.mjs</span><span>tokuten.config.mjs</span><span>tokuten.mjs</span><span>tuning.mjs</span><span>warmup.mjs</span><span>webhook-verify.mjs</span><span>worker.mjs</span>
+              <span>admin-ui.mjs</span><span>alert-config.mjs</span><span>apps-stats.mjs</span><span>appstore-stats.mjs</span><span>auth.mjs</span><span>booking-page.mjs</span><span>bookings.config.mjs</span><span>bookings.mjs</span><span>confirm-mail.mjs</span><span>connections.mjs</span><span>contents.mjs</span><span>d1-budget.mjs</span><span>daily-claim.mjs</span><span>dashboard.mjs</span><span>discord-link.mjs</span><span>discord-stats.mjs</span><span>dormancy.mjs</span><span>engine.mjs</span><span>episode-feed-audit.mjs</span><span>financie-stats.mjs</span><span>footer.config.mjs</span><span>guard.mjs</span><span>health.mjs</span><span>heat-client.mjs</span><span>heat.mjs</span><span>ig-api.mjs</span><span>ig-config.mjs</span><span>ig-engine.mjs</span><span>ig-menu.mjs</span><span>ig-oauth.mjs</span><span>ig-rules.mjs</span><span>ig-stats.mjs</span><span>ig-webhook.mjs</span><span>ig.config.mjs</span><span>ikehaya-mitate.mjs</span><span>import-readers.mjs</span><span>jst.mjs</span><span>line-ai.mjs</span><span>line-analytics.mjs</span><span>line-bookings.mjs</span><span>line-branch.mjs</span><span>line-casts.mjs</span><span>line-chat.mjs</span><span>line-contents.mjs</span><span>line-crm-config.mjs</span><span>line-crm.mjs</span><span>line-diag.mjs</span><span>line-engine.mjs</span><span>line-forms.mjs</span><span>line-import.mjs</span><span>line-inflow.mjs</span><span>line-media-inbox.mjs</span><span>line-media-serve.mjs</span><span>line-media.mjs</span><span>line-member-sync.mjs</span><span>line-menus.mjs</span><span>line-profiles.mjs</span><span>line-quota.mjs</span><span>line-reminder.mjs</span><span>line-render.mjs</span><span>line-richmenu.mjs</span><span>line-segment.mjs</span><span>line.config.mjs</span><span>line.mjs</span><span>mail-casts.mjs</span><span>mail-html.mjs</span><span>mail-links.mjs</span><span>mail-lists.mjs</span><span>mail-segment.mjs</span><span>mail-stats.mjs</span><span>mail-tracking.mjs</span><span>mail.config.mjs</span><span>mobile-icons.mjs</span><span>mobile-ui.mjs</span><span>person-cap.mjs</span><span>person-tags.mjs</span><span>personalize.mjs</span><span>persons.mjs</span><span>privacy-page.mjs</span><span>project-profiles.mjs</span><span>project-stats.mjs</span><span>purchase-rules.config.mjs</span><span>purchase-rules.mjs</span><span>purchases.mjs</span><span>requeue.mjs</span><span>retention.mjs</span><span>sales.mjs</span><span>scenarios.config.mjs</span><span>score.mjs</span><span>security.mjs</span><span>segment-expr.mjs</span><span>send-idem.mjs</span><span>sender.mjs</span><span>test-send.mjs</span><span>themes.js</span><span>threads-insights-audit.mjs</span><span>timing.mjs</span><span>tokuten.config.mjs</span><span>tokuten.mjs</span><span>tuning.mjs</span><span>warmup.mjs</span><span>webhook-verify.mjs</span><span>worker.mjs</span>
             </div>
           </div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-test" data-rondo-label="同梱物ツリー test"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">test/</span><span class="dt-num">160 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc ok">テスト一式。届いたその場で全部走る</span></button>
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-test" data-rondo-label="同梱物ツリー test"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">test/</span><span class="dt-num">180 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc ok">テスト一式。届いたその場で全部走る</span></button>
             <div class="dt-children" id="dt-ch-test" hidden>
-              <span>admin-mail-a.test.mjs</span><span>admin-mail-b.test.mjs</span><span>admin-mail-c1.test.mjs</span><span>admin-no-dialogs.test.mjs</span><span>admin-render.test.mjs</span><span>admin-session-revoke.test.mjs</span><span>admin-st-pill.test.mjs</span><span>advisor-snapshot.test.mjs</span><span>alert-dedup.test.mjs</span><span>appstore-stats.test.mjs</span><span>audit-health-alert.test.mjs</span><span>audit-jobs-generic.test.mjs</span><span>auth.test.mjs</span><span>booking-admin.test.mjs</span><span>booking-anyone-audit1.test.mjs</span><span>booking-anyone-page.test.mjs</span><span>booking-anyone-remind.test.mjs</span><span>booking-page.test.mjs</span><span>booking-remind.test.mjs</span><span>booking-sessions-page.test.mjs</span><span>booking-template.test.mjs</span><span>booking-test-helpers.mjs</span><span>bookings-anyone.test.mjs</span><span>bookings-config.test.mjs</span><span>bookings-sessions.test.mjs</span><span>bookings-store.test.mjs</span><span>calendar-x.test.mjs</span><span>channel-push.test.mjs</span><span>confirm-mail.test.mjs</span><span>contents.test.mjs</span><span>corpus.test.mjs</span><span>course-stop.test.mjs</span><span>cron-query-budget.test.mjs</span><span>d1-adapter.mjs</span><span>d1-read-indexes.test.mjs</span><span>daily-claim.test.mjs</span><span>dashboard-wiring.test.mjs</span><span>dashboard.test.mjs</span><span>deliverability.test.mjs</span><span>discord-stats.test.mjs</span><span>dormancy.test.mjs</span><span>engine-multiscenario.test.mjs</span><span>engine-start-scenario.test.mjs</span><span>engine.test.mjs</span><span>episode-feed-audit.test.mjs</span><span>fake-r2.mjs</span><span>financie-stats.test.mjs</span><span>fixtures/lstep-export-blocked-sjis.csv</span><span>fixtures/lstep-export-sjis.csv</span><span>fixtures/lstep-export-utf8bom.csv</span><span>guard-slotdays.test.mjs</span><span>guard-throttle.test.mjs</span><span>guard.test.mjs</span><span>guides.test.mjs</span><span>health.test.mjs</span><span>heat-ingest.test.mjs</span><span>heat.test.mjs</span><span>helpers-dist.mjs</span><span>ig-admin.test.mjs</span><span>ig-api.test.mjs</span><span>ig-engine.test.mjs</span><span>ig-line-link.test.mjs</span><span>ig-oauth.test.mjs</span><span>ig-rules.test.mjs</span><span>ig-schema.test.mjs</span><span>ig-webhook.test.mjs</span><span>ikehaya-mitate.test.mjs</span><span>import-buyers.test.mjs</span><span>import-list.test.mjs</span><span>jst.test.mjs</span><span>lib-scenario.test.mjs</span><span>line-a-contents.test.mjs</span><span>line-a-engine.test.mjs</span><span>line-a-worker.test.mjs</span><span>line-ab-analytics.test.mjs</span><span>line-ab-content.test.mjs</span><span>line-ab-send.test.mjs</span><span>line-ai.test.mjs</span><span>line-analytics-api.test.mjs</span><span>line-analytics-events.test.mjs</span><span>line-analytics-ui.test.mjs</span><span>line-analytics.test.mjs</span><span>line-b-branch.test.mjs</span><span>line-b-inflow.test.mjs</span><span>line-b-menus.test.mjs</span><span>line-booking-config.test.mjs</span><span>line-c-chat.test.mjs</span><span>line-c-forms.test.mjs</span><span>line-c-order.test.mjs</span><span>line-c-reminder.test.mjs</span><span>line-casts.test.mjs</span><span>line-contents.test.mjs</span><span>line-crm.test.mjs</span><span>line-d-import.test.mjs</span><span>line-engine.test.mjs</span><span>line-instant.test.mjs</span><span>line-lstep-real-csv.test.mjs</span><span>line-media-chat.test.mjs</span><span>line-media-contents.test.mjs</span><span>line-media-inbox.test.mjs</span><span>line-media-lib.test.mjs</span><span>line-media-send.test.mjs</span><span>line-media-serve.test.mjs</span><span>line-media-testsend.test.mjs</span><span>line-media-ui.test.mjs</span><span>line-media.test.mjs</span><span>line-profiles.test.mjs</span><span>line-quota.test.mjs</span><span>line-r-merge.test.mjs</span><span>line-render.test.mjs</span><span>line-richmenu.test.mjs</span><span>line-segment.test.mjs</span><span>line.test.mjs</span><span>mail-booking-link.test.mjs</span><span>mail-branches.test.mjs</span><span>mail-casts.test.mjs</span><span>mail-content-check.test.mjs</span><span>mail-links-worker.test.mjs</span><span>mail-links.test.mjs</span><span>mail-lists.test.mjs</span><span>mail-segment.test.mjs</span><span>mail-stats.test.mjs</span><span>mail-tracking.test.mjs</span><span>media-fixtures.mjs</span><span>mobile-icons.test.mjs</span><span>mobile-next.test.mjs</span><span>mobile-render.test.mjs</span><span>person-tags.test.mjs</span><span>personalize.test.mjs</span><span>persons-link.test.mjs</span><span>persons.test.mjs</span><span>project-profiles.test.mjs</span><span>project-stats.test.mjs</span><span>prune-contents.test.mjs</span><span>purchase-rules-worker.test.mjs</span><span>purchase-rules.test.mjs</span><span>purchases.test.mjs</span><span>requeue.test.mjs</span><span>sales.test.mjs</span><span>score.test.mjs</span><span>security.test.mjs</span><span>segment-expr.test.mjs</span><span>sender.test.mjs</span><span>stripe-purchase.test.mjs</span><span>test-send.test.mjs</span><span>threads-insights-audit.test.mjs</span><span>timing-overdue.test.mjs</span><span>timing-slotdays.test.mjs</span><span>timing.test.mjs</span><span>tokuten-dl-wiring.test.mjs</span><span>tokuten.test.mjs</span><span>tuning.test.mjs</span><span>turnstile.test.mjs</span><span>variants.test.mjs</span><span>version.test.mjs</span><span>warmup.test.mjs</span><span>webhook.test.mjs</span><span>windows-compat.test.mjs</span><span>worker-imports.test.mjs</span><span>wrangler-secrets.test.mjs</span>
+              <span>admin-mail-a.test.mjs</span><span>admin-mail-b.test.mjs</span><span>admin-mail-c1.test.mjs</span><span>admin-no-dialogs.test.mjs</span><span>admin-render.test.mjs</span><span>admin-session-revoke.test.mjs</span><span>admin-st-pill.test.mjs</span><span>advisor-snapshot.test.mjs</span><span>alert-dedup.test.mjs</span><span>apps-stats.test.mjs</span><span>appstore-stats.test.mjs</span><span>audit-health-alert.test.mjs</span><span>audit-jobs-generic.test.mjs</span><span>auth.test.mjs</span><span>backup.test.mjs</span><span>booking-admin.test.mjs</span><span>booking-after.test.mjs</span><span>booking-anyone-audit1.test.mjs</span><span>booking-anyone-page.test.mjs</span><span>booking-anyone-remind.test.mjs</span><span>booking-cancel-race.test.mjs</span><span>booking-gcal.test.mjs</span><span>booking-page.test.mjs</span><span>booking-remind.test.mjs</span><span>booking-sessions-page.test.mjs</span><span>booking-template.test.mjs</span><span>booking-test-helpers.mjs</span><span>bookings-anyone.test.mjs</span><span>bookings-config.test.mjs</span><span>bookings-sessions.test.mjs</span><span>bookings-store.test.mjs</span><span>build.test.mjs</span><span>calendar-x.test.mjs</span><span>channel-push.test.mjs</span><span>choritsu-ab.test.mjs</span><span>confirm-atomic.test.mjs</span><span>confirm-mail.test.mjs</span><span>connections.test.mjs</span><span>contents.test.mjs</span><span>corpus.test.mjs</span><span>course-stop.test.mjs</span><span>cron-query-budget.test.mjs</span><span>d1-adapter.mjs</span><span>d1-read-indexes.test.mjs</span><span>daily-claim.test.mjs</span><span>dashboard-wiring.test.mjs</span><span>dashboard.test.mjs</span><span>deliverability.test.mjs</span><span>discord-stats.test.mjs</span><span>dormancy.test.mjs</span><span>engine-multiscenario.test.mjs</span><span>engine-start-scenario.test.mjs</span><span>engine.test.mjs</span><span>episode-feed-audit.test.mjs</span><span>fake-r2.mjs</span><span>financie-stats.test.mjs</span><span>fixtures/lstep-export-blocked-sjis.csv</span><span>fixtures/lstep-export-sjis.csv</span><span>fixtures/lstep-export-utf8bom.csv</span><span>guard-slotdays.test.mjs</span><span>guard-throttle.test.mjs</span><span>guard.test.mjs</span><span>guides.test.mjs</span><span>health.test.mjs</span><span>heat-ingest.test.mjs</span><span>heat.test.mjs</span><span>helpers-dist.mjs</span><span>ig-admin.test.mjs</span><span>ig-api.test.mjs</span><span>ig-engine.test.mjs</span><span>ig-line-link.test.mjs</span><span>ig-oauth.test.mjs</span><span>ig-rules.test.mjs</span><span>ig-schema.test.mjs</span><span>ig-webhook.test.mjs</span><span>ikehaya-mitate.test.mjs</span><span>import-buyers.test.mjs</span><span>import-list.test.mjs</span><span>import-readers.test.mjs</span><span>jst.test.mjs</span><span>lib-scenario.test.mjs</span><span>line-a-contents.test.mjs</span><span>line-a-engine.test.mjs</span><span>line-a-worker.test.mjs</span><span>line-ab-analytics.test.mjs</span><span>line-ab-content.test.mjs</span><span>line-ab-send.test.mjs</span><span>line-ai.test.mjs</span><span>line-analytics-api.test.mjs</span><span>line-analytics-events.test.mjs</span><span>line-analytics-ui.test.mjs</span><span>line-analytics.test.mjs</span><span>line-b-branch.test.mjs</span><span>line-b-inflow.test.mjs</span><span>line-b-menus.test.mjs</span><span>line-booking-config.test.mjs</span><span>line-c-chat.test.mjs</span><span>line-c-forms.test.mjs</span><span>line-c-order.test.mjs</span><span>line-c-reminder.test.mjs</span><span>line-casts.test.mjs</span><span>line-contents.test.mjs</span><span>line-crm.test.mjs</span><span>line-d-import.test.mjs</span><span>line-engine.test.mjs</span><span>line-instant.test.mjs</span><span>line-lstep-real-csv.test.mjs</span><span>line-media-chat.test.mjs</span><span>line-media-contents.test.mjs</span><span>line-media-inbox.test.mjs</span><span>line-media-lib.test.mjs</span><span>line-media-send.test.mjs</span><span>line-media-serve.test.mjs</span><span>line-media-testsend.test.mjs</span><span>line-media-ui.test.mjs</span><span>line-media.test.mjs</span><span>line-member-sync.test.mjs</span><span>line-profiles.test.mjs</span><span>line-quota.test.mjs</span><span>line-r-merge.test.mjs</span><span>line-render.test.mjs</span><span>line-retry-budget.test.mjs</span><span>line-richmenu.test.mjs</span><span>line-segment.test.mjs</span><span>line.test.mjs</span><span>mail-booking-link.test.mjs</span><span>mail-branches.test.mjs</span><span>mail-casts.test.mjs</span><span>mail-content-check.test.mjs</span><span>mail-dns.test.mjs</span><span>mail-link-retry.test.mjs</span><span>mail-links-worker.test.mjs</span><span>mail-links.test.mjs</span><span>mail-lists.test.mjs</span><span>mail-segment.test.mjs</span><span>mail-stats.test.mjs</span><span>mail-tracking.test.mjs</span><span>media-fixtures.mjs</span><span>migrations-unique.test.mjs</span><span>mobile-icons.test.mjs</span><span>mobile-next.test.mjs</span><span>mobile-render.test.mjs</span><span>person-cap.test.mjs</span><span>person-tags.test.mjs</span><span>personalize.test.mjs</span><span>persons-link.test.mjs</span><span>persons.test.mjs</span><span>project-profiles.test.mjs</span><span>project-stats.test.mjs</span><span>prune-contents.test.mjs</span><span>purchase-rules-worker.test.mjs</span><span>purchase-rules.test.mjs</span><span>purchases.test.mjs</span><span>requeue.test.mjs</span><span>restore-reconcile.test.mjs</span><span>retention.test.mjs</span><span>sales.test.mjs</span><span>score.test.mjs</span><span>security.test.mjs</span><span>segment-expr.test.mjs</span><span>send-halt.test.mjs</span><span>sender.test.mjs</span><span>stripe-purchase.test.mjs</span><span>suppression-import.test.mjs</span><span>test-send.test.mjs</span><span>threads-insights-audit.test.mjs</span><span>timing-overdue.test.mjs</span><span>timing-slotdays.test.mjs</span><span>timing.test.mjs</span><span>tokuten-dl-wiring.test.mjs</span><span>tokuten.test.mjs</span><span>tuning.test.mjs</span><span>turnstile.test.mjs</span><span>variants.test.mjs</span><span>version.test.mjs</span><span>warmup.test.mjs</span><span>webhook.test.mjs</span><span>windows-compat.test.mjs</span><span>worker-imports.test.mjs</span><span>wrangler-secrets.test.mjs</span>
             </div>
           </div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-mig" data-rondo-label="同梱物ツリー migrations"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">migrations/</span><span class="dt-num">52 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配信データベースの設計図</span></button>
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-mig" data-rondo-label="同梱物ツリー migrations"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">migrations/</span><span class="dt-num">53 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配信データベースの設計図</span></button>
             <div class="dt-children" id="dt-ch-mig" hidden>
-              <span>0001_init.sql</span><span>0002_line.sql</span><span>0003_retry_cap.sql</span><span>0004_tuning_loop.sql</span><span>0005_ab_history.sql</span><span>0006_channel_stats.sql</span><span>0007_line_engine.sql</span><span>0008_channel_engine.sql</span><span>0009_line_fallback.sql</span><span>0010_audit.sql</span><span>0011_persons.sql</span><span>0012_diag_result.sql</span><span>0013_channel_post_kind.sql</span><span>0014_line_casts.sql</span><span>0015_persons_discord.sql</span><span>0016_line_link_code.sql</span><span>0017_person_purchases.sql</span><span>0018_person_score.sql</span><span>0019_tokuten_claims.sql</span><span>0020_mail_casts.sql</span><span>0021_heatmap.sql</span><span>0022_line_profiles.sql</span><span>0023_tokuten_unsub.sql</span><span>0024_send_guards.sql</span><span>0025_security_hardening.sql</span><span>0026_discord_channel.sql</span><span>0027_financie_daily.sql</span><span>0028_sales.sql</span><span>0029_sales_feedback.sql</span><span>0030_d1_read_indexes.sql</span><span>0031_send_idempotency.sql</span><span>0032_line_crm.sql</span><span>0033_line_menus.sql</span><span>0034_line_inflow.sql</span><span>0035_line_ops_retry.sql</span><span>0036_line_chat.sql</span><span>0037_line_forms.sql</span><span>0038_webhook_receipt_done.sql</span><span>0039_line_event_order.sql</span><span>0040_line_import_pending.sql</span><span>0041_ig.sql</span><span>0043_line_ai.sql</span><span>0044_ig_touches.sql</span><span>0045_line_media.sql</span><span>0046_mail_lists_tests.sql</span><span>0047_line_analytics.sql</span><span>0048_person_tags_purchase_rules.sql</span><span>0049_mail_links_branches.sql</span><span>0050_line_ab.sql</span><span>0051_line_bookings.sql</span><span>0052_bookings.sql</span><span>0053_purchase_live.sql</span>
+              <span>0001_init.sql</span><span>0002_line.sql</span><span>0003_retry_cap.sql</span><span>0004_tuning_loop.sql</span><span>0005_ab_history.sql</span><span>0006_channel_stats.sql</span><span>0007_line_engine.sql</span><span>0008_channel_engine.sql</span><span>0009_line_fallback.sql</span><span>0010_audit.sql</span><span>0011_persons.sql</span><span>0012_diag_result.sql</span><span>0013_channel_post_kind.sql</span><span>0014_line_casts.sql</span><span>0015_persons_discord.sql</span><span>0016_line_link_code.sql</span><span>0017_person_purchases.sql</span><span>0018_person_score.sql</span><span>0019_tokuten_claims.sql</span><span>0020_mail_casts.sql</span><span>0021_heatmap.sql</span><span>0022_line_profiles.sql</span><span>0023_tokuten_unsub.sql</span><span>0024_send_guards.sql</span><span>0025_security_hardening.sql</span><span>0026_discord_channel.sql</span><span>0027_financie_daily.sql</span><span>0028_sales.sql</span><span>0029_sales_feedback.sql</span><span>0030_d1_read_indexes.sql</span><span>0031_send_idempotency.sql</span><span>0032_line_crm.sql</span><span>0033_line_menus.sql</span><span>0034_line_inflow.sql</span><span>0035_line_ops_retry.sql</span><span>0036_line_chat.sql</span><span>0037_line_forms.sql</span><span>0038_webhook_receipt_done.sql</span><span>0039_line_event_order.sql</span><span>0040_line_import_pending.sql</span><span>0041_ig.sql</span><span>0043_line_ai.sql</span><span>0044_ig_touches.sql</span><span>0045_line_media.sql</span><span>0046_mail_lists_tests.sql</span><span>0047_line_analytics.sql</span><span>0048_person_tags_purchase_rules.sql</span><span>0049_mail_links_branches.sql</span><span>0050_line_ab.sql</span><span>0051_line_bookings.sql</span><span>0052_bookings.sql</span><span>0053_purchase_live.sql</span><span>0054_cost_indexes.sql</span>
             </div>
           </div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-scr" data-rondo-label="同梱物ツリー scripts"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">scripts/</span><span class="dt-num">30 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配備・検証・健康診断・引っ越しのコマンド</span></button>
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-scr" data-rondo-label="同梱物ツリー scripts"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">scripts/</span><span class="dt-num">38 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">配備・検証・健康診断・引っ越しのコマンド</span></button>
             <div class="dt-children" id="dt-ch-scr" hidden>
-              <span>advisor-snapshot.mjs</span><span>cast-count.mjs</span><span>deploy-contents.mjs</span><span>deploy-line-ai.mjs</span><span>deploy-line-casts.mjs</span><span>deploy-line-contents.mjs</span><span>deploy-line-menus.mjs</span><span>deploy-mail-casts.mjs</span><span>doctor.mjs</span><span>import-buyers.mjs</span><span>import-list.mjs</span><span>import-lstep.mjs</span><span>lib-admin-api.mjs</span><span>lib-build.mjs</span><span>lib-csv.mjs</span><span>lib-d1.mjs</span><span>lib-line-media.mjs</span><span>lib-list.mjs</span><span>lib-lstep.mjs</span><span>lib-prune.mjs</span><span>lib-scenario.mjs</span><span>lib-steps-dir.mjs</span><span>lib-wrangler.mjs</span><span>line-test-send.mjs</span><span>new-variant.mjs</span><span>prune-contents.mjs</span><span>tags-backfill.mjs</span><span>test-send.mjs</span><span>vendor/steps-source.mjs</span><span>verify-contents.mjs</span>
+              <span>advisor-snapshot.mjs</span><span>archive-chat.mjs</span><span>backup-drill.mjs</span><span>backup.mjs</span><span>cast-count.mjs</span><span>deploy-contents.mjs</span><span>deploy-line-ai.mjs</span><span>deploy-line-casts.mjs</span><span>deploy-line-contents.mjs</span><span>deploy-line-menus.mjs</span><span>deploy-mail-casts.mjs</span><span>doctor.mjs</span><span>import-buyers.mjs</span><span>import-list.mjs</span><span>import-lstep.mjs</span><span>import-readers.mjs</span><span>lib-admin-api.mjs</span><span>lib-backup.mjs</span><span>lib-build.mjs</span><span>lib-csv.mjs</span><span>lib-d1.mjs</span><span>lib-line-media.mjs</span><span>lib-list.mjs</span><span>lib-lstep.mjs</span><span>lib-mail-dns.mjs</span><span>lib-prune.mjs</span><span>lib-reconcile.mjs</span><span>lib-scenario.mjs</span><span>lib-steps-dir.mjs</span><span>lib-wrangler.mjs</span><span>line-test-send.mjs</span><span>new-variant.mjs</span><span>prune-contents.mjs</span><span>restore-reconcile.mjs</span><span>tags-backfill.mjs</span><span>test-send.mjs</span><span>vendor/steps-source.mjs</span><span>verify-contents.mjs</span>
             </div>
           </div>
 
@@ -1240,7 +1818,7 @@
             </div>
           </div>
 
-          <div class="dt-total">合計 <b>366ファイル</b>・機能の間引きなし。秘密情報・広告SDK・外部への通信は入っていません。</div>
+          <div class="dt-total">合計 <b>401ファイル</b>・機能の間引きなし。秘密情報・広告SDK・外部への通信は入っていません。</div>
           <!-- dist-tree:end -->
         </div>
       </div>
@@ -1248,21 +1826,31 @@
     </div>
   </section>
 
-  <!-- 導入に必要なもの -->
-  <section id="needs" data-sec="needs" style="padding-top:0">
+  <!-- 月々の費用（旧「導入に必要なもの」を統合） -->
+  <section id="cost" data-sec="cost" style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center">導入に必要なもの</h2>
-      <p class="lede" style="text-align:center;margin:16px auto 0">すべて自分名義のアカウントで、Rondoのための新しい月額契約はありません。</p>
-      <div class="needs">
-        <div class="need-row"><span class="need-name">開発AI（CodexかClaude Code）</span><span class="need-cost">月3,000円ほど〜</span><span class="need-desc">導入・運用・カスタマイズの担当者で、実質必須です。どちらも月3,000円ほどのプランから使えます。すでに使っている人は追加費用なし。</span></div>
-        <div class="need-row"><span class="need-name">独自ドメイン</span><span class="need-cost">年1,000円台〜</span><span class="need-desc">メールの送信元に必須。持っていない場合は、Rondo本体が動くCloudflareでの取得がおすすめです。</span></div>
-        <div class="need-row"><span class="need-name">Cloudflare</span><span class="need-cost">月5ドル</span><span class="need-desc">Rondo本体が動く場所。配信の処理量を確保するため、有料プラン（Workers Paid）が必要です。</span></div>
-        <div class="need-row"><span class="need-name">Resend</span><span class="need-cost free">無料〜</span><span class="need-desc">メール送信サービス。小規模なら無料枠内です。</span></div>
-        <div class="need-row"><span class="need-name">Node.js＋npm</span><span class="need-cost free">無料</span><span class="need-desc">手元のパソコンでコマンドを動かすのに使います。</span></div>
-        <div class="need-row"><span class="need-name">LINE公式アカウント</span><span class="need-cost">任意</span><span class="need-desc">LINE配信を使う場合のみ。無料プランから始められます。</span></div>
-        <div class="need-row"><span class="need-name">Rondo本体</span><span class="need-cost">¥4,980 買い切り</span><span class="need-desc">βテスター先行販売価格。正式版は¥9,800を予定。月額はありません。</span></div>
+      <h2 style="text-align:center">月々の費用</h2>
+      <p class="lede" style="text-align:center;margin:0 auto 32px">すべて自分名義のアカウントで契約します。<br>Rondoのための新しい月額契約はありません。</p>
+      <div class="sw-cost">
+        <div class="sw-cost-col">
+          <p class="sw-cost-h">いまの月額（目安・月払い）</p>
+          <div class="sw-cost-row"><span>LINE拡張ツール<small>セグメントのリッチメニューや流入経路分析は上位プラン</small></span><b>月5,000〜33,000円ほど</b></div>
+          <div class="sw-cost-row"><span>Instagram自動化ツール</span><b>月2万円ほど</b></div>
+          <div class="sw-cost-row"><span>オールインワン型の配信スタンド</span><b>月2万円ほど</b></div>
+          <div class="sw-cost-row"><span>予約・日程調整ツール<small>セミナーの定員や決済連携は有料プラン</small></span><b>無料〜月2,000円ほど</b></div>
+        </div>
+        <div class="sw-cost-arrow" aria-hidden="true">→</div>
+        <div class="sw-cost-col rondo">
+          <p class="sw-cost-h">Rondo</p>
+          <div class="sw-cost-row"><span>本体（買い切り）<small>v1系の更新は無償</small></span><b>9,800円</b></div>
+          <div class="sw-cost-row"><span>Cloudflare（動かす場所）<small>有料プランが必須。処理量が大きく増えると従量の追加あり</small></span><b>月5ドル〜</b></div>
+          <div class="sw-cost-row"><span>Resend（メール送信）<small>無料は月3,000通・1日100通まで</small></span><b>無料〜月20ドル</b></div>
+          <div class="sw-cost-row"><span>開発AI（CodexかClaude Code）<small>すでに使っていれば追加なし</small></span><b>月3,000円ほど〜</b></div>
+          <div class="sw-cost-row"><span>独自ドメイン<small>メールの送信元に必須</small></span><b>年1,000円台〜</b></div>
+          <div class="sw-cost-row"><span>サポート窓口<small>運用は、あなたの開発AIが担当します</small></span><b>なし</b></div>
+        </div>
+        <p class="sw-cost-note">他社は主なサービスの公式料金（2026年10月・税込・月払い）からの目安で、機能や上限が違うため同じ条件の比較ではありません。<br>LINE公式アカウントの利用料は、どの方法でも別にかかります。</p>
       </div>
-      <p class="lede" style="text-align:center;margin:24px auto 0;font-size:14px">月々の固定費は、Cloudflareの月5ドルと開発AIの利用料です。<br>開発AIは月3,000円ほどのプランから始められます。</p>
     </div>
   </section>
 
@@ -1310,32 +1898,32 @@
     </div>
   </section>
 
-  <!-- 価格と先行販売(審査制)。#priceアンカーはヘッダーナビ用に温存 -->
+  <!-- 価格と購入（正式版 v1.0）。#priceアンカーはヘッダーナビ用に温存・id/data-sec の reserve は計測の連続性のため据え置き -->
   <div id="price" aria-hidden="true" style="scroll-margin-top:72px"></div>
   <section id="reserve" data-sec="reserve">
     <div class="wrap">
-      <h2 style="text-align:center">先行販売、審査制で始めました。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">購入条件を満たす方だけに販売しています。<br>審査は申込フォームから自動判定、通過するとそのまま決済に進めます。</p>
+      <h2 style="text-align:center">正式版 v1.0、販売中です。</h2>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">買い切りで、月額はありません。<br>ソースコード一式と導入手順書を、決済のあとすぐにお届けします。</p>
       <div class="rsv">
-        <div class="rsv-off"><span class="was">¥9,800</span><span class="now">¥4,980</span><span class="tag">βテスター価格</span></div>
-        <p class="rsv-sub">¥9,800は正式版価格（リリース後に適用予定）。βテスターのいまは¥4,980（税込・買い切り）、<br>事前登録済みの方はさらに10%オフ（¥4,482）が適用されます</p>
-        <ul class="rsv-notes" style="text-align:left;max-width:560px;margin-left:auto;margin-right:auto">
-          <li>条件1: CodexやClaude Codeなどの開発AIが使える環境があること</li>
-          <li>条件2: ステップメールまたはステップLINE配信の運用経験があること</li>
-          <li>条件3: 運用中のマーケティング媒体が4つ以上あること（X、Instagram、YouTube、note、メルマガなど）</li>
-          <li>条件4: 独自ドメインを持っていること</li>
-          <li>条件5: サポートに頼らず、開発AIとともに自力でセットアップ・運用することを理解していること</li>
+        <div class="buy-price"><span class="now">¥9,800</span><span class="tag">税込・買い切り</span></div>
+        <p class="buy-check-h">買う前に、この5つを確かめてください</p>
+        <ul class="buy-check">
+          <li>CodexやClaude Codeなどの開発AIを使える環境がある</li>
+          <li>ステップメールかステップLINEを運用したことがある</li>
+          <li>運用中の発信の場が4つ以上ある（X、Instagram、YouTube、note、メルマガなど）</li>
+          <li>独自ドメインを持っている（メールの送信元に必須）</li>
+          <li>サポートに頼らず、開発AIとともに自分でセットアップ・運用する</li>
         </ul>
-        <div class="hero-ctas" style="justify-content:center;margin-top:22px">
-          <a class="btn ghost" href="#shindan" data-rondo-label="CTA 価格上の適性診断">対象ユーザーか診断を受ける（6問30秒）</a>
+        <div class="hero-ctas" style="justify-content:center;margin-top:26px">
+          <a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 購入" data-rondo-cta="apply">条件を確かめて購入する</a>
         </div>
         <div class="hero-ctas" style="justify-content:center;margin-top:12px">
-          <a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 先行販売申込" data-rondo-cta="apply">先行販売に申し込む（審査は自動・約1分）</a>
+          <a class="btn ghost" href="#shindan" data-rondo-label="CTA 価格上の適性診断">迷ったら適性診断（6問30秒）</a>
         </div>
         <ul class="rsv-notes">
-          <li><span>現在はβテスターフェーズの先行販売です。不具合・エラーは<a href="/rondo-report" data-rondo-label="reserve β報告">報告フォーム</a>で受け付けます</span></li>
           <li>ソースコード一式と導入手順書つき。改造は自由、正本はあなたの手元に残ります</li>
           <li>決済はStripeの決済ページで行います。カード情報が当サイトに渡ることはありません</li>
+          <li><span>不具合・エラーは<a href="/rondo-report" data-rondo-label="購入 不具合報告">報告フォーム</a>で受け付けます（個別の返信はしていません）</span></li>
         </ul>
       </div>
       <div class="env" style="max-width:640px;margin:16px auto 0">
@@ -1355,7 +1943,7 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ サポート">サポートはありますか？</summary>
-          <div class="a">ありません。<br>導入も、運用も、トラブル対応も、あなたとあなたの開発AIの仕事です。<br>Rondoは上級者向けの製品です。自分でカスタマイズできる自信がない人は、買わないでください。<br>サポート窓口が必要なら、MyASPやLステップなどのSaaSが合っています。</div>
+          <div class="a">ありません。<br>導入も、運用も、トラブル対応も、あなたとあなたの開発AIの仕事です。<br>Rondoは上級者向けの製品です。自分でカスタマイズできる自信がない人は、買わないでください。<br>サポート窓口が必要なら、月額の配信サービスの方が合っています。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 返金">返金はできますか？</summary>
@@ -1375,7 +1963,11 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary>
-          <div class="a">読者リストと原稿を書き出せるツール（MyASP、Lステップなど）であれば、移行作業そのものを開発AIに任せる想定です。<br>Rondoの原稿はMarkdownなので、既存のステップメールをそのまま持ち込めます。<br>購入者リストのCSV取込スクリプトも同梱しています。<br>イケハヤ自身も、長年使った配信スタンドから628通のステップメールを移し替えて運用しています。</div>
+          <div class="a">はい。引っ越しの道具を同梱しています。<br>メールの読者はCSVで取り込め、解除・不達の人は配信停止の台帳へ入り、旧ツールの登録日から「続きの通」で始められます。まず数人で試してから全員を入れる手順です。<br>LINEは、LステップのCSVからタグと友だち情報を持ち込めます（友だちとの結び付けは人が確かめます）。購入者リストのCSVも読めます。<br>Rondoの原稿はMarkdownなので、既存のステップメールの移し替えは開発AIに頼めます。<br>イケハヤ自身も、長年使った配信スタンドから628通のステップメールを移し替えて運用しています。</div>
+        </details>
+        <details>
+          <summary data-rondo-label="FAQ 予約">セミナーや個別相談の予約にも使えますか？</summary>
+          <div class="a">使えます。v1.0で予約ページが入りました。<br>セミナーは回ごとの定員・申し込み状況のゲージ・キャンセル待ちと自動の繰り上げ・終わった後のアーカイブの案内まで、個別相談は曜日ごとの受付時間から空き枠を出し、1枠1人で受け付けます。<br>LINEの友だち・メールの読者・URLを開いた誰でもから申し込め、前日と直前のお知らせ、Googleカレンダーへの追加にも対応しています。<br>参加費の決済は含みません。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ 決済サブスク">決済やサブスクの管理もできますか？</summary>
@@ -1383,7 +1975,7 @@
         </details>
         <details>
           <summary data-rondo-label="FAQ 安全性">「AIが安全に触れる」の根拠は何ですか？</summary>
-          <div class="a">全機能に自動テスト（1,789件）があり、配信原稿はgitと配信DBの全一致が機械検証されます。<br>データベースの変更は追記のみの規約で、障害は監査ページに自動記録されます。<br>さらに一斉送信のような取り返しのつかない操作は「AIは下書きまで、実行は人間」という憲法を同梱しています。<br>AIが壊したらすぐ分かる仕組みと、壊せない領域の線引きを最初から備えています。</div>
+          <div class="a">全機能に自動テスト（1,970件）があり、配信原稿はgitと配信DBの全一致が機械検証されます。<br>データベースの変更は追記のみの規約で、障害は監査ページに自動記録されます。<br>さらに一斉送信のような取り返しのつかない操作は「AIは下書きまで、実行は人間」という憲法を同梱しています。<br>AIが壊したらすぐ分かる仕組みと、壊せない領域の線引きを最初から備えています。</div>
         </details>
         <details>
           <summary data-rondo-label="FAQ マーケ相談">マーケティングの相談もできますか？</summary>
@@ -1392,6 +1984,10 @@
         <details>
           <summary data-rondo-label="FAQ アップデート">アップデートはありますか？</summary>
           <div class="a">v1系の更新は、購入者のみなさんに無償でお届けします。<br>新しい版が出たらメールでお知らせし、納品メールのリンクからいつでも最新版を受け取れます。<br>更新の手順は同梱の更新ガイドに書いてあり、適用もあなたのAIに任せられます。<br>次の大きな版（v2）は別商品として出し、既購入者には優待価格でご案内する予定です。<br>なお、更新を出す時期や内容のお約束はしていません。</div>
+        </details>
+        <details>
+          <summary data-rondo-label="FAQ 先行販売の購入者">先行販売（β版）で買った人はどうなりますか？</summary>
+          <div class="a">追加の支払いなしで、v1.0に更新できます。<br>購入したときの納品メールのリンクから、そのまま最新版を受け取れます。<br>更新の手順は同梱の更新ガイドにまとめてあり、適用もあなたのAIに任せられます。</div>
         </details>
       </div>
     </div>
@@ -1402,7 +1998,7 @@
     <div class="wrap">
       <h2>ソフトを買うのではなく、<br>マーケティング部門の設計図を買う。</h2>
       <p class="lede">維持費ほぼゼロの土地に建てて、あなたの開発AIという専属エンジニアに任せる。<br>それがRondoです。</p>
-      <a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 最終先行販売" data-rondo-cta="apply">先行販売の審査に申し込む</a>
+      <a class="btn primary" href="#reserve" data-rondo-label="CTA 最終購入" data-rondo-cta="reserve">購入する（¥9,800・買い切り）</a>
     </div>
   </section>
 
@@ -1514,8 +2110,8 @@
     if(v === 'a'){
       html = '<span class="sh-pill a">向いています</span>'
         + '<p class="sh-title">Rondoは、あなたのための道具です。</p>'
-        + '<p class="sh-body">リストがあり、開発AIが手元にある。<br>それがRondoの想定読者そのものです。<br>先行販売の審査に進んでください。<br>事前登録済みの方は10%オフが適用されます。</p>'
-        + '<div class="sh-ctas"><a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 診断A先行販売" data-rondo-cta="apply">先行販売に申し込む（審査制）</a></div>';
+        + '<p class="sh-body">リストがあり、開発AIが手元にある。<br>それがRondoの想定読者そのものです。<br>購入の条件を確かめて、進んでください。</p>'
+        + '<div class="sh-ctas"><a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 診断A購入" data-rondo-cta="apply">条件を確かめて購入する</a></div>';
     } else if(v === 'b'){
       var next = [];
       if(answers[1] >= 1) next.push('まず、CodexかClaude Codeを日常に入れてください。月3,000円ほどのプランから始められます。Rondoの導入も改造も、開発AIが担当します。');
@@ -1525,13 +2121,13 @@
         + '<p class="sh-title">準備が整えば、使えます。</p>'
         + '<p class="sh-body">いま買っても、育てる手が足りずに止まる可能性があります。<br>先に足場を作ってください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
-        + '<div class="sh-ctas"><a class="btn ghost" href="#reserve" data-rondo-label="CTA 診断B先行販売" data-rondo-cta="reserve">先行販売の購入条件を見る</a></div>'
-        + '<p class="sh-body" style="margin-top:10px;font-size:12.5px;color:var(--note)">先行販売は審査制です。<br>足場がそろってからの申込をおすすめします。</p>';
+        + '<div class="sh-ctas"><a class="btn ghost" href="#reserve" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>'
+        + '<p class="sh-body" style="margin-top:10px;font-size:12.5px;color:var(--note)">足場がそろってからの購入をおすすめします。</p>';
     } else {
       var reasons = [];
       if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。<br>年1,000円台〜で取得できます。取得してから、また診断しに来てください。');
       if(noBudget) reasons.push('Rondoの運用は、CodexやClaude Codeなどの開発AI（月3,000円ほど〜）が最低ラインです。<br>この投資ができないうちは、導入しても止まります。');
-      if(wantsFinished || score <= 2) reasons.push('Rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、大手配信スタンド型SaaS（MyASP、Lステップなど）の方が合っています。<br>開発AIが日常になったら、また診断しに来てください。');
+      if(wantsFinished || score <= 2) reasons.push('Rondoはコードが正本の「種」です。<br>完成品の使い心地とサポート窓口が必要なら、月額の配信サービスの方が合っています。<br>開発AIが日常になったら、また診断しに来てください。');
       html = '<span class="sh-pill c">今は向いていません</span>'
         + '<p class="sh-title">正直に言います。今は買わない方がいいです。</p>'
         + '<p class="sh-body">Rondoは上級者向けの製品で、サポート窓口はありません。</p>'

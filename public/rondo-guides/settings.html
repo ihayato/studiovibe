@@ -289,6 +289,13 @@
               </div>
               <pre><code>現在の配信上限と緊急停止の状態を確認してください。読者規模と予定している配信ペースに対して安全か、各上限が何を防ぐのかを専門用語なしで説明してください。変更が必要なら、変更前後と影響を示して承認を求めてください。</code></pre>
             </div>
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>バックアップの設定依頼文</span>
+                <button class="copy-button" type="button" aria-label="バックアップ設定依頼文をコピー" data-rondo-label="CTA バックアップコピー" data-rondo-cta="copy">コピー</button>
+              </div>
+              <pre><code>SETUP.md §13 のとおり、毎日の自動バックアップ（R2にも保管）と週1回の復元の練習を、このパソコンの定時実行に登録してください。Cloudflare の API トークンが要るなら作り方を案内してください（値は私が入力します）。登録したら1回ずつ手で動かし、監査画面の「D1バックアップ」と「バックアップの復元の練習」の行が緑になったのを見せてください。</code></pre>
+            </div>
             <div class="callout warn">
               <strong>「止まったから上限を上げる」はしない</strong>
               <p>配信が止まった場合は、AIに監査画面と失敗理由を調べてもらい、原因が分かってから判断します。</p>
@@ -296,8 +303,8 @@
             <label class="task">
               <input class="task-check" id="settings-safety" type="checkbox" data-rondo-label="完了 安全設定">
               <span class="task-copy">
-                <strong>安全上限と緊急停止の意味を確認した</strong>
-                <span>自分で止める場所もAIに画面で示してもらいます。</span>
+                <strong>安全上限・緊急停止・バックアップを確認した</strong>
+                <span>自分で止める場所と、バックアップの行が緑なことをAIに画面で示してもらいます。</span>
               </span>
             </label>
           </div>
@@ -312,7 +319,7 @@
             </div>
           </div>
           <p class="step-summary">
-            購入者特典、障害通知、バックアップは、必要になったものだけAIへ追加依頼します。使わない機能は無効のままで問題ありません。
+            購入者特典、障害通知、旧ツールからの引っ越しは、必要になったものだけAIへ追加依頼します。使わない機能は無効のままで問題ありません。
           </p>
           <div class="step-body">
             <div class="ai-prompt copy-block compact">
@@ -320,11 +327,11 @@
                 <span>任意機能の相談文</span>
                 <button class="copy-button" type="button" aria-label="任意機能相談文をコピー" data-rondo-label="CTA 任意機能コピー" data-rondo-cta="copy">コピー</button>
               </div>
-              <pre><code>購入者特典、障害通知、バックアップについて、今の運用で「今すぐ必要」「後でよい」「不要」に分けて提案してください。追加費用、必要なアカウント、私が行うログイン、導入後に増える運用を比較してから、1つずつ確認してください。</code></pre>
+              <pre><code>購入者特典、障害通知、旧ツール（MyASPなど）からの読者の引っ越し（SETUP.md §17）について、今の運用で「今すぐ必要」「後でよい」「不要」に分けて提案してください。追加費用、必要なアカウント、私が行うログイン、導入後に増える運用を比較してから、1つずつ確認してください。引っ越しは、確認だけの実行結果と少人数での試しを見せてから全員に進めてください。</code></pre>
             </div>
             <div class="callout">
               <strong>購入者特典は最初から無効です</strong>
-              <p>使うと決めるまで公開されません。障害通知やバックアップも、入れていない状態で配信が止まることはありません。</p>
+              <p>使うと決めるまで公開されません。障害通知も、入れていない状態で配信が止まることはありません。</p>
             </div>
             <label class="task">
               <input class="task-check" id="settings-optional" type="checkbox" data-rondo-label="完了 任意機能">
