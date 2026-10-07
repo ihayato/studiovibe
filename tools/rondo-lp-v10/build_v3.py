@@ -79,9 +79,32 @@ s = s.replace('</style>', '''  /* ---- v3（10-07 Fable/Astra 点検後） ---- 
   .ig-acts dd{margin:0;font-size:14.5px;color:var(--dim)}
   .ig-acts dd::before{content:"→ ";color:#C2255C;font-weight:600}
   @media(max-width:520px){ .ig-acts div{grid-template-columns:1fr;gap:2px} }
+  .voices{columns:2 360px;column-gap:20px;max-width:1000px;margin:0 auto}
+  .voices .twitter-tweet{break-inside:avoid;margin:0 auto 16px!important}
+  .voices blockquote.twitter-tweet{display:block;background:var(--glass-strong);border:1px solid var(--hair);border-radius:14px;padding:14px 16px;font-size:14px}
+  .voices blockquote.twitter-tweet a{color:var(--accent)}
   @media(max-width:860px){ .ai-grid{grid-template-columns:1fr} }
   @media(max-width:520px){ .roles{grid-template-columns:1fr} .proof-facts{flex-direction:column;align-items:flex-start;gap:6px;padding-left:4px} }
 </style>''', 1)
+
+# 利用者の声: X の埋め込みは節が近づいてから読み込む(重さと追跡を抑える)
+s = s.replace('</body>', """<script>
+(function(){
+  var box = document.getElementById('voices');
+  if(!box) return;
+  var done = false;
+  function load(){
+    if(done) return; done = true;
+    var sc = document.createElement('script');
+    sc.src = 'https://platform.twitter.com/widgets.js'; sc.async = true; sc.charset = 'utf-8';
+    document.body.appendChild(sc);
+  }
+  if(!('IntersectionObserver' in window)){ load(); return; }
+  var io = new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); load(); } }, { rootMargin: '600px 0px' });
+  io.observe(box);
+})();
+</script>
+</body>""", 1)
 for bad in ['自動投稿', '94%', '647', '月額なし', '維持費ほぼゼロ', '一切応じ', '外部への通信は入っていません', 'βテスター', '審査制', '購入する（', '条件を確かめて購入する', '発信の場が4つ']:
     if bad in s:
         i = s.find(bad); print('残り:', bad, repr(re.sub(r'<[^>]+>', '', s[max(0, i - 60):i + 30])))
