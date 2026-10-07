@@ -66,6 +66,13 @@ s = s.replace('</style>', '''  /* ---- v3（10-07 Fable/Astra 点検後） ---- 
   .movie-shot figcaption{font-size:12px;color:var(--note);padding:10px 16px 12px}
   .buy-list{margin:12px auto 0;padding:0 0 0 20px;max-width:560px;text-align:left;font-size:14px;line-height:1.9;color:var(--dim)}
   .buy-terms{max-width:560px;margin:18px auto 0;text-align:left;font-size:13px;line-height:1.85;color:var(--ink);background:var(--warn-soft);border-radius:12px;padding:12px 14px}
+  .ml-cast{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:10px 12px;box-shadow:var(--hi)}
+  .ml-cast-k{flex:none;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
+  .ml-cast div{min-width:0;flex:1}
+  .ml-cast b{display:block;font-size:13px}
+  .ml-cast div span{font-size:11px;color:var(--note)}
+  .ml-cast-st{flex:none;font-size:11px;font-weight:600;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 9px}
+  @media(max-width:400px){ .ml-cast{flex-wrap:wrap} }
   @media(max-width:860px){ .ai-grid{grid-template-columns:1fr} }
   @media(max-width:520px){ .roles{grid-template-columns:1fr} .proof-facts{flex-direction:column;align-items:flex-start;gap:6px;padding-left:4px} }
 </style>''', 1)

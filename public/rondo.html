@@ -1030,6 +1030,13 @@
   .movie-shot figcaption{font-size:12px;color:var(--note);padding:10px 16px 12px}
   .buy-list{margin:12px auto 0;padding:0 0 0 20px;max-width:560px;text-align:left;font-size:14px;line-height:1.9;color:var(--dim)}
   .buy-terms{max-width:560px;margin:18px auto 0;text-align:left;font-size:13px;line-height:1.85;color:var(--ink);background:var(--warn-soft);border-radius:12px;padding:12px 14px}
+  .ml-cast{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:10px 12px;box-shadow:var(--hi)}
+  .ml-cast-k{flex:none;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px}
+  .ml-cast div{min-width:0;flex:1}
+  .ml-cast b{display:block;font-size:13px}
+  .ml-cast div span{font-size:11px;color:var(--note)}
+  .ml-cast-st{flex:none;font-size:11px;font-weight:600;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 9px}
+  @media(max-width:400px){ .ml-cast{flex-wrap:wrap} }
   @media(max-width:860px){ .ai-grid{grid-template-columns:1fr} }
   @media(max-width:520px){ .roles{grid-template-columns:1fr} .proof-facts{flex-direction:column;align-items:flex-start;gap:6px;padding-left:4px} }
 </style>
@@ -1055,7 +1062,7 @@
   <section class="hero" data-sec="hero">
     <div class="wrap">
       <span class="hero-pill">正式版 <span class="mono">v1.0</span>・本体 <span class="mono">¥9,800</span>（税込・買い切り）・購入時の審査なし</span>
-      <p class="hero-kicker">ステップメール・LINE・Instagram・予約ページ</p>
+      <p class="hero-kicker">ステップメール・メルマガ・LINE・Instagram・予約ページ</p>
       <h1><span class="nb">全部入りのマーケ基盤を、</span><br><span class="nb">¥9,800で所有する。</span></h1>
       <p class="hero-sub"><span class="ph">ソースコード一式を納品します。</span><span class="ph">設置も改造も、いつものCodexやClaude Codeに</span><span class="ph">日本語で頼めます。</span></p>
       <div class="hero-ctas">
@@ -1090,7 +1097,7 @@
     <div class="wrap">
       <h2 style="text-align:center"><span class="ph">メール、LINE、Instagram。</span><br><span class="ph">配信の仕事を、1つの管理画面で。</span></h2>
       <nav class="sw-tabs" aria-label="できること">
-        <a href="#sw-mail" data-rondo-label="できること タブ メール"><i style="background:#2E5CE6"></i>ステップメール</a>
+        <a href="#sw-mail" data-rondo-label="できること タブ メール"><i style="background:#2E5CE6"></i>メール</a>
         <a href="#sw-line" data-rondo-label="できること タブ LINE"><i style="background:#178A50"></i>LINE</a>
         <a href="#sw-ig" data-rondo-label="できること タブ Instagram"><i style="background:#C2255C"></i>Instagram</a>
         <a href="#booking" data-rondo-label="できること タブ 予約"><i style="background:#C99A2E"></i>予約ページ</a>
@@ -1098,16 +1105,17 @@
       <!-- 1. ステップメール -->
       <article class="sw-block" id="sw-mail">
         <div class="sw-copy">
-          <p class="sw-kicker"><span class="sw-dot" style="background:#2E5CE6"></span>ステップメール</p>
-          <h3 class="sw-h"><span class="ph">イケハヤが</span><span class="ph">628通の講座を</span><br><span class="ph">毎日届けている、</span><span class="ph">配信エンジン。</span></h3>
+          <p class="sw-kicker"><span class="sw-dot" style="background:#2E5CE6"></span>メール</p>
+          <h3 class="sw-h"><span class="ph">ステップメールも、</span><br><span class="ph">メルマガの一斉配信も。</span></h3>
           <ul class="sw-chips">
-            <li>講座はいくつでも</li><li>一斉配信の絞り込み</li><li>押したら動くリンク</li><li>Stripeの決済で動く</li><li>件名A/Bの自動判定</li>
+            <li>メルマガの一斉配信</li><li>日時を決めて予約配信</li><li>宛先の絞り込み</li><li>送る前に人数とテスト送信</li><li>ステップ講座はいくつでも</li><li>押したら動くリンク</li><li>Stripeの決済で動く</li><li>件名A/Bの自動判定</li>
           </ul>
-          <p class="sw-honest">628通はイケハヤの原稿です。商品にはサンプルの原稿が入っています。</p>
+          <p class="sw-honest">イケハヤは628通のステップメールをこれで毎日届けています（原稿はイケハヤのもので、商品にはサンプルの原稿が入っています）。</p>
         </div>
         <figure class="sw-visual shot">
-          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 講座「senseki」</span></div>
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · メール</span></div>
           <div class="ml-body">
+            <div class="ml-cast"><span class="ml-cast-k">メルマガ</span><div><b>新講座のお知らせ</b><span>10/10（金）20:00 に予約 · 宛先 2,412人（購入者を除く）</span></div><span class="ml-cast-st">予約済み</span></div>
             <div class="ml-tl">
               <div class="ml-st"><span class="d">登録</span><span class="t">確認メール</span><span class="r">開封 92%</span></div>
               <div class="ml-st"><span class="d">1日目</span><span class="t">第1講 なぜ「所有」なのか</span><span class="r">開封 61%</span></div>
