@@ -969,7 +969,7 @@
     .bk-phone{max-width:280px}
   }
   /* ---- 任せきりにできる守り（v1.0） ---- */
-  #care h2 .ph,#itch h2 .ph{display:inline-block}
+  #care h2 .ph{display:inline-block}
   .care-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .care-card{background:var(--glass-strong);border:1px solid var(--hair);border-radius:var(--r-card);box-shadow:var(--shadow),var(--hi);padding:22px 22px 20px;min-width:0}
   .care-k{display:inline-block;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px;margin-bottom:12px}
@@ -986,6 +986,22 @@
   .buy-check li::before{content:"";width:16px;height:16px;flex:none;margin-top:4px;border-radius:5px;border:1.5px solid var(--hair-strong);background:#fff}
   .buy-check-h{max-width:560px;margin:22px auto 0;font-weight:700;font-size:15px;text-align:left}
 
+  /* ---- 文字を減らす(10-07): 機能名の札と図解 ---- */
+  .sw-chips{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .sw-chips li{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--ink);background:var(--glass-strong);border:1px solid var(--hair);border-radius:999px;padding:7px 14px;box-shadow:var(--hi);line-height:1.4}
+  .sw-chips li i{width:8px;height:8px;border-radius:50%;flex:none}
+  .zk{margin:0}
+  .zk img{display:block;width:100%;height:auto}
+  .zk-wide{max-width:980px;margin:0 auto 36px}
+  #switch .zk-wide{margin-bottom:28px}
+  .sw-move .zk{max-width:900px;margin:0 auto}
+  .bk-kind .sw-chips{margin-top:2px}
+  .bk-flow-h{text-align:center;font-weight:700;font-size:18px;margin:64px 0 8px}
+  #booking .zk-wide{margin-bottom:8px}
+  @media(max-width:640px){ .zk-wide{max-width:420px} .sw-move .zk{max-width:420px} .sw-chips li{font-size:13.5px;padding:6px 12px} }
+  #flips h2 .ph{display:inline-block}
+  .sw-move{background:none;border:none;box-shadow:none;padding:0;margin-top:88px}
+  @media(max-width:620px){ .bk-mocks .bk-mock:nth-child(3){display:none} }
 </style>
 </head>
 <body>
@@ -1018,7 +1034,7 @@
         <a class="btn ghost" href="#switch" data-rondo-label="ヒーロー できること">できることを見る</a>
       </div>
       <p class="hero-caution"><span class="hc-t">サポート窓口のない、<span class="nb">開発AIを使いこなす</span><span class="nb">上級者向け製品です。</span></span><a href="#shindan" data-rondo-label="ヒーロー 適性診断">30秒の適性診断で確かめる</a></p>
-      <p class="hero-note">Cloudflareの月5ドルのプランで動作。<br><span style="display:inline-block">CodexもClaude Codeも、</span><span style="display:inline-block">月3,000円ほどのプランから</span><span style="display:inline-block">始められます。</span><br>イケハヤの実務で本番稼働中。</p>
+      <p class="hero-note">Cloudflare（月5ドル）で動作。イケハヤの実務で本番稼働中。</p>
     </div>
   </section>
 
@@ -1255,17 +1271,17 @@
         <div class="tri-card">
           <p class="flip-kicker">逆転 その一</p>
           <h2>SaaSよりずっと自由に、<br>あなただけの基盤を。</h2>
-          <p>Rondoは正真正銘あなたのもの。<br>気に入らないところは<b>全部作り変えられます</b>。<br>月額はなく、かかるのは配信の実費だけです。</p>
+          <p><b>全部作り変えられて</b>、月額はありません。</p>
         </div>
         <div class="tri-card">
           <p class="flip-kicker">逆転 その二</p>
-          <h2>やりたいことは、<br>あなたのAIに日本語で頼むだけ。</h2>
-          <p>本質は<b>閲覧・把握用のダッシュボード</b>。<br>中身の作り込みは、あなたがいつも使っている<b>CodexやClaude Code</b>の仕事です。</p>
+          <h2><span class="ph">やりたいことは、</span><br><span class="ph">あなたのAIに</span><span class="ph">日本語で頼むだけ。</span></h2>
+          <p>作り込みは、いつもの<b>CodexやClaude Code</b>の仕事です。</p>
         </div>
         <div class="tri-card">
           <p class="flip-kicker">逆転 その三</p>
           <h2>コンテンツを<br>自動投稿＆自動改善。</h2>
-          <p><b>件名A/Bの自動判定</b>、成績の還流、<b>週次の調律レポート</b>。<br>改善は感想ではなく、仕組みで回ります。</p>
+          <p><b>件名A/Bの自動判定</b>と、<b>週次の改善レポート</b>。</p>
         </div>
       </div>
 
@@ -1299,9 +1315,9 @@
         </div>
         <div>
           <p class="flip-kicker">実演</p>
-          <h2>頼むだけで、本番反映まで自動。<br>安全確認つき。</h2>
+          <h2><span class="ph">頼むだけで、</span><span class="ph">本番反映まで自動。</span><br><span class="ph">安全確認つき。</span></h2>
           <div class="flip-body">
-            <p>変更のたびに自動テストが走り、<b>壊れていないことを機械的に確かめてから反映</b>されます。<br><b>見た目を変えるのも自由自在</b>です。</p>
+            <p>変更のたびに自動テストが走り、<b>壊れていないことを確かめてから反映</b>します。</p>
           </div>
         </div>
       </div>
@@ -1312,30 +1328,25 @@
   <!-- 乗り換え（配信スタンド・LINE拡張ツール・Instagram自動化ツール・予約ツールの仕事を1つに） -->
   <section id="switch" data-sec="switch" style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center"><span class="ph">メール・LINE・Instagram・予約の</span><span class="ph">ツールから、</span><br><span class="ph">乗り換えられます。</span></h2>
-      <p class="lede" style="text-align:center;margin:0 auto 28px">イケハヤ自身が、配信スタンドから移るために作りました。<br>ばらばらに契約していた月額ツールの主な仕事を、1つの基盤へ。</p>
+      <h2 style="text-align:center"><span class="ph">月額ツール4つの仕事を、</span><span class="ph">1つの基盤へ。</span></h2>
+      <p class="lede" style="text-align:center;margin:0 auto 24px">イケハヤ自身が、配信スタンドから移るために作りました。</p>
+      <figure class="zk zk-wide"><picture><source media="(max-width:640px)" srcset="/rondo-assets/rondo-zukai-switch-m.webp" width="1024" height="1536"><img src="/rondo-assets/rondo-zukai-switch.webp" alt="メール配信スタンド・LINE拡張ツール・Instagram自動化ツール・予約ツールの4つの月額ツールが、Rondoという1つの基盤にまとまる図" width="1536" height="692" loading="lazy"></picture></figure>
       <nav class="sw-tabs" aria-label="乗り換えの4つの領域">
         <a href="#sw-mail" data-rondo-label="乗り換え タブ メール"><i style="background:#2E5CE6"></i>ステップメール</a>
-        <a href="#sw-line" data-rondo-label="乗り換え タブ LINE"><i style="background:#178A50"></i>LINEの高度な配信</a>
-        <a href="#sw-ig" data-rondo-label="乗り換え タブ Instagram"><i style="background:#C2255C"></i>Instagram自動化</a>
+        <a href="#sw-line" data-rondo-label="乗り換え タブ LINE"><i style="background:#178A50"></i>LINE</a>
+        <a href="#sw-ig" data-rondo-label="乗り換え タブ Instagram"><i style="background:#C2255C"></i>Instagram</a>
         <a href="#booking" data-rondo-label="乗り換え タブ 予約"><i style="background:#C99A2E"></i>予約・セミナー</a>
       </nav>
 
       <!-- 1. ステップメール -->
       <article class="sw-block" id="sw-mail">
         <div class="sw-copy">
-          <p class="sw-kicker"><span class="sw-dot" style="background:#2E5CE6"></span>ステップメール<span class="sw-from">メール配信スタンドから</span></p>
+          <p class="sw-kicker"><span class="sw-dot" style="background:#2E5CE6"></span>ステップメール</p>
           <h3 class="sw-h"><span class="ph">628通の講座を、</span><span class="ph">毎日、</span><br><span class="ph">重ねず、</span><span class="ph">止めずに届ける。</span></h3>
-          <p class="sw-lead">イケハヤの講座を毎日動かしているエンジンです。事故を起こさないための守りを厚くしました。</p>
-          <dl class="sw-map">
-            <div class="sw-row"><dt>複数の講座と本人確認</dt><dd>講座はいくつでも。講座ごとに確認メールで本人確認します。</dd></div>
-            <div class="sw-row"><dt>一斉配信の絞り込み</dt><dd>「この講座の読者のうち、購入者を除く」のように<b>AND・OR・NOT</b>で宛先を決め、送る前に人数とテスト送信で確かめます。</dd></div>
-            <div class="sw-row"><dt>押したら動くリンク</dt><dd>本文のリンクを押した人にタグを付け、別の講座へ移せます。1通の中で、読者ごとに本文を出し分けることもできます。</dd></div>
-            <div class="sw-row"><dt>購入で動く</dt><dd>Stripeの決済が入ったら、タグ付け・講座の開始と停止・LINEの切り替えまで自動で動きます。</dd></div>
-            <div class="sw-row"><dt>件名A/Bの自動判定</dt><dd>差がはっきりしたら、勝った件名へ寄せます。</dd></div>
-            <div class="sw-row"><dt>誤送信ガード5層</dt><dd>1人1日の上限から緊急停止まで。<b>どれかが引っかかれば送りません</b>。</dd></div>
-          </dl>
-          <p class="sw-honest">読者はCSVで引っ越せます。解除・不達の人は停止の台帳へ入り、旧ツールの登録日から「続きの通」で始まります。まず数人で試してから全員を入れます。</p>
+          <ul class="sw-chips">
+            <li>講座はいくつでも</li><li>確認メールで本人確認</li><li>一斉配信の絞り込み</li><li>送る前に人数とテスト送信</li><li>押したら動くリンク</li><li>本文の出し分け</li><li>購入で自動で動く</li><li>件名A/Bの自動判定</li><li>誤送信ガード5層</li>
+          </ul>
+          <p class="sw-honest">読者はCSVで引っ越せます。旧ツールの登録日から「続きの通」で始まります。</p>
         </div>
         <figure class="sw-visual shot">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 講座「senseki」</span></div>
@@ -1352,26 +1363,19 @@
               <div class="ml-layers"><span>1人1日</span><span>全体上限</span><span>人数の門</span><span>設定検問</span><span>停止栓</span></div>
             </div>
           </div>
-          <figcaption class="sw-cap">画面は見本です。数字は例です。</figcaption>
+          <figcaption class="sw-cap">画面は見本です。</figcaption>
         </figure>
       </article>
 
       <!-- 2. LINE -->
       <article class="sw-block rev" id="sw-line">
         <div class="sw-copy">
-          <p class="sw-kicker"><span class="sw-dot" style="background:#178A50"></span>LINEの高度な配信<span class="sw-from">LINE拡張ツールから</span></p>
-          <h3 class="sw-h"><span class="ph">タグ、分岐、</span><span class="ph">リッチメニュー。</span><br><span class="ph">LINE拡張ツールの主な仕事を、</span><span class="ph">Rondoで。</span></h3>
-          <p class="sw-lead">押したボタン、答え、来た経路で友だちを分け、それぞれに違う道を用意できます。</p>
-          <dl class="sw-map">
-            <div class="sw-row"><dt>タグと分岐</dt><dd>押したボタンや答えでタグを付け、<b>AND・OR・NOT</b>で配信や本文を出し分けます。</dd></div>
-            <div class="sw-row"><dt>リマインダ配信</dt><dd>セミナーの日などを起点に「3日前・前日・当日」に送れます。</dd></div>
-            <div class="sw-row"><dt>リッチメニューと流入経路</dt><dd>タグでメニューが替わり、<b>どの入口から来た友だちが成果につながったか</b>まで数えます。</dd></div>
-            <div class="sw-row"><dt>画像・動画・カルーセル</dt><dd>横にめくれるカードや押せる画像も、原稿に1行書くだけで送れます。</dd></div>
-            <div class="sw-row"><dt>A/Bテストと分析</dt><dd>文面を2通り送り分け、押した人・ブロック・成果を比べます。</dd></div>
-            <div class="sw-row"><dt>1:1トークとフォーム</dt><dd>個別のやり取りを管理画面で返信。LINEの中で答えるフォームも作れます。</dd></div>
-            <div class="sw-row"><dt>AIの返事（任意）</dt><dd>キーワードで返せない質問にAIが返します。返金・解約の話は人に回します。</dd></div>
-          </dl>
-          <p class="sw-honest">ステップ配信は「◯日後の◯時」の単位です。LステップのCSVからタグと友だち情報を持ち込めますが、友だちとの結び付けは人が確かめます。</p>
+          <p class="sw-kicker"><span class="sw-dot" style="background:#178A50"></span>LINE</p>
+          <h3 class="sw-h"><span class="ph">タグ、分岐、</span><span class="ph">リッチメニュー。</span><br><span class="ph">LINE拡張ツールの仕事を、</span><span class="ph">Rondoで。</span></h3>
+          <ul class="sw-chips">
+            <li>タグと分岐</li><li>リマインダ</li><li>リッチメニューの出し分け</li><li>流入経路の分析</li><li>画像・動画・カルーセル</li><li>A/Bテスト</li><li>1:1トーク</li><li>回答フォーム</li><li>AIの返事（任意）</li>
+          </ul>
+          <p class="sw-honest">LステップのCSVから、タグと友だち情報を持ち込めます。</p>
         </div>
         <figure class="sw-visual shot">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · LINE 友だち</span></div>
@@ -1383,10 +1387,6 @@
             </div>
             <div class="ln-tags">
               <span class="t on">診断Lv2</span><span class="t on">特典受取</span><span class="t on">セミナー申込</span><span class="t">購入者</span>
-            </div>
-            <div class="ln-grid">
-              <div class="ln-cell"><span class="k">セミナーの日</span><span class="v">10/12（日）</span></div>
-              <div class="ln-cell"><span class="k">業種</span><span class="v">美容サロン</span></div>
             </div>
             <div class="ln-path">
               <div class="ln-path-h">この人の道すじ</div>
@@ -1400,7 +1400,7 @@
             <div class="ln-menu">
               <span class="k">リッチメニュー</span>
               <span class="m">入門</span><span class="m on">実務</span><span class="m">上級</span>
-              <span class="why">← タグ「診断Lv2」で切替</span>
+              <span class="why">← タグで切替</span>
             </div>
           </div>
           <figcaption class="sw-cap">画面は見本です。</figcaption>
@@ -1410,25 +1410,20 @@
       <!-- 3. Instagram -->
       <article class="sw-block" id="sw-ig">
         <div class="sw-copy">
-          <p class="sw-kicker"><span class="sw-dot" style="background:#C2255C"></span>Instagram自動化<span class="sw-from">Instagram自動化ツールから</span></p>
-          <h3 class="sw-h"><span class="ph">DMで「特典」と</span><span class="ph">送ってきた人に、</span><br><span class="ph">その場で返す。</span><span class="ph">そのままLINEへ。</span></h3>
-          <p class="sw-lead">「DMで『特典』と送ってください」の導線を動かせます。LINEに来た後の数字まで、同じ管理画面で追えます。</p>
-          <dl class="sw-map">
-            <div class="sw-row"><dt>DMのキーワード自動返信</dt><dd>言葉ごとに、返す文面とボタンを決められます。文面は最大5通りを順に替えます。</dd></div>
-            <div class="sw-row"><dt>ストーリー返信・コメント</dt><dd>ストーリーへの返信や、リール・投稿へのコメントにもDMで返します。</dd></div>
-            <div class="sw-row"><dt>メンションへのお礼とDMメニュー</dt><dd>ストーリーで紹介してくれた人へお礼を送り、DMの質問ボタンと常設メニューも載せられます。</dd></div>
-            <div class="sw-row"><dt>LINEへの誘導と計測</dt><dd><b>どの呼びかけから何人がLINEを開いたか</b>を数えます。</dd></div>
-            <div class="sw-row"><dt>キャンペーンと送りすぎない仕組み</dt><dd>期間と対象の投稿を決めて成果を比べます。「停止」などの言葉には送りません。</dd></div>
-          </dl>
-          <p class="sw-honest">Metaの開発者サイトでアプリ登録が要ります（接続は管理画面のボタンから）。コメントへの返信は、Metaの審査とビジネス認証が通ってから動きます。</p>
+          <p class="sw-kicker"><span class="sw-dot" style="background:#C2255C"></span>Instagram</p>
+          <h3 class="sw-h"><span class="ph">DMで「特典」と</span><span class="ph">来たら、</span><br><span class="ph">その場で返して、</span><span class="ph">LINEへ。</span></h3>
+          <ul class="sw-chips">
+            <li>DMのキーワード返信</li><li>ストーリー返信</li><li>コメントへの返信</li><li>メンションへのお礼</li><li>DMメニュー</li><li>LINEへの誘導と計測</li><li>キャンペーンの成果</li><li>「停止」には送らない</li>
+          </ul>
+          <p class="sw-honest">Metaのアプリ登録が必要です。コメントへの返信は、Metaの審査の後に動きます。</p>
         </div>
         <figure class="sw-visual shot">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Instagram · DM</span></div>
           <div class="ig-thread">
             <div class="ig-who"><span class="ig-av">は</span><div><b>haruto_marketing</b><span>ストーリーに返信しました</span></div></div>
             <div class="ig-msg in"><span class="ig-quote">ストーリー：無料の配信設計シート</span>特典ほしいです！</div>
-            <div class="ig-msg out">ありがとうございます。配信設計シートは、LINEでお渡ししています👇</div>
-            <div class="ig-card"><span class="ig-card-ic">L</span><div><b>LINEで受け取る</b><span>友だち追加で、シートと解説の1通目が届きます</span></div></div>
+            <div class="ig-msg out">ありがとうございます。シートはLINEでお渡ししています👇</div>
+            <div class="ig-card"><span class="ig-card-ic">L</span><div><b>LINEで受け取る</b><span>友だち追加で届きます</span></div></div>
             <div class="ig-meta">自動返信</div>
           </div>
           <div class="ig-flow">
@@ -1445,11 +1440,7 @@
       <!-- 乗り換えの流れ -->
       <div class="sw-move">
         <p class="sw-move-h">乗り換えは、3ステップ</p>
-        <ol class="sw-steps">
-          <li><span class="n">1</span><div><b>データを持ち込む</b><p>読者・タグ・友だち情報・購入者リストをCSVで取り込みます。</p></div></li>
-          <li><span class="n">2</span><div><b>設定と原稿を移す</b><p>シナリオや原稿の移し替えを、開発AIに日本語で頼みます。</p></div></li>
-          <li><span class="n">3</span><div><b>切り替える</b><p>切り替える日を決め、その日の配信時刻から。解約は届くのを確かめてから。</p></div></li>
-        </ol>
+        <figure class="zk"><picture><source media="(max-width:640px)" srcset="/rondo-assets/rondo-zukai-move-m.webp" width="1024" height="1536"><img src="/rondo-assets/rondo-zukai-move.webp" alt="乗り換えの3ステップ。1 CSVで持ち込む（読者・タグ・購入者）、2 AIに移し替えを頼む（原稿とシナリオ）、3 日を決めて切り替え（その日の配信から）" width="1536" height="514" loading="lazy"></picture></figure>
       </div>
     </div>
   </section>
@@ -1457,49 +1448,44 @@
   <!-- 予約ページ（セミナー・個別相談） -->
   <section id="booking" data-sec="booking" style="padding-top:0">
     <div class="wrap">
-      <p class="bk-kicker"><span class="sw-dot" style="background:#C99A2E"></span>予約・セミナー<span class="sw-from">予約ツールから</span></p>
+      <p class="bk-kicker"><span class="sw-dot" style="background:#C99A2E"></span>予約・セミナー</p>
       <h2 style="text-align:center"><span class="ph">セミナーも個別相談も、</span><br><span class="ph">予約ページまで自前で。</span></h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">募集ページ、定員、リマインド、当日の案内、終わった後のアーカイブまで。<br>予約ツールの月額を払わずに、読者と同じ台帳で動きます。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">予約ツールの月額は、いりません。</p>
 
       <div class="bk-main">
         <figure class="bk-phone">
           <div class="bk-phone-frame">
             <img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページの実画面。10月17日のAI動画編集と動画生成の実演セミナーの募集ページで、申し込み状況のゲージに296人が申し込み済み、残り204席と出ている" width="780" height="1560" loading="lazy">
           </div>
-          <figcaption><b>実物です。</b>イケハヤの10/17のセミナーは、このページで募集しています。<br><span class="bk-date">2026年10月7日に撮影</span></figcaption>
+          <figcaption><b>実物です。</b>イケハヤの10/17のセミナーは、<br>このページで募集しています。<br><span class="bk-date">2026年10月7日に撮影</span></figcaption>
         </figure>
 
         <div class="bk-kinds">
           <article class="bk-kind">
             <p class="bk-kind-h"><span class="bk-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>セミナー<small>回を並べて、定員つきで</small></p>
-            <ul class="bk-list">
-              <li><b>申し込み状況のゲージ</b>何人が申し込んだかと残りの席を出し、満席になるたびに席を自動で増やせます。</li>
-              <li><b>キャンセル待ちと繰り上げ</b>空きが出ると自動で繰り上がり、本人に知らせます。</li>
-              <li><b>申し込みの形を選べる</b>メールだけで受ける・確認メールなしで確定する・先に済ませてほしいこと（配信先への登録など）を1段目に出す。</li>
-              <li><b>終わった後のご案内</b>回が終わったら、予約していた人全員にアーカイブの案内を1通送ります。</li>
-              <li><b>募集ページの雛形</b>表紙・こんな方に・当日の流れ・講師・参加者の声・よくある質問。設定に書いた節だけ出ます。</li>
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>セミナー</p>
+            <ul class="sw-chips">
+              <li>回ごとの定員</li><li>申し込み状況のゲージ</li><li>満席で自動増席</li><li>キャンセル待ちと繰り上げ</li><li>メールだけで申し込み</li><li>終了後のアーカイブ案内</li><li>募集ページの雛形</li>
             </ul>
           </article>
           <article class="bk-kind">
             <p class="bk-kind-h"><span class="bk-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>個別相談・面談<small>空き枠から1人ずつ</small></p>
-            <ul class="bk-list">
-              <li><b>受付時間を書くだけ</b>曜日ごとの受付時間と1枠の長さを決めると、空き枠が並びます。</li>
-              <li><b>二重予約にならない</b>1枠1人。同時に押されても、片方だけが入ります。</li>
-              <li><b>自分で変更・取り消し</b>締切までは、予約した人が別の日時に変えたり取り消したりできます。</li>
-              <li><b>前日と直前にお知らせ</b>日時と参加URLをLINEで届けます。予約の前に質問へ答えてもらうこともできます。</li>
+              <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>個別相談・面談</p>
+            <ul class="sw-chips">
+              <li>曜日ごとの受付時間</li><li>1枠1人・二重予約なし</li><li>自分で変更・取り消し</li><li>予約の前に質問</li>
+            </ul>
+          </article>
+          <article class="bk-kind bk-kind-doors">
+            <p class="bk-kind-h">申し込みの入口</p>
+            <ul class="sw-chips">
+              <li><i style="background:#178A50"></i>LINEの友だち</li><li><i style="background:#2E5CE6"></i>メールの読者</li><li><i style="background:#C99A2E"></i>誰でも（URLを貼るだけ）</li>
             </ul>
           </article>
         </div>
       </div>
 
-      <div class="bk-doors">
-        <p class="bk-doors-h">申し込みの入口は3つ</p>
-        <div class="bk-door"><span class="bk-door-k" style="--c:#178A50">LINEの友だち</span><span>リッチメニューやメッセージの「予約する」ボタンから。</span></div>
-        <div class="bk-door"><span class="bk-door-k" style="--c:#2E5CE6">メールの読者</span><span>本文に読者ごとの予約リンクを差し込めます。</span></div>
-        <div class="bk-door"><span class="bk-door-k" style="--c:#C99A2E">誰でも</span><span>ページのURLをLPやSNSに貼るだけ。名前とメールで申し込めます。</span></div>
-      </div>
+      <p class="bk-flow-h">申し込んだ後は、ぜんぶ自動</p>
+      <figure class="zk zk-wide"><picture><source media="(max-width:640px)" srcset="/rondo-assets/rondo-zukai-booking-m.webp" width="1024" height="1536"><img src="/rondo-assets/rondo-zukai-booking.webp" alt="申し込みの後の流れ。申し込み、確定メール、前日・直前のお知らせ、当日、アーカイブのご案内までが自動で進む" width="1536" height="303" loading="lazy"></picture></figure>
 
       <div class="bk-mocks">
         <figure class="shot bk-mock">
@@ -1515,7 +1501,7 @@
               <div class="bm-links"><span>別の回に変える</span><span>取り消す</span></div>
             </div>
           </div>
-          <figcaption class="sw-cap">確定・変更のメールにも、カレンダーに追加するリンクが付きます。<br>画面は見本です。</figcaption>
+          <figcaption class="sw-cap">画面は見本です。</figcaption>
         </figure>
         <figure class="shot bk-mock">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">LINE · 個別相談の予約</span></div>
@@ -1527,7 +1513,7 @@
             <div class="bs-slots"><span class="off">10:00</span><span>10:30</span><span>15:00</span><span>15:30</span></div>
             <div class="bs-remind"><span class="bs-remind-k">前日 20:00</span>明日 13:30 から個別相談です。参加URLはこちら</div>
           </div>
-          <figcaption class="sw-cap">埋まった枠は押せません。<br>画面は見本です。</figcaption>
+          <figcaption class="sw-cap">画面は見本です。</figcaption>
         </figure>
         <figure class="shot bk-mock">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 予約</span></div>
@@ -1542,10 +1528,10 @@
             </ul>
             <div class="ba-acts"><span>CSV</span><span>カレンダー（.ics）</span><span>枠を閉じる</span></div>
           </div>
-          <figcaption class="sw-cap">新しい予約はいつもの通知にも届きます。<br>名前と数字は例です。</figcaption>
+          <figcaption class="sw-cap">名前と数字は例です。</figcaption>
         </figure>
       </div>
-      <p class="gallery-note" style="margin-top:24px">参加費の決済は含みません。<br>誰でも申し込める入口は、bot対策（Cloudflare Turnstile）の鍵を設定したときだけ開きます。</p>
+      <p class="gallery-note" style="margin-top:24px">参加費の決済は含みません。</p>
     </div>
   </section>
 
@@ -1553,7 +1539,7 @@
   <section id="itch" data-sec="itch" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center"><span class="ph">マーケターの</span><span class="ph">かゆいところに、</span><br><span class="ph">手が届く。</span></h2>
-      <p class="lede" style="text-align:center;margin:0 auto 48px">実務で毎日困っていることから作ったので、答えが具体的です。</p>
+      <div style="height:36px"></div>
 
       <div class="itch-list">
         <div class="itch-row">
@@ -1561,7 +1547,6 @@
             <div class="itch-q">メールとLINEとDiscordに同じ人がいるのに、別人として数えている</div>
             <div class="itch-a">
               <div class="name">顧客の名寄せ</div>
-              <p>メール・LINE・Discord・購入履歴を<b>同一人物として自動で束ね</b>、「人」の単位で時系列に追えます。</p>
             </div>
           </div>
           <figure class="itch-fig fig-merge" role="img" aria-label="メール・LINE・Discord・購入の4つの記録が、1人の顧客に束ねられる図">
@@ -1581,7 +1566,6 @@
             <div class="itch-q">誰が熱心な顧客なのか、感覚でしか語れない</div>
             <div class="itch-a">
               <div class="name">顧客スコアと4セグメント</div>
-              <p>購入・反応・接続・新しさで自動採点し、<b>コア/常連/見込み/休眠</b>に仕分けます。</p>
             </div>
           </div>
           <figure class="itch-fig fig-seg" role="img" aria-label="顧客3,328人が、コア214人・常連892人・見込み1,306人・休眠916人に仕分けられた帯グラフ">
@@ -1602,7 +1586,6 @@
             <div class="itch-q">全員に同じ配信を送るしかない</div>
             <div class="itch-a">
               <div class="name">セグメント配信</div>
-              <p><b>購入商品・登録経路・反応履歴</b>で読者を分け、それぞれへ<b>同じ日の同じ時刻に別内容で</b>出し分けます。</p>
             </div>
           </div>
           <figure class="itch-fig fig-fork" role="img" aria-label="同じ時刻の1回の配信が、購入者・Xから登録した人・30日開いていない人の3通りの内容に分かれる図">
@@ -1621,7 +1604,6 @@
             <div class="itch-q">LPから購入まで、どこで人が落ちているのか分からない</div>
             <div class="itch-a">
               <div class="name">ファネル分析</div>
-              <p>流入元→LP訪問→教材クリック→注文→売上を、<b>同じ定義の数字で一気通貫</b>。</p>
             </div>
           </div>
           <figure class="itch-fig fig-fnl" role="img" aria-label="LP訪問6,947、教材クリック4,185、注文241と細くなるファネル。教材クリックから注文で94%が離れている">
@@ -1638,7 +1620,6 @@
             <div class="itch-q">コンテンツの自動配信基盤が夜中に壊れても、朝まで誰も気づかない</div>
             <div class="itch-a">
               <div class="name">自動の見張り番</div>
-              <p>定時ジョブの監視・障害記録・毎朝の送達テスト・毎日のバックアップ。<br><b>異常はDiscordに即通知</b>されます。</p>
             </div>
           </div>
           <figure class="itch-fig fig-watch" role="img" aria-label="夜中0時から朝7時までの見張りの記録。3時12分に定時ジョブの停止を見つけ、Discordにすぐ通知した図">
@@ -1660,39 +1641,8 @@
   <section id="care" data-sec="care" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center"><span class="ph">AIに任せきりにできる、</span><span class="ph">守りの仕組み。</span></h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">壊れても気づける。戻せる。送りすぎない。<br>自分の基盤を持つときの不安を、仕組みで先に潰しました。</p>
-      <div class="care-grid">
-        <div class="care-card">
-          <span class="care-k">戻せる</span>
-          <h3>毎日のバックアップと、<br>復元の練習</h3>
-          <p>データベースを毎日書き出して、手元と自分のクラウドに保管。週に1回、使い捨てのデータベースへ実際に戻して、全部の表の件数が合うかを確かめます。</p>
-        </div>
-        <div class="care-card">
-          <span class="care-k">気づける</span>
-          <h3>つながりの健康診断</h3>
-          <p>メールの配信結果の通知、LINEの鍵、Instagramの期限、bot対策の鍵。切れる前と切れた直後に監査が赤になり、通知も届きます。手元で動かす定時ジョブも、止まれば分かります。</p>
-        </div>
-        <div class="care-card">
-          <span class="care-k">送りすぎない</span>
-          <h3>誤送信ガードと<br>緊急停止栓</h3>
-          <p>1人1日の上限から全体の上限まで、5層のどれかが引っかかれば送りません。メールとLINEはボタン1つでまとめて止められます。</p>
-        </div>
-        <div class="care-card">
-          <span class="care-k">重ねない</span>
-          <h3>二重に届かない送信</h3>
-          <p>通信が途切れて結果が分からない送信は、同じ内容でしか送り直しません。決着しないものは自動では送らず、管理画面でお知らせします。</p>
-        </div>
-        <div class="care-card">
-          <span class="care-k">膨らまない</span>
-          <h3>Cloudflareの利用料を<br>抑える作り</h3>
-          <p>5分ごとの処理は、その回の仕事だけを読みます。古い機械の記録は少しずつ掃除し、容量は監査で見張ります。トーク本文や購入の記録は消しません。</p>
-        </div>
-        <div class="care-card">
-          <span class="care-k">出す前に止める</span>
-          <h3>公開前の検査</h3>
-          <p>書き忘れた設定、足りない鍵、送信ドメインのSPF・DKIM・DMARCまで。どれかが欠けていれば、公開の前に機械が止めて、何を足せばいいかを示します。</p>
-        </div>
-      </div>
+      <p class="lede" style="text-align:center;margin:0 auto 28px">壊れても気づける。戻せる。送りすぎない。</p>
+      <figure class="zk zk-wide"><picture><source media="(max-width:640px)" srcset="/rondo-assets/rondo-zukai-care-m.webp" width="1024" height="1536"><img src="/rondo-assets/rondo-zukai-care.webp" alt="あなたのRondoを守る6つの仕組み。毎日バックアップ、つながりの見張り、誤送信ガード、二重送信を防ぐ、利用料を抑える、公開前の検査" width="1536" height="864" loading="lazy"></picture></figure>
     </div>
   </section>
 
@@ -1700,7 +1650,7 @@
   <section id="proof-use" data-sec="proof-use" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">デモではなく、実物です。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは商品のために作られたものではありません。<br>イケハヤが自分の商売のために毎日使っている、マーケティング基盤そのものです。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">イケハヤが毎日使っている基盤そのものです。</p>
       <div class="use">
         <div class="use-card">
           <div class="use-head">
@@ -1722,21 +1672,21 @@
           <figure class="shot">
             <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — 実演ツアー 9:57</span></div>
             <video controls playsinline preload="none" poster="/rondo-assets/rondo-demo-poster.jpg" width="1284" height="862" src="https://pub-c64a0804900b4a23a38a262c09760f53.r2.dev/rondo-demo-tour.mp4"></video>
-            <figcaption>実演ムービー 9分57秒。<br>イケハヤが実物の管理画面を音声つきで案内します。</figcaption>
+            <figcaption>実演ムービー 9分57秒（音声つき）。</figcaption>
           </figure>
           <div class="gallery-2col">
             <figure class="shot">
               <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — ステップメール</span></div>
               <img src="/rondo-assets/rondo-stepmail.png" alt="Rondo管理画面のステップメール台帳。628通の件名と配信タイミング、A/Bの変種行が並ぶ実画面" width="1600" height="900" loading="lazy">
-              <figcaption>ステップメール台帳。<br>628通の原稿と件名A/Bの変種、配信タイミング。</figcaption>
+              <figcaption>ステップメール台帳（628通）。</figcaption>
             </figure>
             <figure class="shot">
               <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin — ファネル分析</span></div>
               <img src="/rondo-assets/funnel-desktop.png" alt="Rondoのファネル分析の実画面。流入元ごとに色分けされたLP訪問バーから教材クリック、注文、売上へと細くなっていくファネル図" width="2880" height="1960" loading="lazy">
-              <figcaption>ファネル分析。<br>流入元→訪問→注文→売上が一本の道で見えます。</figcaption>
+              <figcaption>ファネル分析。</figcaption>
             </figure>
           </div>
-          <p class="gallery-note">スクリーンショットはすべて実際の運用画面です。<br>2026年8月時点。</p>
+          <p class="gallery-note">すべて実際の運用画面です（2026年8月）。</p>
         </div>
       </div>
     </div>
@@ -1746,7 +1696,7 @@
   <section id="dist-tree" data-sec="dist-tree" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">買うと届くのは、<span style="display:inline-block">このフォルダです。</span></h2>
-      <p class="lede" style="text-align:center;margin:16px auto 40px">エンジンも、テストも、データベースの設計図も、ぜんぶ入っています。<br>サンプルなのは原稿だけ。あなたのAIが、あなたの原稿に差し替えて動かします。</p>
+      <p class="lede" style="text-align:center;margin:16px auto 40px">サンプルなのは原稿だけ。あとは全部入っています。</p>
       <div class="dt-term">
         <div class="dt-bar" aria-hidden="true">
           <span class="dt-dot"></span><span class="dt-dot"></span><span class="dt-dot"></span>
@@ -1763,8 +1713,8 @@
           <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">EULA.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">利用条件</span></div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="true" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">103 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・管理画面</span></button>
-            <div class="dt-children" id="dt-ch-src">
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">103 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・管理画面</span></button>
+            <div class="dt-children" id="dt-ch-src" hidden>
               <span>admin-ui.mjs</span><span>alert-config.mjs</span><span>apps-stats.mjs</span><span>appstore-stats.mjs</span><span>auth.mjs</span><span>booking-page.mjs</span><span>bookings.config.mjs</span><span>bookings.mjs</span><span>confirm-mail.mjs</span><span>connections.mjs</span><span>contents.mjs</span><span>d1-budget.mjs</span><span>daily-claim.mjs</span><span>dashboard.mjs</span><span>discord-link.mjs</span><span>discord-stats.mjs</span><span>dormancy.mjs</span><span>engine.mjs</span><span>episode-feed-audit.mjs</span><span>financie-stats.mjs</span><span>footer.config.mjs</span><span>guard.mjs</span><span>health.mjs</span><span>heat-client.mjs</span><span>heat.mjs</span><span>ig-api.mjs</span><span>ig-config.mjs</span><span>ig-engine.mjs</span><span>ig-menu.mjs</span><span>ig-oauth.mjs</span><span>ig-rules.mjs</span><span>ig-stats.mjs</span><span>ig-webhook.mjs</span><span>ig.config.mjs</span><span>ikehaya-mitate.mjs</span><span>import-readers.mjs</span><span>jst.mjs</span><span>line-ai.mjs</span><span>line-analytics.mjs</span><span>line-bookings.mjs</span><span>line-branch.mjs</span><span>line-casts.mjs</span><span>line-chat.mjs</span><span>line-contents.mjs</span><span>line-crm-config.mjs</span><span>line-crm.mjs</span><span>line-diag.mjs</span><span>line-engine.mjs</span><span>line-forms.mjs</span><span>line-import.mjs</span><span>line-inflow.mjs</span><span>line-media-inbox.mjs</span><span>line-media-serve.mjs</span><span>line-media.mjs</span><span>line-member-sync.mjs</span><span>line-menus.mjs</span><span>line-profiles.mjs</span><span>line-quota.mjs</span><span>line-reminder.mjs</span><span>line-render.mjs</span><span>line-richmenu.mjs</span><span>line-segment.mjs</span><span>line.config.mjs</span><span>line.mjs</span><span>mail-casts.mjs</span><span>mail-html.mjs</span><span>mail-links.mjs</span><span>mail-lists.mjs</span><span>mail-segment.mjs</span><span>mail-stats.mjs</span><span>mail-tracking.mjs</span><span>mail.config.mjs</span><span>mobile-icons.mjs</span><span>mobile-ui.mjs</span><span>person-cap.mjs</span><span>person-tags.mjs</span><span>personalize.mjs</span><span>persons.mjs</span><span>privacy-page.mjs</span><span>project-profiles.mjs</span><span>project-stats.mjs</span><span>purchase-rules.config.mjs</span><span>purchase-rules.mjs</span><span>purchases.mjs</span><span>requeue.mjs</span><span>retention.mjs</span><span>sales.mjs</span><span>scenarios.config.mjs</span><span>score.mjs</span><span>security.mjs</span><span>segment-expr.mjs</span><span>send-idem.mjs</span><span>sender.mjs</span><span>test-send.mjs</span><span>themes.js</span><span>threads-insights-audit.mjs</span><span>timing.mjs</span><span>tokuten.config.mjs</span><span>tokuten.mjs</span><span>tuning.mjs</span><span>warmup.mjs</span><span>webhook-verify.mjs</span><span>worker.mjs</span>
             </div>
           </div>
@@ -1830,7 +1780,7 @@
   <section id="cost" data-sec="cost" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center">月々の費用</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 32px">すべて自分名義のアカウントで契約します。<br>Rondoのための新しい月額契約はありません。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 32px">Rondoのための新しい月額契約はありません。</p>
       <div class="sw-cost">
         <div class="sw-cost-col">
           <p class="sw-cost-h">いまの月額（目安・月払い）</p>
@@ -1858,7 +1808,7 @@
   <section data-sec="fit" style="padding-top:0">
     <div class="wrap">
       <h2 style="text-align:center;margin-bottom:16px">正直に言うと、万人向けではありません。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">Rondoは上級者向けの製品で、サポート窓口はありません。<br>導入も運用もトラブル対応も、あなたとあなたの開発AIの仕事です。<br>自分でカスタマイズできる自信がない人は、絶対に買わないでください。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">サポート窓口はありません。<br>自信がない人は、買わないでください。</p>
       <div class="fit">
         <div class="fit-col yes">
           <h3>Rondoが向いている人</h3>
@@ -1871,11 +1821,11 @@
         <div class="fit-col no">
           <h3>向いていない人</h3>
           <ul>
-            <li>ノーコードで完結したい人。Rondoはコードが正本です</li>
-            <li>完成品のアプリを期待する人。パッケージは「種」です</li>
+            <li>ノーコードで完結したい人</li>
+            <li>完成品のアプリを期待する人</li>
             <li>開発AIを使う予定がない人</li>
-            <li>独自ドメインを持っていない人。メールの送信元に必須です（取得すれば使えます）</li>
-            <li>サポート窓口が必要な人。Rondoにサポートはありません。トラブル対応も自分とAIの仕事です</li>
+            <li>独自ドメインを持っていない人</li>
+            <li>サポート窓口が必要な人</li>
           </ul>
         </div>
       </div>
@@ -1903,7 +1853,7 @@
   <section id="reserve" data-sec="reserve">
     <div class="wrap">
       <h2 style="text-align:center">正式版 v1.0、販売中です。</h2>
-      <p class="lede" style="text-align:center;margin:0 auto 40px">買い切りで、月額はありません。<br>ソースコード一式と導入手順書を、決済のあとすぐにお届けします。</p>
+      <p class="lede" style="text-align:center;margin:0 auto 40px">買い切りで、月額はありません。</p>
       <div class="rsv">
         <div class="buy-price"><span class="now">¥9,800</span><span class="tag">税込・買い切り</span></div>
         <p class="buy-check-h">買う前に、この5つを確かめてください</p>
@@ -1927,7 +1877,7 @@
         </ul>
       </div>
       <div class="env" style="max-width:640px;margin:16px auto 0">
-        <div class="reco"><b>開発AIは、CodexかClaude Codeで。</b><br>モデルの指定はありません。各サービスで選べる新しめのモデルを使ってください。<br>サポート窓口はなく、導入からトラブル対応まで、あなたとあなたの開発AIで完結させる上級者向け製品です。<br><b>デジタル商品の性質上、購入後の返金には一切応じられません。</b><br>v1系の更新は無償でお届けします（時期・内容の保証はありません）。v2は別商品として、既購入者に優待価格を予定しています。</div>
+        <div class="reco"><b>購入後の返金はできません。</b>サポート窓口もありません。<br>v1系の更新は無償です。</div>
       </div>
     </div>
   </section>

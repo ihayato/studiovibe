@@ -24,7 +24,7 @@ TOP_FILES = [
     ("EULA.md", "利用条件"),
 ]
 DIRS = [
-    ("src", "src", "エンジン本体。メール・LINE・予約・Instagram・管理画面", "", True),
+    ("src", "src", "エンジン本体。メール・LINE・予約・Instagram・管理画面", "", False),
     ("test", "test", "テスト一式。届いたその場で全部走る", "ok", False),
     ("mig", "migrations", "配信データベースの設計図", "", False),
     ("scr", "scripts", "配備・検証・健康診断・引っ越しのコマンド", "", False),
