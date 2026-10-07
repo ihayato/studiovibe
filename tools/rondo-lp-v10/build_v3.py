@@ -73,6 +73,12 @@ s = s.replace('</style>', '''  /* ---- v3（10-07 Fable/Astra 点検後） ---- 
   .ml-cast div span{font-size:11px;color:var(--note)}
   .ml-cast-st{flex:none;font-size:11px;font-weight:600;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:2px 9px}
   @media(max-width:400px){ .ml-cast{flex-wrap:wrap} }
+  .ig-acts{margin:4px 0 14px;display:grid;gap:0;border-top:1px solid var(--hair)}
+  .ig-acts div{display:grid;grid-template-columns:12em 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--hair);align-items:baseline}
+  .ig-acts dt{font-weight:600;font-size:14.5px}
+  .ig-acts dd{margin:0;font-size:14.5px;color:var(--dim)}
+  .ig-acts dd::before{content:"→ ";color:#C2255C;font-weight:600}
+  @media(max-width:520px){ .ig-acts div{grid-template-columns:1fr;gap:2px} }
   @media(max-width:860px){ .ai-grid{grid-template-columns:1fr} }
   @media(max-width:520px){ .roles{grid-template-columns:1fr} .proof-facts{flex-direction:column;align-items:flex-start;gap:6px;padding-left:4px} }
 </style>''', 1)
