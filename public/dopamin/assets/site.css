@@ -219,20 +219,56 @@ body.is-android .qr, body.is-ios .qr { display: none; }
 .ur-row { margin: 6px 0 34px; }
 .ur-label { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-weight: 800; font-size: 15px; color: var(--moon); }
 .ur-label b { font-family: var(--pop); font-weight: 400; font-size: 15px; line-height: 1; color: var(--navy); padding: 5px 12px 6px; border-radius: 999px; background: linear-gradient(180deg, #fff6d6, #ffd46a 55%, #e8a93a); box-shadow: 0 0 0 2px var(--navy), 0 0 14px rgba(255, 200, 90, .55); }
-.ur-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 180px)); gap: 12px; }
-@media (min-width: 880px) { .ur-cards { gap: 18px; } }
+/* 10-07: UR が10人に。スマホは横へ送る一列（端まで流し、次の札を少し覗かせる）、PCは5×2 */
+.ur-cards { list-style: none; display: flex; gap: 12px; margin: 0 calc(var(--gutter) * -1); padding: 4px var(--gutter) 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; overscroll-behavior-x: contain; }
+.ur-cards::-webkit-scrollbar { display: none; }
+.ur-card { flex: 0 0 clamp(118px, 34vw, 160px); scroll-snap-align: start; }
+@media (min-width: 880px) { .ur-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 180px)); gap: 22px 18px; margin: 0; padding: 0; overflow: visible; } }
 .ur-frame { position: relative; display: block; padding: 3px; border-radius: 14px;
   background: conic-gradient(from var(--ang), #fff3c4, #e8b84f, #ff8a5c, #ffe9b0, #a8e4ff, #d9b8ff, #e8b84f, #fff3c4);
   box-shadow: 0 0 0 2px var(--navy), 0 0 18px rgba(255, 200, 90, .35), 0 14px 30px rgba(0, 0, 0, .45); animation: urframe 5s linear infinite; }
 @keyframes urframe { to { --ang: 360deg; } }
 .ur-frame img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 11px; }
 .ur-shine { position: absolute; inset: 3px; border-radius: 11px; pointer-events: none; mix-blend-mode: screen;
-  background: linear-gradient(112deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .45) 48%, rgba(255, 236, 190, .18) 53%, rgba(255, 255, 255, 0) 62%); background-size: 260% 100%; background-position: 130% 0; animation: shine 5s ease-in-out infinite; }
-.ur-card.c .ur-shine { animation-delay: .6s; } .ur-card.r .ur-shine { animation-delay: 1.2s; }
-@keyframes shine { 0% { background-position: 130% 0; } 35%, 100% { background-position: -40% 0; } }
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, .45) 48%, rgba(255, 236, 190, .18) 53%, rgba(255, 255, 255, 0) 62%); background-size: 260% 100%; background-position: 130% 0; animation: urshine 5s ease-in-out infinite; }
+.ur-card:nth-child(5n+2) .ur-shine { animation-delay: .6s; } .ur-card:nth-child(5n+3) .ur-shine { animation-delay: 1.2s; }
+.ur-card:nth-child(5n+4) .ur-shine { animation-delay: 1.8s; } .ur-card:nth-child(5n) .ur-shine { animation-delay: 2.4s; }
+@keyframes urshine { 0% { background-position: 130% 0; } 35%, 100% { background-position: -40% 0; } }
 .ur-name { margin: 8px 0 0; line-height: 1.3; text-align: center; }
 .ur-name b { display: block; font-weight: 800; font-size: clamp(12px, 3.4vw, 16px); color: var(--gold-hi); white-space: nowrap; }
 .ur-name span { display: block; font-weight: 700; font-size: 12px; color: var(--moon-2); }
+@media (max-width: 879px) { .ur-name b { white-space: normal; font-size: 13px; } }
+
+/* MR（10-07）: 本人裁定「引くまで絵を見せない」＝ゲームと同じ伏せ札。縁は月白の銀（UR の虹金と分ける）。光条・光の輪は足さない */
+.mr-pick { display: flex; align-items: center; gap: 20px; margin-top: 26px; padding: 18px; border-radius: 20px; background: radial-gradient(120% 120% at 0% 50%, rgba(217, 184, 255, .12), transparent 60%), var(--face); box-shadow: 0 0 0 1px rgba(243, 237, 224, .14), 0 18px 40px rgba(0, 0, 0, .4); max-width: 560px; }
+.mr-card { position: relative; flex: none; width: 104px; aspect-ratio: 2 / 3; border-radius: 12px; background: radial-gradient(90% 60% at 50% 40%, #2a2340, #07060b 75%); box-shadow: 0 0 0 3px #e9e6f2, 0 0 0 5px var(--navy), 0 0 22px rgba(217, 184, 255, .35), 0 14px 28px rgba(0, 0, 0, .5); display: grid; place-items: center; overflow: hidden; }
+.mr-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; background: linear-gradient(112deg, rgba(255, 255, 255, 0) 38%, rgba(230, 225, 255, .35) 48%, rgba(255, 255, 255, 0) 60%); background-size: 260% 100%; background-position: 130% 0; animation: urshine 6s ease-in-out 1.5s infinite; }
+.mr-q { font-family: var(--pop); font-size: 46px; line-height: 1; color: #e9e6f2; -webkit-text-stroke: 4px var(--navy); paint-order: stroke fill; }
+.mr-cap { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-weight: 800; font-size: 11px; letter-spacing: .06em; color: var(--moon-2); }
+.mr-text h3 { font-size: clamp(24px, 6vw, 32px); margin: 4px 0 6px; }
+.mr-text p:last-child { margin: 0; color: var(--moon-2); font-size: 15px; line-height: 1.6; }
+.ur-label.mr { margin: 0; flex-wrap: wrap; row-gap: 6px; } .ur-label.mr span { white-space: nowrap; }
+.ur-label.mr b { background: linear-gradient(180deg, #ffffff, #e2ddf0 55%, #b8b0d6); box-shadow: 0 0 0 2px var(--navy), 0 0 14px rgba(217, 184, 255, .55); }
+@media (max-width: 360px) { .mr-pick { gap: 14px; padding: 14px; } .mr-card { width: 88px; } }
+
+/* タップのほかにも（10-07）: 札返しは実画面＋一言、ほかはゲームの絵と一行だけ */
+.fuda { display: grid; gap: 22px; align-items: center; }
+.fuda-shot { margin: 0 auto; width: min(300px, 74vw); border-radius: 22px; overflow: hidden; background: #07060b; padding: 8px; box-shadow: 0 0 0 2px rgba(243, 237, 224, .14), 0 26px 60px rgba(0, 0, 0, .55), 0 0 90px rgba(92, 68, 112, .4); transform: rotate(-2deg); }
+.fuda-shot img { width: 100%; height: auto; border-radius: 15px; }
+.fuda-tag { margin: 0 0 4px; font-weight: 700; font-size: 14px; letter-spacing: .14em; color: var(--gold); }
+.fuda-text h3 { font-size: clamp(30px, 7vw, 44px); margin: 0 0 10px; }
+.fuda-text rt { font-family: var(--round); font-weight: 700; font-size: 12px; letter-spacing: .12em; color: var(--moon-2); -webkit-text-stroke: 0; }
+.fuda-text > p:not(.fuda-tag) { margin: 0; color: var(--moon-2); }
+.fuda-text .memo { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.fuda-text .memo span { font-weight: 700; font-size: 14px; color: var(--moon); background: var(--face-2); border-radius: 8px; padding: 3px 12px; }
+@media (min-width: 880px) { .fuda { grid-template-columns: 1fr 1fr; gap: 60px; } }
+.asobi { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.asobi li { display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--face); border-radius: 18px; padding: 14px 10px 14px; box-shadow: 0 0 0 1px rgba(243, 237, 224, .08), 0 14px 30px rgba(0, 0, 0, .35); }
+.asobi img { width: auto; height: 64px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .45)); }
+.asobi b { margin-top: 8px; font-weight: 800; font-size: 16px; line-height: 1.35; color: var(--cream); }
+.asobi span { margin-top: 2px; font-weight: 500; font-size: 13px; line-height: 1.5; color: var(--moon-2); }
+@media (min-width: 560px) { .asobi { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; } }
+@media (min-width: 880px) { .asobi { grid-template-columns: repeat(6, minmax(0, 1fr)); } .asobi img { height: 76px; } }
 
 /* 遊んでトークン（09-28 本人「絵巻の節は不要、P2Eを推しだそう」） */
 .p2e { overflow: hidden; }
@@ -386,7 +422,7 @@ body.is-android .qr, body.is-ios .qr { display: none; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .try-next:not([hidden]) { animation: none; }
   .rail ul, .stage .ally, .hint { animation: none; }
-  .ur-frame, .ur-shine { animation: none; }
+  .ur-frame, .ur-shine, .mr-card::after { animation: none; }
   .walker .wsp img, .band .stones, .band-march .track, .btn.shiny.shine::after { animation: none; }
   .js .band-hero .walker { transform: none; transition: none; }
   .reveal.in .sk-fan .c { animation: none; }
