@@ -17,39 +17,40 @@
   <script src="assets/guide.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">本文へ移動</a>
+  <a class="skip-link" href="#main-content" data-rondo-label="スキップ 本文へ移動">本文へ移動</a>
   <p id="guide-status" class="sr-only" role="status" aria-live="polite"></p>
 
-  <header class="site-head">
+  <header class="site-head" data-rondo-click-sec="header">
     <div class="head-inner">
-      <a class="brand" href="/rondo-guides/setup" aria-label="Rondo ガイド">
+      <a class="brand" href="/rondo-guides/setup" aria-label="Rondo ガイド" data-rondo-label="ヘッダー ガイドホーム">
         <span class="brand-mark" aria-hidden="true">R</span>
         <span>Rondo guides</span>
       </a>
       <nav class="guide-nav" aria-label="ガイド">
-        <a href="/rondo-guides/setup">初回セットアップ</a>
-        <a href="/rondo-guides/settings" aria-current="page">導入後の設定</a>
+        <a href="/rondo-guides/setup" data-rondo-label="ヘッダー 初回セットアップ">初回セットアップ</a>
+        <a href="/rondo-guides/settings" aria-current="page" data-rondo-label="ヘッダー 導入後の設定">導入後の設定</a>
+        <a href="/rondo-guides/update" data-rondo-label="ヘッダー 更新の適用">更新の適用</a>
         <a href="/rondo">Rondoとは</a>
       </nav>
     </div>
   </header>
 
   <main id="main-content">
-    <section class="hero" aria-labelledby="page-title">
+    <section class="hero" aria-labelledby="page-title" data-sec="hero">
       <div class="hero-grid">
         <div>
           <p class="eyebrow">セットアップ後・AIと一緒に</p>
           <h1 id="page-title">設定も、AIとの会話で進める。</h1>
           <p class="lead">
-            セットアップ後もコマンドは必要ありません。あなたは「どう届けたいか」を話し、
+            セットアップ後もコマンドは必要ありません。あなたは「どこで発信し、どう届けたいか」を話し、
             AIが設定変更、検査、反映まで担当します。
           </p>
-          <a class="start-link" href="#ask-ai">設定の依頼文をコピーする <span aria-hidden="true">↓</span></a>
+          <a class="start-link" href="#ask-ai" data-rondo-label="ヒーロー 設定依頼文へ">設定の依頼文をコピーする <span aria-hidden="true">↓</span></a>
           <div class="promise" aria-label="このガイドで決めること">
-            <span>講座と原稿</span>
-            <span>配信ペース</span>
+            <span>SNS・LINE連携</span>
+            <span>届け方と原稿</span>
             <span>安全上限</span>
-            <span>任意の連携</span>
+            <span>任意機能</span>
           </div>
         </div>
         <div class="orbit" aria-hidden="true">
@@ -63,7 +64,7 @@
     </section>
 
     <div class="workspace">
-      <aside class="rail" aria-label="設定進捗">
+      <aside class="rail" aria-label="設定進捗" data-rondo-click-sec="rail">
         <div class="progress-card">
           <div class="progress-top">
             <span class="progress-label">導入後の設定</span>
@@ -82,21 +83,21 @@
           <p class="progress-note">チェック状態はこのブラウザに保存されます。</p>
         </div>
         <nav class="toc" aria-label="このページの目次">
-          <a href="#ask-ai">AIへ依頼する</a>
-          <a href="#mail">講座を決める</a>
-          <a href="#safety">安全設定を確認する</a>
-          <a href="#optional">任意機能を選ぶ</a>
-          <a href="#channels">チャネルをつなぐ</a>
-          <a href="#review">変更を確認する</a>
-          <a href="#routine">運用を任せる</a>
+          <a href="#ask-ai" data-rondo-label="目次 AIへ依頼">AIへ依頼する</a>
+          <a href="#channels" data-rondo-label="目次 チャネル">SNS・LINEをつなぐ</a>
+          <a href="#mail" data-rondo-label="目次 配信の型">届け方を決める</a>
+          <a href="#safety" data-rondo-label="目次 安全設定">安全設定を確認する</a>
+          <a href="#optional" data-rondo-label="目次 任意機能">任意機能を選ぶ</a>
+          <a href="#review" data-rondo-label="目次 変更確認">変更を確認する</a>
+          <a href="#routine" data-rondo-label="目次 日々の運用">運用を任せる</a>
         </nav>
       </aside>
 
       <div class="guide-content">
-        <section class="intro" aria-label="役割分担">
+        <section class="intro" aria-label="役割分担" data-sec="intro">
           <div class="intro-item">
             <b>あなたが決めること</b>
-            <span>誰へ、何を、どのペースで届けるか</span>
+            <span>どこで発信し、誰へ何を届けるか</span>
           </div>
           <div class="intro-item">
             <b>AIがすること</b>
@@ -108,7 +109,7 @@
           </div>
         </section>
 
-        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title">
+        <section class="step" id="ask-ai" aria-labelledby="ask-ai-title" data-sec="ask-ai">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">01</span>
             <div>
@@ -123,7 +124,7 @@
             <div class="ai-prompt copy-block">
               <div class="prompt-head">
                 <span>AIへの導入後設定依頼文</span>
-                <button class="copy-button" type="button" aria-label="導入後設定依頼文をコピー">コピー</button>
+                <button class="copy-button" type="button" aria-label="導入後設定依頼文をコピー" data-rondo-label="CTA 導入後設定コピー" data-rondo-cta="copy">コピー</button>
               </div>
               <pre><code>セットアップ済みのRondoを、私の事業に合わせて設定してください。
 
@@ -132,6 +133,7 @@
 進め方のルール：
 - コマンドはすべてあなたが実行し、私には打たせないでください
 - 私には技術設定ではなく、読者、商品、届けたい内容、配信ペースについて質問してください
+- 進める順番は、まずSNSとLINEの接続でダッシュボードを埋め、原稿と配信の設定はそのあとにしてください
 - 質問は一度に詰め込まず、判断しやすい選択肢とおすすめを添えて1つずつ聞いてください
 - 外部サービスへのログインが必要なら該当画面を開き、私がログインした後はブラウザ操作機能で設定を進めてください
 - Google Cloud Consoleの設定や、Cloudflare／ResendのDNS設定を私に手動設定させないでください
@@ -148,7 +150,7 @@
 まず、現在の状態を調べて、最初の質問を1つしてください。</code></pre>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-ask-ai" type="checkbox">
+              <input class="task-check" id="settings-ask-ai" type="checkbox" data-rondo-label="完了 設定依頼">
               <span class="task-copy">
                 <strong>設定依頼文をRondoの作業AIへ渡した</strong>
                 <span>AIから現在の状態と最初の質問が返れば開始です。</span>
@@ -157,52 +159,120 @@
           </div>
         </section>
 
-        <section class="step" id="mail" aria-labelledby="mail-title">
+        <section class="step" id="channels" aria-labelledby="channels-title" data-sec="channels">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">02</span>
             <div>
-              <span class="step-kicker">講座づくり</span>
-              <h2 id="mail-title">講座の中身を会話で決める</h2>
+              <span class="step-kicker">まず見える化</span>
+              <h2 id="channels-title">SNSとLINEの実績をつなぐ</h2>
             </div>
           </div>
           <p class="step-summary">
-            ファイル名や設定項目はAIが扱います。あなたは、読者へ何を届けたいかだけを伝えます。
+            導入直後にいちばん手応えがあるのがここです。YouTube、note、Substack、Xの実績とLINEの友だち数が、1つのダッシュボードに集まります。原稿づくりはこのあとで構いません。
+          </p>
+          <div class="step-body">
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>LINEをつなぐ依頼文</span>
+                <button class="copy-button" type="button" aria-label="LINE接続依頼文をコピー" data-rondo-label="CTA LINE接続コピー" data-rondo-cta="copy">コピー</button>
+              </div>
+              <pre><code>RondoにLINE公式アカウントを接続してください。SETUP.mdのLINEの章に沿って進め、私がやること（アカウント開設、管理画面での確認、キーの入力）は1つずつ画面を開いて案内してください。設定と検証はあなたが行い、接続後は友だち追加からあいさつ配信が届くまで一緒に確認してください。</code></pre>
+            </div>
+            <div class="ai-prompt copy-block compact">
+              <div class="prompt-head">
+                <span>YouTubeやnoteをつなぐ依頼文</span>
+                <button class="copy-button" type="button" aria-label="SNS接続依頼文をコピー" data-rondo-label="CTA SNS接続コピー" data-rondo-cta="copy">コピー</button>
+              </div>
+              <pre><code>私のYouTubeの実績をRondoのダッシュボードに表示したいです。SETUP.mdの「チャネル接続」の章を読み、公式APIで実績を集めてRondoの受け口へ毎日自動で送る仕組みを作ってください。必要なAPIキーの取得は画面を開いて案内し、キーはチャットへ表示しないでください。規約違反になる取得方法は使わないでください。完成したら、管理画面のチャネルビューに数字が出ることを一緒に確認してください。</code></pre>
+            </div>
+            <div class="callout">
+              <strong>note、Substack、Xも同じ頼み方でつながります</strong>
+              <p>依頼文の「YouTube」を差し替えるだけです。1チャネルずつ、実績が表示されるのを確認してから次へ進みます。</p>
+            </div>
+            <div class="callout safe">
+              <strong>つながらなくても配信は止まりません</strong>
+              <p>チャネル接続は「見える化」の追加です。失敗しても配信には影響しない設計なので、キー取得で詰まったチャネルは後回しにして、次のステップへ進んで構いません。</p>
+            </div>
+            <label class="task">
+              <input class="task-check" id="settings-channels" type="checkbox" data-rondo-label="完了 チャネル">
+              <span class="task-copy">
+                <strong>つなぐチャネルを決め、表示を確認した</strong>
+                <span>使わないチャネルは「未接続」表示のままで問題ありません。</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="step" id="mail" aria-labelledby="mail-title" data-sec="mail">
+          <div class="step-head">
+            <span class="step-no" aria-hidden="true">03</span>
+            <div>
+              <span class="step-kicker">配信の型</span>
+              <h2 id="mail-title">何をどう届けるか、型を選ぶ</h2>
+            </div>
+          </div>
+          <p class="step-summary">
+            メール講座は選択肢の1つです。不定期のお知らせだけ、LINE中心でも動きます。あなたは型を選ぶだけで、ファイル名や設定項目はAIが扱います。
           </p>
           <div class="step-body">
             <div class="subsection">
-              <h3>AIと決めること</h3>
+              <h3>3つの型から選ぶ</h3>
+              <div class="choice">
+                <div class="choice-item">
+                  <span class="choice-tag">じっくり伝えたい</span>
+                  <b>連載型（メール講座）</b>
+                  <p>登録した人へ、決めた間隔で順番に届きます。</p>
+                  <p>3通以上の内容を用意できるとき。</p>
+                </div>
+                <div class="choice-item">
+                  <span class="choice-tag">その都度知らせたい</span>
+                  <b>お知らせ型（メルマガ）</b>
+                  <p>登録直後の1通だけ用意し、あとは書けたときに一斉配信します。</p>
+                  <p>新作、セール、更新のお知らせが中心のとき。</p>
+                </div>
+                <div class="choice-item">
+                  <span class="choice-tag">LINEが主戦場</span>
+                  <b>LINE主軸型</b>
+                  <p>LINEの配信を主役にし、メールは登録直後の1通だけにします。</p>
+                  <p>短い文でこまめに届けたいとき。</p>
+                </div>
+              </div>
+            </div>
+            <div class="callout safe">
+              <strong>どの型でも、最初の1通から始められます</strong>
+              <p>登録直後に届く1通目だけは必要です。講座の1通目でも、お礼と自己紹介の1通でも構いません。連載型でも最初は3通で十分で、登録から解除までを自分で一周してから増やせます。</p>
+            </div>
+            <div class="subsection">
+              <h3>型が決まったらAIと決めること</h3>
               <ul>
-                <li>誰の、どんな悩みを解決する講座か</li>
-                <li>読了後にどうなってほしいか</li>
-                <li>何通で、何日おきに届けるか</li>
+                <li>誰の、どんな悩みに向けた配信か</li>
+                <li>読んだあとにどうなってほしいか</li>
+                <li>何通を、どのくらいの間隔で届けるか</li>
                 <li>発行者名と問い合わせ先</li>
                 <li>既存原稿を使うか、AIと下書きを作るか</li>
+                <li>テスト送信の宛先（自分のアドレス。設定 <code>TEST_EMAILS</code> に入れると、管理画面の「テスト送信」で自分宛てに見え方を確かめられます）</li>
               </ul>
             </div>
             <div class="ai-prompt copy-block compact">
               <div class="prompt-head">
-                <span>原稿づくりだけ頼む場合</span>
-                <button class="copy-button" type="button" aria-label="原稿づくり依頼文をコピー">コピー</button>
+                <span>型から相談する場合</span>
+                <button class="copy-button" type="button" aria-label="配信の型の相談文をコピー" data-rondo-label="CTA 配信の型コピー" data-rondo-cta="copy">コピー</button>
               </div>
-              <pre><code>読者像と商品の内容を質問しながら、最初の3通の構成案を作ってください。まだ配信へ反映せず、件名、各通の役割、読者に取ってほしい行動を先に見せてください。</code></pre>
-            </div>
-            <div class="callout safe">
-              <strong>最初は3通で十分</strong>
-              <p>登録から解除までを確認してから増やせます。最初から長い講座を完成させる必要はありません。</p>
+              <pre><code>私の事業に合う配信の型を一緒に決めてください。連載型（メール講座）、お知らせ型（登録直後の1通＋不定期の一斉配信）、LINE主軸型のどれが向くか、読者と商品について質問しながら提案してください。型が決まったら、その型に必要な原稿だけを構成案にして、件名、各通の役割、読者に取ってほしい行動を先に見せてください。私が確認するまで配信へ反映しないでください。</code></pre>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-mail" type="checkbox">
+              <input class="task-check" id="settings-mail" type="checkbox" data-rondo-label="完了 配信の型">
               <span class="task-copy">
-                <strong>講座名、読者、最初の原稿を決めた</strong>
+                <strong>配信の型、読者、最初の原稿を決めた</strong>
                 <span>AIが反映する前に、読者目線で内容を読みます。</span>
               </span>
             </label>
           </div>
         </section>
 
-        <section class="step" id="safety" aria-labelledby="safety-title">
+        <section class="step" id="safety" aria-labelledby="safety-title" data-sec="safety">
           <div class="step-head">
-            <span class="step-no" aria-hidden="true">03</span>
+            <span class="step-no" aria-hidden="true">04</span>
             <div>
               <span class="step-kicker">安全設定</span>
               <h2 id="safety-title">安全設定はAIに説明してもらう</h2>
@@ -215,7 +285,7 @@
             <div class="ai-prompt copy-block compact">
               <div class="prompt-head">
                 <span>安全設定の確認依頼文</span>
-                <button class="copy-button" type="button" aria-label="安全設定確認依頼文をコピー">コピー</button>
+                <button class="copy-button" type="button" aria-label="安全設定確認依頼文をコピー" data-rondo-label="CTA 安全設定コピー" data-rondo-cta="copy">コピー</button>
               </div>
               <pre><code>現在の配信上限と緊急停止の状態を確認してください。読者規模と予定している配信ペースに対して安全か、各上限が何を防ぐのかを専門用語なしで説明してください。変更が必要なら、変更前後と影響を示して承認を求めてください。</code></pre>
             </div>
@@ -224,7 +294,7 @@
               <p>配信が止まった場合は、AIに監査画面と失敗理由を調べてもらい、原因が分かってから判断します。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-safety" type="checkbox">
+              <input class="task-check" id="settings-safety" type="checkbox" data-rondo-label="完了 安全設定">
               <span class="task-copy">
                 <strong>安全上限と緊急停止の意味を確認した</strong>
                 <span>自分で止める場所もAIに画面で示してもらいます。</span>
@@ -233,84 +303,40 @@
           </div>
         </section>
 
-        <section class="step" id="optional" aria-labelledby="optional-title">
+        <section class="step" id="optional" aria-labelledby="optional-title" data-sec="optional">
           <div class="step-head">
-            <span class="step-no" aria-hidden="true">04</span>
+            <span class="step-no" aria-hidden="true">05</span>
             <div>
               <span class="step-kicker">任意の連携</span>
               <h2 id="optional-title">必要な連携だけ選ぶ</h2>
             </div>
           </div>
           <p class="step-summary">
-            メールだけで運用を始められます。LINE、購入者特典、障害通知は、必要になったものだけAIへ追加依頼します。
+            購入者特典、障害通知、バックアップは、必要になったものだけAIへ追加依頼します。使わない機能は無効のままで問題ありません。
           </p>
           <div class="step-body">
             <div class="ai-prompt copy-block compact">
               <div class="prompt-head">
                 <span>任意機能の相談文</span>
-                <button class="copy-button" type="button" aria-label="任意機能相談文をコピー">コピー</button>
+                <button class="copy-button" type="button" aria-label="任意機能相談文をコピー" data-rondo-label="CTA 任意機能コピー" data-rondo-cta="copy">コピー</button>
               </div>
-              <pre><code>LINE、購入者特典、障害通知、バックアップについて、今の運用で「今すぐ必要」「後でよい」「不要」に分けて提案してください。追加費用、必要なアカウント、私が行うログイン、導入後に増える運用を比較してから、1つずつ確認してください。</code></pre>
+              <pre><code>購入者特典、障害通知、バックアップについて、今の運用で「今すぐ必要」「後でよい」「不要」に分けて提案してください。追加費用、必要なアカウント、私が行うログイン、導入後に増える運用を比較してから、1つずつ確認してください。</code></pre>
             </div>
             <div class="callout">
               <strong>購入者特典は最初から無効です</strong>
-              <p>使うと決めるまで公開されません。LINEも接続しない限り、メール運用へ影響しません。</p>
+              <p>使うと決めるまで公開されません。障害通知やバックアップも、入れていない状態で配信が止まることはありません。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-optional" type="checkbox">
+              <input class="task-check" id="settings-optional" type="checkbox" data-rondo-label="完了 任意機能">
               <span class="task-copy">
                 <strong>使う機能と後回しにする機能を決めた</strong>
-                <span>「今回はメールだけ」も安全な選択です。</span>
+                <span>「今回は何も足さない」も安全な選択です。</span>
               </span>
             </label>
           </div>
         </section>
 
-        <section class="step" id="channels" aria-labelledby="channels-title">
-          <div class="step-head">
-            <span class="step-no" aria-hidden="true">05</span>
-            <div>
-              <span class="step-kicker">発信チャネル</span>
-              <h2 id="channels-title">LINEやSNSの実績をつなぐ</h2>
-            </div>
-          </div>
-          <p class="step-summary">
-            メールとLINEは標準装備です。YouTube、note、Substack、Xの実績は「受け口」が用意済みで、集めて送る仕組みをAIに作らせます。
-          </p>
-          <div class="step-body">
-            <div class="ai-prompt copy-block compact">
-              <div class="prompt-head">
-                <span>LINEをつなぐ依頼文</span>
-                <button class="copy-button" type="button" aria-label="LINE接続依頼文をコピー">コピー</button>
-              </div>
-              <pre><code>RondoにLINE公式アカウントを接続してください。SETUP.mdのLINEの章に沿って進め、私がやること（アカウント開設、管理画面での確認、キーの入力）は1つずつ画面を開いて案内してください。設定と検証はあなたが行い、接続後は友だち追加からあいさつ配信が届くまで一緒に確認してください。</code></pre>
-            </div>
-            <div class="ai-prompt copy-block compact">
-              <div class="prompt-head">
-                <span>YouTubeやnoteをつなぐ依頼文</span>
-                <button class="copy-button" type="button" aria-label="SNS接続依頼文をコピー">コピー</button>
-              </div>
-              <pre><code>私のYouTubeの実績をRondoのダッシュボードに表示したいです。SETUP.mdの「チャネル接続」の章を読み、公式APIで実績を集めてRondoの受け口へ毎日自動で送る仕組みを作ってください。必要なAPIキーの取得は画面を開いて案内し、キーはチャットへ表示しないでください。規約違反になる取得方法は使わないでください。完成したら、管理画面のチャネルビューに数字が出ることを一緒に確認してください。</code></pre>
-            </div>
-            <div class="callout">
-              <strong>note、Substack、Xも同じ頼み方でつながります</strong>
-              <p>依頼文の「YouTube」を差し替えるだけです。1チャネルずつ、実績が表示されるのを確認してから次へ進みます。</p>
-            </div>
-            <div class="callout safe">
-              <strong>つながらなくても配信は止まりません</strong>
-              <p>チャネル接続は「見える化」の追加です。失敗してもメールとLINEの配信には影響しない設計なので、安心して試せます。</p>
-            </div>
-            <label class="task">
-              <input class="task-check" id="settings-channels" type="checkbox">
-              <span class="task-copy">
-                <strong>つなぐチャネルを決め、表示を確認した</strong>
-                <span>使わないチャネルは「未接続」表示のままで問題ありません。</span>
-              </span>
-            </label>
-          </div>
-        </section>
-
-        <section class="step" id="review" aria-labelledby="review-title">
+        <section class="step" id="review" aria-labelledby="review-title" data-sec="review">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">06</span>
             <div>
@@ -325,8 +351,8 @@
             <div class="subsection">
               <h3>確認する内容</h3>
               <ul>
-                <li>講座名、送信者名、件名、本文が意図どおりか</li>
-                <li>何日おきに何通届くか</li>
+                <li>配信名、送信者名、件名、本文が意図どおりか</li>
+                <li>何日おきに何通届くか（お知らせ型なら1通目だけ）</li>
                 <li>解除リンクと問い合わせ先があるか</li>
                 <li>検査と原稿照合が成功しているか</li>
                 <li>外部サービスへ何を変更したか</li>
@@ -335,10 +361,10 @@
             </div>
             <div class="callout safe">
               <strong>公開前にテストアドレスで再確認</strong>
-              <p>AIへテスト登録の画面を開いてもらい、変更後の3通を自分で読んでから一般公開します。</p>
+              <p>AIへテスト登録の画面を開いてもらい、変更後の原稿を自分で読んでから一般公開します。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-review" type="checkbox">
+              <input class="task-check" id="settings-review" type="checkbox" data-rondo-label="完了 変更確認">
               <span class="task-copy">
                 <strong>変更内容と検査結果を確認した</strong>
                 <span>気になる文章は公開前にAIへ修正を依頼します。</span>
@@ -347,7 +373,7 @@
           </div>
         </section>
 
-        <section class="step" id="routine" aria-labelledby="routine-title">
+        <section class="step" id="routine" aria-labelledby="routine-title" data-sec="routine">
           <div class="step-head">
             <span class="step-no" aria-hidden="true">07</span>
             <div>
@@ -362,7 +388,7 @@
             <div class="ai-prompt copy-block compact">
               <div class="prompt-head">
                 <span>定期点検の依頼文</span>
-                <button class="copy-button" type="button" aria-label="定期点検依頼文をコピー">コピー</button>
+                <button class="copy-button" type="button" aria-label="定期点検依頼文をコピー" data-rondo-label="CTA 定期点検コピー" data-rondo-cta="copy">コピー</button>
               </div>
               <pre><code>Rondoの定期点検をしてください。管理画面と監査情報を確認し、配信失敗、停止、読者の急変、バックアップ、ドメイン認証で対応が必要なものだけを優先順に教えてください。変更はまだ行わず、対応案と影響を示して私の承認を待ってください。</code></pre>
             </div>
@@ -381,7 +407,7 @@
               <p>AIには下書き、対象人数、安全確認まで任せられます。実際に送る予約だけは内容と人数を見て判断します。</p>
             </div>
             <label class="task">
-              <input class="task-check" id="settings-routine" type="checkbox">
+              <input class="task-check" id="settings-routine" type="checkbox" data-rondo-label="完了 運用ルール">
               <span class="task-copy">
                 <strong>今後の相談方法と承認ルールを決めた</strong>
                 <span>運用担当のAIには毎回AI_CONSTITUTION.mdを守らせます。</span>
@@ -390,18 +416,18 @@
           </div>
         </section>
 
-        <section class="next-guide" aria-labelledby="next-title">
+        <section class="next-guide" aria-labelledby="next-title" data-sec="next">
           <div>
             <h2 id="next-title">設定完了。難しい操作はAIへ。</h2>
             <p>あなたは読者と内容に集中し、設定、検査、原因調査はRondoを開いた作業AIへ依頼できます。</p>
           </div>
-          <a class="next-link" href="/rondo-guides/setup">初回ガイドを見直す</a>
+          <a class="next-link" href="/rondo-guides/setup" data-rondo-label="次へ 初回セットアップガイド">初回ガイドを見直す</a>
         </section>
       </div>
     </div>
   </main>
 
-  <footer class="page-foot">
+  <footer class="page-foot" data-sec="footer">
     <div class="foot-inner">
       <span>Rondo user guide</span>
       <span>技術手順は作業AIがSETUP.mdを読みます</span>
