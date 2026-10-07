@@ -91,8 +91,8 @@
   <div class="wrap">
     <div class="hero">
       <span class="beta-pill">購入者の方へ</span>
-      <h1>不具合・エラーの報告</h1>
-      <p class="lede">エラーや気になる点があれば、このフォームからお知らせください。<br>報告は開発にそのまま届き、以後の改善に反映します。<br>※報告への個別返信・個別サポートは行っていません。</p>
+      <h1>導入のご報告・不具合の報告</h1>
+      <p class="lede">最初の1通が届いたら、分類「導入できました」で一言なしで送ってください。<br>エラーや気になる点があれば、このフォームからお知らせください。<br>報告は開発にそのまま届き、以後の改善に反映します。<br>※報告への個別返信・個別サポートは行っていません。</p>
     </div>
 
     <section>
@@ -102,6 +102,7 @@
 
         <label class="t" for="rp-cat">分類</label>
         <select id="rp-cat" data-rondo-label="報告 分類">
+          <option value="done">導入できました（最初の1通が届いた）</option>
           <option value="setup">セットアップ</option>
           <option value="mail">メール配信</option>
           <option value="line">LINE配信</option>
@@ -110,7 +111,7 @@
         </select>
 
         <label class="t" for="rp-body">報告内容</label>
-        <p class="hint">何をしたら、何が起きたか。エラーメッセージがあればそのまま貼り付けてください（10文字以上）。</p>
+        <p class="hint" id="rp-body-hint">何をしたら、何が起きたか。エラーメッセージがあればそのまま貼り付けてください（10文字以上）。</p>
         <textarea id="rp-body" required minlength="10" maxlength="4000" placeholder="例: SETUP.mdの手順3でdeploy:contentsを実行したら、次のエラーが出ました。..." data-rondo-label="報告 内容"></textarea>
 
         <label class="t" for="rp-env">環境（任意）</label>
@@ -138,6 +139,22 @@
 <footer><span>© 2026 Studio VIBE / Rondo</span></footer>
 
 <script>
+// 「導入できました」は一言なしでも送れる(本文は任意)。?c=done で開くと最初から選ばれている
+(function(){
+  var cat = document.getElementById('rp-cat');
+  var bodyEl = document.getElementById('rp-body');
+  var hint = document.getElementById('rp-body-hint');
+  var normalHint = hint.textContent;
+  function sync(){
+    var done = cat.value === 'done';
+    bodyEl.required = !done;
+    if(done){ bodyEl.removeAttribute('minlength'); hint.textContent = '一言なしでも送れます。つまずいた所があれば、教えてもらえると手順書の改善に使います。'; }
+    else { bodyEl.setAttribute('minlength', '10'); hint.textContent = normalHint; }
+  }
+  try{ var c = new URLSearchParams(location.search).get('c'); if(c && cat.querySelector('option[value="' + c.replace(/[^a-z]/g, '') + '"]')) cat.value = c; }catch(_){}
+  cat.addEventListener('change', sync);
+  sync();
+})();
 document.getElementById('rp-form').addEventListener('submit', async function(e){
   e.preventDefault();
   var form = this;
