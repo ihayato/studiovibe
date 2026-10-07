@@ -74,7 +74,7 @@ def build(dist: Path) -> str:
         out.append("")
     out.append(
         f'          <div class="dt-total">合計 <b>{total:,}ファイル</b>・機能の間引きなし。'
-        "秘密情報・広告SDK・外部への通信は入っていません。</div>"
+        "秘密情報・広告SDKは入っていません。販売元へデータを送る仕組みもありません。</div>"
     )
     body = "\n".join(out)
     cap = f'      <p class="dt-cap">v{version}（{date.today():%Y-%m-%d}）の実測です。ファイル数はzipを作り直すたびに実測で更新します。</p>'

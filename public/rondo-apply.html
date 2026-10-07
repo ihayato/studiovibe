@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo のご購入 | 正式版 v1.0・¥9,800</title>
-<meta name="description" content="マーケティングOS「Rondo」正式版 v1.0 の購入ページ。購入前の5つの確認にチェックすると、そのまま決済に進めます（¥9,800・税込・買い切り）。">
+<meta name="description" content="マーケティングOS「Rondo」正式版 v1.0 の購入ページ。購入前の4つの確認にチェックすると、そのまま決済に進めます（¥9,800・税込・買い切り）。">
 <meta property="og:title" content="Rondo のご購入 | 正式版 v1.0・¥9,800">
-<meta property="og:description" content="購入前の5つの確認にチェックすると、そのまま決済に進めます。">
+<meta property="og:description" content="購入前の4つの確認にチェックすると、そのまま決済に進めます。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <meta property="og:site_name" content="Studio VIBE">
@@ -153,7 +153,7 @@
     <div class="wrap">
       <p class="crumb"><a href="/rondo">Rondo</a> / ご購入</p>
       <h1>Rondo を購入する</h1>
-      <p class="lede">下の5つを確かめてチェックすると、そのまま決済に進めます。</p>
+      <p class="lede">下の4つを確かめてチェックすると、そのまま決済に進めます。</p>
       <div class="price-line">
         <span class="num">¥9,800</span>
         <span class="tag">正式版 v1.0・税込・買い切り</span>
@@ -172,22 +172,21 @@
 
         <div class="fgroup">
           <span class="t">購入前の確認</span>
-          <p class="hint">5つすべてに当てはまる方だけ、ご購入ください。</p>
-          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認1">CodexやClaude Codeなどの開発AIを、自分で使える</label>
-          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認2">ステップメールかステップLINEを運用したことがある</label>
-          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認3">運用中の発信の場が4つ以上ある（X、Instagram、YouTube、note、メルマガなど）</label>
-          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認4">独自ドメインを持っている（メールの送信元に必須）</label>
-          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認5">サポートに頼らず、開発AIとともに自分でセットアップ・運用する</label>
+          <p class="hint">4つすべてに当てはまる方だけ、ご購入ください。</p>
+          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認1">開発AI（CodexやClaude Codeなど）を使って、導入・運用する商品だと理解した</label>
+          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認2">Cloudflare有料プラン（月5ドル〜）などの運用費を負担できる</label>
+          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認3">メールの送信元にする独自ドメインを用意できる</label>
+          <label class="chk"><input type="checkbox" class="ap-c" required data-rondo-label="申込 確認4">設定・動作の確認・障害対応を、自分と開発AIで行う</label>
         </div>
 
         <div class="fgroup">
           <div class="notice">
             <span class="ntag">ご購入の前に</span>
             <ul>
-              <li>サポート窓口はありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。</li>
-              <li>デジタル商品のため、決済完了後の返金には応じられません。</li>
+              <li>技術サポートはありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。</li>
+              <li>購入者都合の返金・キャンセルは受け付けません（法令に基づき必要な対応を除きます）。</li>
               <li>動かすには、Cloudflareの有料プラン（月5ドル）が必要です。</li>
-              <li>v1系の更新は無償でお届けします（時期・内容の保証はありません）。</li>
+              <li>決済が終わると、すぐに納品のメールでダウンロードのリンクをお送りします。v1系の更新は無償です（時期・内容の保証はありません）。</li>
               <li>販売者情報は<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="申込 特商法">特定商取引法に基づく表記</a>をご覧ください。</li>
             </ul>
           </div>
@@ -251,7 +250,7 @@ document.getElementById('ap-form').addEventListener('submit', async function(e){
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         email: document.getElementById('ap-email').value.trim(),
-        // 購入前の確認(5つ全部・必須)を selfSetup として送る(Rondo の審査なしの販売は、これとメールだけを見る)
+        // 購入前の確認(4つ全部・必須)を selfSetup として送る(Rondo の審査なしの販売は、これとメールだけを見る)
         selfSetup: Array.prototype.every.call(form.querySelectorAll('.ap-c'), function(c){ return c.checked; }),
         turnstileToken: tk,
         extra_field: form.querySelector('[name="extra_field"]').value
