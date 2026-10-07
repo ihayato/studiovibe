@@ -41,7 +41,7 @@ rep('<a class="btn primary" href="/rondo-apply" data-rondo-label="CTA 診断A購
 s = s.replace('</style>', '''  /* ---- v3（10-07 Fable/Astra 点検後） ---- */
   .hero-kicker{font-size:14px;font-weight:600;color:var(--dim);letter-spacing:.04em;margin:18px 0 6px}
   .hero-proof{font-size:13.5px;color:var(--ink);margin-top:22px;line-height:1.9}
-  .hero-proof .nb{color:var(--dim)}
+  .hero-proof .ph{display:inline-block}
   .hero-note a{color:var(--accent);margin-left:6px}
   .proof-shot{max-width:980px;margin:0 auto}
   .proof-shot img{display:block;width:100%;height:auto}
