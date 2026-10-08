@@ -1,5 +1,10 @@
 # HANDOFF — Rondo公式サイト「Astra/Fableユーザーのための」改稿（2026-09-21）
 
+> ## 🟢 10-09 更新（最新）: v1.0 の LP は `public/rondo-v4.html`（未配信・noindex・Astra r7 出荷可 9106897）
+> - 実画面（管理画面のダミーデータ）とv1.0の全機能一覧の版。正本の記録は `~/Desktop/main/marketing-crm/HANDOFF.md` 冒頭の 🖥️ 節（撮り直しの手順・Astra r4〜の講評・載せないと決めたこと）。
+> - 画像は `public/rondo-assets/rondo-admin-{channels,channels@2x,home,mailch,line,inbox,robes}.webp` と各 `-sp.webp`（スマホ版）。**`rondo-admin-mail.webp` は公開中の rondo.html 用＝上書き禁止**。
+> - 公開（rondo.html への差し替え・noindex を外す・heat.js を有効化）は v1.0 の ZIP 配布と同じ日に（本人裁定 10-05）。
+
 > ## 🔵 09-27 更新（最新・ここが正）: 「Astra/Fable推奨」を撤回し、Codex/Claude Code軸で**本番配信済み**
 > 本人（2026-09-27）:「opus5.5が賢くなったので、Astra/Fable推奨という表現を取りましょう」
 > - 見出し＝**「Codex/Claude Codeユーザーのための、マーケティングOS。」**（本人選択）。title/OG/Twitterも同じ。
