@@ -62,3 +62,4 @@
   - **出していないもの**: `rondo-guides/*`（v1.0配布物向けの setup/settings/update）・`rondo-report`・`rondo-thanks` は本番の旧版のまま（β購入者が v1.0 のガイドで迷わないため）。
 - **サーバー側の受付停止**: ikehaya-marketing-os main 4dad416 で `SALES_OFFERS.rondo-presale.active=false` → rondo Worker 配信（Version 729a984d）。申込API=404 unknown_offer・審査通過メールの予備決済リンク=410「受付を終了しました」。購入者の再DL・Stripe webhook・報告フォームは影響なし（コードで確認）。
 - **v1.0 公開時にやること**: ①rondo の SALES_OFFERS に v1.0 のオファー（review:false・¥9,800）を active で入れる ②LP は `feat/rondo-lp-v10` の購入導線へ戻す（販売終了の差分は b4719a0 の1コミット＝revert で戻る）③ガイドは scripts/rondo-dist-tree.py と tools/sync-rondo-guides.py で作り直して一緒に出す。
+- 10-08 追記: 見出し2行の行末の「、」「。」で左に寄って見える件（本人指摘）→ `h1 .hang{margin-right:-.5em}` で句読点の右の空きを詰め、`.nb` に nowrap を足した（vibe f29d3e3・Version 16698165）。PC・スマホとも左右の空きが一致。**v1.0版のLPへ戻すときもこの直しは残す**（`feat/rondo-lp-v10` にはまだ入っていない＝a360206 を取り込む）。
