@@ -391,7 +391,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <h2><span class="ph">バラバラだった数字を、</span><br><span class="ph">1枚に。</span></h2>
       <p class="lede">メールはこのツール、LINEはあのツール、インスタは別のアプリ。ツールが分かれていると、数字も分かれます。Rondoでは、媒体ごとの反応から、流入元ごとの訪問と登録、購入と売上までが、同じ管理画面に並びます。</p>
       <div class="steps">
-        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者・再生・日ごとの視聴を、Threadsはフォロワー数を毎日集計し、Instagramはつないだアカウントからフォロワー数を取ります。InstagramとThreadsの投稿ごとのビュー、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
+        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者・再生・日ごとの視聴を、Threadsはフォロワー数を毎日集計し、Instagramはつないだアカウントからフォロワー数を取ります。Instagramの投稿・ビュー・フォロワーの増減と日々の推移、Threadsの投稿とビュー、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
         <div class="face-lo"><b class="n">2</b><div><h3>流入元ごとの訪問と登録</h3><p>リンクに流入元の印を付け、LPの訪問とメール・LINEの登録を流入元ごとに数えます。連携リンクやコードで結び付いたメール読者とLINE友だちは、同じ顧客としてまとめます。</p></div></div>
         <div class="face-lo"><b class="n">3</b><div><h3>購入と売上</h3><p>Stripeの決済の通知を受けて、購入と売上を台帳に記録します。決済ページはStripeで用意します。</p></div></div>
       </div>
@@ -453,7 +453,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <div role="tabpanel" id="pane-ch" aria-labelledby="tab-ch" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
           <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが並ぶ"></picture></a></figure>
-        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。InstagramとThreadsの投稿とビュー、X・note・Substackは、収集の仕組みをつないだときに出ます。</p>
+        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramの投稿・ビュー・増減と推移、Threadsの投稿とビュー、X・note・Substackは、収集の仕組みをつないだときに出ます。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
@@ -471,7 +471,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <li><b>メール</b>読者・配信・開封率・クリック率</li>
           <li><b>LINE</b>友だち・追加・ブロック・ブロック累計</li>
           <li><b>YouTube</b>登録者・投稿・ビュー・平均ビュー</li>
-          <li><b>Threads</b>フォロワー・投稿・ビュー・LINEへの誘導</li>
+          <li><b>Threads</b>フォロワー・投稿・ビュー・平均ビュー</li>
         </ol>
       </div>
       <p class="fine center" style="margin-top:16px">画面は実物で、数字は見本です。設定と原稿を入れ、各チャネルをつないだ状態の見本です。</p>
@@ -510,7 +510,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <ul class="bul">
           <li>要対応・AIの返信の確認待ち・未読で絞り込み、チャネルでも絞り込み</li>
           <li>名前と本文で検索（メールは件名とアドレス、YouTubeは動画名も）</li>
-          <li>会話に自分のラベル（名前と色）を付けて、ラベルや人のタグ（LINEのタグ・購入者のタグ）で絞り込み</li>
+          <li>会話に自分のラベル（名前と色）を付けて、ラベルや、LINEのタグ・購入者のタグで絞り込み（タグは結び付いた相手が対象・YouTubeを除く）</li>
           <li>「すべて既読にする」「要対応をすべて対応済みに」。押し間違えないよう2回押し</li>
           <li>メールは、どの配信への返信かが見え、添付も読めます。自動応答は要対応にしません</li>
           <li>LINEは、AIに返事を任せることもできる（任意）</li>
