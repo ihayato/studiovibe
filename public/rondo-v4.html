@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo | LINEも、インスタも、メールも。ひとつの画面で。</title>
-<meta name="description" content="メール・LINE・Instagram・Threads・YouTube・Xの配信と返信、予約、売上を1つの管理画面に。どのSNSから来た人が何を買ったかまでつながって見える、買い切りのマーケティングの仕組み。ソースコードごと¥9,800（税込）。設置も改造もClaude CodeやCodexに日本語で。運用費は別途。">
+<meta name="description" content="メール・LINE・Instagram・Threads・YouTubeの配信と返信、予約、売上を1つの管理画面に。各媒体の反応、流入元ごとの訪問、登録、購入と売上が同じ画面に並ぶ、買い切りのマーケティングの仕組み。Xは数字の取り込みに対応。ソースコードごと¥9,800（税込）。設置も改造もClaude CodeやCodexに日本語で。運用費は別途。">
 <meta property="og:title" content="Rondo | LINEも、インスタも、メールも。ひとつの画面で。">
-<meta property="og:description" content="配信も、返信も、予約も、売上も。どのSNSから来た人が何を買ったかまで、1つの管理画面でつながって見える。ソースコードごと¥9,800の買い切り。">
+<meta property="og:description" content="配信も、返信も、予約も、売上も。各媒体の反応、流入元ごとの訪問、登録、購入と売上が1つの管理画面に並ぶ。ソースコードごと¥9,800の買い切り。運用費は別途。">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp.jpg">
 <meta property="og:image:width" content="1200">
@@ -38,6 +38,7 @@
   --font-body:'Zen Kaku Gothic New',sans-serif;
   --font-num:'Outfit',sans-serif;
   /* チャネルの識別色（流れの図と札だけに使う・面塗りしない） */
+  --moon:#ECE8DC; /* 漆の副ボタンの文字（月白） */
   --ch-mail:#4C6FA8; --ch-line:#3F7E55; --ch-ig:#B0476E; --ch-th:#6F6B86; --ch-yt:#B5523B; --ch-x:#28263C; --ch-note:#2F8A79; --ch-ss:#C07A2C;
 }
 *{box-sizing:border-box}
@@ -68,12 +69,12 @@ h3{font-size:21px;line-height:1.45}
     linear-gradient(180deg,color-mix(in srgb,var(--accent-lacquer) 70%,transparent),color-mix(in srgb,var(--accent-lacquer) 22%,transparent)) border-box;
   box-shadow:var(--shadow-lo)}
 .btn.pri:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.btn.sec{color:#ECE8DC;letter-spacing:2px;box-shadow:var(--shadow-lo);
-  background:linear-gradient(180deg,#262336,#1A1826) padding-box,linear-gradient(180deg,rgba(236,232,220,.42),rgba(236,232,220,.12)) border-box}
+.btn.sec{color:var(--moon);letter-spacing:2px;box-shadow:var(--shadow-lo);
+  background:linear-gradient(180deg,#262336,#1A1826) padding-box,linear-gradient(180deg,color-mix(in srgb,var(--moon) 42%,transparent),color-mix(in srgb,var(--moon) 12%,transparent)) border-box}
 .btn.sec:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .btn.sm{min-height:44px;padding:0 16px;font-size:13px;letter-spacing:2px}
 .btn:focus-visible,.faq summary:focus-visible,.sh-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){.btn,.btn:hover,.btn:active{transition:none;transform:none}.faq summary::after{transition:none}}
+
 
 /* 面（縁なし・二層影） */
 .face{background:var(--surface);border-radius:14px;box-shadow:var(--shadow)}
@@ -265,7 +266,7 @@ header.top nav a:hover{color:var(--ink)}
 .price h3{font-size:16px;margin:26px 0 10px}
 .price ul{list-style:none;margin:0 auto;padding:0;max-width:26em;text-align:left;display:grid;gap:8px}
 .price li{position:relative;padding-left:26px;font-size:14.5px;line-height:1.7}
-.price li::before{content:"";position:absolute;left:2px;top:.35em;width:14px;height:14px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--accent)}
+.price li::before{content:"";position:absolute;left:2px;top:.35em;width:14px;height:14px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--ink2)}
 .price .terms{margin:22px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink2);text-align:left}
 .price .ctas{justify-content:center;margin:24px 0 0}
 @media (max-width:920px){.buy{grid-template-columns:1fr}.buy .price{order:-1}.price{padding:28px 18px}.price .big{font-size:54px}}
@@ -306,6 +307,13 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   .lede{font-size:16px}
   .btn{padding:0 20px;letter-spacing:2px}
 }
+/* 動きを減らす設定（通常の規則より後に置く＝打ち消されない） */
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn.pri:hover,.btn.sec:hover,.btn:active{transition:none;transform:none}
+  .faq summary::after{transition:none}
+  .ch,.ch:hover{transition:none;transform:none}
+  .sh-choice{transition:none}
+}
 </style>
 </head>
 <body>
@@ -335,7 +343,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <a class="btn pri" href="/rondo-apply" data-rondo-label="CTA ヒーロー購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a>
         <a class="btn sec" href="#shindan" data-rondo-label="CTA ヒーロー適性診断">30秒の適性診断</a>
       </div>
-      <p class="fine">税込・買い切り。運用費は別です（Cloudflare 月5ドル〜・独自ドメイン・開発AIなど）。サポート窓口はありません。各サービスの初回の設定が必要です。Xは数字の取り込みのみで、投稿・DMの操作は含みません。</p>
+      <p class="fine">税込・買い切り。運用費は別です（Cloudflare 月5ドル〜・独自ドメイン・開発AIなど）。サポート窓口はありません。各サービスの初回の設定が必要です。Xは数字の取り込みのみで、投稿・DMの操作は含みません。販売条件は<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="ヒーロー 特商法">特定商取引法に基づく表記</a>をご覧ください。</p>
       <div class="proof">
         <div><b>284</b><span>人がβ版を購入</span></div>
         <div><b>3,336</b><span>人のメール読者</span></div>
@@ -415,7 +423,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <path class="strand" d="M40 60 C200 60 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
           <path class="strand" d="M40 240 C180 240 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
           <path class="strand" d="M40 360 C200 360 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
-          <path d="M360 210 L452 210" stroke="var(--accent)" stroke-width="4"/>
+          <path d="M360 210 L452 210" stroke="var(--ink)" stroke-width="4"/>
         </g>
         <g font-family="Zen Kaku Gothic New, sans-serif" font-size="14" fill="var(--ink2)">
           <text x="34" y="52" text-anchor="end" dx="-6">メール</text>
@@ -428,7 +436,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <g fill="var(--surface)">
           <circle cx="40" cy="60" r="5" stroke="var(--ch-mail)" stroke-width="2"/><circle cx="40" cy="120" r="5" stroke="var(--ch-line)" stroke-width="2"/><circle cx="40" cy="180" r="5" stroke="var(--ch-ig)" stroke-width="2"/><circle cx="40" cy="240" r="5" stroke="var(--ch-th)" stroke-width="2"/><circle cx="40" cy="300" r="5" stroke="var(--ch-yt)" stroke-width="2"/><circle cx="40" cy="360" r="5" stroke="var(--ch-x)" stroke-width="2"/>
         </g>
-        <circle cx="452" cy="210" r="9" fill="var(--accent)"/>
+        <circle cx="452" cy="210" r="9" fill="var(--ink)"/>
         <text x="452" y="246" text-anchor="middle" font-family="Shippori Mincho B1, serif" font-weight="800" font-size="17" fill="var(--ink)">ひとつの画面</text>
         <text x="452" y="268" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-size="12.5" fill="var(--ink2)">反応・訪問・登録・売上</text>
       </g>
@@ -536,7 +544,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     </div>
     <div class="fit">
       <div class="face-lo"><h3>Rondoが向いている人</h3><ul><li>Claude CodeやCodexを、ふだんから使っている人</li><li>発信で商売をしている個人・小さなチーム</li><li>ツールの月額と仕様に縛られたくない人</li></ul></div>
-      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい人</li><li>完成品のアプリを期待する人</li><li>開発AIを使う予定がない人</li><li>独自ドメインを持っていない人</li><li>サポート窓口が必要な人</li></ul></div>
+      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい人</li><li>完成品のアプリを期待する人</li><li>開発AIを使う予定がない人</li><li>独自ドメインを用意する予定がない人</li><li>サポート窓口が必要な人</li></ul></div>
     </div>
     <p class="sh-lede" id="shindan">導入の準備ができているか、6問・約30秒で確かめられます。</p>
     <div class="shindan face">
@@ -712,7 +720,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       html = '<span class="sh-pill b">もう一歩</span><p class="sh-title">準備が整えば、使えます。</p>'
         + '<p class="sh-body">いま買っても、準備が足りずに導入の途中で止まるかもしれません。先に次のことを済ませてください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
-        + '<div class="sh-ctas"><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>';
+        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の準備">導入の準備を見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>';
     } else {
       var reasons = [];
       if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。独自ドメインが何かを調べるところからなら、先にドメインを1つ取得してみてください（年1,000円台〜）。');
@@ -749,6 +757,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   function req(){ if(!queued){ queued = true; requestAnimationFrame(update); } }
   window.addEventListener('scroll', req, { passive: true });
   window.addEventListener('resize', req);
+  document.addEventListener('toggle', req, true);
+  if('ResizeObserver' in window) new ResizeObserver(req).observe(document.body);
   update();
 })();
 
