@@ -114,7 +114,9 @@
     .head-cta{white-space:nowrap;padding:10px 14px;font-size:13px}
   }
   h1{font-size:clamp(21px,5.6vw,42px);font-weight:700;line-height:1.42;letter-spacing:.01em;margin-bottom:20px}
-  h1 .nb{display:inline-block}
+  h1 .nb{display:inline-block;white-space:nowrap}
+  /* 行末の句読点は字面が左半分だけ=右の空きを詰めて、中央揃えの見た目を合わせる */
+  h1 .hang{margin-right:-.5em}
   .hero-sub{color:var(--dim);font-size:15.5px;max-width:620px;margin:0 auto 30px}
   .hero-sub .ph{display:inline-block}
   .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
@@ -1111,7 +1113,7 @@
     <div class="wrap">
       <span class="hero-pill"><span class="nb">β版の販売は終了しました</span>・<span class="nb">正式版 <span class="mono">v1.0</span> を開発中</span></span>
       <p class="hero-kicker">ステップメール・メルマガ・LINE・Instagram・予約ページ</p>
-      <h1><span class="nb">全部入りのマーケ基盤を、</span><br><span class="nb">自分で所有する。</span></h1>
+      <h1><span class="nb">全部入りのマーケ基盤を<span class="hang">、</span></span><br><span class="nb">自分で所有する<span class="hang">。</span></span></h1>
       <p class="hero-sub"><span class="ph">ソースコード一式を、あなたのものに。</span><span class="ph">設置も改造も、いつものCodexやClaude Codeに</span><span class="ph">日本語で頼めます。</span></p>
       <div class="hero-ctas">
         <a class="btn primary" href="https://x.com/IHayato" target="_blank" rel="noopener" data-rondo-label="CTA ヒーローXフォロー" data-rondo-cta="follow-x">イケハヤのXをフォローして待つ</a>
