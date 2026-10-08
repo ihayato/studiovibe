@@ -734,6 +734,7 @@
   .ib-ch{width:8px;height:8px;border-radius:50%}
   .ib-ch.ig{background:#C2255C}
   .ib-ch.ln{background:#178A50}
+  .ib-ch.yt{background:#CC0000}
   .ib-thread{display:grid;gap:7px;align-content:start;padding:10px;background:rgba(245,247,251,.7)}
   .ib-head{display:flex;align-items:center;gap:8px;padding-bottom:7px;border-bottom:1px solid var(--hair)}
   .ib-head b{font-size:12px}
@@ -749,7 +750,8 @@
   @media (max-width:520px){
     .ib-panes{grid-template-columns:1fr}
     .ib-list{border-right:0;border-bottom:1px solid var(--hair)}
-    .ib-list li:nth-child(n+3){display:none}
+    .ib-list li:nth-child(n+4){display:none}
+    .ib-filters .sp{display:none}
   }
   .ln-body{padding:16px;display:grid;gap:12px}
   .ln-prof{display:flex;align-items:center;gap:10px}
@@ -1258,24 +1260,25 @@
         </figure>
       </article>
 
-      <!-- 4. 受信箱(LINE と Instagram の 1:1 返信) -->
+      <!-- 4. 受信箱(LINE・Instagram の 1:1 返信と YouTube のコメント返信) -->
       <article class="sw-block rev" id="sw-inbox">
         <div class="sw-copy">
           <p class="sw-kicker"><span class="sw-dot" style="background:#17181C"></span>受信箱</p>
-          <h3 class="sw-h"><span class="ph">LINEもInstagramも、</span><br><span class="ph">1つの受信箱で返信。</span></h3>
+          <h3 class="sw-h"><span class="ph">LINEもInstagramも</span><span class="ph">YouTubeのコメントも、</span><br><span class="ph">1つの受信箱で返信。</span></h3>
           <ul class="sw-chips">
-            <li>要対応だけを一覧に</li><li>LINEとInstagramを並べて</li><li>管理画面から返信</li><li>AIの返事を確かめてから</li><li>画像も送れる（LINE）</li><li>返信期限の残り時間（Instagram）</li><li>二重送信を防ぐ</li>
+            <li>要対応だけを一覧に</li><li>LINE・Instagram・YouTubeを並べて</li><li>YouTubeのコメントに返信</li><li>管理画面から返信</li><li>AIの返事を確かめてから</li><li>画像も送れる（LINE）</li><li>返信期限の残り時間（Instagram）</li><li>二重送信を防ぐ</li>
           </ul>
-          <p class="sw-honest">Instagramは、相手の最後のメッセージから24時間まで返信できます（Instagramの決まりです）。期限を過ぎた会話は、その理由を表示します。</p>
+          <p class="sw-honest">Instagramは、相手の最後のメッセージから24時間まで返信できます（Instagramの決まりです）。期限を過ぎた会話は、その理由を表示します。YouTubeは、投稿から30日以内のコメントと、こちらが返信したスレッドの返信を取り込みます。動画のアップロードや予約公開はしません。</p>
         </div>
         <figure class="sw-visual shot">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 受信箱</span></div>
           <div class="ib-body">
-            <div class="ib-filters"><span class="on">要対応 <b>5</b></span><span>未読 <b>4</b></span><span class="sp"></span><span>LINE</span><span>Instagram</span></div>
+            <div class="ib-filters"><span class="on">要対応 <b>5</b></span><span>未読 <b>4</b></span><span class="sp"></span><span>LINE</span><span>Instagram</span><span>YouTube</span></div>
             <div class="ib-panes">
               <ul class="ib-list">
                 <li class="sel"><i class="ib-ch ig"></i><div><b>@sakura.design</b><span>LINEが開かなかったです…</span></div><em class="wait">要対応</em></li>
                 <li><i class="ib-ch ln"></i><div><b>小田原</b><span>AI: まずはnote記事を1本…</span></div><em class="ai">AI返信</em></li>
+                <li><i class="ib-ch yt"></i><div><b>なかむら｜副業</b><span>動画の設定、無料版でもできますか？</span></div><em class="wait">要対応</em></li>
                 <li><i class="ib-ch ln"></i><div><b>マツモト</b><span>個別相談の日程って…</span></div><em class="wait">要対応</em></li>
                 <li class="late"><i class="ib-ch ig"></i><div><b>@kenta_ai</b><span>使っているツールは…</span></div><em>期限切れ</em></li>
               </ul>
