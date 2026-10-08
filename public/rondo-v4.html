@@ -138,7 +138,7 @@ header.top nav a:hover{color:var(--ink)}
 @media (max-width:520px){.dash{padding:10px}.dash .kpi b{font-size:17px}.dash .kpi{padding:9px 10px}.dash td,.dash th{padding:5px 2px}.dash .hide-sm{display:none}}
 @media (max-width:920px){.hero{padding:28px 0 56px}.hero .grid{grid-template-columns:1fr;gap:36px}}
 
-/* つながる（流れの図＝シグネチャー: 糸が撚られて1本の金の糸になる） */
+/* つながる（流れの図＝シグネチャー: 糸が撚られて1本の糸になる） */
 .weave{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
 .weave svg{width:100%;height:auto;display:block}
 .weave .steps{display:grid;gap:14px;margin-top:28px}
@@ -411,7 +411,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       </div>
     </div>
     <div>
-      <svg viewBox="0 0 590 420" role="img" aria-label="メール、LINE、Instagram、Threads、YouTube、Xの6本の糸が右へ進むにつれて寄り合い、1本の金の糸になって1つの管理画面に届く図">
+      <svg viewBox="0 0 590 420" role="img" aria-label="メール、LINE、Instagram、Threads、YouTube、Xの6本の糸が右へ進むにつれて寄り合い、1本の糸にまとまって1つの管理画面に届く図">
         <g transform="translate(60,0)">
         <g fill="none" stroke-width="2.4" stroke-linecap="round">
           <path d="M40 60 C200 60 230 210 360 210" stroke="var(--ch-mail)" opacity=".9"/>
@@ -423,7 +423,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <path class="strand" d="M40 60 C200 60 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
           <path class="strand" d="M40 240 C180 240 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
           <path class="strand" d="M40 360 C200 360 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
-          <path d="M360 210 L452 210" stroke="var(--ink)" stroke-width="4"/>
+          <path d="M360 210 L452 210" stroke="var(--ink2)" stroke-width="4"/>
         </g>
         <g font-family="Zen Kaku Gothic New, sans-serif" font-size="14" fill="var(--ink2)">
           <text x="34" y="52" text-anchor="end" dx="-6">メール</text>
@@ -436,7 +436,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <g fill="var(--surface)">
           <circle cx="40" cy="60" r="5" stroke="var(--ch-mail)" stroke-width="2"/><circle cx="40" cy="120" r="5" stroke="var(--ch-line)" stroke-width="2"/><circle cx="40" cy="180" r="5" stroke="var(--ch-ig)" stroke-width="2"/><circle cx="40" cy="240" r="5" stroke="var(--ch-th)" stroke-width="2"/><circle cx="40" cy="300" r="5" stroke="var(--ch-yt)" stroke-width="2"/><circle cx="40" cy="360" r="5" stroke="var(--ch-x)" stroke-width="2"/>
         </g>
-        <circle cx="452" cy="210" r="9" fill="var(--ink)"/>
+        <circle cx="452" cy="210" r="9" fill="var(--ink2)"/>
         <text x="452" y="246" text-anchor="middle" font-family="Shippori Mincho B1, serif" font-weight="800" font-size="17" fill="var(--ink)">ひとつの画面</text>
         <text x="452" y="268" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-size="12.5" fill="var(--ink2)">反応・訪問・登録・売上</text>
       </g>
@@ -720,7 +720,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       html = '<span class="sh-pill b">もう一歩</span><p class="sh-title">準備が整えば、使えます。</p>'
         + '<p class="sh-body">いま買っても、準備が足りずに導入の途中で止まるかもしれません。先に次のことを済ませてください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
-        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の準備">導入の準備を見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>';
+        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の流れ">導入の流れを見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>';
     } else {
       var reasons = [];
       if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。独自ドメインが何かを調べるところからなら、先にドメインを1つ取得してみてください（年1,000円台〜）。');
