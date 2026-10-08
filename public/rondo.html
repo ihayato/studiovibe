@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo | 全部入りのマーケ基盤を、¥9,800で所有する</title>
-<meta name="description" content="CodexやClaude Codeを使う人のための買い切りマーケティングOS。ステップメール、LINE配信、Instagram、予約ページ、売上、顧客台帳を1つのダッシュボードに統合し、あなたのAIで運用する。正式版 v1.0・本体¥9,800（税込・買い切り）。運用費は別途。">
+<meta name="description" content="CodexやClaude Codeを使う人のための買い切りマーケティングOS。ステップメール、LINE配信、Instagram、Threads、予約ページ、売上、顧客台帳を1つのダッシュボードに統合し、あなたのAIで運用する。正式版 v1.0・本体¥9,800（税込・買い切り）。運用費は別途。">
 <meta property="og:title" content="Rondo | 全部入りのマーケ基盤を、¥9,800で所有する">
 <meta property="og:description" content="月額SaaSを借りるのではなく、マーケティング基盤を所有する。CRM・セグメント配信・予約ページ・自動見張りまで同梱、CodexやClaude Codeで作り込む。正式版 v1.0・本体¥9,800（税込・買い切り）。">
 <meta property="og:type" content="website">
@@ -712,6 +712,29 @@
   .ig-ar{align-self:center;color:var(--note);font-family:var(--mono)}
   @media(max-width:400px){ .ig-step .k{white-space:normal;overflow:visible} .ig-flow{gap:4px;padding:12px} .ig-ar{display:none} }
 
+  /* Threads(予約投稿・返信でリンク・合言葉・AIの案) */
+  .th-thread{padding:14px 16px 10px;display:grid;gap:0}
+  .th-post{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;position:relative;padding-bottom:12px}
+  .th-post.reply::before{content:"";position:absolute;left:14px;top:-12px;height:12px;width:2px;background:var(--hair-strong)}
+  .th-post.child{margin-left:40px}
+  .th-av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:#17181C}
+  .th-av.o{background:#B9BEC8}
+  .th-hd{display:flex;align-items:baseline;gap:6px;font-size:12px}
+  .th-hd b{font-weight:600}
+  .th-hd span{color:var(--note);font-size:11px}
+  .th-tx{font-size:13px;line-height:1.65;margin-top:2px;overflow-wrap:anywhere}
+  .th-url{display:block;font-family:var(--mono);font-size:11px;color:#2E5CE6;margin-top:2px;overflow-wrap:anywhere}
+  .th-tag{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10.5px;color:var(--note);background:rgba(23,24,28,.05);border-radius:999px;padding:1px 8px}
+  .th-tag.ok{color:var(--ok);background:var(--ok-soft)}
+  .th-tag.ai{color:var(--accent);background:var(--accent-soft)}
+  .th-card{display:flex;align-items:center;gap:10px;margin-top:7px;background:#fff;border:1px solid var(--hair);border-radius:12px;padding:8px 10px;box-shadow:var(--hi);max-width:260px}
+  .th-card b{display:block;font-size:12px}
+  .th-card span{font-size:10.5px;color:var(--note)}
+  .th-ai{margin-top:6px;display:grid;gap:6px;border:1px dashed var(--hair-strong);border-radius:12px;padding:8px 10px;background:rgba(255,255,255,.7)}
+  .th-ai p{margin:0;font-size:12px;line-height:1.6}
+  .th-ai b.btn{justify-self:start;font-size:11px;font-weight:600;color:#fff;background:var(--ink);border-radius:8px;padding:3px 10px}
+  @media(max-width:520px){ .th-post.child{margin-left:20px} .th-card{max-width:none} }
+
   /* LINE 友だち */
   /* 受信箱(LINE と Instagram の 1:1 返信)の見本 */
   .ib-body{padding:14px;display:grid;gap:10px}
@@ -1112,7 +1135,7 @@
   <section class="hero" data-sec="hero">
     <div class="wrap">
       <span class="hero-pill">正式版 <span class="mono">v1.0</span>・本体 <span class="mono">¥9,800</span>（税込・買い切り）・購入時の審査なし</span>
-      <p class="hero-kicker">ステップメール・メルマガ・LINE・Instagram・予約ページ</p>
+      <p class="hero-kicker">ステップメール・メルマガ・LINE・Instagram・Threads・予約ページ</p>
       <h1><span class="nb">全部入りのマーケ基盤を、</span><br><span class="nb">¥9,800で所有する。</span></h1>
       <p class="hero-sub"><span class="ph">ソースコード一式を納品します。</span><span class="ph">設置も改造も、いつものCodexやClaude Codeに</span><span class="ph">日本語で頼めます。</span></p>
       <div class="hero-ctas">
@@ -1142,14 +1165,15 @@
     </div>
   </section>
 
-  <!-- メール・LINE・Instagram -->
+  <!-- メール・LINE・Instagram・Threads -->
   <section id="switch" data-sec="switch" style="padding-top:0">
     <div class="wrap">
-      <h2 style="text-align:center"><span class="ph">メール、LINE、Instagram。</span><br><span class="ph">配信の仕事を、1つの管理画面で。</span></h2>
+      <h2 style="text-align:center"><span class="ph">メール、LINE、Instagram、Threads。</span><br><span class="ph">配信の仕事を、1つの管理画面で。</span></h2>
       <nav class="sw-tabs" aria-label="できること">
         <a href="#sw-mail" data-rondo-label="できること タブ メール"><i style="background:#2E5CE6"></i>メール</a>
         <a href="#sw-line" data-rondo-label="できること タブ LINE"><i style="background:#178A50"></i>LINE</a>
         <a href="#sw-ig" data-rondo-label="できること タブ Instagram"><i style="background:#C2255C"></i>Instagram</a>
+        <a href="#sw-th" data-rondo-label="できること タブ Threads"><i style="background:#8A8F98"></i>Threads</a>
         <a href="#sw-inbox" data-rondo-label="できること タブ 受信箱"><i style="background:#17181C"></i>受信箱</a>
         <a href="#booking" data-rondo-label="できること タブ 予約"><i style="background:#C99A2E"></i>予約ページ</a>
       </nav>
@@ -1260,20 +1284,82 @@
         </figure>
       </article>
 
-      <!-- 4. 受信箱(LINE・Instagram の 1:1 返信と YouTube のコメント返信) -->
-      <article class="sw-block rev" id="sw-inbox">
+      <!-- 3b. Threads(予約投稿・返信でリンク・合言葉・AIの案) -->
+      <article class="sw-block rev" id="sw-th">
+        <div class="sw-copy">
+          <p class="sw-kicker"><span class="sw-dot" style="background:#8A8F98"></span>Threads</p>
+          <h3 class="sw-h"><span class="ph">予約投稿して、</span><span class="ph">返信でリンク。</span><br><span class="ph">コメントには合言葉で。</span></h3>
+          <dl class="ig-acts">
+            <div><dt>予約投稿</dt><dd>決めた時刻に公開（1日の本数と間隔を守る）</dd></div>
+            <div><dt>投稿の直後</dt><dd>自分の返信で、LINEや特典のリンク</dd></div>
+            <div><dt>合言葉のコメント</dt><dd>公開の返信で特典のリンク（1人1回）</dd></div>
+            <div><dt>質問のコメント</dt><dd>AIが返信の案。確かめてワンタップ、自動でも</dd></div>
+            <div><dt>投稿ごとの数字</dt><dd>表示・いいね・返信・LINE登録（推定）</dd></div>
+          </dl>
+          <ul class="sw-chips">
+            <li>本文の検問（URL・定型の締め）</li><li>リンクは2本に1本</li><li>コメントに受信箱から返信</li><li>AIの自動返信は開示の一文つき</li><li>おかしければ自動で止まる</li><li>緊急停止</li>
+          </ul>
+          <p class="sw-honest">ThreadsにはDMのAPIがないため、返信はすべて公開の返信です。Metaのアプリ登録が必要です。コメントは数分おきに取りに行きます（即時の受信はMetaの審査の後）。投稿ごとのLINE登録は、リンクを開いた時刻から結び付ける推定です。</p>
+        </div>
+        <figure class="sw-visual shot">
+          <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Threads · 投稿とコメント</span></div>
+          <div class="th-thread">
+            <div class="th-post">
+              <span class="th-av">R</span>
+              <div><div class="th-hd"><b>your.brand</b><span>2時間</span></div>
+                <div class="th-tx">配信の設計は「誰に・いつ・何を」を先に決めると、文章で迷わなくなる。</div>
+                <span class="th-tag">予約投稿 08:10</span></div>
+            </div>
+            <div class="th-post reply">
+              <span class="th-av">R</span>
+              <div><div class="th-hd"><b>your.brand</b><span>2時間</span></div>
+                <div class="th-tx">決め方のシートはLINEで配っています。</div>
+                <div class="th-card"><span class="ig-card-ic">L</span><div><b>LINEで受け取る</b><span>友だち追加で届きます</span></div></div>
+                <span class="th-tag ok">返信でリンク</span></div>
+            </div>
+            <div class="th-post reply">
+              <span class="th-av o">み</span>
+              <div><div class="th-hd"><b>mika_writes</b><span>1時間</span></div>
+                <div class="th-tx">シート</div></div>
+            </div>
+            <div class="th-post child">
+              <span class="th-av">R</span>
+              <div><div class="th-hd"><b>your.brand</b><span>1時間</span></div>
+                <div class="th-tx">コメントありがとうございます。こちらから受け取れます。<span class="th-url">your.brand.com/in/threads</span></div>
+                <span class="th-tag ok">合言葉で自動返信</span></div>
+            </div>
+            <div class="th-post reply">
+              <span class="th-av o">け</span>
+              <div><div class="th-hd"><b>kenji.design</b><span>12分</span></div>
+                <div class="th-tx">これって無料プランでもできますか？</div>
+                <div class="th-ai"><p>AIの案：はい、無料プランでも同じ手順で使えます。</p><b class="btn">確かめて送る</b></div></div>
+            </div>
+          </div>
+          <div class="ig-flow">
+            <div class="ig-step"><span class="k">投稿</span><span class="v">21</span></div>
+            <span class="ig-ar">→</span>
+            <div class="ig-step"><span class="k">リンクを開いた</span><span class="v">186</span></div>
+            <span class="ig-ar">→</span>
+            <div class="ig-step hl"><span class="k">LINE登録（推定）</span><span class="v">41</span></div>
+          </div>
+          <figcaption class="sw-cap">画面は見本です。名前と数字は例です。</figcaption>
+        </figure>
+      </article>
+
+      <!-- 4. 受信箱(LINE・Instagram の 1:1 返信と YouTube・Threads のコメント返信) -->
+      <article class="sw-block" id="sw-inbox">
         <div class="sw-copy">
           <p class="sw-kicker"><span class="sw-dot" style="background:#17181C"></span>受信箱</p>
-          <h3 class="sw-h"><span class="ph">LINEもInstagramも</span><span class="ph">YouTubeのコメントも、</span><br><span class="ph">1つの受信箱で返信。</span></h3>
+          <h3 class="sw-h"><span class="ph">LINEもInstagramも、</span><span class="ph">YouTubeとThreadsのコメントも、</span><br><span class="ph">1つの受信箱で返信。</span></h3>
           <ul class="sw-chips">
-            <li>要対応だけを一覧に</li><li>LINE・Instagram・YouTubeを並べて</li><li>YouTubeのコメントに返信</li><li>管理画面から返信</li><li>AIの返事を確かめてから</li><li>画像も送れる（LINE）</li><li>返信期限の残り時間（Instagram）</li><li>二重送信を防ぐ</li>
+            <li>要対応だけを一覧に</li><li>LINE・Instagram・YouTube・Threadsを並べて</li><li>YouTubeのコメントに返信</li><li>管理画面から返信</li><li>AIの返事を確かめてから</li><li>画像も送れる（LINE）</li><li>返信期限の残り時間（Instagram）</li><li>二重送信を防ぐ</li>
           </ul>
           <p class="sw-honest">Instagramは、相手の最後のメッセージから24時間まで返信できます（Instagramの決まりです）。期限を過ぎた会話は、その理由を表示します。YouTubeは、投稿から30日以内のコメントと、こちらが返信したスレッドの返信を取り込みます。動画のアップロードや予約公開はしません。一部の大きなチャンネルでは、Googleの判断で接続が一時的に止められ、つながらないことがあります。</p>
         </div>
         <figure class="sw-visual shot">
           <div class="shot-bar"><i></i><i></i><i></i><span class="shot-url">Rondo /admin · 受信箱</span></div>
           <div class="ib-body">
-            <div class="ib-filters"><span class="on">要対応 <b>5</b></span><span>未読 <b>4</b></span><span class="sp"></span><span>LINE</span><span>Instagram</span><span>YouTube</span></div>
+            <div class="ib-filters"><span class="on">要対応 <b>5</b></span><span>未読 <b>4</b></span><span class="sp"></span><span>LINE</span><span>Instagram</span><span>YouTube</span><span>Threads</span></div>
             <div class="ib-panes">
               <ul class="ib-list">
                 <li class="sel"><i class="ib-ch ig"></i><div><b>@sakura.design</b><span>LINEが開かなかったです…</span></div><em class="wait">要対応</em></li>
@@ -1467,7 +1553,7 @@
           <div class="dt-row"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret-pad"></span><span class="dt-name">EULA.md</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">利用条件</span></div>
 
           <div class="dt-node">
-            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">104 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・管理画面</span></button>
+            <button class="dt-row" data-dir aria-expanded="false" aria-controls="dt-ch-src" data-rondo-label="同梱物ツリー src"><span class="dt-tree" aria-hidden="true">├─</span><span class="dt-caret" aria-hidden="true">▸</span><span class="dt-name dir">src/</span><span class="dt-num">104 files</span><span class="dt-fill" aria-hidden="true"></span><span class="dt-desc">エンジン本体。メール・LINE・予約・Instagram・Threads・管理画面</span></button>
             <div class="dt-children" id="dt-ch-src" hidden>
               <span>admin-ui.mjs</span><span>alert-config.mjs</span><span>apps-stats.mjs</span><span>appstore-stats.mjs</span><span>auth.mjs</span><span>booking-page.mjs</span><span>bookings.config.mjs</span><span>bookings.mjs</span><span>confirm-mail.mjs</span><span>connections.mjs</span><span>contents.mjs</span><span>d1-budget.mjs</span><span>daily-claim.mjs</span><span>dashboard.mjs</span><span>discord-link.mjs</span><span>discord-stats.mjs</span><span>dormancy.mjs</span><span>engine.mjs</span><span>episode-feed-audit.mjs</span><span>financie-stats.mjs</span><span>footer.config.mjs</span><span>guard.mjs</span><span>health.mjs</span><span>heat-client.mjs</span><span>heat.mjs</span><span>ig-api.mjs</span><span>ig-config.mjs</span><span>ig-engine.mjs</span><span>ig-menu.mjs</span><span>ig-oauth.mjs</span><span>ig-rules.mjs</span><span>ig-stats.mjs</span><span>ig-webhook.mjs</span><span>ig.config.mjs</span><span>ikehaya-mitate.mjs</span><span>import-readers.mjs</span><span>jst.mjs</span><span>line-ai.mjs</span><span>line-analytics.mjs</span><span>line-bookings.mjs</span><span>line-branch.mjs</span><span>line-casts.mjs</span><span>line-chat.mjs</span><span>line-contents.mjs</span><span>line-crm-config.mjs</span><span>line-crm.mjs</span><span>line-diag.mjs</span><span>line-engine.mjs</span><span>line-forms.mjs</span><span>line-import.mjs</span><span>line-inflow.mjs</span><span>line-media-inbox.mjs</span><span>line-media-serve.mjs</span><span>line-media.mjs</span><span>line-member-sync.mjs</span><span>line-menus.mjs</span><span>line-profiles.mjs</span><span>line-quota.mjs</span><span>line-reminder.mjs</span><span>line-render.mjs</span><span>line-richmenu.mjs</span><span>line-segment.mjs</span><span>line.config.mjs</span><span>line.mjs</span><span>mail-casts.mjs</span><span>mail-html.mjs</span><span>mail-links.mjs</span><span>mail-lists.mjs</span><span>mail-segment.mjs</span><span>mail-stats.mjs</span><span>mail-tracking.mjs</span><span>mail.config.mjs</span><span>mobile-icons.mjs</span><span>mobile-ui.mjs</span><span>person-cap.mjs</span><span>person-tags.mjs</span><span>personalize.mjs</span><span>persons.mjs</span><span>privacy-page.mjs</span><span>project-profiles.mjs</span><span>project-stats.mjs</span><span>purchase-rules.config.mjs</span><span>purchase-rules.mjs</span><span>purchases.mjs</span><span>requeue.mjs</span><span>retention.mjs</span><span>sales.mjs</span><span>scenarios.config.mjs</span><span>score.mjs</span><span>security.mjs</span><span>segment-expr.mjs</span><span>send-idem.mjs</span><span>sender.mjs</span><span>status-feed-audit.mjs</span><span>test-send.mjs</span><span>themes.js</span><span>threads-insights-audit.mjs</span><span>timing.mjs</span><span>tokuten.config.mjs</span><span>tokuten.mjs</span><span>tuning.mjs</span><span>warmup.mjs</span><span>webhook-verify.mjs</span><span>worker.mjs</span>
             </div>
