@@ -185,6 +185,7 @@ header.top nav a:hover{color:var(--ink)}
 .robe-row i{width:16px;height:16px;border-radius:5px;background:radial-gradient(circle at 70% 32%,var(--d) 0 22%,transparent 26%),var(--b);box-shadow:inset 0 0 0 1px rgba(40,38,60,.2)}
 /* v1.0 に入っているもの */
 .inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 40px;margin-top:44px}
+@media (max-width:520px){.inv{grid-template-columns:minmax(0,1fr)}}
 .inv > div{padding:22px 0 20px;box-shadow:0 -1px 0 var(--line)}
 .inv h3{display:flex;align-items:center;gap:8px;font-size:17px;margin-bottom:8px}
 .inv h3 i{width:9px;height:9px;border-radius:50%}
@@ -362,7 +363,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="ヒーロー 画面の拡大">
           <picture>
             <source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262">
-            <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面の実物。チャネル画面の「すべて」で、つながり合計・投稿7日・ビュー7日と、メール・Threads・Instagram・LINE・YouTube・X・note・Substack・LPのタイルに、規模と7日の増減と30日の推移が並んでいる">
+            <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面の実物。チャネル画面の「すべて」で、つながり合計・投稿7日・ビュー7日と、チャネルごとのタイルに規模と7日の増減と30日の推移が並んでいる">
           </picture>
         </a>
         <figcaption>管理画面の実物です（チャネル → すべて）。数字は見本です。押すと大きく見られます。</figcaption>
@@ -390,7 +391,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <h2><span class="ph">バラバラだった数字を、</span><br><span class="ph">1枚に。</span></h2>
       <p class="lede">メールはこのツール、LINEはあのツール、インスタは別のアプリ。ツールが分かれていると、数字も分かれます。Rondoでは、媒体ごとの反応から、流入元ごとの訪問と登録、購入と売上までが、同じ管理画面に並びます。</p>
       <div class="steps">
-        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から、ThreadsとYouTubeは毎日の集計で、Instagramはつないだアカウントから数字を取ります。X・note・Substackは、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
+        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者と再生を、Threadsはフォロワー数を毎日集計し、Instagramはつないだアカウントからフォロワー数を取ります。投稿ごとのビューや日々の推移、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
         <div class="face-lo"><b class="n">2</b><div><h3>流入元ごとの訪問と登録</h3><p>リンクに流入元の印を付け、LPの訪問とメール・LINEの登録を流入元ごとに数えます。連携リンクやコードで結び付いたメール読者とLINE友だちは、同じ顧客としてまとめます。</p></div></div>
         <div class="face-lo"><b class="n">3</b><div><h3>購入と売上</h3><p>Stripeの決済の通知を受けて、購入と売上を台帳に記録します。決済ページはStripeで用意します。</p></div></div>
       </div>
@@ -446,13 +447,13 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       </div>
       <div role="tabpanel" id="pane-home" aria-labelledby="tab-home">
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの3枚、LP訪問から登録・教材クリック・売上までのファネル、AIの見立て、日別配信数のグラフ"></picture></a></figure>
-        <p class="cap">開いて最初に見る画面です。売上30日・講座の読者・LINE友だち。LPの訪問から登録、教材のクリック、売上までのファネル。止まっている配信があれば、いちばん上に出ます。下には、全チャネルの調子の表が続きます。</p>
+          <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの数字、LP訪問から登録・教材クリック・売上までのファネル、イケハヤAIの見立て"></picture></a></figure>
+        <p class="cap">開いて最初に見る画面です。売上30日・講座の読者・LINE友だち。LPの訪問から登録、教材のクリック、売上までのファネル。止まっている配信や、伸ばせそうなところがあれば、いちばん上に出ます。下には、全チャネルの調子の表が続きます。</p>
       </div>
       <div role="tabpanel" id="pane-ch" aria-labelledby="tab-ch" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが3列で並ぶ"></picture></a></figure>
-        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。</p>
+          <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが並ぶ"></picture></a></figure>
+        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。SNSの投稿とビューは、収集の仕組みをつないだチャネルで出ます。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
@@ -461,11 +462,11 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       </div>
       <div role="tabpanel" id="pane-line" aria-labelledby="tab-line" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · LINE</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・友だち追加7日・ブロック7日・ブロック累計の4枚と、友だち追加の30日の推移、友だちの出入りの記録"></picture></a></figure>
+          <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・友だち追加7日・ブロック7日・ブロック累計の4枚と、友だち追加の30日の推移"></picture></a></figure>
         <p class="cap">友だち・追加・ブロックの4枚と、友だち追加の30日の推移。出入りは1件ずつ時刻つきで残ります。流入経路ごとの友だち追加やA/Bの結果は、LINEの分析の画面で見られます。</p>
       </div>
       <div class="grammar">
-        <p>どのチャネルも、同じ順の4枚で読めます。</p>
+        <p>どのチャネルも、上に主な数字を4枚。</p>
         <ol>
           <li><b>規模</b>読者・友だち・フォロワー</li>
           <li><b>発信</b>配信・投稿</li>
@@ -473,7 +474,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <li><b>成果</b>登録・友だち追加・売上</li>
         </ol>
       </div>
-      <p class="fine center" style="margin-top:16px">画面は実物で、数字は見本です。つないでいないチャネルは出ません。</p>
+      <p class="fine center" style="margin-top:16px">画面は実物で、数字は見本です。設定と原稿を入れ、各チャネルをつないだ状態の見本です。</p>
     </div>
   </div>
 </section>
@@ -509,16 +510,17 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <ul class="bul">
           <li>要対応・AIの返信の確認待ち・未読で絞り込み、チャネルでも絞り込み</li>
           <li>名前と本文で検索（メールは件名とアドレス、YouTubeは動画名も）</li>
+          <li>会話に自分のラベル（名前と色）を付けて、ラベルやLINEのタグ・購入で絞り込み</li>
           <li>「すべて既読にする」「要対応をすべて対応済みに」。押し間違えないよう2回押し</li>
           <li>メールは、どの配信への返信かが見え、添付も読めます。自動応答は要対応にしません</li>
-          <li>LINEとInstagramのDMは、AIに返事を任せることもできる（任意）</li>
+          <li>LINEは、AIに返事を任せることもできる（任意）</li>
           <li>同じ返信を二度送らない仕組み。Instagramは返信できる残り時間を表示</li>
         </ul>
-        <p class="note">Instagramは相手の最後のメッセージから24時間まで返信できます（Instagramの決まり）。YouTubeは投稿から30日以内のコメントを取り込みます。一部の大きなチャンネルでは、Googleの判断で接続が一時的に止められることがあります。メールの返信を受け取るには、独自ドメインに受信の設定を足します。</p>
+        <p class="note">Instagramは相手の最後のメッセージから24時間まで返信できます（Instagramの決まり）。YouTubeは投稿から30日以内のコメントを取り込みます。一部の大きなチャンネルでは、Googleの判断で接続が一時的に止められることがあります。メールの返信を受け取るには、受信用のサブドメインとResendの受信の初回設定が要ります。</p>
       </div>
       <figure class="face shot" style="margin:0">
         <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
-        <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱の実物。左にLINE・Instagram・YouTube・メールの会話が要対応の札つきで並び、右にステップメールへの読者の返信の会話と返信の入力欄が開いている"></picture></a>
+        <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱の実物。LINE・Instagram・YouTube・メールの会話が要対応やAIの確認待ちの札、ラベルつきで1つの一覧に並んでいる"></picture></a>
         <figcaption>受信箱の実物です。名前と本文は見本です。押すと大きく見られます。</figcaption>
       </figure>
     </div>
@@ -551,13 +553,14 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <div>
         <p class="job">整える ・ 設定</p>
         <h2><span class="ph">運用の切り替えも、</span><br><span class="ph">画面で。</span></h2>
-        <p class="lede">管理画面の左下に「設定」があります。見た目の色から、AIの返事の一時停止、知らせの送り先、配信の安全装置まで、画面で変えるとその場で効きます。設置し直す必要はありません。</p>
+        <p class="lede">管理画面の左下に「設定」があります。見た目の色、AIの返事の一時停止、新しいメッセージの知らせ、配信の緊急停止などを、設置し直さずに画面から切り替えられます。</p>
         <ul class="bul">
           <li>デザインは7つの衣から（明るい5・暗い2）。端末に合わせることも</li>
-          <li>AIの返事を、LINEとInstagramそれぞれで一時停止</li>
-          <li>新しいメッセージと、見張りで問題が見つかったときの知らせ（Discord・メール）</li>
-          <li>配信の緊急停止、1人1日の上限、反応のない読者の休眠の整理</li>
-          <li>差出人の名前、データを残す日数</li>
+          <li>AIの返事の一時停止</li>
+          <li>新しいメッセージの知らせのオン・オフと、見張りの知らせを受けるメールの宛先</li>
+          <li>配信の緊急停止と、反応のない読者の休眠の整理</li>
+          <li>差出人の名前、データを残す日数、受信箱のラベルの名前と色</li>
+          <li>1人あたりの上限や一斉配信の上限は、ここで確かめられます</li>
         </ul>
         <div class="robe-row" aria-label="7つの衣">
           <span><i style="--b:#F5F3EC;--d:#B08A2E"></i>羽二重</span><span><i style="--b:#EEEDEA;--d:#B5413A"></i>墨</span><span><i style="--b:#F7ECEE;--d:#C25A73"></i>桜</span><span><i style="--b:#EEF2E7;--d:#5E8A3A"></i>若葉</span><span><i style="--b:#F8EEE6;--d:#C2652E"></i>茜</span><span><i style="--b:#1A1826;--d:#D9A94C"></i>宵闇</span><span><i style="--b:#161B26;--d:#8FB3D9"></i>雪月</span>
@@ -601,8 +604,9 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     </div>
     <div class="inv">
       <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
-        <li>ステップメール・複数の講座・登録ページ<span class="new">NEW</span></li>
-        <li>一斉配信（タグ・購入・名簿で絞り込み・テスト送信）<span class="new">NEW</span></li>
+        <li>ステップメール・一斉配信</li>
+        <li>複数の講座と、講座ごとの登録ページ<span class="new">NEW</span></li>
+        <li>一斉配信の絞り込み（タグ・購入・名簿）とテスト送信<span class="new">NEW</span></li>
         <li>押したら動くリンク・本文の分岐・この講座だけ止める<span class="new">NEW</span></li>
         <li>件名のA/B（勝った方を自動で採用）</li>
         <li>購入で講座を始める・止める・タグを付ける<span class="new">NEW</span></li>
@@ -610,8 +614,9 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <li>旧ツールの読者CSV・購入者CSVの取り込み<span class="new">NEW</span></li>
       </ul></div>
       <div><h3><i style="background:var(--ch-line)"></i>LINE</h3><ul>
-        <li>ステップ配信・タグ・分岐・リマインダ<span class="new">NEW</span></li>
-        <li>リッチメニューの出し分け<span class="new">NEW</span></li>
+        <li>ステップ配信・一斉配信・リッチメニュー</li>
+        <li>タグ・友だち情報・分岐・リマインダ<span class="new">NEW</span></li>
+        <li>タグで切り替わるリッチメニュー<span class="new">NEW</span></li>
         <li>流入経路の計測と、経路ごとの友だち追加<span class="new">NEW</span></li>
         <li>A/Bテスト・分析<span class="new">NEW</span></li>
         <li>画像・動画・カルーセル・フォーム<span class="new">NEW</span></li>
@@ -623,7 +628,6 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <li>DMメニュー（質問ボタン・常設メニュー）<span class="new">NEW</span></li>
         <li>ストーリーのキャンペーンごとの成果表<span class="new">NEW</span></li>
         <li>管理画面からDMに返信<span class="new">NEW</span></li>
-        <li>DMのAIの返事（任意）<span class="new">NEW</span></li>
         <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
       </ul></div>
       <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
@@ -639,13 +643,14 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
         <li>LINE・Instagram・YouTube・メールを1つの一覧に<span class="new">NEW</span></li>
         <li>名前と本文の検索<span class="new">NEW</span></li>
+        <li>会話のラベル・ラベルやタグでの絞り込み<span class="new">NEW</span></li>
         <li>すべて既読・要対応をすべて対応済みに<span class="new">NEW</span></li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>数字</h3><ul>
         <li>ダッシュボード（売上・ファネル・チャネルの調子）</li>
         <li>チャネルの「すべて」と、チャネルごとの4枚<span class="new">NEW</span></li>
         <li>ファネル分析・LPのヒートマップと到達</li>
-        <li>顧客の区分（コア・常連・見込み・休眠）とスコア<span class="new">NEW</span></li>
+        <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
         <li>X・note・Substackの数字の受け口</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
@@ -655,7 +660,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
         <li>設定の画面・デザインの7つの衣<span class="new">NEW</span></li>
-        <li>緊急停止・二重送信の防止・メールとLINEを合わせた1人1日の上限</li>
+        <li>緊急停止・二重送信の防止</li>
+        <li>メールとLINEを合わせた1人1日の上限（任意）<span class="new">NEW</span></li>
         <li>監査の画面に接続の健康と容量<span class="new">NEW</span></li>
         <li>毎日のバックアップと復元の練習<span class="new">NEW</span>・過去30日への巻き戻し</li>
         <li>導入の点検（送信ドメインの検査まで）<span class="new">NEW</span></li>
@@ -760,7 +766,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <details><summary data-rondo-label="FAQ AIモデル">どの開発AIで使えますか？</summary><div class="a">Claude CodeとCodexを想定して手順書を書いています。どちらも、契約中のプランで使えます。</div></details>
       <details><summary data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary><div class="a">はい。メールの読者はCSVで取り込め、解除・不達の人は配信停止の台帳へ入り、旧ツールの登録日から「続きの通」で始められます。LINEは、LステップのCSVからタグと友だち情報を持ち込めます（友だちとの結び付けは人が確かめます）。</div></details>
       <details><summary data-rondo-label="FAQ 導入の流れ">購入後は、どういう流れで使い始めますか？</summary><div class="a">決済が終わると、すぐに納品のメールが届きます。ソースコード一式（zip）と導入手順書を受け取り、開発AIに読ませて、あなたのCloudflareへ設置します。全体の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」</a>、作業の手順は<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>で公開しています。</div></details>
-      <details><summary data-rondo-label="FAQ メールの返信">配信したメールに読者が返信したら、どこに届きますか？</summary><div class="a">Rondoの受信箱に届きます。配信の返信先が受信箱につながり、どの配信への返信かも分かります。お問い合わせのメールも同じ一覧に入り、そこから返信できます。使うには、独自ドメインに受信の設定（MXの記録）を足します。手順は導入の手順書にあります。</div></details>
+      <details><summary data-rondo-label="FAQ メールの返信">配信したメールに読者が返信したら、どこに届きますか？</summary><div class="a">Rondoの受信箱に届きます。配信の返信先が受信箱につながり、どの配信への返信かも分かります。お問い合わせのメールも同じ一覧に入り、そこから返信できます。使うには、受信用のサブドメインとResendの受信の初回設定（MXの記録・Webhook・設定の値）が要ります。手順は導入の手順書にあります。</div></details>
       <details><summary data-rondo-label="FAQ 購入連動">購入した人だけに配信できますか？</summary><div class="a">できます。決済ページはStripeで用意し、決済の通知を受けると、タグ付け・メール講座の開始と停止・LINEの切り替えが動きます（商品と購入のルールの設定が必要です。LINEの切り替えは、メールとLINEが結び付いた人が対象です）。サブスクの管理は標準には入っていません（開発AIに作らせることはできます）。</div></details>
       <details><summary data-rondo-label="FAQ マーケ相談">マーケティングの相談には乗ってもらえますか？</summary><div class="a">個別の相談は受けていません。Rondoには、管理画面の数字を読んで改善の案を出す診断用のAIが同梱されています。</div></details>
       <details><summary data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコード一式を納品するデジタル商品のため、購入者都合の返金・キャンセルは受け付けていません（法令に基づき必要な対応を除きます）。迷いがあるうちは、適性診断と公開中のガイドを先に確かめてください。</div></details>
