@@ -179,6 +179,8 @@ header.top nav a:hover{color:var(--ink)}
 .grammar li b{display:block;font-family:var(--font-display);font-size:17px;color:var(--ink);font-weight:800;margin-bottom:2px}
 .grammar li + li::before{content:"›";position:absolute;left:-10px;top:50%;transform:translate(-50%,-50%);color:var(--ink3);font-size:16px}
 @media (max-width:760px){.grammar ol{grid-template-columns:repeat(2,minmax(0,1fr))}.grammar li + li::before{display:none}}
+.demo-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:26px}
+.demo-cta .fine{max-width:34em}
 /* 設定 */
 .robe-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
 .robe-row span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);background:var(--surface);border-radius:999px;padding:4px 11px;box-shadow:var(--shadow-lo)}
@@ -366,7 +368,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
             <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面の実物。チャネル画面の「すべて」で、つながり合計・投稿7日・ビュー7日と、チャネルごとのタイルに規模と7日の増減と30日の推移が並んでいる">
           </picture>
         </a>
-        <figcaption>管理画面の実物です（チャネル → すべて）。数字は見本です。押すと大きく見られます。</figcaption>
+        <figcaption>管理画面の実物です（チャネル → すべて）。数字は見本です。<a href="/rondo-demo/?view=channels&amp;channel=all" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモを開く">見本の数字でデモを触る</a></figcaption>
       </figure>
       <div class="chlist" aria-label="つながるもの">
         <span><i style="background:var(--ch-mail)"></i>メール</span><span><i style="background:var(--ch-line)"></i>LINE</span><span><i style="background:var(--ch-ig)"></i>Instagram</span><span><i style="background:var(--ch-th)"></i>Threads</span><span><i style="background:var(--ch-yt)"></i>YouTube</span><span><i style="background:var(--ch-x)"></i>X</span><span><i style="background:var(--ink2)"></i>予約・売上</span>
@@ -437,6 +439,10 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     <div class="center">
       <h2><span class="ph">全部の数字を、</span><span class="ph">実際の画面で。</span></h2>
       <p class="lede">ここに並べたのは、Rondoの管理画面そのものです。売上とファネルから、チャネルの合計、メールの便ごとの開封まで、押していくだけで降りていけます。</p>
+      <div class="demo-cta">
+        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">管理画面のデモを触る</a>
+        <p class="fine">見本の数字で、ダッシュボード・チャネル・受信箱・設定まで実際に操作できます。保存や送信はされません（新しいタブで開きます）。</p>
+      </div>
     </div>
     <div class="scr">
       <div class="tabs" role="tablist" aria-label="管理画面">
