@@ -51,3 +51,14 @@
 - このリポジトリの本番枝は `codex/meikyo-island`。`worker.js`・`wrangler.jsonc` は git に無い（memory: vibe-site-deploy-new-mac）。
 - 作業木には無関係の未コミット（hero-bg.mp4・vite.config.js・public/senri/*）がある。**git add にフォルダを渡さない**。今回は3ファイル＋このHANDOFFだけを名指しで add。
 - 検収用の `.claude/launch.json` エントリ（rondo-lp-static・8791）は作業後に削除済み。
+
+---
+
+## 2026-10-08 β版の販売終了・LP v3 を「v1.0 開発中」で公開（本人指示）
+本人「Rondoのベータ版販売を終了しよう。v1.0を開発中である旨を添えて、最新のLPに差し替えて。イケハヤのXをフォローしてお待ちくださいという感じに」。
+
+- **公開したもの**: LP v3（枝 `feat/rondo-lp-v10` c185886）を土台に、購入ボタン7か所→イケハヤのX（https://x.com/IHayato・`data-rondo-cta="follow-x"`）、価格欄 `#reserve`→「β版の販売は、終了しました。」＋v1.0の予定（¥9,800予定・審査なし予定・v1系更新無償予定）、FAQ先頭に「いま買えますか？」、終盤CTA「正式版 v1.0、開発中です。」。`/rondo-apply` は申込フォームを撤去し「販売終了のお知らせ」頁に。`/rondo-setup` の購入ボタンも差し替え。
+  - 枝 `feat/rondo-lp-closed`（作業木 `dev/vibe-wt-rondo-closed`・b4719a0）→本番枝 codex/meikyo-island に **3頁＋画像4枚だけ** 名指しで入れた（134da34）→dist へ写して配信（Version 2501e825・verify-deploy 全項目OK）。配信前に dist 全1401件を本番と照合（差は luna-occulta/privacy のみ＝正常）・worker も API で一致確認。
+  - **出していないもの**: `rondo-guides/*`（v1.0配布物向けの setup/settings/update）・`rondo-report`・`rondo-thanks` は本番の旧版のまま（β購入者が v1.0 のガイドで迷わないため）。
+- **サーバー側の受付停止**: ikehaya-marketing-os main 4dad416 で `SALES_OFFERS.rondo-presale.active=false` → rondo Worker 配信（Version 729a984d）。申込API=404 unknown_offer・審査通過メールの予備決済リンク=410「受付を終了しました」。購入者の再DL・Stripe webhook・報告フォームは影響なし（コードで確認）。
+- **v1.0 公開時にやること**: ①rondo の SALES_OFFERS に v1.0 のオファー（review:false・¥9,800）を active で入れる ②LP は `feat/rondo-lp-v10` の購入導線へ戻す（販売終了の差分は b4719a0 の1コミット＝revert で戻る）③ガイドは scripts/rondo-dist-tree.py と tools/sync-rondo-guides.py で作り直して一緒に出す。
