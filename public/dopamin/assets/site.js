@@ -1,4 +1,9 @@
 // どぱくり！公式サイト — 仲間の列・出入り・遅延再生・「ためし斬り」（ゲームの素材でつくる小さなクリッカー）
+// 10-09 英語版（/dopamin/en/・<html lang="en">）: 文字は T(日本語, 英語)・素材は B（en/ からは一つ上の assets/）
+const EN = document.documentElement.lang === "en";
+const B = EN ? "../" : "";
+const T = (ja, en) => (EN ? en : ja);
+const NAME_EN = {"emma": "Emma", "sakuya": "Sakuya", "oto": "Oto", "nemu": "Nemu", "izuna": "Izuna", "shion": "Shion", "uka": "Uka", "yui": "Yui", "karma": "Karma", "dan": "Dan", "shinra": "Shinra", "tobari": "Tobari", "tart": "Tart", "magoichi": "Magoichi", "rotton": "Rotton", "orochi": "Orochi", "aun": "Aun", "atoza": "Atoza", "nekomata": "Nekomata", "karura": "Karura", "kohaku": "Kohaku", "oen": "Oen", "janome": "Janome", "hinanojo": "Hinanojo", "naruka": "Naruka", "shiba": "Shiba", "benten": "Benten", "torika": "Torika", "xiaolan": "Xiaolan", "anne": "Anne", "sakuya_bancho": "Sakuya"};
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -28,7 +33,7 @@
   const fill = (id, list) => {
     const ul = document.querySelector(`#${id} ul`);
     if (!ul) return;
-    const html = list.map(([k, n]) => `<li><img src="assets/img/card/${k}.webp" alt="${n}" loading="lazy" width="360" height="540"><span>${n}</span></li>`).join("");
+    const html = list.map(([k, ja]) => { const n = EN ? (NAME_EN[k] || k) : ja; return `<li><img src="${B}assets/img/card/${k}.webp" alt="${n}" loading="lazy" width="360" height="540"><span>${n}</span></li>`; }).join("");
     ul.innerHTML = html + html.replace(/alt="[^"]*"/g, 'alt="" aria-hidden="true"'); // 途切れず流れるように二周ぶん
   };
   fill("rail1", ROSTER); // 09-29: 2段目は「ちびの行進」に替えたので、札は1段に全員
@@ -118,9 +123,9 @@
   const MOBS = ["water", "fire", "wood", "metal", "earth"];
   const SLASH = ["fire", "water", "wood"];
   const fmt = (n) => {
-    const u = [["京", 1e16], ["兆", 1e12], ["億", 1e8], ["万", 1e4]];
-    for (const [s, v] of u) if (n >= v) return (n / v).toFixed(n / v < 10 ? 2 : n / v < 100 ? 1 : 0) + s;
-    return Math.floor(n).toLocaleString("ja-JP");
+    const u = EN ? [["Q", 1e15], ["T", 1e12], ["B", 1e9], ["M", 1e6], ["K", 1e3]] : [["京", 1e16], ["兆", 1e12], ["億", 1e8], ["万", 1e4]];
+    for (const [s, v] of u) if (n >= (EN && s === "K" ? 1e4 : v)) return (n / v).toFixed(n / v < 10 ? 2 : n / v < 100 ? 1 : 0) + s;
+    return Math.floor(n).toLocaleString(EN ? "en-US" : "ja-JP");
   };
   const statusEl = $("tryStatus"), nextEl = $("tryNext"), nightOut = $("tryNight");
   const say = (t) => { if (statusEl) statusEl.textContent = t; };
@@ -130,18 +135,18 @@
     if (nightOut) nightOut.textContent = st.night;
     if (!nextEl.hidden || !(bossDown || st.kill >= 8)) return;
     nextEl.hidden = false;
-    say("続きはアプリで遊べます");
+    say(T("続きはアプリで遊べます", "Keep playing in the app"));
   };
   const st = { night: 1, kill: 0, hp: 0, max: 0, coins: 0, combo: 0, lastTap: 0, boss: false, bossEnd: 0, mob: 0, busy: false };
   let comboTimer = 0, timerTick = 0;
 
   // 音（既定はオフ。押したときだけ読み込む）
   const se = {}; let soundOn = false, lastCoinSe = 0, atkI = 0;
-  const load = () => { for (const k of ["se_atk_p0", "se_atk_p2", "se_atk_p4", "se_coin_p0", "se_doban"]) if (!se[k]) { se[k] = new Audio(`assets/audio/${k}.m4a`); se[k].preload = "auto"; } };
+  const load = () => { for (const k of ["se_atk_p0", "se_atk_p2", "se_atk_p4", "se_coin_p0", "se_doban"]) if (!se[k]) { se[k] = new Audio(`${B}assets/audio/${k}.m4a`); se[k].preload = "auto"; } };
   const play = (k, vol = 0.5) => { if (!soundOn || !se[k]) return; const a = se[k].cloneNode(); a.volume = vol; a.play().catch(() => {}); };
   soundBtn.addEventListener("click", () => {
     soundOn = !soundOn; if (soundOn) load();
-    soundBtn.textContent = soundOn ? "音：オン" : "音：オフ";
+    soundBtn.textContent = soundOn ? T("音：オン", "Sound: On") : T("音：オフ", "Sound: Off");
     soundBtn.setAttribute("aria-pressed", String(soundOn));
   });
 
@@ -150,22 +155,22 @@
     const base = 12 * Math.pow(1.28, st.night - 1);
     st.max = st.hp = Math.round(base * (st.boss ? 8 : 1));
     st.mob = (st.mob + 1) % MOBS.length;
-    foe.src = st.boss ? `assets/img/fx/anim_chapboss_${st.night % 20 === 0 ? "water" : "fire"}_idle.webp` : `assets/img/fx/anim_mob_${MOBS[st.mob]}_idle.webp`;
+    foe.src = st.boss ? `${B}assets/img/fx/anim_chapboss_${st.night % 20 === 0 ? "water" : "fire"}_idle.webp` : `${B}assets/img/fx/anim_mob_${MOBS[st.mob]}_idle.webp`;
     foe.classList.toggle("boss", st.boss);
     hpBar.classList.toggle("boss", st.boss);
     hpFill.style.transform = "scaleX(1)";
-    nightEl.textContent = `第${st.night}夜`;
+    nightEl.textContent = T(`第${st.night}夜`, `Night ${st.night}`);
     foe.animate([{ opacity: 0, transform: "translateY(-30%) scale(.9)" }, { opacity: 1, transform: "none" }], { duration: reduce ? 1 : 360, easing: "cubic-bezier(.22,.61,.36,1)" });
     clearInterval(timerTick);
     timerEl.style.display = st.boss ? "block" : "none";
     if (st.boss) {
       st.bossEnd = performance.now() + 30000;
-      banner("大妖 見参！"); say(`第${st.night}夜、大妖が現れた。刻限は30秒`);
+      banner(T("大妖 見参！", "BOSS!")); say(T(`第${st.night}夜、大妖が現れた。刻限は30秒`, `Night ${st.night}: a Boss appears. 30 seconds!`));
       play("se_doban", 0.5);
       const tick = () => {
         const left = Math.max(0, Math.ceil((st.bossEnd - performance.now()) / 1000));
-        timerEl.textContent = `残り${left}秒`;
-        if (left <= 0) { clearInterval(timerTick); st.busy = true; banner("大妖は退いた…"); say("大妖は退いた"); st.night = Math.max(1, st.night - 1); setTimeout(() => { st.busy = false; spawn(); }, 900); }
+        timerEl.textContent = T(`残り${left}秒`, `${left}s left`);
+        if (left <= 0) { clearInterval(timerTick); st.busy = true; banner(T("大妖は退いた…", "The Boss escaped…")); say(T("大妖は退いた", "The Boss escaped")); st.night = Math.max(1, st.night - 1); setTimeout(() => { st.busy = false; spawn(); }, 900); }
       };
       tick(); timerTick = setInterval(tick, 250);
     }
@@ -196,7 +201,7 @@
     const tx = c.left - r.left + 14, ty = c.top - r.top + c.height / 2;
     for (let i = 0; i < n; i++) {
       const dx = (Math.random() - 0.5) * 90, dy = -30 - Math.random() * 60;
-      fx("coin", x, y, "assets/img/fx/koban.webp", [
+      fx("coin", x, y, `${B}assets/img/fx/koban.webp`, [
         { transform: "translate(0,0) scale(1.4)", opacity: 1 },
         { transform: `translate(${dx}px,${dy}px) scale(1.6)`, opacity: 1, offset: 0.35 },
         { transform: `translate(${tx - x}px,${ty - y}px) scale(.8)`, opacity: 0.9 },
@@ -223,7 +228,7 @@
 
     // 斬撃・数字・揺れ
     const sl = SLASH[st.combo % SLASH.length];
-    fx("slash", x, y, `assets/img/fx/fx_slash_${sl}.webp`, reduce ? [{ opacity: 1 }, { opacity: 0 }] : [
+    fx("slash", x, y, `${B}assets/img/fx/fx_slash_${sl}.webp`, reduce ? [{ opacity: 1 }, { opacity: 0 }] : [
       { opacity: 0, transform: `rotate(${Math.random() * 360}deg) scale(.6)` },
       { opacity: 1, transform: `rotate(${Math.random() * 360}deg) scale(1.1)`, offset: 0.25 },
       { opacity: 0, transform: "scale(1.25)" },
@@ -244,11 +249,11 @@
 
     // 連打の数
     if (st.combo >= 2) {
-      comboEl.innerHTML = `${st.combo}<small>連</small>`;
+      comboEl.innerHTML = `${st.combo}<small>${T("連", " Combo")}</small>`;
       comboEl.getAnimations().forEach((a) => a.cancel());
       comboEl.style.opacity = 1;
       if (!reduce) comboEl.animate([{ transform: "scale(1.35)" }, { transform: "scale(1)" }], { duration: 160 });
-      if (st.combo === 100) banner("百連！"); else if (st.combo === 300) banner("三百連！"); else if (st.combo === 1000) banner("千連！！");
+      if (st.combo === 100) banner(T("百連！", "100 Combo!")); else if (st.combo === 300) banner(T("三百連！", "300 Combo!")); else if (st.combo === 1000) banner(T("千連！！", "1,000 Combo!!"));
     }
 
     hpFill.style.transform = `scaleX(${Math.max(0, st.hp / st.max)})`;
@@ -259,13 +264,13 @@
     st.busy = true;
     const r = stage.getBoundingClientRect(), f = foe.getBoundingClientRect();
     const cx = f.left - r.left + f.width / 2, cy = f.top - r.top + f.height * 0.55;
-    fx("burst", cx, cy, "assets/img/fx/fx_sumi_burst_a.webp", [{ opacity: 1, transform: "scale(.5)" }, { opacity: 0, transform: "scale(1.5)" }], 520, "img");
+    fx("burst", cx, cy, `${B}assets/img/fx/fx_sumi_burst_a.webp`, [{ opacity: 1, transform: "scale(.5)" }, { opacity: 0, transform: "scale(1.5)" }], 520, "img");
     foe.animate([{ opacity: 1 }, { opacity: 0, transform: "scale(.8)" }], { duration: 200, fill: "forwards" });
     const bonus = Math.round(st.max * (st.boss ? 2 : 0.8));
     st.coins += bonus;
     syncCoins();
     coinFly(cx, cy, st.boss ? 10 : 4);
-    if (st.boss) { clearInterval(timerTick); banner("討伐！"); say("大妖を討伐した"); play("se_doban", 0.5); bossDown = true; }
+    if (st.boss) { clearInterval(timerTick); banner(T("討伐！", "DEFEATED!")); say(T("大妖を討伐した", "You defeated the Boss")); play("se_doban", 0.5); bossDown = true; }
     st.kill++;
     if (st.boss || st.kill % 3 === 0) st.night++;
     offerNext();
@@ -303,7 +308,7 @@
     const [n, w] = WALK[id];
     const el = document.createElement("div");
     el.className = "walker"; el.dataset.id = id; el.style.width = `${w}px`;
-    el.innerHTML = `<div class="wb"><i class="wsh"></i><div class="wsp" style="width:${w}px;height:${WH}px"><img data-src="assets/img/walk/${id}.webp" alt="" width="${w * n}" height="${WH}" style="width:${w * n}px;height:${WH}px;--n:${n};--dur:${n * FRAME}ms;--ph:-${((i * 37) % n) * FRAME}ms"></div></div>${named ? `<span class="wname">${WNAME[id]}</span>` : ""}`;
+    el.innerHTML = `<div class="wb"><i class="wsh"></i><div class="wsp" style="width:${w}px;height:${WH}px"><img data-src="${B}assets/img/walk/${id}.webp" alt="" width="${w * n}" height="${WH}" style="width:${w * n}px;height:${WH}px;--n:${n};--dur:${n * FRAME}ms;--ph:-${((i * 37) % n) * FRAME}ms"></div></div>${named ? `<span class="wname">${EN ? (NAME_EN[id] || id) : WNAME[id]}</span>` : ""}`;
     return el;
   };
   const bands = [...document.querySelectorAll(".band[data-walk]")];
@@ -352,10 +357,10 @@
       body.animate([{ transform: "none" }, { transform: "scale(1.08,.9)", offset: .12 }, { transform: "translateY(-30px) scale(.94,1.08)", offset: .45 }, { transform: "scale(1.1,.9)", offset: .82 }, { transform: "none" }], { duration: 520, easing: "ease-out" });
       el.querySelector(".wsh").animate([{ transform: "none" }, { transform: "scale(.6)", offset: .45 }, { transform: "none" }], { duration: 520 });
     }
-    const b = document.createElement("span"); b.className = "wbub"; b.textContent = (bubAlt++ % 2) ? "小判！" : WNAME[el.dataset.id]; el.appendChild(b);
+    const b = document.createElement("span"); b.className = "wbub"; b.textContent = (bubAlt++ % 2) ? T("小判！", "Gold!") : (EN ? (NAME_EN[el.dataset.id] || el.dataset.id) : WNAME[el.dataset.id]); el.appendChild(b);
     b.animate([{ opacity: 0, transform: "translate(-50%,6px) scale(.7)" }, { opacity: 1, transform: "translate(-50%,0) scale(1)", offset: .2 }, { opacity: 1, offset: .8 }, { opacity: 0, transform: "translate(-50%,-6px)" }], { duration: 1300, easing: "ease-out" }).onfinish = () => b.remove();
     if (!reduce) {
-      const k = document.createElement("img"); k.className = "wkoban"; k.src = "assets/img/fx/koban.webp"; k.alt = ""; k.style.left = "50%"; k.style.bottom = "60%"; el.appendChild(k);
+      const k = document.createElement("img"); k.className = "wkoban"; k.src = `${B}assets/img/fx/koban.webp`; k.alt = ""; k.style.left = "50%"; k.style.bottom = "60%"; el.appendChild(k);
       const dx = (Math.random() - .5) * 50;
       k.animate([{ transform: "translate(-50%,0) rotate(0) scale(.5)", opacity: 1 }, { transform: `translate(calc(-50% + ${dx}px),-54px) rotate(200deg) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(calc(-50% + ${dx * 1.4}px),10px) rotate(420deg) scale(.9)`, opacity: 0 }], { duration: 760, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = () => k.remove();
     }
@@ -372,7 +377,7 @@
     const box = b.parentElement; if (getComputedStyle(box).position === "static") box.style.position = "relative";
     const r = b.getBoundingClientRect(), pr = box.getBoundingClientRect();
     for (let j = 0; j < 3; j++) {
-      const k = document.createElement("img"); k.className = "wkoban"; k.src = "assets/img/fx/koban.webp"; k.alt = "";
+      const k = document.createElement("img"); k.className = "wkoban"; k.src = `${B}assets/img/fx/koban.webp`; k.alt = "";
       k.style.left = `${r.left - pr.left + r.width / 2}px`; k.style.top = `${r.top - pr.top}px`; box.appendChild(k);
       const dx = (j - 1) * 46 + (Math.random() - .5) * 16;
       k.animate([{ transform: "translate(-50%,0) scale(.5)", opacity: 1 }, { transform: `translate(calc(-50% + ${dx}px),-58px) rotate(${180 + j * 60}deg) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(calc(-50% + ${dx * 1.3}px),6px) rotate(${400 + j * 60}deg) scale(.9)`, opacity: 0 }], { duration: 720 + j * 60, easing: "cubic-bezier(.2,.7,.4,1)" }).onfinish = () => k.remove();
