@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""どーぱみんくりっかー！ 攻略帖（public/dopamin/guide/）を組み立てる。
+"""どぱくり！ 攻略帖（public/dopamin/guide/）を組み立てる。
 
 見た目は月蝕綺譚 攻略帖（vibe.co.jp/luna-occulta/guide/）に合わせる＝方向宣言 DESIGN_DIRECTION.md。
 数字はすべて guide_data.json（ゲーム本体の定数から書き出したもの）から取る＝頁に数字を手書きしない。
@@ -53,12 +53,12 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False, foot=Non
     ld = [{
         '@context': 'https://schema.org', '@type': 'BreadcrumbList',
         'itemListElement': [
-            {'@type': 'ListItem', 'position': 1, 'name': 'どーぱみんくりっかー！', 'item': 'https://vibe.co.jp/dopamin/'},
+            {'@type': 'ListItem', 'position': 1, 'name': 'どぱくり！', 'item': 'https://vibe.co.jp/dopamin/'},
             {'@type': 'ListItem', 'position': 2, 'name': '攻略帖', 'item': BASE_URL},
         ] + ([{'@type': 'ListItem', 'position': 3, 'name': title, 'item': here}] if slug else []),
     }] + ([jsonld] if jsonld else [])
     ld_html = ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in ld)
-    full_title = f'{title}｜どーぱみん 攻略帖' if slug else 'どーぱみん 攻略帖｜どーぱみんくりっかー！公式攻略'
+    full_title = f'{title}｜どぱくり！ 攻略帖' if slug else 'どぱくり！ 攻略帖｜どぱくり！公式攻略'
     js = f'<script src="{site}assets/guide.js?v={V}" defer></script>' if script else ''
     return f'''<!doctype html>
 <html lang="ja">
@@ -70,7 +70,7 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False, foot=Non
 <meta name="theme-color" content="#f5f3ec">
 <link rel="canonical" href="{here}">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="どーぱみんくりっかー！">
+<meta property="og:site_name" content="どぱくり！">
 <meta property="og:title" content="{e(full_title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{here}">
@@ -87,7 +87,7 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False, foot=Non
 <body class="guide-root">
 <header class="g-head">
   <div class="g-head-in">
-    <a class="g-brand" href="{up or './'}"><img src="{site}assets/img/icon.png" alt="" width="30" height="30"><span>どーぱみん 攻略帖</span></a>
+    <a class="g-brand" href="{up or './'}"><img src="{site}assets/img/icon.png" alt="" width="30" height="30"><span>どぱくり！ 攻略帖</span></a>
     <a class="g-play" href="{TF_URL}" rel="noopener" data-analytics-event="cta_click" data-analytics-item="testflight" data-analytics-context="guide_header">先行プレイ</a>
   </div>
   <nav class="g-nav" aria-label="攻略帖の頁"><div class="g-nav-in">{nav}</div></nav>
@@ -104,7 +104,7 @@ def layout(slug, title, desc, body, updated, jsonld=None, script=False, foot=Non
 <footer class="g-foot">
   <p>{foot or '運営による公式攻略。数値はゲーム本体の定数から自動で写しています。テスト版のため、調整で変わることがあります。'}</p>
   <nav aria-label="サイト情報"><a href="{site}">公式サイト</a><a href="{site}terms/">利用規約</a><a href="{site}privacy/">プライバシーポリシー</a><a href="{site}support/">サポート</a></nav>
-  <p class="g-copy">© Studio VIBE — どーぱみんくりっかー！</p>
+  <p class="g-copy">© Studio VIBE — どぱくり！</p>
 </footer>
 {js}
 </body>
@@ -128,7 +128,7 @@ def page_index(d, updated):
                   'お金はかかりません。ダウンロード無料、アプリ内課金なし',
                   f'なかまはいま{len(d["allies"])}人（<a href="nakama/#ichiran">一覧</a>）',
               ])))
-    return layout('', 'どーぱみん 攻略帖', 'どーぱみんくりっかー！の公式攻略。月蝕の押しどき、倍率の式、なかまの攻・速・技、絵巻の率と天井、装備と開眼まで、ゲームの定数から写した数字でまとめています。', body, updated)
+    return layout('', 'どぱくり！ 攻略帖', 'どぱくり！の公式攻略。月蝕の押しどき、倍率の式、なかまの攻・速・技、絵巻の率と天井、装備と開眼まで、ゲームの定数から写した数字でまとめています。', body, updated)
 
 
 def page_hajimekata(d, updated):
@@ -221,7 +221,7 @@ def page_hajimekata(d, updated):
               + p(f'週ごとの宵巡りは{len(q["meguri"])}題。1題ごとに絵巻{q["meguriGekka"]}枚、全部済ませる（満願）とさらに{b(q["meguriFullGekka"])}枚。')
               + more('宵巡りの題と目標', table(['宵巡り', '目標'], meguri, 'num')))
     )
-    return layout('hajimekata', 'はじめかた 最初の一日', 'どーぱみんくりっかー！のはじめかた。画面の見方、夜と大妖、タップと育成、放置の実入りの式、最初の一日の流れと依頼。', body, updated)
+    return layout('hajimekata', 'はじめかた 最初の一日', 'どぱくり！のはじめかた。画面の見方、夜と大妖、タップと育成、放置の実入りの式、最初の一日の流れと依頼。', body, updated)
 
 
 def page_gesshoku(d, updated):
@@ -311,7 +311,7 @@ def page_gesshoku(d, updated):
         + sec('kage', '月の通い路の宿が陰る',
               p('2回目からの月蝕では、陰っている宿が3つ未満なら、加護が灯っていて、まだ陰っておらず、位1・2の星が残る宿が1つ陰り、その星の効き目が止まります（最初の月蝕では陰りません）。位3の星は陰りません。宿の加護・四神・紫微垣の効き目は止まりません。陰った星は灯し直せて、灯し直すと星の位が上がります。'))
     )
-    return layout('gesshoku', '月蝕・暁 押しどきと倍率の式', 'どーぱみんくりっかー！の月蝕の押しどき。蝕片と全ダメージ倍率の式、押しどき計算機、失うもの・残るもの、札と巻物、暁の恵みまで。', body, updated, script=True)
+    return layout('gesshoku', '月蝕・暁 押しどきと倍率の式', 'どぱくり！の月蝕の押しどき。蝕片と全ダメージ倍率の式、押しどき計算機、失うもの・残るもの、札と巻物、暁の恵みまで。', body, updated, script=True)
 
 
 def page_nisen(d, updated, ps, ms):
@@ -459,7 +459,7 @@ def page_nisen(d, updated, ps, ms):
                   ('閉じるときは留守に任せる', f'小判・灯・落とし物が貯まります（はじめは{hours(d["offline"]["capSec"])}まで。暁で延びる）。夜は進みません。'),
               ]))
     )
-    return layout('nisen', f'第{goal}夜の越え方 早い人のやり方', f'どーぱみんくりっかー！で第{goal}夜を早く越える人のやり方。番付の記録と運営の計測から、月蝕の押しどき・叩き方・毎日のこと・第{goal}夜の坂まで、実際の画面つきで。', body, updated,
+    return layout('nisen', f'第{goal}夜の越え方 早い人のやり方', f'どぱくり！で第{goal}夜を早く越える人のやり方。番付の記録と運営の計測から、月蝕の押しどき・叩き方・毎日のこと・第{goal}夜の坂まで、実際の画面つきで。', body, updated,
                   foot='運営による公式攻略。数値はゲーム本体の定数・番付の集計・運営の計測に基づいています。テスト版のため、調整で変わることがあります。')
 
 
@@ -567,7 +567,7 @@ def page_nakama(d, updated, faces):
               + table(['開眼', '効き目', '1回ごと'], kai)
               + more('枠ごとに選べる開眼', table(['枠', '選べる開眼'], kai_ch)))
     )
-    return layout('nakama', 'なかま・絵巻・装備', 'どーぱみんくりっかー！の全なかまの攻・速・技と倍率、絵巻の出る率と天井、覚醒、技と奥義、装備の格と一点物、鍛冶場と開眼。', body, updated)
+    return layout('nakama', 'なかま・絵巻・装備', 'どぱくり！の全なかまの攻・速・技と倍率、絵巻の出る率と天井、覚醒、技と奥義、装備の格と一点物、鍛冶場と開眼。', body, updated)
 
 
 def page_komatta(d, updated):
@@ -599,7 +599,7 @@ def page_komatta(d, updated):
     body = (shiori('詰まったら、まずここへ。答えを先に書いてございます。')
             + sec('susumanai', '夜が進まないとき', p('上から順に試してください。') + flow)
             + sec('faq', 'よくある質問', ''.join(f'<details class="faq"{" open" if i < 2 else ""}><summary>{e(q)}</summary><div class="faq-a">{a}</div></details>' for i, (q, a) in enumerate(faq))))
-    return layout('komatta', '困ったとき よくある質問', 'どーぱみんくりっかー！で困ったとき。夜が進まない・大妖に勝てないときの手、月蝕の押しどき、機種変更の引き継ぎ、番付の組、数字の単位。', body, updated, jsonld=ld)
+    return layout('komatta', '困ったとき よくある質問', 'どぱくり！で困ったとき。夜が進まない・大妖に勝てないときの手、月蝕の押しどき、機種変更の引き継ぎ、番付の組、数字の単位。', body, updated, jsonld=ld)
 
 
 def copy_assets(d, clicker, kitan_web):

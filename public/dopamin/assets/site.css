@@ -1,4 +1,4 @@
-/* どーぱみんクリッカー！公式サイト — 方向宣言は ../../DESIGN_DIRECTION.md（宵闇に金＋題字の朱・Dela Gothic One／M PLUS Rounded 1c／DotGothic16）
+/* どぱくり！公式サイト（旧 どーぱみんくりっかー！） — 方向宣言は ../../DESIGN_DIRECTION.md（宵闇に金＋題字の朱・Dela Gothic One／M PLUS Rounded 1c／DotGothic16）
    09-28 本人「フォントが読みにくい」: Dela は大見出しだけ。ボタン・副題・本文・小さい字は丸ゴ（Shippori Mincho は外した）。縁取りも細くして字の中を潰さない */
 :root {
   --night: #15121f; --deep: #0e0c16; --face: #201b31; --face-2: #2a2340;
