@@ -279,6 +279,11 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
 .price li::before{content:"";position:absolute;left:2px;top:.35em;width:14px;height:14px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--ink2)}
 .price .terms{margin:22px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink2);text-align:left}
 .price .ctas{justify-content:center;margin:24px 0 0}
+.price .presale{margin:18px auto 0;max-width:26em;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--accent) 9%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent);display:grid;gap:4px}
+.price .presale b{font-size:15px;color:var(--accent-hi)}
+.price .presale span{font-size:13px;line-height:1.7;color:var(--ink2)}
+.presale-note{margin:0 0 12px;font-size:14px;line-height:1.75;color:var(--ink2)}
+.presale-note b{color:var(--ink)}
 @media (max-width:920px){.buy{grid-template-columns:1fr}.buy .price{order:-1}.price{padding:28px 18px}.price .big{font-size:54px}}
 
 /* FAQ */
@@ -338,7 +343,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <a href="#price" data-rondo-label="ヘッダー 費用">費用</a>
       <a href="#faq" data-rondo-label="ヘッダー よくある質問">よくある質問</a>
     </nav>
-    <a class="btn pri sm" href="/rondo-apply" data-rondo-label="CTA ヘッダー購入" data-rondo-cta="apply">購入手続きへ</a>
+    <a class="btn pri sm" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
   </div>
 </header>
 
@@ -352,9 +357,10 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <h1><span class="ph">LINEも、</span><span class="ph">インスタも、</span><span class="ph">メールも。</span><br><em class="ph">ひとつの画面で。</em></h1>
       <p class="lead">配信も、返信も、予約も、売上も。各媒体の反応、流入元ごとの登録、購入と売上が、1つの管理画面に並びます。ソースコードごと¥9,800の買い切り。設置も改造も、いつものClaude CodeやCodexに日本語で頼めます。</p>
       <div class="ctas">
-        <a class="btn pri" href="/rondo-apply" data-rondo-label="CTA ヒーロー購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a>
+        <a class="btn pri" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
         <a class="btn sec" href="#shindan" data-rondo-label="CTA ヒーロー適性診断">30秒の適性診断</a>
       </div>
+      <p class="presale-note"><b>発売日は未定です。</b>Substackでメールを登録した方に、発売当日、期間限定の10%オフのリンクをお送りします（登録は無料）。</p>
       <p class="fine">税込・買い切り。運用費は別です（Cloudflare 月5ドル〜・独自ドメイン・開発AIなど）。サポート窓口はありません。各サービスの初回の設定が必要です。Xは数字の取り込みのみで、投稿・DMの操作は含みません。販売条件は<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="ヒーロー 特商法">特定商取引法に基づく表記</a>をご覧ください。</p>
       <div class="proof">
         <div><b>284</b><span>人がβ版を購入</span></div>
@@ -732,9 +738,10 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <p class="fine" style="margin-top:14px">LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料は別にかかります。決済ページはStripeなどで用意し、Rondoは決済の通知を受けて記録します。予約ページで参加費を集める機能はありません。</p>
       </div>
       <div class="face price">
-        <p class="kick" style="margin:0">正式版 v1.0</p>
+        <p class="kick" style="margin:0">正式版 v1.0 ・ 発売日未定</p>
         <p class="big num">¥9,800</p>
         <p class="tag">税込・買い切り・購入時の審査なし</p>
+        <div class="presale"><b>事前登録で10%オフ</b><span>発売当日、期間限定の割引リンクをメールでお送りします。</span></div>
         <h3>買う前に、確かめてください</h3>
         <ul>
           <li>開発AIを使って、導入・運用する商品です</li>
@@ -743,7 +750,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <li>設定・動作の確認・障害対応は、あなたと開発AIで行います</li>
         </ul>
         <p class="terms">お支払いは購入時に一括で、Stripeの決済ページで行います（クレジットカードなど、表示される方法から選べます。カード情報が当サイトに渡ることはありません）。決済が終わると、すぐに納品のメールでダウンロードのリンクをお送りします。技術サポートはありません。購入者都合の返金・キャンセルは受け付けません（法令に基づき必要な対応を除きます）。</p>
-        <div class="ctas"><a class="btn pri" href="/rondo-apply" data-rondo-label="CTA 購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a></div>
+        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>
+        <p class="fine" style="margin-top:10px">Substack（イケハヤのメールマガジン）の登録ページが開きます。</p>
         <p class="fine" style="margin-top:12px"><a href="/rondo-setup" data-rondo-label="購入 動作環境">動作環境と導入の流れ</a> ・ <a href="#shindan" data-rondo-label="CTA 価格上の適性診断">適性診断（6問・30秒）</a> ・ <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="購入 特商法">特定商取引法に基づく表記</a></p>
       </div>
     </div>
@@ -772,6 +780,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   <div class="wrap">
     <h2 class="center">よくある質問</h2>
     <div class="faq">
+      <details><summary data-rondo-click-sec="faq-13" data-rondo-label="FAQ 発売日と事前登録">いつ発売ですか？ 事前登録とは？</summary><div class="a">発売日は未定です。<a href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="FAQ Substack登録">Substack（イケハヤのメールマガジン）</a>にメールを登録しておくと、発売のお知らせと、発売当日だけ使える期間限定の10%オフのリンクをお送りします。登録は無料で、いつでも解除できます。</div></details>
       <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードを書くのは開発AIの仕事なので、あなたが書く必要はありません。ただしノーコードツールではありません。開発AIに日本語で指示を出し、結果を自分で確かめられることが前提です。</div></details>
       <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。不具合は<a href="/rondo-report" data-rondo-label="FAQ 報告フォーム">報告フォーム</a>で受け付けています（個別の返信はしていません）。</div></details>
       <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額費用">本体のほかに、いくらかかりますか？</summary><div class="a">Cloudflareの有料プラン（月5ドル〜）、独自ドメイン（年1,000円台〜）、メール送信のResend（小規模なら無料）、開発AIの利用料がかかります。LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料も別です。読者が増えると、配信量に応じて費用が増えることがあります。</div></details>
@@ -792,8 +801,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section class="last" data-sec="final">
   <div class="wrap">
     <h2><span class="ph">ひとつの画面で、</span><span class="ph">商売を回す<span class="hang">。</span></span></h2>
-    <p class="lede" style="margin-left:auto;margin-right:auto">本体は¥9,800の買い切り。運用費は別にかかります。</p>
-    <div class="ctas"><a class="btn pri" href="/rondo-apply" data-rondo-label="CTA 最終購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a></div>
+    <p class="lede" style="margin-left:auto;margin-right:auto">本体は¥9,800の買い切り。運用費は別にかかります。<br>発売日は未定。事前登録の方には、発売当日に期間限定の10%オフをお届けします。</p>
+    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>
   </div>
 </section>
 
@@ -814,8 +823,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 </footer>
 
 <div class="dock" id="dock" aria-hidden="true" data-rondo-click-sec="dock">
-  <span class="p"><b>¥9,800</b>税込・買い切り・運用費別</span>
-  <a class="btn pri" href="/rondo-apply" tabindex="-1" data-rondo-label="CTA 下の固定購入" data-rondo-cta="apply">購入手続きへ</a>
+  <span class="p"><b>¥9,800</b>発売日未定・事前登録で10%オフ</span>
+  <a class="btn pri" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
 </div>
 
 <script>
@@ -860,8 +869,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     var noBudget = answers[2] === 2, noDomain = answers[3] === 2, wantsFinished = answers[4] === 2, s = score();
     if(v === 'a'){
       html = '<span class="sh-pill a">向いています</span><p class="sh-title">Rondoは、あなたのための道具です。</p>'
-        + '<p class="sh-body">リストがあり、開発AIが手元にある。それがRondoの想定する使い手です。購入の条件を確かめて、進んでください。</p>'
-        + '<div class="sh-ctas"><a class="btn pri" href="/rondo-apply" data-rondo-label="CTA 診断A購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a></div>';
+        + '<p class="sh-body">リストがあり、開発AIが手元にある。それがRondoの想定する使い手です。発売日は未定です。事前登録しておくと、発売当日に期間限定の10%オフのリンクが届きます。</p>'
+        + '<div class="sh-ctas"><a class="btn pri" href="https://ihayato.substack.com/subscribe" target="_blank" rel="noopener" data-rondo-label="CTA 診断A事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>';
     } else if(v === 'b'){
       var next = [];
       if(answers[1] >= 1) next.push('まず、Claude CodeかCodexを日常に入れてください。月3,000円ほどのプランから始められます。Rondoの導入も改造も、開発AIが担当します。');
