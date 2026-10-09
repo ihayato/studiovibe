@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- 計測: 公開時に有効化する（下書きの閲覧を本番の数字に混ぜない）
-<script src="https://rondo.nubonba.workers.dev/heat.js?v=20261009" data-page="rondo-lp-v10" defer></script>
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20261009b" data-page="rondo-lp-v10" data-sp-max="760" defer></script>
 -->
 <style>
 /* 羽二重白 — ライト正典（habutae/tokens/habutae.css） */
@@ -330,7 +330,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 </head>
 <body>
 
-<header class="top">
+<header class="top" data-rondo-click-sec="header">
   <div class="in">
     <a class="logo" href="#top" data-rondo-label="ヘッダー ロゴ"><img src="/rondo-assets/rondo-mark.svg" alt="" width="28" height="28">Rondo</a>
     <nav aria-label="ページ内">
@@ -773,18 +773,18 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   <div class="wrap">
     <h2 class="center">よくある質問</h2>
     <div class="faq">
-      <details><summary data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードを書くのは開発AIの仕事なので、あなたが書く必要はありません。ただしノーコードツールではありません。開発AIに日本語で指示を出し、結果を自分で確かめられることが前提です。</div></details>
-      <details><summary data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。不具合は<a href="/rondo-report" data-rondo-label="FAQ 報告フォーム">報告フォーム</a>で受け付けています（個別の返信はしていません）。</div></details>
-      <details><summary data-rondo-label="FAQ 月額費用">本体のほかに、いくらかかりますか？</summary><div class="a">Cloudflareの有料プラン（月5ドル〜）、独自ドメイン（年1,000円台〜）、メール送信のResend（小規模なら無料）、開発AIの利用料がかかります。LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料も別です。読者が増えると、配信量に応じて費用が増えることがあります。</div></details>
-      <details><summary data-rondo-label="FAQ 決済サブスク">月額のサブスクではありませんか？</summary><div class="a">本体は¥9,800の買い切りで、Rondoへの月額の支払いはありません。かかるのは上の運用費だけで、それぞれのサービスに直接払います。</div></details>
-      <details><summary data-rondo-label="FAQ アップデート">アップデートはありますか？</summary><div class="a">v1系の更新は、購入者のみなさんに無償でお届けします（時期・内容の保証はありません）。新しい版が出たらメールでお知らせし、納品メールのリンクから最新版を受け取れます。次の大きな版（v2）は別商品として、既購入者に優待価格を予定しています。</div></details>
-      <details><summary data-rondo-label="FAQ AIモデル">どの開発AIで使えますか？</summary><div class="a">Claude CodeとCodexを想定して手順書を書いています。どちらも、契約中のプランで使えます。</div></details>
-      <details><summary data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary><div class="a">はい。メールの読者はCSVで取り込め、解除・不達の人は配信停止の台帳へ入り、旧ツールの登録日から「続きの通」で始められます。LINEは、LステップのCSVからタグと友だち情報を持ち込めます（友だちとの結び付けは人が確かめます）。</div></details>
-      <details><summary data-rondo-label="FAQ 導入の流れ">購入後は、どういう流れで使い始めますか？</summary><div class="a">決済が終わると、すぐに納品のメールが届きます。ソースコード一式（zip）と導入手順書を受け取り、開発AIに読ませて、あなたのCloudflareへ設置します。全体の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」</a>、作業の手順は<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>で公開しています。</div></details>
-      <details><summary data-rondo-label="FAQ メールの返信">配信したメールに読者が返信したら、どこに届きますか？</summary><div class="a">Rondoの受信箱に届きます。配信の返信先が受信箱につながり、どの配信への返信かも分かります。お問い合わせのメールも同じ一覧に入り、そこから返信できます。使うには、受信用のサブドメインとResendの受信の初回設定（MXの記録・Webhook・設定の値）が要ります。手順は導入の手順書にあります。</div></details>
-      <details><summary data-rondo-label="FAQ 購入連動">購入した人だけに配信できますか？</summary><div class="a">できます。決済ページはStripeで用意し、決済の通知を受けると、タグ付け・メール講座の開始と停止・LINEの切り替えが動きます（商品と購入のルールの設定が必要です。LINEの切り替えは、メールとLINEが結び付いた人が対象です）。サブスクの管理は標準には入っていません（開発AIに作らせることはできます）。</div></details>
-      <details><summary data-rondo-label="FAQ マーケ相談">マーケティングの相談には乗ってもらえますか？</summary><div class="a">個別の相談は受けていません。Rondoには、管理画面の数字を読んで改善の案を出す診断用のAIが同梱されています。</div></details>
-      <details><summary data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコード一式を納品するデジタル商品のため、購入者都合の返金・キャンセルは受け付けていません（法令に基づき必要な対応を除きます）。迷いがあるうちは、適性診断と公開中のガイドを先に確かめてください。</div></details>
+      <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードを書くのは開発AIの仕事なので、あなたが書く必要はありません。ただしノーコードツールではありません。開発AIに日本語で指示を出し、結果を自分で確かめられることが前提です。</div></details>
+      <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。不具合は<a href="/rondo-report" data-rondo-label="FAQ 報告フォーム">報告フォーム</a>で受け付けています（個別の返信はしていません）。</div></details>
+      <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額費用">本体のほかに、いくらかかりますか？</summary><div class="a">Cloudflareの有料プラン（月5ドル〜）、独自ドメイン（年1,000円台〜）、メール送信のResend（小規模なら無料）、開発AIの利用料がかかります。LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料も別です。読者が増えると、配信量に応じて費用が増えることがあります。</div></details>
+      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ 決済サブスク">月額のサブスクではありませんか？</summary><div class="a">本体は¥9,800の買い切りで、Rondoへの月額の支払いはありません。かかるのは上の運用費だけで、それぞれのサービスに直接払います。</div></details>
+      <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ アップデート">アップデートはありますか？</summary><div class="a">v1系の更新は、購入者のみなさんに無償でお届けします（時期・内容の保証はありません）。新しい版が出たらメールでお知らせし、納品メールのリンクから最新版を受け取れます。次の大きな版（v2）は別商品として、既購入者に優待価格を予定しています。</div></details>
+      <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ AIモデル">どの開発AIで使えますか？</summary><div class="a">Claude CodeとCodexを想定して手順書を書いています。どちらも、契約中のプランで使えます。</div></details>
+      <details><summary data-rondo-click-sec="faq-7" data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary><div class="a">はい。メールの読者はCSVで取り込め、解除・不達の人は配信停止の台帳へ入り、旧ツールの登録日から「続きの通」で始められます。LINEは、LステップのCSVからタグと友だち情報を持ち込めます（友だちとの結び付けは人が確かめます）。</div></details>
+      <details><summary data-rondo-click-sec="faq-8" data-rondo-label="FAQ 導入の流れ">購入後は、どういう流れで使い始めますか？</summary><div class="a">決済が終わると、すぐに納品のメールが届きます。ソースコード一式（zip）と導入手順書を受け取り、開発AIに読ませて、あなたのCloudflareへ設置します。全体の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」</a>、作業の手順は<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>で公開しています。</div></details>
+      <details><summary data-rondo-click-sec="faq-9" data-rondo-label="FAQ メールの返信">配信したメールに読者が返信したら、どこに届きますか？</summary><div class="a">Rondoの受信箱に届きます。配信の返信先が受信箱につながり、どの配信への返信かも分かります。お問い合わせのメールも同じ一覧に入り、そこから返信できます。使うには、受信用のサブドメインとResendの受信の初回設定（MXの記録・Webhook・設定の値）が要ります。手順は導入の手順書にあります。</div></details>
+      <details><summary data-rondo-click-sec="faq-10" data-rondo-label="FAQ 購入連動">購入した人だけに配信できますか？</summary><div class="a">できます。決済ページはStripeで用意し、決済の通知を受けると、タグ付け・メール講座の開始と停止・LINEの切り替えが動きます（商品と購入のルールの設定が必要です。LINEの切り替えは、メールとLINEが結び付いた人が対象です）。サブスクの管理は標準には入っていません（開発AIに作らせることはできます）。</div></details>
+      <details><summary data-rondo-click-sec="faq-11" data-rondo-label="FAQ マーケ相談">マーケティングの相談には乗ってもらえますか？</summary><div class="a">個別の相談は受けていません。Rondoには、管理画面の数字を読んで改善の案を出す診断用のAIが同梱されています。</div></details>
+      <details><summary data-rondo-click-sec="faq-12" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコード一式を納品するデジタル商品のため、購入者都合の返金・キャンセルは受け付けていません（法令に基づき必要な対応を除きます）。迷いがあるうちは、適性診断と公開中のガイドを先に確かめてください。</div></details>
     </div>
   </div>
 </section>
@@ -814,7 +814,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   </div>
 </footer>
 
-<div class="dock" id="dock" aria-hidden="true">
+<div class="dock" id="dock" aria-hidden="true" data-rondo-click-sec="dock">
   <span class="p"><b>¥9,800</b>税込・買い切り・運用費別</span>
   <a class="btn pri" href="/rondo-apply" tabindex="-1" data-rondo-label="CTA 下の固定購入" data-rondo-cta="apply">購入手続きへ</a>
 </div>
@@ -872,7 +872,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       html = '<span class="sh-pill b">もう一歩</span><p class="sh-title">準備が整えば、使えます。</p>'
         + '<p class="sh-body">いま買っても、準備が足りずに導入の途中で止まるかもしれません。先に次のことを済ませてください。</p>'
         + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
-        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の流れ">導入の流れを見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件" data-rondo-cta="reserve">購入の条件を見る</a></div>';
+        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の流れ">導入の流れを見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件">購入の条件を見る</a></div>';
     } else {
       var reasons = [];
       if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。独自ドメインが何かを調べるところからなら、先にドメインを1つ取得してみてください（年1,000円台〜）。');
