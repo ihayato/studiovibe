@@ -393,7 +393,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <h2><span class="ph">バラバラだった数字を、</span><br><span class="ph">1枚に。</span></h2>
       <p class="lede">メールはこのツール、LINEはあのツール、インスタは別のアプリ。ツールが分かれていると、数字も分かれます。Rondoでは、媒体ごとの反応から、流入元ごとの訪問と登録、購入と売上までが、同じ管理画面に並びます。</p>
       <div class="steps">
-        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者・再生・日ごとの視聴を、Threadsはフォロワー数を毎日集計し、Instagramはつないだアカウントからフォロワー数を取ります。Instagramの投稿・ビュー・フォロワーの増減と日々の推移、Threadsの投稿とビュー、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
+        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者・再生・日ごとの視聴を、Threadsはフォロワー数を、Instagramはフォロワー・投稿・いいね・コメントを毎日集計します（Instagramのビュー・リーチ・プロフィール訪問は、Metaアプリに許可を足すと取れます）。Threadsの投稿ごとのビュー、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
         <div class="face-lo"><b class="n">2</b><div><h3>流入元ごとの訪問と登録</h3><p>リンクに流入元の印を付け、LPの訪問とメール・LINEの登録を流入元ごとに数えます。連携リンクやコードで結び付いたメール読者とLINE友だちは、同じ顧客としてまとめます。</p></div></div>
         <div class="face-lo"><b class="n">3</b><div><h3>購入と売上</h3><p>Stripeの決済の通知を受けて、購入と売上を台帳に記録します。決済ページはStripeで用意します。</p></div></div>
       </div>
@@ -459,7 +459,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <div role="tabpanel" id="pane-ch" aria-labelledby="tab-ch" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
           <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが並ぶ"></picture></a></figure>
-        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramの投稿・ビュー・増減と推移、Threadsの投稿とビュー、X・note・Substackは、収集の仕組みをつないだときに出ます。</p>
+        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramのビューは許可を足したとき、Threadsの投稿とビュー、X・note・Substackは収集の仕組みをつないだときに出ます。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
@@ -495,7 +495,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     <div class="chgrid">
       <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-mail)"></i><h3>メール</h3></div><p>ステップメール、メルマガの一斉配信、登録ページ。件名のA/B、押した人で分ける。購入の通知で講座を始める・止める。返信とお問い合わせは受信箱へ。</p><span class="how std">標準（独自ドメインとResendの設定）</span></article>
       <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-line)"></i><h3>LINE</h3></div><p>ステップ配信、タグ、分岐、リッチメニューの出し分け、流入経路の計測、A/Bテスト、画像・動画・カルーセル、フォーム、リマインダ。LステップのCSVを取り込めます。</p><span class="how std">標準（LINE公式アカウントとMessaging APIの設定）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-ig)"></i><h3>Instagram</h3></div><p>DM・ストーリーへの返信・コメント・メンションに自動で返信してLINEへ案内。DMメニュー、ストーリーのキャンペーンごとの成果表。</p><span class="how std">標準（プロアカウントとMetaのアプリ登録）</span></article>
+      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-ig)"></i><h3>Instagram</h3></div><p>DM・ストーリーへの返信・コメント・メンションに自動で返信してLINEへ案内。DMメニュー、ストーリーのキャンペーンごとの成果表。フォロワーと投稿を毎日集計（ビューはMetaの許可を足して）。</p><span class="how std">標準（プロアカウントとMetaのアプリ登録）</span></article>
       <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-th)"></i><h3>Threads</h3></div><p>つなぐとフォロワー数を毎日集計。予約投稿と、投稿の直後に返信でリンク（予約投稿は自分でオンにして使います）。</p><span class="how std">標準（Metaのアプリ登録）</span></article>
       <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-yt)"></i><h3>YouTube</h3></div><p>登録者と再生の数字を毎日集計。説明欄のリンクを計測。コメントを受信箱に取り込んで、管理画面から返信。</p><span class="how std">標準（Google Cloudの設定）</span></article>
       <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-x)"></i><h3>X・note・Substack</h3></div><p>リンクの計測は標準。フォロワーと投稿の数字は、あなたのAIが作る収集の仕組みで取り込みます。投稿やDMの操作は含みません。</p><span class="how ai">あなたのAIがつなぐ（XのAPIは有料）</span></article>
@@ -519,7 +519,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
           <li>会話に自分のラベル（名前と色）を付けて、ラベルや、LINEのタグ・購入者のタグで絞り込み（タグは結び付いた相手が対象・YouTubeを除く）</li>
           <li>「すべて既読にする」「要対応をすべて対応済みに」。押し間違えないよう2回押し</li>
           <li>メールは、どの配信への返信かが見え、添付も読めます。自動応答は要対応にしません</li>
-          <li>LINEは、AIに返事を任せることもできる（任意）</li>
+          <li>LINEとInstagramのDMは、AIに返事を任せることもできる（任意・最初は止まった状態で、試運転から始める）</li>
           <li>同じ返信を二度送らない仕組み。Instagramは返信できる残り時間を表示</li>
         </ul>
         <p class="note">Instagramは相手の最後のメッセージから24時間まで返信できます（Instagramの決まり）。YouTubeは投稿から30日以内のコメントを取り込みます。一部の大きなチャンネルでは、Googleの判断で接続が一時的に止められることがあります。メールの返信を受け取るには、受信用のサブドメインとResendの受信の初回設定が要ります。</p>
@@ -635,6 +635,9 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <li>DMメニュー（質問ボタン・常設メニュー）<span class="new">NEW</span></li>
         <li>ストーリーのキャンペーンごとの成果表<span class="new">NEW</span></li>
         <li>管理画面からDMに返信<span class="new">NEW</span></li>
+        <li>フォロワー・投稿・いいね・コメントの毎日の集計<span class="new">NEW</span></li>
+        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足して）<span class="new">NEW</span></li>
+        <li>DMのAIの返事（任意・試運転から）<span class="new">NEW</span></li>
         <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
       </ul></div>
       <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
