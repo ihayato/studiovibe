@@ -1081,6 +1081,17 @@ function __route(url) {
       version: { id: '02be5fae-0000-4000-8000-000000000000', tag: null, timestamp: new Date(now - 2 * H).toISOString() },
     };
   }
+  else if (url.pathname === '/api/admin/inbox/templates') {
+    body = { ok: true, max: 30, templates: [
+      { id: 1, name: 'お礼', text: 'メッセージありがとうございます！確認してお返事しますね。' },
+      { id: 2, name: '特典の受け取り方', text: '特典は、LINEのメニューの「特典を受け取る」から開けます。開けないときは、お手数ですがもう一度お知らせください。' },
+    ] };
+  }
+  else if (url.pathname === '/api/admin/inbox/profile') {
+    body = { ok: true, supported: url.searchParams.get('ch') !== 'yt', found: true, personId: 1, segment: '見込み', score: 38, channels: ['メール', 'LINE'], since: now - 40 * 86400000,
+      purchases: { count: 1, total: 9800, recent: [{ product: '教材A', yen: 9800, at: now - 12 * 86400000 }] },
+      tags: ['教材A 購入者', 'セミナー申込'], steps: [{ ch: 'メール', label: 'サンプル講座', sent: 4, status: '配信中' }, { ch: 'LINE', label: 'はじめての方へ', sent: 3, status: '完走' }] };
+  }
   else if (url.pathname === '/api/admin/inbox/labels') {
     body = { ok: true, colors: ['gold', 'blue', 'green', 'red', 'purple', 'gray'],
       labels: [{ id: 1, name: '重要', color: 'red', n: 2 }, { id: 2, name: '見込み客', color: 'gold', n: 1 }, { id: 3, name: '返金対応', color: 'blue', n: 0 }],
@@ -1660,6 +1671,22 @@ function __route(url) {
   .set-how pre,.set-pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 var(--sans);color:var(--dim);background:var(--hover);border-radius:var(--r-btn);padding:10px 12px;margin:0}
   .set-how .btn{margin-top:6px}
   .set-warn{color:var(--warn)}
+  /* 受信箱: 一覧の返信期限・新着の知らせ・定型文・この人 */
+  .lchat-row .ibx-due{font-size:11px;color:var(--warn);white-space:nowrap}
+  .ibx-newmsg{margin-left:8px}
+  .ibx-more-f{display:none}
+  .tpl-pop{position:fixed;z-index:60;min-width:220px;max-width:min(360px,90vw);max-height:280px;overflow:auto;background:var(--surface);border-radius:var(--r-card);box-shadow:var(--shadow);padding:6px}
+  .tpl-pop button.tpl-i{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:var(--r-btn);background:none;border:0;color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
+  .tpl-pop button.tpl-i:hover,.tpl-pop button.tpl-i:focus{background:var(--hover)}
+  .tpl-pop .tpl-i small{display:block;color:var(--dim);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tpl-pop .tpl-empty{padding:8px 10px;font-size:12px;color:var(--dim)}
+  .ibx-prof{margin:0 0 10px;padding:10px 12px;border-radius:var(--r-btn);background:var(--hover);font-size:12px;line-height:1.7;color:var(--ink)}
+  .ibx-prof .k{color:var(--dim);margin-right:6px}
+  .ibx-prof .row{display:flex;flex-wrap:wrap;gap:4px 12px}
+  .ibx-prof .tg{display:inline-block;padding:0 8px;border-radius:999px;background:var(--surface);margin:2px 4px 0 0}
+  .ai-how{padding:4px 0 2px}
+  .btn.link-danger{background:none;border-color:transparent;box-shadow:none;color:var(--bad);padding-left:6px;padding-right:6px}
+  .btn.link-danger:hover{text-decoration:underline;background:none}
   .ai-empty{padding:18px 16px}
   .ai-empty b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
   .ai-empty p{font-size:13px;line-height:1.8;color:var(--dim);margin:4px 0 0}
@@ -1669,6 +1696,11 @@ function __route(url) {
   .mobile-nav::-webkit-scrollbar{display:none}
   .mobile-nav .fchip{flex:none}
   .mobile-nav .fchip.on{background:var(--hover);color:var(--ink);font-weight:500}
+  .mtab{display:none}
+  .mtab-a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 2px 6px;border:0;background:none;color:var(--dim);font:500 11px/1.2 var(--sans);position:relative;cursor:pointer}
+  .mtab-a svg{width:20px;height:20px}
+  .mtab-a.on,.mtab-a[aria-expanded="true"]{color:var(--accent)}
+  .mtab-n{position:absolute;top:3px;left:calc(50% + 6px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--accent);color:#fff;font-size:10px;line-height:16px;text-align:center}
 
   /* グリッド項目のmin-width:autoがnowrapテキストのmin-contentを拾って横はみ出しするのを防ぐ */
   .card,.kpi{min-width:0}
@@ -2241,6 +2273,9 @@ function __route(url) {
   }
   .mobile-theme{display:none}
   @media (max-width:860px){
+    .ibx-desc{display:none}
+    .ibx-more-f{display:inline-flex}
+    .ibx-bar:not(.f-open) #ibx-chf,.ibx-bar:not(.f-open) #ibx-lf,.ibx-bar:not(.f-open) .ibx-bulk{display:none}
     .mobile-theme{display:flex;justify-content:flex-end;padding:8px 16px 0}
     .robe-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px}
     .robe-pv{height:72px}
@@ -2251,6 +2286,14 @@ function __route(url) {
     .robe[aria-checked="true"] .robe-name .on{display:block}
     .side{display:none}
     .mobile-nav{display:flex}
+    /* 下のタブ: 主な4画面＋その他。上の横に流れるメニューは「その他」で下から開く(親指で届く・横に探さない) */
+    .mtab{display:flex;flex-direction:row;gap:0;position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--hair);padding-bottom:env(safe-area-inset-bottom)}
+    .mtab[hidden]{display:none}
+    .main{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+    /* 栞(右下の顔と吹き出し)は下のタブの上へ(「その他」を覆わない) */
+    .shiori{bottom:calc(68px + env(safe-area-inset-bottom))}
+    #mobile-nav-main{display:none}
+    body.mnav-open #mobile-nav-main:not([hidden]){display:flex;flex-wrap:wrap;position:fixed;left:0;right:0;bottom:calc(56px + env(safe-area-inset-bottom));z-index:41;background:var(--surface);padding:14px 16px;box-shadow:0 -8px 24px rgba(0,0,0,.12);max-height:60vh;overflow:auto}
     .topbar{padding:12px 16px}
     .content{padding:16px 16px 40px}
     .subbar-row{padding:8px 16px}
@@ -2324,7 +2367,7 @@ function __route(url) {
     <div class="ws">
       <button class="ws-btn" id="ws-btn" disabled aria-haspopup="listbox" aria-expanded="false">
         <div class="ws-logo" id="ws-logo"><svg class="rondo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1F1C2E"/><circle cx="16" cy="16" r="8.6" fill="none" stroke="#ECE8DC" stroke-width="1.6"/><circle cx="22.1" cy="9.9" r="2.6" fill="#D9A94C"/></svg></div>
-        <div><div class="ws-name" id="ws-name">rondo</div><div class="ws-plan" id="ws-plan">運用者 workspace</div></div>
+        <div><div class="ws-name" id="ws-name">rondo</div><div class="ws-plan" id="ws-plan">運用者 の管理画面</div></div>
         <svg class="ws-chev" id="ws-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" hidden><path d="m4.5 6.25 3.5 3.5 3.5-3.5"/></svg>
       </button>
       <div class="ws-pop" id="ws-pop" hidden role="listbox" aria-label="プロジェクト切り替え"></div>
@@ -2407,6 +2450,15 @@ function __route(url) {
       <button class="fchip" data-nav="audit">稼働状況<span class="fnb" id="fchip-aud-n" hidden>要確認</span></button>
     </div>
     <div class="mobile-nav" id="mobile-nav-project" hidden></div>
+    <!-- スマホの下のタブ(よく使う4つ＋その他)。その他で上のメニュー(全画面)を下から開く -->
+    <nav class="mtab" id="mtab" aria-label="主なメニュー">
+      <button class="mtab-a" type="button" data-nav="home"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 7.2 8 2.8l5.5 4.4V13a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8z"/></svg>ホーム</button>
+      <button class="mtab-a" type="button" data-nav="inbox"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 9.5h3.2l1 1.6h3.6l1-1.6H14M2 9.5 3.6 3.6h8.8L14 9.5V13H2z"/></svg>受信箱<span class="mtab-n" id="mtab-ibx-n" hidden></span></button>
+      <button class="mtab-a gate-booking" type="button" data-nav="booking"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3M5 9.5l2 2 4-4"/></svg>予約<span class="mtab-n" id="mtab-bk-n" hidden></span></button>
+      <button class="mtab-a gate-booking-alt" type="button" data-nav="cal"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"/></svg>カレンダー</button>
+      <button class="mtab-a" type="button" data-nav="persons"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="5.5" r="2.6"/><path d="M2.8 13.6c.6-2.6 2.6-4 5.2-4s4.6 1.4 5.2 4"/></svg>顧客</button>
+      <button class="mtab-a" type="button" data-mtab-more="1" aria-expanded="false" aria-controls="mobile-nav-main"><span class="mtab-dot" id="mtab-more-dot" hidden></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h11"/></svg>その他</button>
+    </nav>
     <div class="subbar" id="step-subnav" hidden>
       <div class="subbar-row"><span class="subbar-l">ステップ</span><button class="fchip" data-nav="genko" data-scenario="course">7日間講座</button></div>
       <div class="subbar-row"><span class="subbar-l">記録</span><button class="fchip" data-nav="sends">配信ログ</button><button class="fchip" data-nav="channels" data-ch="mail">数字と読者</button></div>
@@ -2443,16 +2495,16 @@ function __route(url) {
         </div>
         <div id="reco-zone" style="display:grid;gap:16px"></div>
         <div class="card">
-          <div class="card-head"><h2 id="chart-title">日別配信数</h2><span class="sub">直近30日</span><div class="legend" id="chart-legend"></div><button class="link" data-nav="report" style="margin-left:14px">売上と配信 →</button></div>
-          <div class="card-body chart-wrap" id="chart-body"><svg id="chart" width="100%" height="280" role="img" aria-label="直近30日の推移"></svg><div class="tip" id="chart-tip"></div></div>
-        </div>
-        <div class="card">
           <div class="card-head"><h2>チャネルの調子</h2><span class="sub">7日</span><button class="link" data-nav="channels" data-ch="all" style="margin-left:auto">SNS →</button></div>
           <div class="tbl-scroll"><table>
             <thead><tr><th>チャネル</th><th class="r">規模</th><th class="r">増減 7日</th><th class="r">発信 7日</th><th class="r">前週比</th></tr></thead>
             <tbody id="ch-body"></tbody>
           </table></div>
           <div class="tbl-foot">発信は メールが配信の通数・SNSが投稿の本数 · 名前を押すとそのチャネルへ</div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2 id="chart-title">日別配信数</h2><span class="sub">直近30日</span><div class="legend" id="chart-legend"></div><button class="link" data-nav="report" style="margin-left:14px">売上と配信 →</button></div>
+          <div class="card-body chart-wrap" id="chart-body"><svg id="chart" width="100%" height="280" role="img" aria-label="直近30日の推移"></svg><div class="tip" id="chart-tip"></div></div>
         </div>
       </div>
     </section>
@@ -2482,7 +2534,7 @@ function __route(url) {
     <section class="view v-persons">
       <header class="topbar">
         <h1>顧客</h1>
-        <input class="search" id="p-q" name="person-search" type="search" placeholder="メール・LINE IDで検索…" aria-label="顧客検索" autocomplete="off" spellcheck="false">
+        <input class="search" id="p-q" name="person-search" type="search" placeholder="メール・LINEの名前・IDで検索…" aria-label="顧客検索" autocomplete="off" spellcheck="false">
         <button class="btn ghost sm push" id="p-reload">更新</button>
       </header>
       <div class="content">
@@ -2679,7 +2731,9 @@ function __route(url) {
     <section class="view v-inbox">
       <header class="topbar">
         <h1>受信箱</h1>
-        <span class="upd">LINE と Instagram の 1:1 のメッセージ・YouTube のコメント・メールの返信とお問い合わせ</span>
+        <span class="upd ibx-desc">LINE と Instagram の 1:1 のメッセージ・YouTube のコメント・メールの返信とお問い合わせ</span>
+        <span class="upd" id="ibx-upd"></span>
+        <button class="btn ghost sm push" id="ibx-reload" type="button">更新</button>
       </header>
       <div class="content">
         <div class="card ibx-card">
@@ -2687,6 +2741,7 @@ function __route(url) {
             <div class="ibx-search" role="search">
               <input type="search" id="ibx-q" maxlength="50" autocomplete="off" placeholder="名前・本文で検索" aria-label="受信箱を名前と本文で検索">
             </div>
+            <button type="button" class="btn ghost sm ibx-more-f" id="ibx-more-f" aria-expanded="false" aria-controls="ibx-chf">絞り込み・並び</button>
             <div class="filters" id="lchat-chips" role="group" aria-label="状態で絞る">
               <button type="button" class="fchip on" data-cs="open" aria-pressed="true">要対応 <span class="num" id="lchat-n-open"></span></button>
               <button type="button" class="fchip" data-cs="ai" aria-pressed="false">AI返信・確認待ち <span class="num" id="lchat-n-ai"></span></button>
@@ -2702,6 +2757,7 @@ function __route(url) {
             </div>
             <select class="ibx-lf" id="ibx-lf" aria-label="ラベル・タグで絞る"><option value="">ラベル・タグ: すべて</option></select>
             <div class="ibx-bulk">
+              <button type="button" class="fchip" id="ibx-sort" aria-pressed="false" title="Instagram の返信の期限が近い会話を上に">返信期限が近い順</button>
               <button type="button" class="btn ghost sm" id="ibx-read-all" disabled>すべて既読にする</button>
               <button type="button" class="btn ghost sm" id="ibx-done-all" disabled>要対応をすべて対応済みに</button>
             </div>
@@ -2883,7 +2939,7 @@ function __route(url) {
           </div>
         </div>
         <div class="card" id="ig-menu-card" hidden>
-          <div class="card-head"><h2>DMメニュー</h2><span class="sub" id="ig-menu-sub">ig.config.mjs の IG_MENU</span></div>
+          <div class="card-head"><h2>DMメニュー</h2><span class="sub" id="ig-menu-sub">DM の下に出す選択肢</span></div>
           <div class="today-list" id="ig-menu-list"></div>
           <div class="card-actions">
             <button type="button" class="btn primary sm" id="ig-menu-apply">DMメニューを反映</button>
@@ -3346,6 +3402,10 @@ function __route(url) {
         <div class="card">
           <div class="card-head"><h2>受信箱のラベル</h2><span class="sub">会話に付ける印。付け外しは受信箱の会話の「ラベル」から</span></div>
           <div class="set-list" id="set-labels"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>受信箱の定型文</h2><span class="sub">よく使う返事。返信欄の「定型文」から選ぶと差し込みます(送るのは押したとき)</span></div>
+          <div class="set-list" id="set-tpls"></div>
         </div>
         <div class="card">
           <div class="card-head"><h2>AIの返事</h2><span class="sub">オフにすると、AIは新しい返事を作らず、作りかけの返事も送りません</span></div>
@@ -3813,6 +3873,18 @@ function __route(url) {
           '<span class="l">' + esc(a.text) + '</span><span class="cnt">→</span></div>';
       }).join('');
       if (!rows) rows = '<div class="trow"><span class="act-ok">✓</span><span class="l">対応が必要な項目 0件</span></div>';
+      return '<div class="card">' + head + '<div class="today-list">' + rows + '</div></div>';
+    },
+    // 今日やること: 返信・Instagram の期限・今日の配信・予約(0件の項目はサーバーが出さない)。行を押すとその画面へ
+    today: function (d) {
+      var list = d.today || [];
+      if (!list.length) return '';
+      var head = '<div class="card-head"><h2>今日やること</h2><span class="sub">' + fmtN(list.length) + '件</span></div>';
+      var rows = list.map(function (a) {
+        var next = a.nextAt ? '（次は ' + fmtT(a.nextAt) + '）' : '';
+        return '<div class="trow act-row" data-nav="' + esc(a.nav) + '"><span class="adot ' + esc(a.level) + '"></span>' +
+          '<span class="l">' + esc(a.text + next) + '</span><span class="cnt">→</span></div>';
+      }).join('');
       return '<div class="card">' + head + '<div class="today-list">' + rows + '</div></div>';
     },
     // はじめの設定: 必須の項目が全部済むまで出る(サーバ側 setupComplete)。未の行は進め方(画面を開く・AIへの頼み方)を畳んで持つ
@@ -4555,7 +4627,8 @@ function __route(url) {
   // ---- 受信箱(10-08): LINE と Instagram の 1:1 を1つの一覧に混ぜ、右の欄で会話を開く ----
   // cur = 開いている会話('line:<id>' / 'ig:<id>')。一覧を読み直しても選択を保つ
   var lchat = { status: 'open', chf: 'all', offset: 0, igOffset: 0, ytOffset: 0, mailOffset: 0, line: [], ig: [], yt: [], mail: [], lineMore: false, igMore: false, ytMore: false, mailMore: false, cur: null,
-    counts: { line: {}, ig: {}, yt: {}, mail: {} }, maxIn: {}, q: '', lf: '', labels: [], tags: [], labelsDirty: false, curLabels: null, curLabelsKey: null, lblPending: {}, lblChain: {}, lblGen: {}, lblReload: {}, listGen: 0, firstPending: false, keyOf: {}, lineFailed: false, igFailed: false, ytFailed: false, mailFailed: false, ytOn: false, mailOn: false, gen: 0, pickGen: 0, winTimer: null };
+    counts: { line: {}, ig: {}, yt: {}, mail: {} }, maxIn: {}, q: '', lf: '', labels: [], tags: [], labelsDirty: false, curLabels: null, curLabelsKey: null, lblPending: {}, lblChain: {}, lblGen: {}, lblReload: {}, listGen: 0, firstPending: false, keyOf: {}, lineFailed: false, igFailed: false, ytFailed: false, mailFailed: false, ytOn: false, mailOn: false, gen: 0, pickGen: 0, winTimer: null,
+    drafts: {}, sort: 'new', loadedAt: 0, templates: null, templatesVersion: 0, profGen: 0 };
   var IBX_CH = { line: 'LINE', ig: 'Instagram', yt: 'YouTube', mail: 'メール' };
   var IBX_EMPTY = { chats: [], hasMore: false, counts: null };
   // more=true: 続きの50人を下に足す(読めたときだけ位置を進める・失敗の再試行で50人飛ばさない)
@@ -4571,7 +4644,8 @@ function __route(url) {
     var iOff = more ? lchat.igOffset + 50 : 0;
     var soft = function (e) { if (e && e.message === 'unauthorized') throw e; return { chats: [], hasMore: false, counts: null, failed: true }; };
     var pl = !more || lchat.lineMore ? api('/api/admin/line/chats?status=' + lchat.status + '&offset=' + lOff + qs).catch(soft) : Promise.resolve(null);
-    var pi = !more || lchat.igMore ? api('/api/admin/ig/chats?status=' + lchat.status + '&offset=' + iOff + qs).catch(soft) : Promise.resolve(null);
+    // 返信期限が近い順のときは、Instagram の一覧もサーバーで期限の近い順に読む(最初の50件の外の急ぐ会話も出す)
+    var pi = !more || lchat.igMore ? api('/api/admin/ig/chats?status=' + lchat.status + '&offset=' + iOff + qs + (lchat.sort === 'due' ? '&sort=due' : '')).catch(soft) : Promise.resolve(null);
     // YouTube のコメント(10-08)。つないでいない・受け口の無い古い版では出さない(404 や connected:false は「無い」扱い)
     var yOff = more ? lchat.ytOffset + 50 : 0;
     // 一度「つないでいない」と分かったら、このページの間は問い合わせない(つなぐと画面ごと読み直すので戻ってこられる・Astra 10-08)
@@ -4643,8 +4717,10 @@ function __route(url) {
           lchat.ig = more ? lchat.ig.concat(I.chats || []) : (I.chats || []);
         }
       }
+      if (!more) { lchat.loadedAt = Date.now(); el('ibx-upd').textContent = fmtT(lchat.loadedAt) + ' 更新'; }
       renderInboxCounts();
       renderInboxList();
+      noteNewInOpen();
       // 両方とも読めなかったときだけ、エラーの帯(片方だけの不調は、もう片方を見せたまま)
       if (L && L.failed && I && I.failed) loadFail(function () { loadLineChats(more); })(new Error('inbox'));
     });
@@ -4660,6 +4736,9 @@ function __route(url) {
     el('ibx-n-ig').textContent = k && g[k] ? fmtN(g[k]) : '';
     el('ibx-n-yt').textContent = k && y[k] ? fmtN(y[k]) : '';
     el('ibx-n-mail').textContent = k && ml[k] ? fmtN(ml[k]) : '';
+    var mb = el('mtab-ibx-n');
+    mb.textContent = sum('open') > 99 ? '99+' : (sum('open') ? fmtN(sum('open')) : '');
+    mb.hidden = !sum('open');
     var nb = el('nav-ibx-n');
     nb.textContent = sum('open') ? fmtN(sum('open')) : '';
     nb.hidden = !sum('open');
@@ -4985,12 +5064,63 @@ function __route(url) {
       : c.chat_status === 'open' ? '<span class="st wait">要対応</span>' : c.chat_status === 'ai' ? '<span class="st plan">AI返信・確認待ち</span>'
       : c.chat_status === 'done' ? '<span class="st ok">対応済み</span>' : '';
     var who = c.last_dir === 'out' ? (c.last_staff === 'ai' ? 'AI: ' : c.last_staff === 'auto' ? '自動: ' : 'あなた: ') : '';
+    // Instagram の返信の期限が6時間を切った要対応は、一覧にも残り時間を出す(開かなくても急ぐ順が分かる)
+    var dueLeft = ig && c.window_open !== false && c.chat_status === 'open' ? igDueLeft(c) : null;
+    var due = dueLeft != null && dueLeft < 6 * 3600000 ? '<span class="ibx-due">あと ' + Math.floor(dueLeft / 3600000) + ':' + ('0' + Math.floor((dueLeft % 3600000) / 60000)).slice(-2) + '</span>' : '';
     return '<div class="trow lchat-row' + (lchat.cur === key ? ' sel' : '') + '" tabindex="0" role="button"' + (lchat.cur === key ? ' aria-current="true"' : '') + ' data-ck="' + key + '"' + (ig || yt || ml ? ' data-igid="' + c.id + '"' : ' data-cid="' + c.id + '"') + '>' +
       '<span class="lchat-dot' + (c.unread ? '' : ' off') + '" aria-label="' + (c.unread ? '未読' : '') + '"></span>' +
       '<span class="who"><b>' + name + '</b> <span class="via">' + IBX_CH[c.channel] + (yt && c.video_title ? ' · ' + esc(c.video_title) : '') + (ml && c.subject ? ' · ' + esc(c.subject) : '') + '</span></span>' +
-      '<span class="t">' + esc(fmtDT(c.chat_last_in_at)) + '</span>' +
+      '<span class="t">' + due + ' ' + esc(fmtDT(c.chat_last_in_at)) + '</span>' +
       '<span class="lchat-snip">' + (lchat.q && c.hit_text ? hitSnippet(c.hit_text, lchat.q) : esc(who + (c.last_text || ''))) + '</span>' + st +
       (labelChips(c.label_ids) ? '<span class="lbls">' + labelChips(c.label_ids) + '</span>' : '') + '</div>';
+  }
+  // Instagram の返信の残り時間(ms)。期限の時刻があればそれから、無ければ読み込んだ時点の残りから
+  function igDueLeft(c) {
+    var exp = Number(c.window_expires_at);
+    if (exp > 0) return Math.max(0, exp - Date.now());
+    var ms = Number(c.window_remaining_ms);
+    return isFinite(ms) && ms > 0 ? Math.max(0, ms - (Date.now() - (lchat.loadedAt || Date.now()))) : null;
+  }
+  function convOf(key) {
+    var ch = key.split(':')[0], id = key.slice(ch.length + 1);
+    var arr = lchat[ch] || [];
+    for (var i = 0; i < arr.length; i++) if (String(arr[i].id) === id) return arr[i];
+    return null;
+  }
+  // 一覧を読み直したとき、開いている会話に新しい受信が来ていたら見出しに知らせる(会話は勝手に描き直さない＝書きかけを壊さない)
+  function noteNewInOpen() {
+    if (!lchat.cur) return;
+    var c = convOf(lchat.cur), box = el('ibx-box');
+    if (!c || box.dataset.key !== lchat.cur) return;
+    var seenIn = Number(box.dataset.lastIn) || 0;
+    if ((Number(c.chat_last_in_at) || 0) > seenIn && !el('ibx-head').querySelector('[data-ibx-new]')) {
+      var w = el('ibx-head').querySelector('.ibx-lwrap');
+      if (w) w.insertAdjacentHTML('beforebegin', '<button type="button" class="btn primary sm ibx-newmsg" data-ibx-new="1">新しいメッセージ · 読み込む</button>');
+    }
+  }
+  // 書きかけの返信を会話ごとに覚える(別の会話を開いて戻っても残す)。送ろうとした文(識別子 rid のある文)は覚えない:
+  // 届いたか不明の文を新しい識別子で送り直すと二重に届くため(送り直しは会話の「確かめて送る」から)
+  function saveDraft(box) {
+    var key = box.dataset.key;
+    if (!key) return;
+    var ta = box.querySelector('[data-text]');
+    if (!ta) return;
+    // 送信中(画像を上げている間を含む)の文も覚えない
+    if (ta.value.trim() && !ta.dataset.rid && !ta.dataset.sending) lchat.drafts[key] = ta.value;
+    else if (!ta.value.trim()) delete lchat.drafts[key];
+  }
+  // 返信欄がある(戻せた)ときだけ消す。返信できない間(Instagram の期限切れなど)は覚えたまま
+  function restoreDraft(box, key) {
+    var ta = box.querySelector('[data-text]');
+    if (!ta || !lchat.drafts[key]) return;
+    if (!ta.value) ta.value = lchat.drafts[key];
+    delete lchat.drafts[key];
+  }
+  // 描いた会話の最後の受信の時刻(描いた応答から。一覧の新しい値で埋めない＝見ていない新着を見た扱いにしない)
+  function lastInOf(d) {
+    var f = d.friend || {}, t = Number(f.chat_last_in_at) || 0;
+    (d.messages || []).forEach(function (m) { if (m.direction === 'in') t = Math.max(t, Number(m.created_at) || 0); });
+    return t;
   }
   function renderInboxList() {
     var rows = [];
@@ -5000,6 +5130,12 @@ function __route(url) {
     if (want('yt') && lchat.ytOn) rows = rows.concat(lchat.yt.map(function (c) { return Object.assign({ channel: 'yt' }, c); }));
     if (want('mail') && lchat.mailOn) rows = rows.concat(lchat.mail.map(function (c) { return Object.assign({ channel: 'mail' }, c); }));
     rows.sort(function (a, b) { return (Number(b.chat_last_in_at) || 0) - (Number(a.chat_last_in_at) || 0); });
+    // 返信期限が近い順: 返せる窓の開いた Instagram の要対応を期限の近い順に上へ、残りは新着順のまま
+    if (lchat.sort === 'due') {
+      var dueOf = function (c) { return c.channel === 'ig' && c.window_open !== false && c.chat_status === 'open' ? igDueLeft(c) : null; };
+      var withDue = rows.filter(function (c) { return dueOf(c) != null; }).sort(function (a, b) { return dueOf(a) - dueOf(b); });
+      rows = withDue.concat(rows.filter(function (c) { return dueOf(c) == null; }));
+    }
     var more = (want('line') && lchat.lineMore) || (want('ig') && lchat.igMore) || (want('yt') && lchat.ytOn && lchat.ytMore) || (want('mail') && lchat.mailOn && lchat.mailMore);
     var moreRow = more ? '<div class="trow lchat-more"><button type="button" class="btn ghost sm" data-more-chats="1">もっと見る</button></div>' : '';
     var failed = [];
@@ -5063,6 +5199,7 @@ function __route(url) {
         '<div class="lchat-reply"><div class="lchat-pick" data-pick="1" hidden><img alt="送る画像"><button type="button" class="x" data-unpick="1" aria-label="画像を外す">×</button></div>' +
         '<textarea data-text="1" maxlength="5000" aria-label="返信" placeholder="返信を書く（LINEで届きます）"></textarea>' +
         '<div class="lchat-acts"><button type="button" class="btn primary sm" data-send="1">送信して対応済み</button>' +
+        '<button type="button" class="btn ghost sm" data-tpl="1" aria-haspopup="true">定型文</button>' +
         '<button type="button" class="btn ghost sm" data-pick-img="1">画像</button><input type="file" accept="image/jpeg,image/png" data-file="1" hidden>' +
         (d.friend.chat_status === 'open' ? '<button type="button" class="btn ghost sm" data-st="done">返信せずに対応済み</button>'
           : d.friend.chat_status === 'ai' ? '<button type="button" class="btn ghost sm" data-st="done">AIの返信を確認した</button><button type="button" class="btn ghost sm" data-st="open">要対応に戻す</button>'
@@ -5072,6 +5209,11 @@ function __route(url) {
         '<span class="lcrm-msg" data-msg="1" role="status"></span></div></div>');
     var l = box.querySelector('[data-log]');
     if (l) l.scrollTop = l.scrollHeight;
+    var lkey = 'line:' + d.friend.id;
+    box.dataset.key = lkey;
+    box.dataset.lastIn = String(lastInOf(d));
+    restoreDraft(box, lkey);
+    paintProfile(box, lkey);
   }
   // 便1: 選んだ画像をブラウザの中で縮める(本体は長辺2048px・プレビューは長辺480px・JPEG)。上限を超えたら画質を下げる
   function shrinkImage(file, maxSide, maxBytes, q) {
@@ -5170,7 +5312,9 @@ function __route(url) {
     var hadFocus = document.activeElement && head.contains(document.activeElement) && document.activeElement.classList.contains('who');
     head.innerHTML = '<button type="button" class="back" data-ibx-back="1" aria-label="一覧へ戻る">‹</button>' +
       '<span class="who" tabindex="-1">' + esc(raw || '') + '</span><span class="via">' + IBX_CH[ch] + '</span>' + vid + mailTag + (ig && f ? ibxWindowHtml(f) : '') +
-      '<span class="ibx-lbls" id="ibx-lbls"></span><span class="ibx-lwrap"><button type="button" class="btn ghost sm" data-ibx-lbl="1" aria-haspopup="true" aria-expanded="false">ラベル</button></span>';
+      '<span class="ibx-lbls" id="ibx-lbls"></span>' +
+      (ch === 'yt' ? '' : '<button type="button" class="btn ghost sm" data-ibx-prof="1" aria-expanded="' + (lchat.profOpen ? 'true' : 'false') + '">この人</button>') +
+      '<span class="ibx-lwrap"><button type="button" class="btn ghost sm" data-ibx-lbl="1" aria-haspopup="true" aria-expanded="false">ラベル</button></span>';
     head.hidden = false;
     if (lchat.curLabelsKey !== lchat.cur) { lchat.curLabels = null; loadCurLabels(); }
     paintHeadLabels();
@@ -5369,7 +5513,8 @@ function __route(url) {
         ? '<div class="ibx-closed"><b>この会話には今は返信できません</b>Instagram の決まりで、相手の最後のメッセージから24時間を過ぎると返信できません。相手から次のメッセージが届くと、また返信できます。</div>' +
           '<div class="lchat-acts">' + st + '<span class="lcrm-msg" data-msg="1" role="status"></span></div>'
         : '<div class="lchat-reply"><textarea data-text="1" aria-label="返信" placeholder="' + (xch === 'yt' ? '返信を書く（YouTube のコメント欄に、あなたのチャンネル名で公開されます）' : xch === 'mail' ? '返信を書く（メールで届きます・件名は「Re: 元の件名」）' : '返信を書く（Instagram の DM で届きます・日本語なら330字まで）') + '"></textarea>' +
-          '<div class="lchat-acts"><button type="button" class="btn primary sm" data-isend="1">送信して対応済み</button>' + st +
+          '<div class="lchat-acts"><button type="button" class="btn primary sm" data-isend="1">送信して対応済み</button>' +
+          '<button type="button" class="btn ghost sm" data-tpl="1" aria-haspopup="true">定型文</button>' + st +
           '<span class="lcrm-msg" data-msg="1" role="status"></span></div></div>');
     var l = box.querySelector('[data-log]');
     if (l) l.scrollTop = l.scrollHeight;
@@ -5384,13 +5529,17 @@ function __route(url) {
         box._carry = carry; // 期限が延びて返信欄が戻ったら、書いた文と識別子を戻す
       }
     }
+    box.dataset.key = key;
+    box.dataset.lastIn = String(lastInOf(d));
+    if (!carry) restoreDraft(box, key);
+    paintProfile(box, key);
   }
   var IBX_NARROW = window.matchMedia ? window.matchMedia('(max-width:860px)') : { matches: false };
   // 会話を開く。gen = 開くたびに増やす番号。遅れて届いた前の会話の応答・画像の縮小結果は、番号が違えば捨てる
   function openChat(key, keepFocus) {
     if (!key) return;
     var switching = lchat.cur !== key;
-    if (switching) closeLabelPop(); // 別の会話を開いたら、前の会話のラベルのポップは閉じる
+    if (switching) { closeLabelPop(); closeTplPop(); } // 別の会話を開いたら、前の会話のポップは閉じる
     lchat.cur = key;
     var gen = ++lchat.gen;
     if (switching) lchat.pickGen++;
@@ -5410,8 +5559,11 @@ function __route(url) {
     // スマホは一覧が隠れるので、キーボードの位置を会話の見出しへ移す
     if (IBX_NARROW.matches && !keepFocus) { var w0 = el('ibx-head').querySelector('.who'); if (w0) w0.focus(); }
     var box = el('ibx-box');
+    // 書きかけを会話ごとに覚える(別の会話へ・LINE は同じ会話の読み直しでも)。Instagram 等の同じ会話の読み直しは従来どおり識別子ごと引き継ぐ
+    if (switching || ch === 'line') saveDraft(box);
     if (!switching && ch !== 'line') igCaptureDraft(box);
     else if (switching) box._carry = null;
+    delete box.dataset.key;
     box.removeAttribute('data-cp');
     box.removeAttribute('data-igp');
     box.setAttribute(ch === 'line' ? 'data-cp' : 'data-igp', id);
@@ -5428,6 +5580,112 @@ function __route(url) {
     });
   }
   function reopenChat() { if (lchat.cur) openChat(lchat.cur, true); }
+  // ---- 定型文(よく使う返事)。返信欄の「定型文」から選ぶと、書きかけの文の後ろ(カーソルの位置)に差し込む ----
+  function loadTemplates() {
+    return api('/api/admin/inbox/templates').then(function (d) { lchat.templates = d.templates || []; lchat.templatesVersion = d.version || 0; return lchat.templates; });
+  }
+  function closeTplPop() {
+    var p = document.querySelector('.tpl-pop');
+    if (p) p.remove();
+    var b = document.querySelector('[data-tpl][aria-expanded="true"]');
+    if (b) b.setAttribute('aria-expanded', 'false');
+  }
+  function tplPopHtml(list) {
+    if (!list.length) return '<div class="tpl-empty">定型文はまだありません。設定の「受信箱の定型文」で作れます</div><button type="button" class="tpl-i" data-tpl-edit="1">定型文を作る</button>';
+    return list.map(function (t) {
+      return '<button type="button" class="tpl-i" data-tpl-i="' + t.id + '">' + esc(t.name) + '<small>' + esc(t.text.replace(/\s+/g, ' ').slice(0, 60)) + '</small></button>';
+    }).join('') + '<button type="button" class="tpl-i" data-tpl-edit="1"><small>定型文を編集する</small></button>';
+  }
+  function openTplPop(btn) {
+    closeTplPop();
+    btn.setAttribute('aria-expanded', 'true');
+    var pop = document.createElement('div');
+    pop.className = 'tpl-pop';
+    pop.setAttribute('role', 'menu');
+    pop.innerHTML = lchat.templates ? tplPopHtml(lchat.templates) : '<div class="tpl-empty">読み込み中…</div>';
+    // body 直下に fixed で置く(返信欄の箱のはみ出し隠しで切れないように)。下に入らなければボタンの上に出す。中身が変わったら置き直す
+    document.body.appendChild(pop);
+    var place = function () {
+      var r = btn.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight;
+      var pw = Math.min(360, vw - 16), ph = Math.min(280, pop.offsetHeight || 280);
+      pop.style.left = Math.max(8, Math.min(r.left, vw - pw - 8)) + 'px';
+      pop.style.top = (r.bottom + 4 + ph <= vh ? r.bottom + 4 : Math.max(8, r.top - 4 - ph)) + 'px';
+    };
+    place();
+    if (!lchat.templates) loadTemplates().then(function (list) { if (pop.isConnected) { pop.innerHTML = tplPopHtml(list); place(); } }).catch(function () {
+      if (pop.isConnected) { pop.innerHTML = '<div class="tpl-empty">定型文を読み込めませんでした</div>'; place(); }
+    });
+    var first = pop.querySelector('button'); if (first) first.focus();
+  }
+  function insertTemplate(id) {
+    var t = (lchat.templates || []).filter(function (x) { return x.id === id; })[0];
+    closeTplPop();
+    var ta = el('ibx-box').querySelector('[data-text]');
+    if (!t || !ta) return;
+    var a = ta.selectionStart != null ? ta.selectionStart : ta.value.length, b = ta.selectionEnd != null ? ta.selectionEnd : ta.value.length;
+    var before = ta.value.slice(0, a), after = ta.value.slice(b);
+    var sep = before && !/\n$/.test(before) ? '\n' : '';
+    ta.value = before + sep + t.text + after;
+    var pos = (before + sep + t.text).length;
+    ta.focus();
+    try { ta.setSelectionRange(pos, pos); } catch (err) { /* 古いブラウザ */ }
+  }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.querySelector('.tpl-pop')) closeTplPop(); });
+  // 画面を動かしたら閉じる(fixed の位置がボタンから離れたまま残らないように)。メニューの中のスクロールでは閉じない
+  window.addEventListener('scroll', function (e) { if (document.querySelector('.tpl-pop') && !(e.target && e.target.closest && e.target.closest('.tpl-pop'))) closeTplPop(); }, true);
+  window.addEventListener('resize', function () { if (document.querySelector('.tpl-pop')) closeTplPop(); });
+  // メニューは body 直下にあるので、選ぶ・外を押して閉じるは document で受ける
+  document.addEventListener('click', function (e) {
+    if (!document.querySelector('.tpl-pop') || !e.target.closest) return;
+    var it = e.target.closest('.tpl-pop [data-tpl-i]');
+    if (it) { insertTemplate(Number(it.getAttribute('data-tpl-i'))); return; }
+    if (e.target.closest('.tpl-pop [data-tpl-edit]')) { closeTplPop(); show('settings'); return; }
+    if (!e.target.closest('.tpl-pop') && !e.target.closest('[data-tpl]')) closeTplPop();
+  });
+  // ---- この人(会話の横の横顔): 区分・購入・タグ・ステップの進み具合。開いた状態は会話を変えても保つ ----
+  function profileHtml(p) {
+    if (!p || p.supported === false) return '';
+    if (!p.found) return '<div class="ibx-prof">この人の記録は見つかりませんでした</div>';
+    var yen = function (n) { return '¥' + fmtN(Math.round(n || 0)); };
+    var rows = [];
+    rows.push('<div class="row"><span><span class="k">区分</span>' + esc(p.segment || '—') + '</span><span><span class="k">つながり</span>' + esc((p.channels || []).join('・') || '—') + '</span>' +
+      (p.since ? '<span><span class="k">はじめて</span>' + esc(fmtDT(p.since)) + '</span>' : '') + '</div>');
+    var pu = p.purchases || {};
+    rows.push('<div class="row"><span><span class="k">購入</span>' + (pu.count ? fmtN(pu.count) + '件 · ' + yen(pu.total) : 'なし') + '</span>' +
+      (pu.recent || []).map(function (r) { return '<span>' + esc(r.product) + (r.yen ? ' ' + yen(r.yen) : '') + (r.at ? '（' + esc(fmtDT(r.at)) + '）' : '') + '</span>'; }).join('') + '</div>');
+    if ((p.tags || []).length) rows.push('<div><span class="k">タグ</span>' + p.tags.map(function (t) { return '<span class="tg">' + esc(t) + '</span>'; }).join('') + '</div>');
+    if ((p.steps || []).length) rows.push('<div class="row"><span class="k">ステップ</span>' + p.steps.map(function (s) {
+      var pos = s.state === 'active' && s.next ? ' · 次は第' + s.next + '通' : '';
+      return '<span>' + esc(s.ch + ' ' + s.label + pos + ' · ' + s.status) + '</span>';
+    }).join('') + '</div>');
+    if (p.unlinked) rows.push('<div style="color:var(--note)">名簿の読者と結びついていないメールなので、購入やタグは出しません</div>');
+    return '<div class="ibx-prof" data-prof="1">' + rows.join('') + '</div>';
+  }
+  function paintProfile(box, key) {
+    var old = box.querySelector('[data-prof]');
+    if (old) old.remove();
+    if (!lchat.profOpen) return;
+    var ch = key.split(':')[0], id = key.slice(ch.length + 1);
+    if (ch === 'yt') return;
+    var log = box.querySelector('[data-log]');
+    if (!log) return;
+    var g = lchat.gen, pg = ++lchat.profGen;
+    api('/api/admin/inbox/profile?ch=' + encodeURIComponent(ch) + '&id=' + encodeURIComponent(id)).then(function (p) {
+      // 待つ間に会話を変えた・「この人」を閉じた(開き直した)なら描かない
+      if (lchat.cur !== key || lchat.gen !== g || box.dataset.key !== key || !lchat.profOpen || lchat.profGen !== pg) return;
+      var o2 = box.querySelector('[data-prof]'); if (o2) o2.remove();
+      var html = profileHtml(p);
+      if (html) box.insertAdjacentHTML('afterbegin', html);
+    }).catch(function () {});
+  }
+  function toggleProfile() {
+    lchat.profOpen = !lchat.profOpen;
+    lchat.profGen++;
+    var b = el('ibx-head').querySelector('[data-ibx-prof]');
+    if (b) b.setAttribute('aria-expanded', lchat.profOpen ? 'true' : 'false');
+    var box = el('ibx-box');
+    if (box.dataset.key) paintProfile(box, box.dataset.key);
+  }
   // 確かめてから動かすボタン: 1回目で文言が変わり(赤)、5秒以内にもう一度押すと true を返す。
   // confirm()/prompt() の小窓はアプリ内ブラウザで出ずに「キャンセル」扱いになる(2026-10-06 実測)ので使わない
   function armTwice(b, label) {
@@ -5463,6 +5721,28 @@ function __route(url) {
     el('lchat-chips').querySelectorAll('.fchip').forEach(function (b) { b.classList.toggle('on', b === chip); b.setAttribute('aria-pressed', b === chip ? 'true' : 'false'); });
     loadLineChats();
   });
+  el('ibx-reload').addEventListener('click', function () { loadLineChats(); });
+  el('ibx-sort').addEventListener('click', function () {
+    lchat.sort = lchat.sort === 'due' ? 'new' : 'due';
+    el('ibx-sort').classList.toggle('on', lchat.sort === 'due');
+    el('ibx-sort').setAttribute('aria-pressed', lchat.sort === 'due' ? 'true' : 'false');
+    loadLineChats(); // Instagram の一覧の並び(と続きの読み方)が変わるので読み直す
+  });
+  el('ibx-more-f').addEventListener('click', function () {
+    var bar = el('ibx-more-f').closest('.ibx-bar');
+    var open = !bar.classList.contains('f-open');
+    bar.classList.toggle('f-open', open);
+    el('ibx-more-f').setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  // 新着の自動の読み直し: 受信箱を表示していて、画面が見えていて、続き(もっと見る)を読んでいないときだけ60秒ごとに一覧を読み直す。
+  // 開いている会話は描き直さない(書きかけ・送信中の状態を壊さない)。新しい受信があれば見出しに「新しいメッセージ」を出す
+  setInterval(function () {
+    if (document.documentElement.getAttribute('data-view') !== 'inbox' || document.visibilityState !== 'visible') return;
+    if (lchat.firstPending || lchat.offset || lchat.igOffset || lchat.ytOffset || lchat.mailOffset) return;
+    if (el('ibx-q').value.trim() !== lchat.q) return; // 検索欄を打っている途中は待つ
+    if (Date.now() - (lchat.loadedAt || 0) < 55000) return;
+    loadLineChats();
+  }, 15000);
   el('ibx-chf').addEventListener('click', function (e) {
     var chip = e.target.closest ? e.target.closest('[data-chf]') : null;
     if (!chip) return;
@@ -5481,6 +5761,11 @@ function __route(url) {
     }
     if (e.target.closest('[data-retry-chats]')) { loadLineChats(); return; }
     if (e.target.closest('[data-reopen]')) { reopenChat(); return; }
+    if (e.target.closest('[data-ibx-new]')) { reopenChat(); return; }
+    var tplBtn = e.target.closest('[data-tpl]');
+    if (tplBtn) { if (document.querySelector('.tpl-pop')) closeTplPop(); else openTplPop(tplBtn); return; }
+    var profBtn = e.target.closest('[data-ibx-prof]');
+    if (profBtn) { toggleProfile(); return; }
     var lb = e.target.closest('[data-ibx-lbl]');
     if (lb) { if (document.querySelector('.ibx-lpop')) closeLabelPop(); else openLabelPop(lb); return; }
     if (e.target.closest('[data-ibx-back]')) {
@@ -5627,6 +5912,7 @@ function __route(url) {
       if (!text && !pick) { msg.className = 'lcrm-msg bad'; msg.textContent = '本文が空です'; return; }
       var btn = e.target.closest('[data-send]');
       btn.disabled = true;
+      ta.dataset.sending = '1'; // 画像を上げている間に別の会話へ移っても、この文を書きかけとして覚えない(送った後に戻って二重に送らない)
       msg.className = 'lcrm-msg'; msg.textContent = '送信中…';
       var image = null;
       var sendOnce = function (extra) {
@@ -5671,7 +5957,7 @@ function __route(url) {
           // 一覧の行の状態と件数も揃える(開いている会話は閉じない)
           loadLineChats();
         });
-      }).catch(function () {}).then(function () { btn.disabled = false; });
+      }).catch(function () {}).then(function () { btn.disabled = false; delete ta.dataset.sending; });
       return;
     }
     if (e.target.closest('[data-pick-img]')) { box.querySelector('[data-file]').click(); return; }
@@ -6687,18 +6973,36 @@ function __route(url) {
   var personsQ = '';
   var personsSeg = '';
   var personsSort = '';
+  var personsShown = 0;   // いま並べている人数(もっと見るで50人ずつ足す)
+  var personsGen = 0;     // 読み込みの世代(条件を変えたら古い応答を捨てる)
+  var personsFirstPending = false; // 新しい条件の先頭を読んでいる間は「もっと見る」を受け付けない(前の条件の位置で読まない)
+  var personsKeyShown = null;      // いま並べている一覧の条件(先頭が読めた条件)。条件が違えば「もっと見る」は先頭から読み直す
+  function personsKey() { return personsQ + '|' + personsSeg + '|' + personsSort; }
   var SEG_UI = {
     core: ['コア', 'rgba(232,98,44,.15)', 'var(--ink)'],
     regular: ['常連', 'rgba(6,199,85,.12)', 'var(--ink)'],
     prospect: ['見込み', 'rgba(74,144,217,.12)', 'var(--ink)'],
     dormant: ['休眠', 'rgba(139,145,153,.15)', 'var(--ink)'],
   };
-  function loadPersons() {
+  function loadPersons(more) {
     var qs = [];
     if (personsQ) qs.push('q=' + encodeURIComponent(personsQ));
     if (personsSeg) qs.push('seg=' + encodeURIComponent(personsSeg));
     if (personsSort) qs.push('sort=' + encodeURIComponent(personsSort));
+    if (more && personsFirstPending) return;
+    var fromMoreBtn = !!more; // 「もっと見る」から来た(失敗したらボタンを押せる状態に戻す)
+    // 並べている一覧と条件が違う(新しい条件の先頭が読めていない)なら、続きではなく先頭から読む
+    if (more && personsKeyShown !== personsKey()) more = false;
+    var reqKey = personsKey();
+    var off = more ? personsShown : 0;
+    if (off) qs.push('offset=' + off);
+    var my = more ? personsGen : ++personsGen;
+    if (!more) personsFirstPending = true;
     api('/api/admin/persons' + (qs.length ? '?' + qs.join('&') : '')).then(function (d) {
+      if (my !== personsGen) return;
+      // 続きの応答は、頼んだ位置(off)がいまの表示の末尾のままのときだけ足す(重ねて押した・読み直した後の応答を足さない)
+      if (more && off !== personsShown) return;
+      if (!more) { personsFirstPending = false; personsKeyShown = reqKey; }
       el('p-total').textContent = fmtN(d.kpi.persons);
       el('p-email').textContent = fmtN(d.kpi.email);
       el('p-line').textContent = fmtN(d.kpi.line);
@@ -6713,7 +7017,7 @@ function __route(url) {
         el('p-core-d').innerHTML = '<span>常連 ' + fmtN(sg.regular || 0) + ' · 見込み ' + fmtN(sg.prospect || 0) + ' · 休眠 ' + fmtN(sg.dormant || 0) + '</span>';
       }
       var rows = (d.rows || []).map(function (r) {
-        var name = r.email ? esc(r.email) : (r.line_id ? 'LINEのみ' : r.discord_id ? 'Discordのみ' : r.ig_id ? (r.ig_username ? '@' + esc(r.ig_username) : 'Instagram ' + esc(String(r.ig_id))) : '—');
+        var name = r.email ? esc(r.email) : (r.line_id ? (r.line_name ? esc(r.line_name) + ' <span style="color:var(--note)">· LINE</span>' : 'LINEのみ') : r.discord_id ? 'Discordのみ' : r.ig_id ? (r.ig_username ? '@' + esc(r.ig_username) : 'Instagram ' + esc(String(r.ig_id))) : '—');
         var badges = '';
         if (r.segment && SEG_UI[r.segment]) {
           var sc = SEG_UI[r.segment];
@@ -6733,13 +7037,29 @@ function __route(url) {
           '<span class="l">' + name + sub + '</span><span class="cnt">' + badges + '</span></div>' +
           '<div class="p-tl" data-tl="' + r.id + '" hidden style="padding:4px 12px 10px 24px"></div>';
       });
-      el('p-list').innerHTML = rows.length ? rows.join('') : aiEmpty('まだ顧客がいません', 'メールの読者やLINEの友だちが登録すると、ここに自動で並びます。購入やタグ、反応の多さで区分(コア・常連・見込み・休眠)も付きます。', 'Rondo に、前に使っていた配信ツールの読者や購入者の CSV を取り込みたいです。OPTIONS.md の取り込みの手順(import:readers・import:buyers・import:lstep)のどれが合うか教えて、取り込む前に件数を見せてください。');
+      var moreBtn = d.hasMore ? '<div class="trow lchat-more" data-p-more-row="1"><button type="button" class="btn ghost sm" data-p-more="1">もっと見る</button></div>'
+        : d.capped ? '<div class="trow empty" data-p-more-row="1">これより先は、上の検索や区分で絞って探してください</div>' : '';
+      if (more) {
+        var oldMore = el('p-list').querySelector('[data-p-more-row]');
+        if (oldMore) oldMore.remove();
+        el('p-list').insertAdjacentHTML('beforeend', rows.join('') + moreBtn);
+        personsShown += (d.rows || []).length;
+      } else {
+        personsShown = (d.rows || []).length;
+      }
+      if (!more) el('p-list').innerHTML = rows.length ? rows.join('') + moreBtn : aiEmpty('まだ顧客がいません', 'メールの読者やLINEの友だちが登録すると、ここに自動で並びます。購入やタグ、反応の多さで区分(コア・常連・見込み・休眠)も付きます。', 'Rondo に、前に使っていた配信ツールの読者や購入者の CSV を取り込みたいです。OPTIONS.md の取り込みの手順(import:readers・import:buyers・import:lstep)のどれが合うか教えて、取り込む前に件数を見せてください。');
       var subParts = [];
       if (personsQ) subParts.push('検索: ' + personsQ);
       if (personsSeg && SEG_UI[personsSeg]) subParts.push(SEG_UI[personsSeg][0] + 'のみ');
-      subParts.push(personsSort === 'score' ? 'スコア順 50人' : '最新50人');
+      subParts.push((personsSort === 'score' ? 'スコア順' : '新しい順') + ' · ' + fmtN(d.matched != null ? d.matched : personsShown) + '人中 ' + fmtN(personsShown) + '人を表示');
       el('p-sub').textContent = subParts.join(' · ');
-    }).catch(loadFail(loadPersons));
+    }).catch(function (e) {
+      var b = fromMoreBtn ? el('p-list').querySelector('[data-p-more]') : null;
+      if (b) b.disabled = false;
+      if (more) return;
+      if (my === personsGen) personsFirstPending = false;
+      loadFail(function () { loadPersons(); })(e);
+    });
   }
   el('p-chips').addEventListener('click', function (e) {
     var chip = e.target.closest ? e.target.closest('.fchip') : null;
@@ -6753,6 +7073,9 @@ function __route(url) {
   });
   // 顧客タイムライン(改善⑥): 行クリックで展開。もう一度クリックで閉じる
   el('p-list').addEventListener('click', function (e) {
+    var mb = e.target.closest ? e.target.closest('[data-p-more]') : null;
+    // 先頭を読んでいる間は押しても何もしない(ボタンを無効にしたまま残さない)
+    if (mb) { if (personsFirstPending) return; mb.disabled = true; loadPersons(true); return; }
     var row = e.target.closest ? e.target.closest('[data-pid]') : null;
     if (!row) return;
     var pid = row.getAttribute('data-pid');
@@ -6789,7 +7112,7 @@ function __route(url) {
     var v = this.value;
     pqTimer = setTimeout(function () { personsQ = v.trim(); loadPersons(); }, 300);
   });
-  el('p-reload').addEventListener('click', loadPersons);
+  el('p-reload').addEventListener('click', function () { loadPersons(); }); // 引数(クリックの印)を「続き」と取り違えない
 
   // ---- 監査 ----
   var AUD_KEY = { cron: 'ステップメールの送信', line_cron: 'LINEのステップ配信', line_cast: 'LINEセグメント配信', mail_cast: 'メールセグメント配信', choritsu: '週次調律', queue: '送信の待ち行列', empty_slot: '配信不能(原稿切れ)', send_dead: 'メール打ち止め', line_send_dead: 'LINE打ち止め', resend_batch: 'メールの一括送信(Resend)' };
@@ -7530,7 +7853,7 @@ function __route(url) {
     }
     if (d.ch === 'mail' && d.engine) {
       var ab = d.engine.abTests || [];
-      var mb = '<div class="eng-h">件名A/B <span class="w">開封率 · 各変種n≥100で週次自動判定</span></div>';
+      var mb = '<div class="eng-h">件名A/B <span class="w">開封率 · どちらも100通以上届いたら、週に1回勝った方を自動で採用</span></div>';
       if (ab.length) {
         mb += ab.map(function (t) {
           var num = t.variants.map(function (v) {
@@ -7546,7 +7869,7 @@ function __route(url) {
       // 便B: 購入のルール(購入台帳に入った購入で動くこと)と、これまでに動いた件数
       var prs = d.purchase_rules || [];
       if (prs.length || d.purchase_rules_dead) {
-        mb += '<div class="eng-h" style="margin-top:14px">購入のルール <span class="w">購入台帳に入った購入で5分ごとに動く · purchase-rules.config.mjs</span></div>';
+        mb += '<div class="eng-h" style="margin-top:14px">購入のルール <span class="w">買われたら5分以内に動く(タグ・講座の開始や停止・LINE)</span></div>';
         mb += prs.map(function (r) {
           var acts = [];
           if ((r.tags || []).length) acts.push('タグ ' + r.tags.map(esc).join('・'));
@@ -7557,13 +7880,15 @@ function __route(url) {
           return engLine(esc(r.product) + ' <span style="color:var(--note)">' + acts.join(' · ') + '</span>', fmtN(r.done) + '件');
         }).join('');
         if (d.purchase_rules_dead) mb += '<div style="color:var(--bad);font-size:12px">打ち止め ' + fmtN(d.purchase_rules_dead) + '件 · 稼働状況の画面で確かめてください</div>';
+        mb += aiHow('Rondo の購入のルール(purchase-rules.config.mjs)に、「(商品名)」を買った人に「(タグ・講座の開始など)」をする決まりを足してください。足す前に案を見せてください。');
       }
       // 便C1: 計測リンク(本文の %link:キー%)。押した人数と、押したら動くこと。鍵が無いと記録も操作もしない
       var mls = d.mail_links || [];
       if (mls.length) {
-        mb += '<div class="eng-h" style="margin-top:14px">計測リンク <span class="w">本文の %link:キー% · 初めて押した人だけ動く · mail.config.mjs</span></div>';
+        mb += '<div class="eng-h" style="margin-top:14px">計測リンク <span class="w">メールの本文に入れたリンク · 誰が押したかを数え、初めて押した人にだけ動く</span></div>';
         if (!d.mail_link_secret) {
-          mb += '<div style="color:var(--bad);font-size:12px">MAIL_LINK_SECRET が未設定です。いまは行き先へそのままつながり、記録も操作もしません</div>';
+          mb += '<div style="color:var(--bad);font-size:12px">リンクの記録に使う鍵が未設定です。いまは行き先へそのままつながり、記録も操作もしません</div>' +
+            aiHow('Rondo の計測リンクの鍵(MAIL_LINK_SECRET)を、ランダムな値で wrangler secret put して入れてください。');
         }
         mb += mls.map(function (l) {
           var acts = (l.do || []).map(function (x) {
@@ -7578,16 +7903,18 @@ function __route(url) {
           return engLine(esc(l.key) + ' <span style="color:var(--note)">' + esc(dest.length > 40 ? dest.slice(0, 40) + '…' : dest) +
             (acts.length ? ' · ' + acts.join(' · ') : '') + '</span>', fmtN(l.clickers) + '人');
         }).join('');
+        mb += aiHow('Rondo のメールの計測リンク(mail.config.mjs と本文の %link:キー%)で、「(行き先)」へのリンクを作り、押した人に「(タグなど)」を付けてください。');
       }
       // 便A: 名簿の一覧(一斉配信の式 list:<名> で使う)。14日を過ぎたものは赤
       var lists = d.lists || [];
       if (lists.length) {
-        mb += '<div class="eng-h" style="margin-top:14px">名簿 <span class="w">一斉配信の list:名前 で絞る · npm run list:import で取り込み</span></div>';
+        mb += '<div class="eng-h" style="margin-top:14px">名簿 <span class="w">一斉配信の宛先を名簿で絞れる · 14日より古い名簿は赤</span></div>';
         mb += lists.map(function (l) {
           var old = Date.now() - l.updated_at > (d.listMaxAgeDays || 14) * 86400000;
           return engLine(esc(l.name) + (l.label ? ' <span style="color:var(--note)">' + esc(l.label) + '</span>' : ''),
             fmtN(l.member_count) + '人 · <span' + (old ? ' style="color:var(--bad)"' : '') + '>' + jstMD(l.updated_at) + '更新' + (old ? ' · 古い' : '') + '</span>');
         }).join('');
+        mb += aiHow('Rondo の名簿に、この CSV を「(名簿の名前)」として取り込んでください(npm run list:import)。取り込む前に件数を見せてください。');
       }
       mb += '<div class="eng-h" style="margin-top:14px">セグメント配信 <span class="w">' +
         esc(SCN_LABEL[CFG.defaultScenarioKey] || 'ステップ') + '読者宛 · 購入者リスト宛はメール面へ</span></div>';
@@ -8641,7 +8968,8 @@ function __route(url) {
       if (r.status === 'active' || r.status === 'pending' || r.status === 'dormant') {
         acts += '<button class="btn ghost sm" data-runsub="' + r.id + '">配信を解除</button>';
       }
-      acts += '<button class="btn ghost sm" data-rdel="' + r.id + '" data-email="' + esc(r.email) + '">削除</button>';
+      // 削除(取り返しがつかない)は、ふつうの操作と同じ枠にしない: 枠なしの小さな赤字(押した後はアドレスの入力で確かめる)
+      acts += '<button class="btn link-danger sm" data-rdel="' + r.id + '" data-email="' + esc(r.email) + '">削除</button>';
       return '<tr><td class="mail">' + esc(r.email) + '</td>' +
         '<td>' + st + '</td>' +
         '<td class="dim"><span class="num">' + esc(fmtD(r.confirmed_at || r.registered_at)) + '</span></td>' +
@@ -9169,6 +9497,7 @@ function __route(url) {
     el('nav-project').hidden = isMain;
     el('side-project-channels').hidden = isMain;
     el('mobile-nav-main').hidden = !isMain;
+    el('mtab').hidden = !isMain; // 追加のプロジェクトを見ている間は、上のプロジェクトのメニューを使う
     el('mobile-nav-project').hidden = isMain;
     if (!isMain) renderProjectNav([]);
     if (isMain) el('ws-logo').innerHTML = RONDO_MARK; else el('ws-logo').textContent = (p.short || '?');
@@ -9512,6 +9841,11 @@ function __route(url) {
   function setReset(d, key) {
     return d && d.overrides[key] != null ? '<button class="btn ghost sm" type="button" data-set-reset="' + key + '">設定ファイルの値に戻す</button>' : '';
   }
+  // 読むだけの欄の「変え方」: 畳んだ AI への頼み方(コピー)。ファイル名やコマンドは頼み方の側に入れる
+  function aiHow(ask) {
+    return '<details class="set-how ai-how"><summary>変え方</summary><pre>' + esc(ask) + '</pre>' +
+      '<button class="btn ghost sm" type="button" data-ai-ask="' + esc(ask) + '">AIへの頼み方をコピー</button></details>';
+  }
   // 空の画面の案内: 何がここに出るか＋AIへの頼み方(コピー)。ファイル名やコマンドは頼み方の側に入れる
   function aiEmpty(title, body, ask) {
     return '<div class="ai-empty"><b>' + esc(title) + '</b><p>' + esc(body) + '</p>' +
@@ -9521,6 +9855,20 @@ function __route(url) {
   function setHow(text, ask) {
     return '<details class="set-how"><summary>変え方</summary><p>' + text + '</p>' +
       (ask ? '<pre>' + esc(ask) + '</pre><button class="btn ghost sm" type="button" data-set-copy="' + esc(ask) + '">AIへの頼み方をコピー</button>' : '') + '</details>';
+  }
+  // 自分の LINE を新着の知らせ先にする(合言葉を公式アカウントに送る)。利用者IDは画面に出さない
+  function ownerLineDesc(n) {
+    var ol = n.ownerLine || {};
+    if (!n.lineReady) return 'LINE公式アカウントをつなぐと使えます';
+    if (ol.registered) return '受信箱の新しいメッセージを、自分のLINEにも知らせます(1日' + fmtN(ol.dailyMax || 20) + '通まで・LINEの月の通数に数えられます)';
+    return '合言葉を出して、自分のLINEから公式アカウントに「通知 合言葉」と送ると、そのLINEに新着が届きます';
+  }
+  function ownerLineCtl(n) {
+    var ol = n.ownerLine || {};
+    if (!n.lineReady) return '<span class="v dim">—</span>';
+    if (ol.registered) return '<span class="v ok">受け取っています</span><button class="btn ghost sm" type="button" id="set-ownerline-clear">止める</button><span class="set-msg" id="set-msg-ownerline"></span>';
+    return '<button class="btn primary sm" type="button" id="set-ownerline-code">合言葉を出す</button><span class="set-msg" id="set-msg-ownerline"></span>' +
+      (ol.pending ? '<span class="v dim">合言葉は ' + esc(fmtT(ol.pending.expiresAt)) + ' まで有効です(出し直すと前の合言葉は使えません)</span>' : '');
   }
   function setMsg(id, text, cls) {
     var m = el(id); if (!m) return;
@@ -9577,10 +9925,12 @@ function __route(url) {
     syncShioriSetting(shOn && !!sh.ready);
     // 通知
     var n = d.notify || {};
+    var ol = n.ownerLine || {};
     el('set-notify').innerHTML =
       setRow('知らせの送り先(Discord)', 'Webhook のURLは秘密の値なので、画面では受け付けません',
         '<span class="v ' + (n.webhookSet ? 'ok' : 'dim') + '">' + (n.webhookSet ? '設定済み' : '未設定') + '</span>') +
-      setRow('LINEの新しいメッセージ', '1人につき10分に1回まで、Discordへ知らせます' + (n.webhookSet ? '' : '(送り先が未設定なので、いまは届きません)'),
+      setRow('自分のLINEで受け取る', ownerLineDesc(n), ownerLineCtl(n)) +
+      setRow('LINEの新しいメッセージ', '1人につき10分に1回まで、Discord' + (ol.registered ? 'と自分のLINE' : '') + 'へ知らせます' + (n.webhookSet || ol.registered ? '' : '(送り先が未設定なので、いまは届きません)'),
         setSw('set-sw-linenotify', d.effective.line_chat_notify === '1', false, 'LINEの新しいメッセージの通知') + setSrc(d, 'line_chat_notify') + setReset(d, 'line_chat_notify')) +
       setRow('Instagramの新しいメッセージ', '知らせ方はLINEと同じです',
         setSw('set-sw-ignotify', d.effective.ig_chat_notify === '1', false, 'Instagramの新しいメッセージの通知') + setSrc(d, 'ig_chat_notify') + setReset(d, 'ig_chat_notify')) +
@@ -9609,7 +9959,7 @@ function __route(url) {
     // 差出人とメールの末尾
     var sd = d.sender || {};
     el('set-sender').innerHTML =
-      setRow('差出人名', '確認メール・特典メールの名乗りと、左上の「〇〇 workspace」に使います(40字まで)',
+      setRow('差出人名', '確認メール・特典メールの名乗りと、左上の「〇〇 の管理画面」に使います(40字まで)',
         '<input class="set-in" id="set-in-sender" type="text" maxlength="40" aria-label="差出人名" value="' + esc(d.effective.sender_name || '') + '">' +
         '<button class="btn primary sm" type="button" id="set-save-sender">保存</button>' + setReset(d, 'sender_name') + setSrc(d, 'sender_name') + '<span class="set-msg" id="set-msg-sender"></span>') +
       setRow('送信元アドレス', '配信メールの From', '<span class="v">' + esc(sd.fromAddr || '未設定') + '</span>') +
@@ -9659,6 +10009,62 @@ function __route(url) {
         '<button class="btn danger sm" type="button" data-ldel="' + l.id + '">削除</button><span class="set-msg" id="set-msg-l' + l.id + '"></span>');
     }).join('');
   }
+  // 受信箱の定型文(30件まで・名前40字・本文2000字)
+  function renderSetTemplates(list, max) {
+    var box = el('set-tpls'); if (!box) return;
+    var rows = list.map(function (t) {
+      return '<div class="set-row tpl-row"><div class="l" style="flex:1 1 100%">' +
+        '<input class="set-in" type="text" maxlength="40" aria-label="定型文の名前" value="' + esc(t.name) + '" data-tname="' + t.id + '" style="width:100%;max-width:320px">' +
+        '<textarea class="set-in" rows="3" maxlength="2000" aria-label="定型文の本文" data-ttext="' + t.id + '" style="width:100%;margin-top:6px">' + esc(t.text) + '</textarea></div>' +
+        '<div class="c"><button class="btn primary sm" type="button" data-tsave="' + t.id + '">保存</button>' +
+        '<button class="btn ghost sm" type="button" data-tdel="' + t.id + '">削除</button><span class="set-msg" id="set-msg-t' + t.id + '"></span></div></div>';
+    }).join('');
+    var add = list.length >= (max || 30) ? setRow('定型文は' + fmtN(max || 30) + '件までです', '', '')
+      : '<div class="set-row tpl-row"><div class="l" style="flex:1 1 100%"><b>新しい定型文</b>' +
+        '<input class="set-in" type="text" maxlength="40" aria-label="新しい定型文の名前" placeholder="名前(例: お礼・特典の受け取り方)" id="set-tname-new" style="width:100%;max-width:320px;margin-top:6px">' +
+        '<textarea class="set-in" rows="3" maxlength="2000" aria-label="新しい定型文の本文" placeholder="本文" id="set-ttext-new" style="width:100%;margin-top:6px"></textarea></div>' +
+        '<div class="c"><button class="btn primary sm" type="button" data-tadd="1">追加</button><span class="set-msg" id="set-msg-tnew"></span></div></div>';
+    box.innerHTML = rows + add;
+  }
+  function templateApi(body, msgId) {
+    body.version = lchat.templatesVersion; // 読んだときの版(ほかの画面が先に保存していたら断られる)
+    return fetch('/api/admin/inbox/templates', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (res) { return res.json().then(function (d) { return { status: res.status, d: d }; }); })
+      .then(function (x) {
+        if (x.status === 401) { showLogin(loginMessage()); return; }
+        if (x.status !== 200) {
+          if (x.d.error === 'conflict') {
+            // ほかの画面が先に保存していた: 最新を読み直して見せる(古い内容で上書きしない)
+            setPending = ['set-msg-tnew', 'ほかの画面で直されていたので読み直しました。もう一度直してください', 'bad'];
+            loadSettings();
+            return;
+          }
+          setMsg(msgId, x.d.error === 'empty' ? '名前と本文を入れてください' : x.d.error === 'too_many' ? '定型文は30件までです' : '保存できませんでした', 'bad');
+          return;
+        }
+        lchat.templates = x.d.templates || [];
+        lchat.templatesVersion = x.d.version || 0;
+        setPending = [msgId === 'set-msg-tnew' || body.action === 'delete' ? null : msgId, '保存しました', 'ok'];
+        if (!setPending[0]) setPending = null;
+        loadSettings();
+      }).catch(function () { setMsg(msgId, '保存できませんでした。通信を確かめてください', 'bad'); });
+  }
+  el('set-tpls').addEventListener('click', function (ev) {
+    var t = ev.target.closest('button'); if (!t) return;
+    if (t.dataset.tadd) {
+      templateApi({ action: 'create', name: el('set-tname-new').value, text: el('set-ttext-new').value }, 'set-msg-tnew');
+    }
+    if (t.dataset.tsave) {
+      var id = Number(t.dataset.tsave);
+      templateApi({ action: 'update', id: id, name: document.querySelector('[data-tname="' + id + '"]').value, text: document.querySelector('[data-ttext="' + id + '"]').value }, 'set-msg-t' + id);
+    }
+    if (t.dataset.tdel) {
+      var did = Number(t.dataset.tdel);
+      if (!armTwice(t, 'もう一度押すと削除')) return;
+      t.disabled = true;
+      templateApi({ action: 'delete', id: did }, 'set-msg-t' + did);
+    }
+  });
   function labelApi(body, msgId) {
     return fetch('/api/admin/inbox/labels', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
       .then(function (res) { return res.json().then(function (d) { return { status: res.status, d: d }; }); })
@@ -9688,6 +10094,9 @@ function __route(url) {
     api('/api/admin/inbox/labels').then(function (d) { if (my === setGen) renderSetLabels(d.labels || []); }).catch(function () {
       var b = el('set-labels'); if (b) b.innerHTML = setRow('ラベルを読み込めませんでした', '', '');
     });
+    api('/api/admin/inbox/templates').then(function (d) { if (my === setGen) { lchat.templates = d.templates || []; lchat.templatesVersion = d.version || 0; renderSetTemplates(lchat.templates, d.max); } }).catch(function () {
+      var b = el('set-tpls'); if (b) b.innerHTML = setRow('定型文を読み込めませんでした', '', '');
+    });
     // 接続の台帳はダッシュボードの読み込みで埋まる。まだなら一緒に読む
     if (!loaded.home) { loaded.home = true; loadHome(); }
     renderSetConns();
@@ -9714,6 +10123,26 @@ function __route(url) {
       var txt = t.dataset.setCopy;
       var done = function () { t.textContent = 'コピーしました'; setTimeout(function () { t.textContent = 'AIへの頼み方をコピー'; }, 2000); };
       try { navigator.clipboard.writeText(txt).then(done, function () {}); } catch (e) { /* コピーできない環境では文例を選んで写してもらう */ }
+      return;
+    }
+    if (t.id === 'set-ownerline-code') {
+      t.disabled = true;
+      fetch('/api/admin/owner-line', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'code' }) })
+        .then(function (res) { if (res.status === 401) { showLogin(loginMessage()); throw new Error('unauthorized'); } return res.json(); })
+        .then(function (d2) {
+          t.disabled = false;
+          if (!d2.ok) { setMsg('set-msg-ownerline', 'LINE公式アカウントをつないでから使えます', 'bad'); return; }
+          setMsg('set-msg-ownerline', '自分のLINEから公式アカウントに「通知 ' + d2.code + '」と送ってください(' + fmtT(d2.expiresAt) + ' まで)。届いたら、この画面を読み直すと「受け取っています」になります', 'ok');
+        }).catch(function (e) { t.disabled = false; if (e && e.message !== 'unauthorized') setMsg('set-msg-ownerline', '合言葉を出せませんでした。通信を確かめてください', 'bad'); });
+      return;
+    }
+    if (t.id === 'set-ownerline-clear') {
+      if (!armTwice(t, 'もう一度押すと止める')) return;
+      t.disabled = true;
+      fetch('/api/admin/owner-line', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'clear' }) })
+        .then(function (res) { if (res.status === 401) { showLogin(loginMessage()); throw new Error('unauthorized'); } return res.json(); })
+        .then(function () { setPending = null; loadSettings(); })
+        .catch(function () { t.disabled = false; });
       return;
     }
     if (t.dataset.setReset) {
@@ -9820,7 +10249,7 @@ function __route(url) {
         (!n.dataset.list || n.dataset.list === mlCur) &&
         (!n.dataset.offer || n.dataset.offer === tkCur) &&
         (!n.dataset.page || n.dataset.page === heatCur);
-      n.classList.toggle(n.classList.contains('fchip') ? 'on' : (n.classList.contains('nav-a') ? 'cur' : 'noop'), on);
+      n.classList.toggle(n.classList.contains('fchip') || n.classList.contains('mtab-a') ? 'on' : (n.classList.contains('nav-a') ? 'cur' : 'noop'), on);
     });
     // スマホの横に流れるメニューは、いまの画面の札が見える位置まで送る
     ['mobile-nav-main', 'mobile-nav-project'].forEach(function (id) {
@@ -9867,6 +10296,7 @@ function __route(url) {
   function setViewState(view, mode) {
     if (VALID_VIEWS.indexOf(view) < 0) view = 'home';
     closeLabelPop(); // 画面を移ったら(戻るボタンでも)受信箱のラベルのポップは閉じる(Astra ラベル r2-4)
+    closeTplPop();
     document.documentElement.dataset.view = view;
     placeSubbars(view);
     syncNav();
@@ -9948,6 +10378,19 @@ function __route(url) {
     var n = e.target.closest('[data-nav]');
     if (n) show(n.dataset.nav);
   });
+  // スマホの下のタブの「その他」: 全画面のメニューを下から開く。どれかを押したら・外を押したら閉じる
+  function setMoreNav(open) {
+    document.body.classList.toggle('mnav-open', open);
+    var b = document.querySelector('[data-mtab-more]');
+    if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    if (e.target.closest('[data-mtab-more]')) { setMoreNav(!document.body.classList.contains('mnav-open')); return; }
+    if (!document.body.classList.contains('mnav-open')) return;
+    if (e.target.closest('[data-nav]') || !e.target.closest('#mobile-nav-main')) setMoreNav(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('mnav-open')) setMoreNav(false); });
   // 「AIへの頼み方をコピー」(はじめの設定・空の画面の案内)。どの画面でも同じ部品で受ける
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-ai-ask]');
@@ -10181,6 +10624,14 @@ function __route(url) {
 #demo-toast{position:fixed;left:50%;bottom:70px;transform:translate(-50%,8px);z-index:2147483001;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
   padding:9px 16px;border-radius:10px;background:#28263C;color:#fff;font:500 13px/1.5 'Zen Kaku Gothic New',system-ui,sans-serif;box-shadow:0 8px 24px rgba(26,24,38,.25)}
 #demo-toast.on{opacity:1;transform:translate(-50%,0)}
+/* スマホ(管理画面の下のタブが出る幅): 左右いっぱいで下のタブのすぐ上へ。中央寄せ(left:50%)のままだと幅が画面の半分に縮み、文字が1字ずつ折れる */
+@media (max-width:860px){
+  #demo-bar{left:12px;right:12px;transform:none;max-width:none;justify-content:space-between;padding:6px 6px 6px 14px;bottom:calc(64px + env(safe-area-inset-bottom))}
+  #demo-bar span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #demo-toast{bottom:calc(116px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px)}
+  body.mnav-open #demo-bar{display:none}
+  #main-content.main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+}
 @media (max-width:640px){#demo-bar .l{display:none}#demo-bar .s{display:inline}}
 @media (prefers-reduced-motion:reduce){#demo-toast{transition:none}}
 </style>
