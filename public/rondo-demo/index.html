@@ -193,6 +193,8 @@ const pushChannel = (ch) => {
     x: { f: 180420, d7: 524, p7: 31, pp7: 28, avg: 12400, rows: [20, 9800, 7, null], tv: null },
     note: { f: 25310, d7: 96, p7: 5, pp7: 4, avg: 1460, rows: [20, 1200, 30, null], tv: 4820000 },
     substack: { f: 3214, d7: 41, p7: 2, pp7: 2, avg: 880, rows: [12, 720, 60, null], tv: null },
+    threads: { f: 9801, d7: 43, p7: 21, pp7: 19, avg: 3530, rows: [20, 3200, 9, null], tv: null },
+    ig: { f: 38080, d7: 73, p7: 7, pp7: 6, avg: 9840, rows: [20, 9800, 26, ['reel', 'post', 'reel', 'carousel']], tv: null },
   }[ch];
   const rows = pushRows(ch, conf.rows[0], conf.rows[1], conf.rows[2], conf.rows[3]);
   const out = {
@@ -229,6 +231,7 @@ const pushChannel = (ch) => {
       } : {}),
     };
   }
+  if (ch === 'threads' || ch === 'ig') out.push = true;
   return out;
 };
 
@@ -330,7 +333,7 @@ const financieChannel = (() => {
 
 // ch=<id> で返す一覧。Discord は上の見本をそのまま使う
 const channelMocks = {
-  mail: mailChannel, threads: publisherChannel('threads'), ig: publisherChannel('ig'), line: lineChannel,
+  mail: mailChannel, threads: pushChannel('threads'), ig: pushChannel('ig'), line: lineChannel,
   youtube: pushChannel('youtube'), x: pushChannel('x'), note: pushChannel('note'), substack: pushChannel('substack'),
   meikyou: meikyouChannel, kyozai: kyozaiChannel, discord: discordChannel, financie: financieChannel,
 };
@@ -529,7 +532,7 @@ function __route(url) {
   else if (url.pathname === '/api/admin/inbox/labels') {
     body = { ok: true, colors: ['gold', 'blue', 'green', 'red', 'purple', 'gray'],
       labels: [{ id: 1, name: '重要', color: 'red', n: 2 }, { id: 2, name: '見込み客', color: 'gold', n: 1 }, { id: 3, name: '返金対応', color: 'blue', n: 0 }],
-      tags: [{ key: 'buyer-meikyou', label: '明鏡 購入者' }, { key: 'int-game', label: 'ゲームに関心' }] };
+      tags: [{ key: 'buyer-a', label: '教材A 購入者' }, { key: 'int-game', label: 'ゲームに関心' }] };
   }
   else if (url.pathname === '/api/admin/line/ai') body = { ok: true, enabled: true, paused: false, keySet: true, personaReady: true, send: true, today: {} };
   else if (url.pathname === '/api/admin/ig/ai') body = { ok: true, configured: true, enabled: true, paused: false, active: true, keySet: true, personaReady: true, send: true, today: {} };
@@ -538,7 +541,8 @@ function __route(url) {
     body = {
       ok: true, days: 30, recent: [],
       funnel: [{ rule_key: 'tokuten', entry: 'dm', story_id: null, matched: 41, gated: 30, delivered: 30, line_opened: 22, line_verified: 15, friended: 12, existing_friend: 3 }],
-      account: { followers: 38080, followersLive: true, followersDay: null, followersDelta7: 73, reach7: 52356, reachPrev7: 48810, visits7: 3540, visitsPrev7: 3720, metricsDay: '2026-10-09', posts7: 7, postsPrev7: 6, views7: 41200, viewsPrev7: 38900 },
+      account: { followers: 38080, followersLive: true, followersDay: null, followersDelta7: 73, reach7: 52356, reachPrev7: 48810, visits7: 3540, visitsPrev7: 3720, metricsDay: ymdOf(1), postsKind: 'all', posts7: 7, postsPrev7: 6, views7: 41200, viewsPrev7: 38900 },
+      statsSync: { day: ymdOf(0), at: Date.now() - 3 * 3600000, note: null, error: null },
       touches: [{ rule_key: 'tokuten', entry: 'story', story_id: '18110113424269956', replies: 3, people: 3, refused: 0, delivered: 3, line_opened: 3, line_verified: 0, friended: 0, existing_friend: 0, first_at: Date.now() - 86400000, last_at: Date.now() }, { rule_key: null, entry: 'comment', media_id: '18087141773270673', replies: 2, people: 2, refused: 0, delivered: 0, line_opened: 0, line_verified: 0, friended: 0, existing_friend: 0, first_at: Date.now() - 3 * 86400000, last_at: Date.now() - 3 * 86400000 }],
       campaigns: [{ key: 'tokuten', label: null }],
       health: { configured: true, connected: { username: 'example.account', at: Date.now() }, oauthReady: true, hasToken: true, tokenDaysLeft: 59, sendingStopped: false },
@@ -598,6 +602,15 @@ function __route(url) {
     if (!t) return;
     e.preventDefault(); e.stopImmediatePropagation(); toast(DEMO_MSG);
   }, true);
+  // デザインの選択なども、この端末に残さない(デモの間だけ覚える)
+  try {
+    var mem = {};
+    var store = { getItem: function (k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; }, setItem: function (k, v) { mem[k] = String(v); },
+      removeItem: function (k) { delete mem[k]; }, clear: function () { mem = {}; }, key: function (i) { return Object.keys(mem)[i] || null; } };
+    Object.defineProperty(store, 'length', { get: function () { return Object.keys(mem).length; } });
+    Object.defineProperty(window, 'localStorage', { value: store, configurable: true });
+    Object.defineProperty(window, 'sessionStorage', { value: store, configurable: true });
+  } catch (e) { /* 差し替えられないブラウザでは、そのまま */ }
   window.__RONDO_DEMO__ = true;
 })();
 </script>
@@ -5344,6 +5357,20 @@ function __route(url) {
       rows.push(['送信', h.sendingStopped ? '<span class="st wait">停止中' + (h.killed ? '(全体の停止栓)' : '') + '</span>' : '<span class="st ok">動作中</span>']);
       // 長い文は丸札に入れず、見出しの下に折り返す枠で出す(丸札は1行のままなので狭い幅でページが横に伸びていた 10-06)
       var igLong = function (lines) { return '<div class="ig-long">' + lines.map(function (t) { return '<div>' + esc(t) + '</div>'; }).join('') + '</div>'; };
+      // 数字の日次集計(配布版の標準・JST 4時以降に1日1回)。ビュー・リーチの許可が無ければ、許可を足してつなぎ直す釦
+      var ss = d.statsSync;
+      if (ss) {
+        var ssTxt = ss.note === 'no_insights'
+          ? '<span class="st wait">ビュー・リーチの許可がありません</span>'
+          : ss.day ? '<span class="st ok">' + esc(String(ss.day).slice(5).replace('-', '/')) + ' 集計済み</span>' : '<span class="st wait">まだです(4時以降に1日1回)</span>';
+        rows.push(['数字の集計', ssTxt]);
+        if (ss.note === 'no_insights') {
+          rows.push(['数字の集計', '<div class="ig-long"><div>フォロワー数・いいね・コメントは集計しています。ビューとリーチも取るには、Metaアプリの「アクセス許可」に instagram_business_manage_insights を足してから、下の釦でつなぎ直してください。</div>' +
+            (h.oauthReady ? '<div><button class="btn sm" id="ig-insights-connect">ビュー・リーチの許可を足してつなぎ直す</button></div>' : '') + '</div>', true]);
+        } else if (ss.error) {
+          rows.push(['数字の集計', igLong(['一部を取れませんでした(' + String(ss.error) + ')。1時間後に試し直します']), true]);
+        }
+      }
       if (h.authError) rows.push(['認証', igLong(['切れています(' + fmtDT(h.authError.at) + ') · トークンを作り直して IG_ACCESS_TOKEN を登録し直す']), true]);
       if (h.subscribeError) rows.push(['購読の確認', igLong([String(h.subscribeError)]), true]);
       if (h.configErrors && h.configErrors.length) rows.push(['設定の誤り(送信停止中)', igLong(h.configErrors.map(String)), true]);
@@ -5418,8 +5445,8 @@ function __route(url) {
     if (a.visits7 != null) cards.push(weekCard('プロフ訪問 7日', a.visits7, a.visitsPrev7));
     if (a.posts7 != null) {
       var wv = wowTxt(a.views7, a.viewsPrev7);
-      cards.push(kpiHtml('リール 7日', fmtN(a.posts7) + '<small> 本</small>',
-        a.views7 != null ? '<span>ビュー ' + esc(fmtN(a.views7)) + '</span>' + (wv ? ' ' + esc(wv.txt.replace(' ／ 前週比', '')) : '') : '<span>ビューは24時間後に確定</span>',
+      cards.push(kpiHtml(a.postsKind === 'all' ? '投稿 7日' : 'リール 7日', fmtN(a.posts7) + '<small> 本</small>',
+        a.views7 != null ? '<span>ビュー ' + esc(fmtN(a.views7)) + (a.viewsPartial ? '(取れた投稿だけ)' : '') + '</span>' + (wv ? ' ' + esc(wv.txt.replace(' ／ 前週比', '')) : '') : '<span>' + (a.postsKind === 'all' ? 'ビューは集計の後に' : 'ビューは24時間後に確定') + '</span>',
         wv && !wv.up ? ' bad' : (wv ? ' up' : '')));
     }
     // DMの自動応答からの LINE 友だち追加(人ごと・初回。下の「段ごとの人数」の合計)
@@ -5497,6 +5524,14 @@ function __route(url) {
     b.disabled = true;
     api('/api/admin/ig/connect', { method: 'POST', body: '{}' }).then(function (d) { location.href = d.url; })
       .catch(function () { b.disabled = false; b.textContent = '接続を始められませんでした(IG_APP_ID を確認)'; });
+  });
+  // ビュー・リーチの許可を足してつなぎ直す(数字の集計の行に出る釦。行は描き直されるので委譲で受ける)
+  el('ig-health').addEventListener('click', function (e) {
+    var b = e.target && e.target.closest && e.target.closest('#ig-insights-connect');
+    if (!b) return;
+    b.disabled = true;
+    api('/api/admin/ig/connect', { method: 'POST', body: JSON.stringify({ insights: true }) }).then(function (d) { location.href = d.url; })
+      .catch(function () { b.disabled = false; b.textContent = 'つなぎ直しを始められませんでした(IG_APP_ID を確認)'; });
   });
   // 止めるときだけ確かめる(再開はすぐ)。受け取りの記録は止めている間も続く
   function setIgPause(on) {
@@ -8937,15 +8972,16 @@ function __route(url) {
   font:500 12.5px/1.4 'Zen Kaku Gothic New',system-ui,sans-serif;box-shadow:0 8px 24px rgba(26,24,38,.28)}
 #demo-bar b{color:#D9A94C;font-weight:700;white-space:nowrap}
 #demo-bar span{opacity:.9}
+#demo-bar .s{display:none}
 #demo-bar a{flex:none;color:#1A1826;background:#ECE8DC;text-decoration:none;border-radius:999px;padding:7px 14px;font-weight:700;min-height:32px;display:inline-flex;align-items:center}
 #demo-bar a:focus-visible{outline:2px solid #D9A94C;outline-offset:2px}
 #demo-toast{position:fixed;left:50%;bottom:70px;transform:translate(-50%,8px);z-index:2147483001;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
   padding:9px 16px;border-radius:10px;background:#28263C;color:#fff;font:500 13px/1.5 'Zen Kaku Gothic New',system-ui,sans-serif;box-shadow:0 8px 24px rgba(26,24,38,.25)}
 #demo-toast.on{opacity:1;transform:translate(-50%,0)}
-@media (max-width:640px){#demo-bar span{display:none}}
+@media (max-width:640px){#demo-bar .l{display:none}#demo-bar .s{display:inline}}
 @media (prefers-reduced-motion:reduce){#demo-toast{transition:none}}
 </style>
-<div id="demo-bar" role="note"><b>デモ</b><span>数字と名前はすべて見本です。保存や送信はされません。</span><a href="/rondo">Rondo のページへ</a></div>
+<div id="demo-bar" role="note"><b>デモ</b><span class="l">数字と名前はすべて見本です。保存や送信はされません。</span><span class="s">見本・保存されません</span><a href="/rondo">Rondo のページへ</a></div>
 <div id="demo-toast" role="status" aria-live="polite"></div>
 </body>
 </html>
