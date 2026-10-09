@@ -991,16 +991,22 @@ function __route(url) {
     body = { ok: true, kpi: { persons: 15420, email: 4118, line: 12080, discord: 0, ig: 1460, both: 1860, meikyou: 0, buyers: 466,
       segments: { core: 212, regular: 1380, prospect: 4210, dormant: 2950 }, scoredAt: Date.now() - 5 * H }, rows };
   }
+  else if (url.pathname === '/api/admin/inbox/label-link') {
+    // 会話のラベル: 一覧の見本(label_ids)と同じところから返す(Astra LP r13 P2)
+    const list = { line: lineChats, ig: igChats, yt: ytChats, mail: mailChats }[url.searchParams.get('channel')];
+    const c = (list?.chats ?? []).find((x) => String(x.id) === String(url.searchParams.get('id')));
+    body = { ok: true, labelIds: String(c?.label_ids ?? '').split(',').filter(Boolean).map(Number) };
+  }
   else if (url.pathname === '/api/admin/persons/timeline') {
     const id = Number(url.searchParams.get('id'));
     const T = {
-      48: { ids: [['email', 'yukari@example.com'], ['line', 'U…48'], ['ig', '17844800000']], ev: [[2, 'メール', '「7日間講座」3通目を開封'], [26, 'LINE', '個別相談を予約'], [96, '購入', '教材B（¥19,800）'], [150, 'Instagram', 'ストーリーに返信'], [400, '購入', '教材A（¥9,800）'], [700, '購入', '教材A の特典（¥9,800）']] },
+      48: { ids: [['email', 'yukari@example.com'], ['line', 'U…48'], ['ig', '1784480000']], ev: [[2, 'メール', '「7日間講座」3通目を開封'], [26, 'LINE', '個別相談を予約'], [96, '購入', '教材B（¥19,800）'], [150, 'Instagram', 'ストーリーに返信'], [400, '購入', '教材A（¥9,800）'], [700, '購入', '教材A の特典（¥9,800）']] },
       47: { ids: [['email', 'ken@example.com'], ['line', 'U…47']], ev: [[5, 'LINE', 'タグ「講座A 修了」'], [72, 'メール', '「7日間講座」7通目のリンクを押した'], [300, '購入', '教材A（¥9,800）']] },
-      46: { ids: [['line', 'U…46'], ['ig', '17844600000']], ev: [[1, 'Instagram', 'DM「特典」→ LINEへ案内'], [1.2, 'LINE', '友だち追加（経路 Instagram）']] },
+      46: { ids: [['line', 'U…46'], ['ig', '1784460000']], ev: [[1, 'Instagram', 'DM「特典」→ LINEへ案内'], [1.2, 'LINE', '友だち追加（経路 Instagram）']] },
       45: { ids: [['email', 'odawara@example.com'], ['line', 'U…45']], ev: [[20, 'LINE', '個別相談の日程を質問'], [200, '購入', '講座の個別相談（¥4,980）']] },
       44: { ids: [['email', 'info@shop.example.jp']], ev: [[20, 'メール', 'お問い合わせ「取材のご依頼」']] },
       43: { ids: [['email', 'reader2@example.com']], ev: [[60 * 24, 'メール', '休眠へ（90日間 開封なし）']] },
-      42: { ids: [['email', 'mikan@example.com'], ['line', 'U…42'], ['ig', '17844200000']], ev: [[3, 'Instagram', 'リールにコメント'], [120, '購入', '教材B（¥19,800）'], [500, '購入', '教材A（¥9,800）']] },
+      42: { ids: [['email', 'mikan@example.com'], ['line', 'U…42'], ['ig', '1784420000']], ev: [[3, 'Instagram', 'リールにコメント'], [120, '購入', '教材B（¥19,800）'], [500, '購入', '教材A（¥9,800）']] },
     }[id] || { ids: [], ev: [] };
     body = { ok: true, identities: T.ids.map(([kind, key]) => ({ kind, key })), events: T.ev.map(([h, ch, label]) => ({ at: Date.now() - h * H, ch, label })) };
   }
@@ -7767,7 +7773,7 @@ function __route(url) {
   function renderFunnel() {
     var fn = lastReport && lastReport.funnel;
     var f = fn ? fn[fnlPeriod] : null;
-    if (f && f.lite) return; // 計測基盤の無い環境ではファネルのカード自体を出さない(.need-analytics)
+    if (f && f.lite) { el('fnl-body').innerHTML = ''; return; } // 計測基盤の無い環境ではファネルのカード自体を出さない(.need-analytics)
     el('fnl-title').textContent = fn && fn.offerLabel ? fn.offerLabel + ' ファネル' : 'ファネル';
     el('fnl-sub').textContent = (fnlPeriod === 'd7' ? '直近7日' : '直近30日') + ' · 率は同期間の概算';
     if (!f) {
