@@ -346,7 +346,7 @@ const dashboard = {
     delivered30: 14260, openers30: 7011,
   },
   phase: null,
-  layout: [['funnel'], ['mitate']],
+  layout: [['mitate']],
   funnel: { visits7: 5360, signups7: 118, signupRate: 118 / 5360, mail7: 84, line7: 34, clicks7: 1420, clickRate: 1420 / 5360, revenue7: 126000, orders7: 11 },
   checklist: [
     { label: '公開前doctor', done: true },
@@ -393,11 +393,11 @@ const audit = {
 };
 
 // LINE の友だち台帳(タグが多い状態)の見え方の確認用ダミー
-const lineTags = ['セミナー申込', '購入者', '興味: 集客', '興味: 動画', '興味: 事業', '興味: AI', '7講を完走', '個別相談', 'その後 1通目', 'その後 2通目',
-  'その後 3通目', '紹介から', 'Instagram経由', 'メール講座に申込', '続きのお知らせを押した', '続きのお知らせを止めた', '会員', 'アンケート回答'];
+const lineTags = ['セミナー申込', '購入者', '興味: 集客', '興味: 動画', '興味: 事業', '興味: AI', '講座A 修了', '個別相談', 'フォロー配信 第1通', 'フォロー配信 第2通',
+  'フォロー配信 第3通', '紹介から', 'Instagram経由', 'メール講座に申込', '続きのお知らせを押した', '続きのお知らせを止めた', '会員', 'アンケート回答'];
 const lineCrm = {
   ok: true,
-  defs: { tags: Object.fromEntries(lineTags.map((label, i) => [`t${i}`, { label }])), fields: {}, scenarios: {}, links: {} },
+  defs: { tags: Object.fromEntries(lineTags.map((label, i) => [`t${i}`, { label }])), fields: {}, scenarios: { course: { label: '7日間講座' }, aisatsu: { label: 'あいさつ' } }, links: {} },
   tagCounts: Object.fromEntries(lineTags.map((_, i) => [`t${i}`, [96, 49, 25, 6, 1, 0, 869, 5, 0, 0, 0, 3, 0, 49, 0, 0, 76, 12][i]])),
   configErrors: [],
 };
@@ -469,6 +469,407 @@ const lineChat = (id) => {
   return { ok: true, hasMore: false, friend: { ...c, status: 'active', aiEnabled: true }, messages: [{ id: 1, direction: 'in', text: c.last_text, created_at: c.chat_last_in_at }] };
 };
 // RONDO_PREVIEW_DELAY=ミリ秒 で API の応答を遅らせる(読み込み中の見え方の確認)
+// ===== 分析・配信ログ・メール原稿・監査・カレンダー・予約・LP分析の見本(形は src/worker.mjs の各 GET と同じ・数字と名前は見本) =====
+const JDAY = 86400000;
+const JH = 3600000;
+const dayStartMs = (back = 0) => Math.floor((Date.now() + 9 * JH) / JDAY) * JDAY - 9 * JH - back * JDAY;
+const rt = (n, d) => (d >= 10 ? n / d : null);
+const abV = (a, b) => {
+  if (a.n < 30 || b.n < 30) return { code: 'few', text: '人数が足りません（各30人から判断します）' };
+  const p = (a.x + b.x) / (a.n + b.n);
+  const se = Math.sqrt(p * (1 - p) * (1 / a.n + 1 / b.n));
+  const z = se > 0 ? (a.x / a.n - b.x / b.n) / se : 0;
+  if (z >= 1.96) return { code: 'A', text: 'A のほうが良さそう' };
+  if (z <= -1.96) return { code: 'B', text: 'B のほうが良さそう' };
+  return { code: 'none', text: 'まだ差は分かりません' };
+};
+const WK_JA = ['日', '月', '火', '水', '木', '金', '土'];
+const jfmt = (ms, end) => {
+  const hm = (x) => `${x.getUTCHours()}:${String(x.getUTCMinutes()).padStart(2, '0')}`;
+  const d = new Date(ms + 9 * JH);
+  return `${d.getUTCMonth() + 1}/${d.getUTCDate()}（${WK_JA[d.getUTCDay()]}）${hm(d)}` + (end ? `〜${hm(new Date(end + 9 * JH))}` : '');
+};
+
+// ---- LINE: 分析(入口・配信・A/B・増え方) ----
+const L_TARGET = { '7': 171, '30': 690, '90': 1980, all: 3700 };
+const LROUTES = [
+  ['ig-bio', 'Instagram プロフィール', 2140, 1320, 212, 31],
+  ['threads-bio', 'Threads プロフィール', 1680, 980, 168, 22],
+  ['yt-desc', 'YouTube 概要欄', 820, 490, 84, 9],
+  ['mail-footer', 'メール フッター', 610, 402, 71, 6],
+  ['seminar-qr', 'セミナー会場 QR', 160, 133, 53, 2],
+  ['x-pin', 'X 固定ポスト', 505, 288, 40, 7],
+];
+const L_NONE_LABEL = '経路なし（直接・QRなど）';
+const lineGoals = [{ key: 't1', label: '購入者' }, { key: 't0', label: 'セミナー申込' }];
+const goalCell = (fr) => {
+  const a = Math.round(fr * 0.07), b = Math.round(fr * 0.16);
+  return { t1: { n: a, rate: rt(a, fr) }, t0: { n: b, rate: rt(b, fr) } };
+};
+const linePeriod = (dq) => {
+  const n = dq === 'all' ? 180 : Number(dq);
+  return { fromMs: dq === 'all' ? 0 : dayStartMs(n - 1), toMs: Date.now(), days: dq === 'all' ? 'all' : n };
+};
+const lineInflow = (dq) => {
+  const target = L_TARGET[dq] ?? 690, f = target / 690;
+  const rows = LROUTES.map(([route, label, o, , fr, bl]) => {
+    const opens = Math.round(o * f), friends = Math.round(fr * f), blocked = Math.round(bl * f);
+    return { route, label, opens, friends, openToFriend: rt(friends, opens), blocked, blockRate: rt(blocked, friends), goals: goalCell(friends) };
+  }).sort((a, b) => b.friends - a.friends);
+  const nf = Math.max(0, target - rows.reduce((n, r) => n + r.friends, 0)), nb = Math.round(11 * f);
+  rows.push({ route: '', label: L_NONE_LABEL, opens: null, friends: nf, openToFriend: null, blocked: nb, blockRate: rt(nb, nf), goals: goalCell(nf) });
+  const sum = (k) => rows.reduce((n, r) => n + (r[k] ?? 0), 0);
+  const friends = sum('friends');
+  const goals = {};
+  for (const g of lineGoals) { const n = rows.reduce((m, r) => m + r.goals[g.key].n, 0); goals[g.key] = { n, rate: rt(n, friends) }; }
+  return { rows, total: { opens: sum('opens'), friends, blocked: sum('blocked'), blockRate: rt(sum('blocked'), friends), goals } };
+};
+const lineGrowth = (dq) => {
+  const n = dq === 'all' ? 180 : Number(dq);
+  const target = L_TARGET[dq] ?? 690;
+  const raw = Array.from({ length: n }, (_, i) => Math.max(1, 23 * (0.82 + 0.36 * i / Math.max(1, n - 1)) + wob(i + 11, 14)));
+  const k = target / raw.reduce((a, b) => a + b, 0);
+  const days = [];
+  let acc = 0;
+  for (let i = 0; i < n; i++) {
+    const added = i === n - 1 ? Math.max(0, target - acc) : Math.round(raw[i] * k);
+    acc += added;
+    const readded = Math.min(added, Math.max(0, Math.round(1.3 + wob(i + 2, 2))));
+    const blocked = Math.max(0, Math.round(4 + wob(i + 5, 7)));
+    days.push({ day: ymdOf(n - 1 - i), added, readded, blocked, net: added - blocked });
+  }
+  let fr = 12080;
+  for (let i = n - 1; i >= 0; i--) { days[i].friends = fr; fr -= days[i].net; }
+  const totals = days.reduce((s, x) => ({ added: s.added + x.added, readded: s.readded + x.readded, blocked: s.blocked + x.blocked, net: s.net + x.net }), { added: 0, readded: 0, blocked: 0, net: 0 });
+  const f = target / 690;
+  const rs = LROUTES.map(([route, label, , , c]) => ({ route, label, n: Math.round(c * f) }));
+  rs.push({ route: '', label: L_NONE_LABEL, n: Math.max(0, target - rs.reduce((a, r) => a + r.n, 0)) });
+  rs.sort((a, b) => b.n - a.n);
+  const top = rs.slice(0, 5), rest = rs.slice(5).reduce((a, r) => a + r.n, 0);
+  return { days, totals, friendsNow: 12080, byRoute: rest ? [...top, { route: '__other', label: 'その他', n: rest }] : top, fromMs: dayStartMs(n - 1) };
+};
+const lineDelivery = (dq) => {
+  const f = (L_TARGET[dq] ?? 690) / 690;
+  const L = [
+    ['cast', 'c1', 0, 'セミナー録画のお知らせ', 812, true, 148, 9],
+    ['step', 'aisatsu', 1, 'あいさつ 第1通', 690, true, 212, 14],
+    ['step', 'course', 1, '7日間講座 第1通', 664, true, 201, 18],
+    ['step', 'course', 2, '7日間講座 第2通', 631, true, 164, 11],
+    ['step', 'course', 3, '7日間講座 第3通', 598, true, 139, 9],
+    ['step', 'course', 4, '7日間講座 第4通', 552, false, 0, 6],
+    ['step', 'follow', 1, 'フォロー配信 第1通', 301, true, 58, 4],
+  ];
+  const rows = L.map(([kind, key, slot, title, s, has, c, b]) => {
+    const sent = Math.round(s * f), clicked = has ? Math.round(c * f) : null, blockedAfter = Math.round(b * f);
+    return { kind, key, ...(kind === 'step' ? { slot } : {}), title, sent, hasLinks: has, clicked, clickRate: clicked == null ? null : rt(clicked, sent), blockedAfter, blockRate: rt(blockedAfter, sent) };
+  });
+  return { rows, truncated: false, fromMs: dayStartMs(29) };
+};
+const lineAb = () => {
+  const side = (v, sent, x, bl, g1, g0) => ({ v, sent, hasLinks: true, clicked: x, clickRate: rt(x, sent), blockedAfter: bl, blockRate: rt(bl, sent), goals: { t1: { n: g1, rate: rt(g1, sent) }, t0: { n: g0, rate: rt(g0, sent) } } });
+  const mk = (id, kind, key, slot, title, a, b, firstH, lastH) => {
+    const sides = [side('A', ...a), side('B', ...b)];
+    return { id, kind, key, ...(kind === 'step' ? { slot } : {}), title, firstAt: Date.now() - firstH * JH, lastAt: Date.now() - lastH * JH, hasLinks: true,
+      verdict: abV({ n: sides[0].sent, x: sides[0].clicked }, { n: sides[1].sent, x: sides[1].clicked }), sides };
+  };
+  return { tests: [
+    mk(1, 'step', 'course', 1, '7日間講座 第1通', [332, 82, 9, 21, 52], [332, 119, 7, 26, 49], 24 * 20, 5),
+    mk(2, 'cast', 'c1', 0, 'セミナー録画のお知らせ', [406, 70, 5, 4, 66], [406, 78, 4, 5, 61], 50, 50),
+  ], truncated: false, fromMs: dayStartMs(29) };
+};
+const lineRoutesDemo = (days) => {
+  const f = days / 30;
+  const rows = LROUTES.map(([route, label, o, v, fr, bl]) => {
+    const friends = Math.round(fr * f), blocked = Math.round(bl * f);
+    return { route, label, opens: Math.round(o * f), verified: Math.round(v * f), friends, blocked, blockRate: friends ? blocked / friends : null, url: `https://example.com/in/${route}` };
+  }).sort((a, b) => b.friends - a.friends || b.opens - a.opens);
+  return { ok: true, days, liffReady: true, rows };
+};
+const lineMenusDemo = {
+  ok: true, defaultMenu: 'main', defaultCleared: false, currentDefault: 'richmenu-0000000000000000000000000000a001',
+  rules: [{ when: { t: 'tag', key: 't1' }, menu: 'buyers' }, { when: { t: 'tag', key: 't0' }, menu: 'seminar' }],
+  menus: {
+    main: { label: '標準メニュー', managed: true, image: 'menu-main.png', size: 'large', body: null, deployed: { id: 'richmenu-0000000000000000000000000000a001', hash: 'a1', deployedAt: Date.now() - 31 * 86400000 }, isDefault: true, linkedFriends: 0 },
+    buyers: { label: '購入者メニュー', managed: true, image: 'menu-buyers.png', size: 'large', body: null, deployed: { id: 'richmenu-0000000000000000000000000000a002', hash: 'a2', deployedAt: Date.now() - 12 * 86400000 }, isDefault: false, linkedFriends: 466 },
+    seminar: { label: 'セミナー参加者メニュー', managed: true, image: 'menu-seminar.png', size: 'small', body: null, deployed: { id: 'richmenu-0000000000000000000000000000a003', hash: 'a3', deployedAt: Date.now() - 6 * 86400000 }, isDefault: false, linkedFriends: 812 },
+  },
+};
+const lineFormsDemo = {
+  ok: true, forms: [
+    { key: 'survey', title: 'はじめてのアンケート', once: true, questions: 5, answers: 612, people: 612, lastAt: Date.now() - 2 * JH },
+    { key: 'consult', title: '個別相談の申し込み', once: false, questions: 4, answers: 96, people: 88, lastAt: Date.now() - 26 * JH },
+  ],
+};
+const lineImportDemo = (offset) => ({
+  ok: true, offset, unnamed: 0, waitingTotal: 137, rosterReady: true, rosterComplete: true,
+  sources: [{ source: '旧ツール', total: 1240, matched: 1103, sealed: true }],
+  waiting: [
+    { id: 901, source: '旧ツール', extId: '30211', name: 'ゆうこ', noLineName: false, tags: ['t0'], fields: {}, twins: 1, candidates: 1 },
+    { id: 902, source: '旧ツール', extId: '30244', name: 'ともや', noLineName: false, tags: ['t1', 't6'], fields: {}, twins: 1, candidates: 2 },
+    { id: 903, source: '旧ツール', extId: '30290', name: 'はるか', noLineName: false, tags: [], fields: {}, twins: 2, candidates: 1 },
+    { id: 904, source: '旧ツール', extId: '30318', name: 'ケンタ', noLineName: false, tags: ['t0'], fields: {}, twins: 1, candidates: 0 },
+    { id: 905, source: '旧ツール', extId: '30377', name: null, noLineName: true, tags: ['t6'], fields: {}, twins: 1, candidates: 0 },
+  ],
+});
+const lineImportMatched = {
+  ok: true, total: 1103, offset: 0, rows: [
+    { id: 801, source: '旧ツール', extId: '20118', name: 'みさき', by: 'name', at: Date.now() - 3 * JH, tags: ['t0', 't6'], contact: { id: 31, name: 'みさき', tail: 'a3f1', origin: 'import', followedAt: Date.now() - 400 * 86400000 } },
+    { id: 802, source: '旧ツール', extId: '20131', name: 'ダイスケ', by: 'manual', at: Date.now() - 9 * JH, tags: ['t1'], contact: { id: 52, name: 'ダイスケ', tail: '07be', origin: 'import', followedAt: Date.now() - 380 * 86400000 } },
+  ],
+};
+
+// ---- LINE: 友だち台帳の一覧と1人分の詳細 ----
+const F_FAM = ['佐藤', '鈴木', '高橋', '田中', '伊藤', '渡辺', '山本', '中村', '小林', '加藤'];
+const F_GIVEN = ['みか', 'けん', 'さくら', 'ひろ', 'ゆうこ', 'だいすけ', 'まなぶ', 'あおい', 'そら', 'りく', 'はるか', 'かい'];
+const F_COUNTS = [96, 49, 25, 6, 1, 0, 869, 5, 0, 0, 0, 3, 0, 49, 0, 0, 76, 12];
+const friendOf = (i, tag) => {
+  const extra = [['t6'], ['t0', 't7'], ['t1', 't13'], ['t2'], ['t6', 't16'], []][i % 6];
+  return { id: 1000 + i, line_user_id: 'U' + String(70000 + i * 131).padStart(32, '0'), display_name: F_FAM[i % 10] + ' ' + F_GIVEN[(i * 7) % 12], picture_url: null,
+    status: i % 14 === 13 ? 'blocked' : 'active', followed_at: Date.now() - (i * 2.1 + 1) * 3600000, diag_level: null,
+    tags: tag ? [tag, ...extra.filter((x) => x !== tag)] : extra, person_tags: [], last_event_at: Date.now() - (i * 1.7 + 0.5) * 3600000 };
+};
+const friendsDemo = (url) => {
+  const tag = url.searchParams.get('tag'), q = String(url.searchParams.get('q') ?? '').trim();
+  const off = Math.max(Number(url.searchParams.get('offset')) || 0, 0), lim = Math.min(Math.max(Number(url.searchParams.get('limit')) || 50, 1), 200);
+  const all = tag ? (F_COUNTS[Number(String(tag).slice(1))] ?? 0) : 12080;
+  let list = [];
+  const n = q ? Math.min(all, 40) : Math.min(all, off + lim);
+  for (let i = 0; i < n; i++) list.push(friendOf(i, tag));
+  if (q) list = list.filter((f) => f.display_name.includes(q));
+  const total = q ? list.length : all;
+  return { ok: true, total, friends: list.slice(off, off + lim) };
+};
+const friendDemo = (url) => {
+  const f = friendOf(Math.max(0, Number(url.searchParams.get('id')) - 1000), null);
+  return { ok: true, friend: { id: f.id, line_user_id: f.line_user_id, display_name: f.display_name, picture_url: null, status: f.status, followed_at: f.followed_at, diag_level: null },
+    tags: f.tags.map((t) => ({ tag: t })), fields: {}, scenarios: [{ scenario_key: 'course', slot: 3, status: 'active', next_send_at: Date.now() + 14 * 3600000, started_at: Date.now() - 2 * JDAY }],
+    events: [
+      { type: 'scenario_start', at: Date.now() - 2 * JDAY, meta: { scenario: 'course', source: 'follow' } },
+      { type: 'tag_add', at: Date.now() - 2 * JDAY, meta: { tag: f.tags[0] || 't6', source: 'follow' } },
+      { type: 'inflow', at: Date.now() - 2 * JDAY - 60000, meta: { route: 'ig-bio' } },
+    ] };
+};
+
+// ---- メール: 読者統計・原稿・配信ログ・ファネル分析 ----
+const mailStatsDemo = (() => {
+  const end = dayStartMs(0), n = 90;
+  const series = Array.from({ length: n }, (_, i) => ({ day: end - (n - 1 - i) * JDAY, adds: Math.max(0, Math.round(13.5 + wob(i + 4, 12))), unsubs: Math.max(0, Math.round(1.7 + wob(i + 9, 5))), total: 0 }));
+  let tot = 4118;
+  for (let i = n - 1; i >= 0; i--) { series[i].total = tot; tot -= series[i].adds - series[i].unsubs; }
+  const last30 = series.slice(-30);
+  const adds30 = last30.reduce((a, r) => a + r.adds, 0), unsubs30 = last30.reduce((a, r) => a + r.unsubs, 0);
+  return { ok: true, active: 4118, series, adds30, unsubs30, net30: adds30 - unsubs30, sent: 14260, opens: 7011, clicks: 1183 };
+})();
+const mailTitle = (subj) => String(subj).replace(/^【.+?】/, '');
+const mailContentRows = (() => {
+  const rows = mailSlots.slice().reverse().map((s) => ({
+    slot: s.slot, variant: 'a', subject: s.subject, status: 'active', chars: 620 + s.slot * 85, branched: false, skipped: 0,
+    days: s.slot === 1 ? 0 : s.slot, send_hour: 7, sent: s.sent, opens: s.opens, clicks: s.clicks,
+  }));
+  rows.splice(3, 0, { ...rows[2], variant: 'b', subject: '【3日目】最初の1本は、3行で書き始める', chars: 668 });
+  return rows;
+})();
+const mailBodyText = (slot, subj) => [
+  'こんにちは。運用者です。',
+  `7日間講座の第${slot}通です。今日のテーマは「${mailTitle(subj)}」。`,
+  '今日やることは一つだけです。紙かメモアプリに、思いつくことを3行書き出してください。うまく書こうとしなくて大丈夫です。',
+  slot >= 7 ? 'これで7日間は最後です。ここまで読んでくださって、ありがとうございました。続きの案内は、あらためてお送りします。' : `明日の第${slot + 1}通でも、続きをお届けします。`,
+  'わからないことがあれば、このメールにそのまま返信してください。',
+  '運用者',
+].join('\n\n');
+const contentsDemo = (url) => {
+  const q = String(url.searchParams.get('q') ?? '').trim(), st = url.searchParams.get('status') ?? '';
+  const off = Math.max(0, Number(url.searchParams.get('offset')) || 0), lim = Math.min(90, Number(url.searchParams.get('limit')) || 50);
+  let rows = mailContentRows;
+  if (q) rows = /^\d+$/.test(q) ? rows.filter((r) => r.slot === Number(q)) : rows.filter((r) => r.subject.includes(q));
+  if (st) rows = rows.filter((r) => r.status === st);
+  return { ok: true, total: rows.length, rows: rows.slice(off, off + lim) };
+};
+const contentDemo = (url) => {
+  const slot = Number(url.searchParams.get('slot')), variant = url.searchParams.get('variant') ?? 'a';
+  const r = mailContentRows.find((x) => x.slot === slot && x.variant === variant);
+  if (!r) return { ok: false, error: 'not_found' };
+  const text = mailBodyText(r.slot, r.subject);
+  const html = '<div style="font:15px/1.9 sans-serif;color:#222;padding:16px;max-width:560px">' + text.split('\n\n').map((p) => `<p style="margin:0 0 14px">${p}</p>`).join('') + '</div>';
+  return { ok: true, ...r, text, html, variants: mailContentRows.filter((x) => x.slot === slot).map((x) => ({ variant: x.variant, status: x.status })),
+    prev: slot > 1 ? slot - 1 : null, next: slot < 7 ? slot + 1 : null };
+};
+const scenariosDemo = {
+  ok: true,
+  rows: [{ key: 'course', label: '7日間講座', total: 8, active: 8, readers: 4118 }],
+  lists: [{ product: 'buyers-a', label: '教材A 購入者', buyers: 466 }, { product: 'buyers-b', label: '教材B 購入者', buyers: 348 }],
+  signup: { course: { state: 'open', url: 'https://example.com/s/course' } },
+  tokuten: [],
+};
+const mailListDemo = (product) => ({
+  ok: true, product, label: product === 'buyers-b' ? '教材B 購入者' : '教材A 購入者',
+  kpi: product === 'buyers-b' ? { buyers: 348, reachable: 301 } : { buyers: 466, reachable: 412 },
+  casts: [
+    { cast_id: 'c-1', title: '10月の教材 先行案内', status: 'scheduled', send_at: Date.now() + 2 * JDAY, target_count: null, sent_count: 0, failed_count: 0, max_targets: 5000, guard_note: null, segment_label: '全員', planned_count: 412, opens: 0, clicks: 0 },
+    { cast_id: 'c-0', title: '9月 セミナー録画のお知らせ', status: 'done', send_at: ago(240), target_count: 405, sent_count: 405, failed_count: 0, max_targets: 5000, guard_note: null, segment_label: '開封した人', opens: 231, clicks: 58 },
+  ],
+});
+const sendsDemo = (url) => {
+  const st = url.searchParams.get('status') ?? '';
+  const totals = { '': 58230, sent: 41970, delivered: 14260, failed: 38, dead: 1, queued: 1961 };
+  const off = Math.max(0, Number(url.searchParams.get('offset')) || 0), lim = Math.min(200, Number(url.searchParams.get('limit')) || 50);
+  const total = totals[st] ?? 0;
+  const rows = [];
+  for (let i = off; i < Math.min(total, off + lim); i++) {
+    const slot = (i * 5) % 7 + 1;
+    const status = st || (i === 9 ? 'failed' : i % 4 === 3 ? 'delivered' : 'sent');
+    const at = Date.now() - (6 + i * 1.3) * 60000;
+    rows.push({ slot, status, error: status === 'failed' ? 'rate_limited' : status === 'dead' ? 'mailbox_unavailable' : null,
+      sent_at: status === 'queued' ? null : at, created_at: at, email: `reader${100 + (i * 37) % 900}@example.com`, subject: (mailSlots.find((m) => m.slot === slot) || {}).subject });
+  }
+  return { ok: true, total, rows };
+};
+const reportDemo = (() => {
+  const fp = (v, c, m, l, rev, o) => ({ visits7: v, signups7: m + l, mail7: m, line7: l, clicks7: c, revenue7: rev, orders7: o, signupRate: v ? (m + l) / v : null, clickRate: v ? c / v : null, cvr: null });
+  const mkLinks = (a) => a.map(([camp, n]) => ({ camp, n }));
+  const src = (src, links) => ({ src, n: links.reduce((s, l) => s + l[1], 0), links: mkLinks(links) });
+  return {
+    ok: true,
+    slots: mailSlots.map((s) => ({ slot: s.slot, subject: s.subject, sent: s.sent, failed: s.slot === 4 ? 3 : 0, opens: s.opens, clicks: s.clicks })),
+    daily: daily30(556, 220),
+    offers: [{ label: '教材B', clicks: 1480, revenue: 238400, orders: 8 }, { label: '教材A', clicks: 3120, revenue: 176400, orders: 18 }, { label: '教材C', clicks: 1100, revenue: 67200, orders: 15 }],
+    funnel: {
+      offerLabel: '教材A',
+      d7: fp(5360, 1420, 84, 34, 126000, 11), d30: fp(21400, 5700, 372, 150, 482000, 41),
+      p7: fp(4890, 1280, 77, 30, 112000, 10), p30: fp(19200, 5090, 331, 140, 421000, 36),
+      sources: {
+        d7: [src('threads', [['profile-link', 1100], ['post-reply', 640], ['', 240]]), src('instagram', [['bio', 700], ['story', 360], ['reel', 150]]),
+          src('mail', [['step-d5', 420], ['step-d7', 310], ['broadcast', 150]]), src('x', [['pin', 380], ['post', 260]]), src('youtube', [['desc', 240]]), { src: '', n: 410, links: [] }],
+        d30: [src('threads', [['profile-link', 4400], ['post-reply', 2560], ['', 940]]), src('instagram', [['bio', 2800], ['story', 1440], ['reel', 600]]),
+          src('mail', [['step-d5', 1680], ['step-d7', 1240], ['broadcast', 600]]), src('x', [['pin', 1520], ['post', 1040]]), src('youtube', [['desc', 960]]), { src: '', n: 1620, links: [] }],
+      },
+    },
+    events30: { open: 9420, click: 1860, unsubscribe: 52 }, eventsPrev30: { open: 8650, click: 1710, unsubscribe: 61 },
+  };
+})();
+
+// ---- 監査 ----
+const auditDemo = (() => {
+  const week = { sent7: 3890, delivered7: 3862, open7: 2140, bounce7: 19, complaint7: 2 };
+  const j = (num, den, hi) => ({ kind: 'rate', rate: num / den, level: 'ok', hi });
+  return {
+    ok: true, api: 'audit/1',
+    alerts: [
+      { key: 'send_dead', text: 'メール 1件が打ち止めになりました（宛先のメールボックスが使えません）', created_at: ago(70) },
+      { key: 'cron', text: '期日スキャンが1回遅れました。次の回で戻っています', created_at: ago(190) },
+    ],
+    adminActions: [
+      { action: 'requeue', target_kind: 'mail', target_id: 42, actor: 'owner@example.com', reason: '原因を修正して再送', result_json: '{}', created_at: ago(20) },
+      { action: 'send_kill_off', target_kind: null, target_id: null, actor: 'owner@example.com', reason: '点検が終わったので再開', result_json: '{}', created_at: ago(96) },
+    ],
+    alerts7: 2,
+    jobs: [
+      { key: 'cron', name: '期日スキャン(5分cron)', last: ago(0.05), ok: true, note: null, state: 'ok' },
+      { key: 'choritsu', name: '週次調律(月曜08:00)', last: ago(60), ok: true, note: '週キー 2026-W41', state: 'ok' },
+      { key: 'backup', name: 'D1バックアップ(外部ジョブ・毎日)', last: ago(8), ok: true, note: '全表を保存しました', state: 'ok' },
+      { key: 'tracking', name: '開封・クリック計測(Resend設定)', last: null, ok: true, note: null, state: 'ok' },
+      { key: 'warmup', name: '送信ウォームアップ(段階増量)', last: null, ok: null, note: '無効(無制限)。移行前にONにする', state: 'info' },
+      { key: 'purchase_rules', name: '購入のルール(5分ごとの見回り)', last: ago(0.05), ok: true, note: '未処理 0 · 打ち止め 0', state: 'ok' },
+      { key: 'mail', name: 'メール配信', last: null, ok: false, note: '失敗 0 · 打ち止め 1 ／ 7日', state: 'bad' },
+      { key: 'line', name: 'LINE配信', last: null, ok: true, note: '失敗 0 · 打ち止め 0 ／ 7日', state: 'ok' },
+    ],
+    deads: { mail: [{ id: 42, scenario_key: 'course', slot: 4, error: 'mailbox_unavailable', updated_at: ago(30), email: 'reader3@example.com' }], line: [], cast: [], mailCast: [] },
+    guard: { kill: { on: false }, globalCap: { sentToday: 1240, cap: 2000, activeContacts: 4118, exceeded: false }, contactDailyMax: 3, castMaxTargets: 5000 },
+    health: {
+      week,
+      daily: Array.from({ length: 30 }, (_, i) => { const sent = Math.round(556 + wob(i, 200)); return { day: ymdOf(29 - i), sent, delivered: Math.round(sent * 0.993), open: Math.round(sent * 0.55), bounce: i % 6 === 2 ? 1 : 0, complaint: i === 27 ? 1 : 0 }; }),
+      levels: {
+        delivery: { kind: 'rate', rate: week.delivered7 / week.sent7, level: 'ok' }, open: { kind: 'rate', rate: week.open7 / week.delivered7, level: 'ok' },
+        bounce: { kind: 'rate', rate: week.bounce7 / week.sent7, level: 'ok' }, complaint: { kind: 'rate', rate: week.complaint7 / week.delivered7, level: 'ok' }, pending: false,
+      },
+    },
+    lineQuota: { used: 5240, stepSent: 4310, castSent: 930, aiSent: 0, limit: 15000, pct: 5240 / 15000, level: 'ok', projected: 9800 },
+    kpi: { mailFailed7: 1, lineFailed7: 0, snsDead7: 0 },
+  };
+})();
+
+// ---- カレンダー・予約・LP分析 ----
+const calendarDemo = (url) => {
+  const start = Number(url.searchParams.get('start')) || dayStartMs(0);
+  const days = Math.min(42, Math.max(1, Number(url.searchParams.get('days')) || 35));
+  const social = [];
+  const md = (ms) => { const d = new Date(ms + 9 * JH); return `${String(d.getUTCMonth() + 1).padStart(2, '0')}/${String(d.getUTCDate()).padStart(2, '0')}`; };
+  for (let i = 0; i < days; i++) {
+    const day = start + i * JDAY, dow = new Date(day + 9 * JH).getUTCDay();
+    const items = [['Threads', 7.5 * JH, 'th1'], ['Threads', 19 * JH, 'th2']];
+    if ((Math.floor(day / JDAY)) % 2 === 0) items.push(['IG', 12 * JH, 'ig']);
+    if (dow === 2 || dow === 5) items.push(['YouTube', 18 * JH, 'yt']);
+    items.forEach(([channel, off, k], j) => {
+      const at = day + off;
+      const status = at < Date.now() ? ((Math.floor(day / JDAY) + j) % 23 === 0 ? 'dead' : 'published') : 'queued';
+      social.push({ channel, d: md(day), at_ms: at, status, title: titleAt(Math.floor(day / JDAY) * 3 + j) });
+    });
+  }
+  return { ok: true, start, sent: [], plan: [], social };
+};
+const bookingsDemo = (view) => {
+  const at = (back, h, m = 0) => dayStartMs(back) + h * JH + m * 60000;
+  const bk = (id, key, title, startAt, mins, status, channel, name, ans, blocked = false) => ({ id, key, title, startAt, endAt: startAt + mins * 60000, label: jfmt(startAt, startAt + mins * 60000), status, canceledBy: status === 'canceled' ? 'user' : null, channel, name, blocked, answers: {}, answerList: ans });
+  const upcoming = [
+    bk(501, 'consult', '個別相談', at(-1, 14), 30, 'booked', 'line', '佐藤 みか', [{ label: '相談したいこと', value: '商品の価格の決め方' }]),
+    bk(502, 'consult', '個別相談', at(-2, 11), 30, 'booked', 'email', '鈴木 けん', [{ label: '相談したいこと', value: 'LINEとメールの使い分け' }]),
+    bk(503, 'seminar', 'オンラインセミナー', at(-4, 20), 90, 'booked', 'line', '高橋 ひろ', []),
+    bk(504, 'seminar', 'オンラインセミナー', at(-4, 20), 90, 'waiting', 'email', '田中 ゆかり', [{ label: '参加の目的', value: '講座の作り方を知りたい' }]),
+    bk(505, 'consult', '個別相談', at(-6, 16), 30, 'pending', 'line', '伊藤 まなぶ', []),
+  ];
+  const past = [
+    bk(490, 'consult', '個別相談', at(1, 15), 30, 'done', 'line', '渡辺 りく', [{ label: '相談したいこと', value: '配信の頻度' }]),
+    bk(491, 'seminar', 'オンラインセミナー', at(3, 20), 90, 'done', 'email', '山本 あおい', []),
+    bk(492, 'consult', '個別相談', at(5, 13), 30, 'canceled', 'line', '中村 そら', []),
+  ];
+  return {
+    ok: true,
+    sessions: [
+      { key: 'seminar', title: 'オンラインセミナー', startAt: at(-4, 20), label: jfmt(at(-4, 20), at(-4, 21.5)), note: 'Zoom', capacity: 50, booked: 34, waiting: 0 },
+      { key: 'seminar', title: 'オンラインセミナー', startAt: at(-18, 20), label: jfmt(at(-18, 20), at(-18, 21.5)), note: 'Zoom', capacity: 50, booked: 50, waiting: 6 },
+    ],
+    notify: [{ key: 'seminar', title: 'オンラインセミナー', count: 73 }],
+    keys: [{ key: 'consult', title: '個別相談', kind: 'slots' }, { key: 'seminar', title: 'オンラインセミナー', kind: 'sessions' }],
+    bookings: view === 'past' ? past : upcoming,
+    blocks: [{ id: 1, key: 'consult', title: '個別相談', day: ymdOf(-8), startAt: null, label: `${jfmt(at(-8, 12)).replace(/\d+:\d+$/, '')}（その日全部）` }],
+  };
+};
+const bookingParticipantsDemo = {
+  ok: true, label: jfmt(dayStartMs(-4) + 20 * JH, dayStartMs(-4) + 21.5 * JH), title: 'オンラインセミナー',
+  participants: [
+    { id: 503, name: '高橋 ひろ', channel: 'line', status: 'booked', answerList: [] },
+    { id: 504, name: '田中 ゆかり', channel: 'email', status: 'waiting', answerList: [{ label: '参加の目的', value: '講座の作り方を知りたい' }] },
+    { id: 506, name: '小林 かい', channel: 'line', status: 'booked', answerList: [] },
+  ],
+};
+const heatDemo = (url) => {
+  const pages = [
+    { page: 'sample-lp', url: 'https://example.com/lp', updated_at: ago(2), label: 'サンプルLP' },
+    { page: 'seminar-lp', url: 'https://example.com/seminar', updated_at: ago(30), label: 'セミナーLP' },
+  ];
+  const tag = '<scr' + 'ipt src="https://example.com/heat.js" data-page="ページ名" defer></scr' + 'ipt>';  // 画面に埋め込む script の中に書くので、閉じタグを分けて書く
+  if (url.searchParams.get('list') === '1') return { ok: true, pages, tag };
+  const page = url.searchParams.get('page') || 'sample-lp';
+  const f = page === 'seminar-lp' ? 0.4 : 1;
+  const views = Math.round(3860 * f);
+  const all = {
+    views, ctaRate: 0.124, ctaViews: views, ctaVisits: Math.round(views * 0.124), interactionClicks: Math.round(2310 * f), dwellTotalMs: views * 74000, rageTotal: Math.round(14 * f),
+    sections: [['ヒーロー', 1, 9800], ['悩みの共感', 0.82, 14200], ['解決策', 0.64, 18600], ['実績', 0.47, 11300], ['料金', 0.31, 16900], ['よくある質問', 0.19, 8200]].map(([sec, reachRate, dwellAvgMs]) => ({ sec, reachRate, dwellAvgMs })),
+    elements: [
+      { sel: 'a.cta-main|申し込みボタン', sec: '料金', clicks: Math.round(612 * f), clicksPerView: 0.16, rage: 3 },
+      { sel: 'a.cta-hero|最初のボタン', sec: 'ヒーロー', clicks: Math.round(498 * f), clicksPerView: 0.13, rage: 1 },
+      { sel: 'summary.faq|質問を開く', sec: 'よくある質問', clicks: Math.round(244 * f), clicksPerView: 0.06, rage: 0 },
+      { sel: 'img.proof|実績の画像', sec: '実績', clicks: Math.round(131 * f), clicksPerView: 0.03, rage: 6 },
+    ],
+  };
+  return { ok: true, pages, page, pageLabel: pages.find((p) => p.page === page).label, days: 30, report: { all, sp: { views: Math.round(views * 0.72) }, pc: { views: Math.round(views * 0.28) } },
+    findings: [
+      { level: 'ok', text: '申し込みボタンの反応は、訪問の12%です。' },
+      { level: 'warn', text: '料金の手前で、読む人が3割まで減っています。料金の見出しを手前に置くと、届く人が増えます。' },
+      { level: 'info', text: '実績の画像は、押せると思われて連打されています。リンクにするか、押せない見た目にします。' },
+    ], viewerUrl: null, tag };
+};
+
 const delayMs = Number(undefined || 0);
 
 
@@ -476,8 +877,8 @@ function __route(url) {
 
   let body = { ok: true };
   if (url.pathname === '/api/admin/dashboard') body = dashboard;
-  else if (url.pathname === '/api/admin/audit') body = audit;
-  else if (url.pathname === '/api/admin/heat') body = { ok: true, pages: [] };
+  else if (url.pathname === '/api/admin/audit') body = auditDemo;
+  else if (url.pathname === '/api/admin/heat') body = heatDemo(url);
   else if (url.pathname === '/api/admin/line/crm') body = lineCrm;
   else if (url.pathname === '/api/admin/line/chats') body = lineChats;
   else if (url.pathname === '/api/admin/ig/chats') body = igChats;
@@ -494,8 +895,8 @@ function __route(url) {
   else if (url.pathname === '/api/admin/mail/chat') body = mailChat(url.searchParams.get('id'));
   else if (url.pathname === '/api/admin/th/status') body = thStatus;
   else if (url.pathname === '/api/admin/th/posts') body = thPosts;
-  else if (url.pathname === '/api/admin/line/friends') body = { ok: true, friends: [], total: 0, hasMore: false };
-  else if (url.pathname === '/api/admin/scenarios') body = { ok: true, rows: [], lists: [], tokuten: [] };
+
+  else if (url.pathname === '/api/admin/scenarios') body = scenariosDemo;
   else if (url.pathname === '/api/admin/channel') body = channelMocks[url.searchParams.get('ch') ?? 'mail'] ?? { ok: true, connected: false };
   else if (url.pathname === '/api/admin/channels/summary') {
     // 一覧専用の集計: 各チャネルの見本から上4枚・30日の線に要る分だけ
@@ -508,6 +909,66 @@ function __route(url) {
     }
     body = { ok: true, channels };
   }
+  else if (url.pathname === '/api/admin/line') {
+    body = { ok: true, connected: true, followers: 12034, blocks: 1852, delta7: 134,
+      events: [{ type: 'follow', n: 612 }, { type: 'message', n: 438 }, { type: 'unfollow', n: 96 }],
+      friends: 12080, blockedNow: 1860, profile: 'main', profileName: '公式アカウント', engine: true,
+      profiles: [{ key: 'main', name: '公式アカウント' }], channelLabels: {},
+      conn: { oaName: '公式アカウント', channelId: '2000000000', webhookPath: '/webhooks/line', configured: true },
+      step: { ledger: [{ status: 'active', n: 12080 }, { status: 'blocked', n: 1860 }], states: [{ status: 'active', n: 3120 }, { status: 'done', n: 7480 }],
+        sends: [{ scenario_key: 'aisatsu', slot: 1, status: 'sent', error: null, sent_at: Date.now() - 0.6 * H, created_at: Date.now() - 0.6 * H },
+          { scenario_key: 'aisatsu', slot: 1, status: 'sent', error: null, sent_at: Date.now() - 5 * H, created_at: Date.now() - 5 * H },
+          { scenario_key: 'aisatsu', slot: 1, status: 'queued', error: null, sent_at: null, created_at: Date.now() + 19 * H }] },
+      casts: [{ cast_id: 'c2', title: '10月の教材 先行案内', segment_label: '講座A 修了', send_at: Date.now() + 26 * H, status: 'scheduled', target_count: 2100, sent_count: 0, failed_count: 0 },
+        { cast_id: 'c1', title: 'セミナー録画のお知らせ', segment_label: 'セミナー申込', send_at: Date.now() - 50 * H, status: 'done', target_count: 812, sent_count: 812, failed_count: 0 }],
+      diag: { none: 8200, 1: 1400, 2: 980, 3: 860, 4: 420, 5: 220 }, richmenuLevels: null,
+      daily: daily30(23, 10),
+      funnel: { clicks: [{ channel: 'ig', ck7: 241, ck30: 988 }, { channel: 'threads', ck7: 118, ck30: 402 }, { channel: 'youtube', ck7: 64, ck30: 250 }], follows7: 171, follows30: 690 } };
+  }
+  else if (url.pathname === '/api/admin/persons') {
+    const P = (id, seg, score, email, line, ig, tags, n, total) => ({ id, created_at: Date.now() - id * 9 * H, score, segment: seg, email, line_id: line ? `U${String(id).padStart(32, '0')}` : null,
+      discord_id: null, ig_id: ig ? `1784${id}0000` : null, ig_username: ig, kinds: [email, line, ig].filter(Boolean).length, tags, meikyou_tier: null,
+      purchase_n: n, purchase_total: total, purchase_estimated: false });
+    let rows = [P(48, 'core', 92, 'yukari@example.com', true, 'yukari.writes', ['教材A 購入者', 'セミナー申込'], 3, 39400),
+      P(47, 'regular', 71, 'ken@example.com', true, null, ['講座A 修了'], 1, 9800), P(46, 'prospect', 54, null, true, 'sakura.design', ['興味: 集客'], 0, 0),
+      P(45, 'regular', 66, 'odawara@example.com', true, null, ['個別相談'], 1, 4980), P(44, 'prospect', 41, 'info@shop.example.jp', false, null, [], 0, 0),
+      P(43, 'dormant', 12, 'reader2@example.com', false, null, ['講座A 修了'], 0, 0), P(42, 'core', 88, 'mikan@example.com', true, 'mikan.video', ['教材A 購入者', '教材B 購入者'], 2, 29600)];
+    const seg = url.searchParams.get('seg'), q = String(url.searchParams.get('q') ?? '').toLowerCase();
+    if (seg) rows = rows.filter((r) => r.segment === seg);
+    if (q) rows = rows.filter((r) => [r.email, r.ig_username].filter(Boolean).join(' ').includes(q.replace(/^@/, '')));
+    if (url.searchParams.get('sort') === 'score') rows = rows.slice().sort((a, b) => b.score - a.score);
+    body = { ok: true, kpi: { persons: 15420, email: 4118, line: 12080, discord: 0, ig: 1460, both: 1860, meikyou: 0, buyers: 466,
+      segments: { core: 212, regular: 1380, prospect: 4210, dormant: 2950 }, scoredAt: Date.now() - 5 * H }, rows };
+  }
+  else if (url.pathname === '/api/admin/persons/timeline') {
+    body = { ok: true, identities: [{ kind: 'email', key: 'yukari@example.com' }, { kind: 'line', key: 'U…' }],
+      events: [{ at: Date.now() - 2 * H, ch: 'メール', label: '「7日間講座」3通目を開封' }, { at: Date.now() - 26 * H, ch: 'LINE', label: '個別相談を予約' },
+        { at: Date.now() - 4 * 24 * H, ch: '購入', label: '教材A（¥9,800）' }, { at: Date.now() - 9 * 24 * H, ch: 'Instagram', label: 'ストーリーに返信' }] };
+  }
+  else if (url.pathname === '/api/admin/line/friends') body = friendsDemo(url);
+  else if (url.pathname === '/api/admin/line/friend') body = friendDemo(url);
+  else if (url.pathname === '/api/admin/line/analytics') {
+    const v = url.searchParams.get('view'), dq = ['7', '30', '90', 'all'].includes(url.searchParams.get('days')) ? url.searchParams.get('days') : '30';
+    const period = linePeriod(dq);
+    if (v === 'inflow') body = { ok: true, period, goals: lineGoals, ...lineInflow(dq) };
+    else if (v === 'ab') body = { ok: true, period, goals: lineGoals, ...lineAb() };
+    else if (v === 'delivery') body = { ok: true, period, ...lineDelivery(dq) };
+    else body = { ok: true, period, ...lineGrowth(dq) };
+  }
+  else if (url.pathname === '/api/admin/line/routes') body = lineRoutesDemo(Math.min(Math.max(Number(url.searchParams.get('days')) || 30, 1), 365));
+  else if (url.pathname === '/api/admin/line/menus') body = lineMenusDemo;
+  else if (url.pathname === '/api/admin/line/forms') body = lineFormsDemo;
+  else if (url.pathname === '/api/admin/line/import') body = lineImportDemo(Math.max(Number(url.searchParams.get('offset')) || 0, 0));
+  else if (url.pathname === '/api/admin/line/import/matched') body = lineImportMatched;
+  else if (url.pathname === '/api/admin/report') body = reportDemo;
+  else if (url.pathname === '/api/admin/sends') body = sendsDemo(url);
+  else if (url.pathname === '/api/admin/contents') body = contentsDemo(url);
+  else if (url.pathname === '/api/admin/content') body = contentDemo(url);
+  else if (url.pathname === '/api/admin/mail-stats') body = mailStatsDemo;
+  else if (url.pathname === '/api/admin/mail-list') body = mailListDemo(url.searchParams.get('product'));
+  else if (url.pathname === '/api/admin/calendar') body = calendarDemo(url);
+  else if (url.pathname === '/api/admin/bookings') body = bookingsDemo(url.searchParams.get('view'));
+  else if (/^\/api\/admin\/bookings\/[^/]+\/participants$/.test(url.pathname)) body = bookingParticipantsDemo;
   else if (url.pathname === '/api/admin/contacts') {
     body = { ok: true, total: 2, rows: [
       { id: 1, email: 'reader1@example.com', status: 'active', confirmed_at: Date.now() - 9 * 86400000, slot: 8, scenario_status: 'active', next_send_at: Date.now() + 86400000 },
@@ -576,6 +1037,7 @@ function __route(url) {
       }
       var body;
       try { body = __route(u); } catch (e) { body = { ok: true }; }
+      (window.__demoCalls = window.__demoCalls || []).push(u.pathname + u.search + (body && Object.keys(body).length <= 1 ? ' [EMPTY]' : ''));
       // 受信箱の一覧は、状態・検索語・ラベルで絞る(見本は条件を見ないので、ここで)
       if (/^\/api\/admin\/(line|ig|yt|mail)\/chats$/.test(u.pathname) && body && Array.isArray(body.chats)) {
         var stq = u.searchParams.get('status') || 'all', q = (u.searchParams.get('q') || '').toLowerCase(), lf = u.searchParams.get('lf') || '';
@@ -899,6 +1361,11 @@ function __route(url) {
   .set-how p{font-size:12px;line-height:1.8;color:var(--dim);margin:6px 0}
   .set-how pre,.set-pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 var(--sans);color:var(--dim);background:var(--hover);border-radius:var(--r-btn);padding:10px 12px;margin:0}
   .set-how .btn{margin-top:6px}
+  .set-warn{color:var(--warn)}
+  .ai-empty{padding:18px 16px}
+  .ai-empty b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+  .ai-empty p{font-size:13px;line-height:1.8;color:var(--dim);margin:4px 0 0}
+  .ai-empty .set-how{padding:8px 0 0}
 
   .mobile-nav{display:none;gap:6px;padding:10px 16px 2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-padding:0 16px}
   .mobile-nav::-webkit-scrollbar{display:none}
@@ -1068,6 +1535,9 @@ function __route(url) {
 
   /* セットアップチェックリスト */
   .ck-row .st{margin-left:auto}
+  .ck-row .l{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.6}
+  .ck-how{padding:0 16px 12px}
+  .ck-how .btn{margin-top:6px}
 
   /* イケハヤAIの見立て(第1層)。.cardは自身にpaddingを持たない設計なので横16pxは各自が持つ */
   .mitate-foot{padding:10px 16px 12px;font-size:12px;color:var(--note)}
@@ -1519,6 +1989,7 @@ function __route(url) {
     *{transition:none!important}
     .busybar::after,html[data-busy] .kpi .v:empty::before,html[data-busy] .skel:empty::before{animation:none}
   }
+  .need-analytics{display:none!important}
 </style>
 </head>
 <body>
@@ -1563,12 +2034,12 @@ function __route(url) {
       <button class="nav-a" data-nav="insta"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.8"/><circle cx="11.6" cy="4.4" r=".6" fill="currentColor"/></svg>Instagram</button>
       <button class="nav-a" data-nav="booking"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3M5 9.5l2 2 4-4"/></svg>予約</button>
       <div class="side-sec">分析</div>
-      <button class="nav-a" data-nav="report"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13.5h12M4 13V8M8 13V4M12 13V6"/></svg>ファネル分析</button>
+      <button class="nav-a" data-nav="report"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13.5h12M4 13V8M8 13V4M12 13V6"/></svg>売上と配信</button>
       <button class="nav-a" data-nav="heat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><circle cx="6.2" cy="6.2" r="1.6"/><circle cx="10.2" cy="9.8" r="2.4"/></svg>LP分析</button>
       <button class="nav-a" data-nav="channels" id="nav-channels"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="12" r="1.8"/><path d="m5.6 7.2 4.8-2.4M5.6 8.8l4.8 2.4"/></svg>チャネル<span class="ch-badge" id="side-ch-badge"></span></button>
 
       <div class="side-sec">運用</div>
-      <button class="nav-a" data-nav="sales"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4.5v7M10 6H7a1.5 1.5 0 0 0 0 3h2a1.5 1.5 0 0 1 0 3H6"/></svg>先行販売</button>
+
       <button class="nav-a" data-nav="audit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2 2.5 4.5v3.6c0 3.2 2.3 5.4 5.5 6.4 3.2-1 5.5-3.2 5.5-6.4V4.5L8 2Z"/><path d="M5.8 8.2 7.3 9.7l3-3.2"/></svg>監査</button>
     </nav>
     <nav id="nav-project" hidden>
@@ -1596,7 +2067,7 @@ function __route(url) {
 
 
 
-        <button class="nav-a" data-nav="channels" data-ch="kyozai">教材LP <span style="margin-left:auto;color:var(--note)" id="side-lp-st">—</span></button>
+
       </nav>
     </div>
     <div class="side-bottom">
@@ -1621,11 +2092,11 @@ function __route(url) {
       <button class="fchip" data-nav="line">LINE</button>
       <button class="fchip" data-nav="insta">Instagram</button>
       <button class="fchip" data-nav="booking">予約</button>
-      <button class="fchip" data-nav="report">ファネル分析</button>
+      <button class="fchip" data-nav="report">売上と配信</button>
       <button class="fchip" data-nav="heat">LP分析</button>
       <button class="fchip" data-nav="channels">チャネル</button>
 
-      <button class="fchip" data-nav="sales">先行販売</button>
+
       <button class="fchip" data-nav="audit">監査</button>
     </div>
     <div class="mobile-nav" id="mobile-nav-project" hidden></div>
@@ -1664,7 +2135,7 @@ function __route(url) {
         </div>
         <div id="reco-zone" style="display:grid;gap:16px"></div>
         <div class="card">
-          <div class="card-head"><h2 id="chart-title">日別配信数</h2><span class="sub">直近30日</span><div class="legend" id="chart-legend"></div><button class="link" data-nav="report" style="margin-left:14px">ファネル分析 →</button></div>
+          <div class="card-head"><h2 id="chart-title">日別配信数</h2><span class="sub">直近30日</span><div class="legend" id="chart-legend"></div><button class="link" data-nav="report" style="margin-left:14px">売上と配信 →</button></div>
           <div class="card-body chart-wrap" id="chart-body"><svg id="chart" width="100%" height="280" role="img" aria-label="直近30日の推移"></svg><div class="tip" id="chart-tip"></div></div>
         </div>
         <div class="card">
@@ -1711,10 +2182,10 @@ function __route(url) {
           <div class="kpi"><div class="k">人数</div><div class="v" id="p-total"></div><div class="d"><span>名寄せ済みの人</span></div></div>
           <div class="kpi"><div class="k">メール接続</div><div class="v" id="p-email"></div><div class="d"></div></div>
           <div class="kpi"><div class="k">LINE接続</div><div class="v" id="p-line"></div><div class="d"></div></div>
-          <div class="kpi"><div class="k">Discord接続</div><div class="v" id="p-discord"></div><div class="d"></div></div>
+
           <div class="kpi"><div class="k">Instagram</div><div class="v" id="p-ig"></div><div class="d"></div></div>
           <div class="kpi"><div class="k">複数接続</div><div class="v" id="p-both"></div><div class="d"><span>2チャネル以上 名寄せ成立</span></div></div>
-          <div class="kpi"><div class="k">会員サイト会員</div><div class="v" id="p-meikyou"></div><div class="d"><span>Discord連携で判明した会員</span></div></div>
+
           <div class="kpi"><div class="k">購入者</div><div class="v" id="p-buyers"></div><div class="d"><span>購入台帳と接続した人</span></div></div>
           <div class="kpi"><div class="k">コア顧客</div><div class="v" id="p-core"></div><div class="d" id="p-core-d"><span>購入あり · 90日反応あり</span></div></div>
         </div>
@@ -2054,8 +2525,9 @@ function __route(url) {
       </header>
       <div class="content">
         <div class="card" id="lbook-empty" hidden>
-          <div class="card-head"><h2>予約ページはまだありません</h2></div>
-          <div class="trow empty">bookings.config.mjs の BOOKINGS に書くと始まります（OPTIONS.md §10-18・AIに頼めます）</div>
+          <div class="ai-empty"><b>予約ページはまだありません</b><p>セミナーや個別相談の予約を受けるページです。日時・定員・案内文を決めると、LINEやメールで配れる予約ページができます。</p>
+            <details class="set-how"><summary>AIへの頼み方</summary><pre>Rondo の OPTIONS.md §10-18 のとおり、予約ページを作ってください(bookings.config.mjs の BOOKINGS)。日時・定員・案内文は、案を出してから私に確かめてください。</pre>
+            <button class="btn ghost sm" type="button" data-ai-ask="Rondo の OPTIONS.md §10-18 のとおり、予約ページを作ってください(bookings.config.mjs の BOOKINGS)。日時・定員・案内文は、案を出してから私に確かめてください。">AIへの頼み方をコピー</button></details></div>
         </div>
         <div class="card" id="lbook-card">
           <div class="card-head"><h2>予約</h2><span class="sub">取り消すと本人に知らせる（LINE／メール）· 回の「参加者」から CSV と .ics</span>
@@ -2151,7 +2623,7 @@ function __route(url) {
 
 
 
-          <button class="fchip" data-ch="kyozai">教材LP</button>
+
         </div>
         <div class="kpis" id="chn-kpis"></div>
         <!-- すべてのチャネル(10-09): チャネルごとに 規模・7日の動き・30日の推移。押すとそのチャネルへ -->
@@ -2245,7 +2717,7 @@ function __route(url) {
     <!-- ファネル分析 -->
     <section class="view v-report">
       <header class="topbar">
-        <h1>ファネル分析</h1>
+        <h1>売上と配信</h1>
         <span class="upd" id="rep-upd"></span>
         <button class="btn ghost sm push" id="rep-reload">更新</button>
       </header>
@@ -2253,8 +2725,8 @@ function __route(url) {
         <div class="kpis">
           <div class="kpi"><div class="k">売上 30日</div><div class="v" id="rp-rev"></div><div class="d" id="rp-rev-d"></div><div class="d" id="rp-rev-p"></div></div>
           <div class="kpi"><div class="k">注文 30日</div><div class="v" id="rp-orders"></div><div class="d" id="rp-orders-d"></div><div class="d" id="rp-orders-p"></div></div>
-          <div class="kpi"><div class="k">教材クリック 30日</div><div class="v" id="rp-clicks"></div><div class="d" id="rp-clicks-d"></div><div class="d" id="rp-clicks-p"></div></div>
-          <div class="kpi"><div class="k">LP訪問 30日</div><div class="v" id="rp-visits"></div><div class="d"><span>bot除外</span></div><div class="d" id="rp-visits-p"></div></div>
+          <div class="kpi need-analytics"><div class="k">教材クリック 30日</div><div class="v" id="rp-clicks"></div><div class="d" id="rp-clicks-d"></div><div class="d" id="rp-clicks-p"></div></div>
+          <div class="kpi need-analytics"><div class="k">LP訪問 30日</div><div class="v" id="rp-visits"></div><div class="d"><span>bot除外</span></div><div class="d" id="rp-visits-p"></div></div>
         </div>
         <div class="kpis">
           <div class="kpi"><div class="k">登録 30日</div><div class="v" id="rp-signups"></div><div class="d" id="rp-signups-d"></div><div class="d" id="rp-signups-p"></div></div>
@@ -2262,7 +2734,7 @@ function __route(url) {
           <div class="kpi"><div class="k">メールクリック 30日</div><div class="v" id="rp-click"></div><div class="d"><span>イベント数</span></div><div class="d" id="rp-click-p"></div></div>
           <div class="kpi"><div class="k">解除 30日</div><div class="v" id="rp-unsub"></div><div class="d"><span>イベント数</span></div><div class="d" id="rp-unsub-p"></div></div>
         </div>
-        <div class="card">
+        <div class="card need-analytics">
           <div class="card-head"><h2 id="fnl-title">ファネル</h2><span class="sub" id="fnl-sub">直近30日 · 率は同期間の概算</span>
             <div class="filters" id="fnl-period" style="margin-left:auto">
               <button class="fchip" data-p="d7">7日</button>
@@ -2595,7 +3067,7 @@ function __route(url) {
   </main>
 </div>
 
-<script>window.RONDO_CFG = {"senderName":"運用者","defaultScenarioKey":"course","defaultScenarioLabel":"7日間講座","scenarioLabels":{"course":"7日間講座"},"mailChannelName":"メール","memberSiteName":"会員サイト","memberKpiLabel":"無料会員","memberSiteConnected":false,"memberShortName":"会員サイト","offerLpName":"教材LP","lineOaName":"","lineChannelId":"","baseHost":"example.com","discordName":"コミュニティ Discord","discordConnected":false,"financieConnected":false,"financieName":"トークン価格"};</script>
+<script>window.RONDO_CFG = {"senderName":"運用者","defaultScenarioKey":"course","defaultScenarioLabel":"7日間講座","scenarioLabels":{"course":"7日間講座"},"mailChannelName":"メール","memberSiteName":"会員サイト","memberKpiLabel":"無料会員","memberSiteConnected":false,"memberShortName":"会員サイト","offerLpName":"教材LP","lineOaName":"","lineChannelId":"","baseHost":"example.com","discordName":"コミュニティ Discord","discordConnected":false,"financieConnected":false,"analyticsConnected":false,"salesConnected":false,"financieName":"トークン価格"};</script>
 <script>
 (function () {
   'use strict';
@@ -2932,13 +3404,22 @@ function __route(url) {
       if (!rows) rows = '<div class="trow"><span class="act-ok">✓</span><span class="l">対応が必要な項目 0件</span></div>';
       return '<div class="card">' + head + '<div class="today-list">' + rows + '</div></div>';
     },
+    // はじめの設定: 必須の項目が全部済むまで出る(サーバ側 setupComplete)。未の行は進め方(画面を開く・AIへの頼み方)を畳んで持つ
     setup: function (d) {
       var items = d.checklist || [];
-      var doneN = items.filter(function (c) { return c.done; }).length;
-      var head = '<div class="card-head"><h2>はじめの設定</h2><span class="sub">' + doneN + '/' + items.length + '</span></div>';
+      var req = items.filter(function (c) { return !c.optional; });
+      var doneN = req.filter(function (c) { return c.done !== false; }).length;
+      var head = '<div class="card-head"><h2>はじめの設定</h2><span class="sub">' + doneN + '/' + req.length + '</span></div>';
       var rows = items.map(function (c) {
-        return '<div class="trow ck-row"><span class="l">' + esc(c.label) + '</span>' +
-          (c.done ? '<span class="st ok">済</span>' : '<span class="st mute">未</span>') + '</div>';
+        var st = c.done === true ? '<span class="st ok">済</span>'
+          : c.done === null ? '<span class="st mute">判定なし</span>'
+            : '<span class="st ' + (c.optional ? 'mute">使う場合' : 'wait">未') + '</span>';
+        var how = c.done === false && (c.how || c.nav)
+          ? '<details class="set-how ck-how"><summary>進め方</summary>' +
+            (c.how ? '<pre>' + esc(c.how) + '</pre><button class="btn ghost sm" type="button" data-ai-ask="' + esc(c.how) + '">AIへの頼み方をコピー</button> ' : '') +
+            (c.nav ? '<button class="btn ghost sm" type="button" data-nav="' + esc(c.nav) + '">画面を開く</button>' : '') + '</details>'
+          : '';
+        return '<div class="ck-item"><div class="trow ck-row"><span class="l">' + esc(c.label) + '</span>' + st + '</div>' + how + '</div>';
       }).join('');
       return '<div class="card">' + head + '<div class="today-list">' + rows + '</div></div>';
     },
@@ -2952,7 +3433,7 @@ function __route(url) {
         return '<div class="trow act-row" data-nav="' + esc(c.nav) + '"><span class="adot info"></span>' +
           '<span class="l">' + esc(c.text) + '</span><span class="cnt">→</span></div>';
       }).join('');
-      var foot = '<div class="mitate-foot">詳しい診断は、Claude Codeで「イケハヤAI」に頼んでください。</div>';
+      var foot = '<div class="mitate-foot">詳しい診断は、Claude Code か Codex で「イケハヤAI」に頼んでください。</div>';
       return '<div class="card">' + head + '<div class="today-list">' + rows + '</div>' + foot + '</div>';
     },
   };
@@ -2996,7 +3477,7 @@ function __route(url) {
         (repBox.hidden ? '開く' : '閉じる') + '</button>';
       repBox.innerHTML = '<div class="mitate-rep"><div class="rep-head">イケハヤAIの診断レポート · <span class="num">' + esc(rep.date || '') + '</span></div>' +
         '<div class="rep-body">' + esc(rep.summary) + '</div></div>' +
-        '<div class="mitate-foot">詳しい診断は、Claude Codeで「イケハヤAI」に頼んでください。</div>';
+        '<div class="mitate-foot">詳しい診断は、Claude Code か Codex で「イケハヤAI」に頼んでください。</div>';
     } else {
       repBox.hidden = true;
       repBox.innerHTML = '';
@@ -3042,7 +3523,8 @@ function __route(url) {
       el('k-sales-mix').textContent = mix.join(' · ');
     } else {
       el('k-sales').textContent = '—';
-      el('k-sales-d').innerHTML = '<span>計測基盤 取得なし</span>';
+      // 配布版の売上は Stripe の購入の記録から立つ(計測基盤は作者の本番だけ)
+      el('k-sales-d').innerHTML = '<span>' + (CFG.analyticsConnected ? '計測基盤 取得なし' : 'まだ購入の記録がありません') + '</span>';
       el('k-sales-mix').textContent = '—';
     }
 
@@ -3247,7 +3729,7 @@ function __route(url) {
       smk.style.color = 'var(--ok)';
     }
     // 教材LP=計測基盤(ANALYTICS_DB)が読めていれば✓
-    if (d.lp) {
+    if (d.lp && el('side-lp-st')) {
       var slp = el('side-lp-st');
       slp.textContent = '✓';
       slp.style.color = 'var(--ok)';
@@ -3316,7 +3798,9 @@ function __route(url) {
       el('cal-grid').innerHTML = html;
       var m = new Date(calMonth + JST);
       el('cal-range').textContent = m.getUTCFullYear() + '年' + (m.getUTCMonth() + 1) + '月';
-      el('cal-sum').textContent = '今月 ' + fmtN(sentN + planN + failN) + '便 · 済み ' + fmtN(sentN) + ' · 予約 ' + fmtN(planN) + (failN ? ' · 失敗 ' + fmtN(failN) : '');
+      // 何が載る画面かを毎回言う(空の月が「壊れている」に見えないように)
+      el('cal-sum').textContent = '今月 ' + fmtN(sentN + planN + failN) + '件 · 済み ' + fmtN(sentN) + ' · 予定 ' + fmtN(planN) + (failN ? ' · 失敗 ' + fmtN(failN) : '') +
+        ' · 載るもの: SNSの予約投稿と投稿・メールとLINEの一斉配信・予約ページの予約(ステップメールは配信ログで見ます)';
     }).catch(loadFail(loadCal));
   }
   el('cal-prev').addEventListener('click', function () { calMonth = addMonths(calMonth, -1); loadCal(); });
@@ -3334,7 +3818,8 @@ function __route(url) {
   function renderLineFunnel() {
     var box = el('line-funnel');
     if (!lineFn || lineFn.clicks == null) {
-      box.innerHTML = '<div class="trow empty">計測基盤 未接続</div>';
+      box.innerHTML = '<div class="trow empty">' + (CFG.analyticsConnected ? '計測基盤 未接続'
+        : 'この表は計測基盤(外部の計測データベース)をつないだ環境だけで出ます。どこから友だちになったかは「流入経路」で見られます') + '</div>';
       return;
     }
     var w30 = lineFnWin === '30';
@@ -4358,6 +4843,42 @@ function __route(url) {
     return '<div class="lchat-b ' + cls + ' mail' + (muted ? ' muted' : '') + '">' + subj + esc(body) + quoted + atts + '</div><div class="lchat-meta">' + esc(meta) + '</div>' + retry;
   }
   function chMsgHtml(xch) { return xch === 'mail' ? mailMsgHtml : igMsgHtml; }
+  // イケハヤAIの案(影運転の案・検問で止めた案)。相手には届いていない。canReply = 返信欄がある(24時間の窓の中)ときだけ「この案を返信欄へ」
+  // tail = 前のページの末尾に残った案(印 data-itail。差し込んだ後に igPlaceTail が後ろのページの自動応答の後へ移す)
+  function igDraftHtml(x, canReply, tail) {
+    var t = tail ? ' data-itail="1"' : '';
+    var dmeta = fmtDT(x.created_at) + ' · ' + (x.status === 'drafted' ? 'AIの案（未送信）' : 'AIの案を止めました（' + (x.reason || '決まりに合わない') + '）');
+    return '<div class="lchat-b draft"' + t + ' data-idraft="' + esc(String(x.id)) + '">' + esc(x.text || '（案の本文はありません）') + '</div><div class="lchat-meta"' + t + '>' + esc(dmeta) + '</div>' +
+      (x.status === 'drafted' && canReply && x.text ? '<div class="lchat-draft-acts"' + t + '><button type="button" class="btn ghost sm" data-iuse-draft="' + esc(String(x.id)) + '">この案を返信欄へ</button></div>' : '');
+  }
+  // 履歴の1ページ。案(d.drafts)は答えた受信(anchor_id)の後ろ、次の受信の手前に置く(その受信への自動応答の後)。
+  // 案は messages に入っていないので、既読・前のページの番号(data-iolder)には効かない。
+  // older = 前のページ(後ろに表示済みの新しいページが続く): 末尾に残った案は印を付けて返す(igPlaceTail で置き直す)
+  function igLogHtml(d, xch, canReply, older) {
+    var fmt = chMsgHtml(xch);
+    var by = {};
+    (d.drafts || []).forEach(function (x) { (by[x.anchor_id] = by[x.anchor_id] || []).push(x); });
+    var pend = [];
+    var flush = function (tail) { var h = pend.map(function (x) { return igDraftHtml(x, canReply, tail); }).join(''); pend = []; return h; };
+    var out = '';
+    (d.messages || []).forEach(function (m) {
+      if (m.direction === 'in' && pend.length) out += flush(false);
+      out += fmt(m);
+      if (by[m.id]) pend = pend.concat(by[m.id]);
+    });
+    return out + flush(!!older);
+  }
+  // 前のページの末尾に残った案を、続く(新しいページの)自動応答の後・次の受信の手前へ移す(ページの境目でも1ページで読んだときと同じ並び)
+  function igPlaceTail(logEl) {
+    var tails = Array.prototype.slice.call(logEl.querySelectorAll('[data-itail]'));
+    if (!tails.length) return;
+    var n = tails[tails.length - 1].nextElementSibling;
+    while (n && !(n.classList.contains('lchat-b') && n.classList.contains('in'))) n = n.nextElementSibling;
+    tails.forEach(function (t) {
+      t.removeAttribute('data-itail');
+      if (n) logEl.insertBefore(t, n); else logEl.appendChild(t);
+    });
+  }
   function igOlderBtn(d) {
     var first = (d.messages || [])[0];
     return d.hasMore && first ? '<div class="lchat-older" style="text-align:center;margin-bottom:8px"><button type="button" class="btn ghost sm" data-iolder="' + first.id + '">前のメッセージを読む</button></div>' : '';
@@ -4389,14 +4910,14 @@ function __route(url) {
     box.dataset.lastSeen = d.seenId ? String(d.seenId) : '';
     box._seen = {};
     igNoteSeen(box, d.messages);
-    var log = (d.messages || []).map(chMsgHtml(xch)).join('');
+    var mailOff = xch === 'mail' && f.canReply === false;
+    var log = igLogHtml(d, xch, !mailOff && f.window_open !== false);
     var st = (f.chat_status === 'done' ? '<button type="button" class="btn ghost sm" data-ist="open">要対応に戻す</button>'
       : f.chat_status === 'ai' ? '<button type="button" class="btn ghost sm" data-ist="done">AIの返信を確認した</button><button type="button" class="btn ghost sm" data-ist="open">要対応に戻す</button>'
       : '<button type="button" class="btn ghost sm" data-ist="done">' + (f.window_open === false ? '対応済みにする' : '返信せずに対応済み') + '</button>') +
       (f.aiEnabled ? '<button type="button" class="btn ghost sm" data-iai-pause="' + (f.ai_paused_at ? '0' : '1') + '">' + (f.ai_paused_at ? 'この人へのAI返事を再開' : 'この人へのAI返事を止める') + '</button>' : '') +
       // メール: 「配信を止めて」という返信には、ここから解除する(自動では解除しない)
       (xch === 'mail' && f.contact_id && f.contact_status === 'active' ? '<button type="button" class="btn ghost sm" data-munsub="' + f.contact_id + '">この人の配信を解除</button>' : '');
-    var mailOff = xch === 'mail' && f.canReply === false;
     box.innerHTML = '<div class="lchat-log" data-log="1">' + igOlderBtn(d) + (log || '<div style="color:var(--note)">メッセージはまだありません</div>') + '</div>' +
       (mailOff
         ? '<div class="ibx-closed"><b>この会話には今は返信できません</b>メールの送信の設定（RESEND_API_KEY・FROM_ADDR）が足りません。</div>' +
@@ -4542,9 +5063,20 @@ function __route(url) {
           if (lchat.cur !== oKey || lchat.gen !== oGen) return;
           igNoteSeen(ibox, d.messages);
           var wrap = iolder.closest('.lchat-older');
-          var html = igOlderBtn(d) + (d.messages || []).map(chMsgHtml(xc)).join('');
+          var html = igOlderBtn(d) + igLogHtml(d, xc, !!ibox.querySelector('[data-text]'), true);
           if (wrap) { wrap.insertAdjacentHTML('afterend', html); wrap.remove(); }
+          var ilog = ibox.querySelector('[data-log]');
+          if (ilog) igPlaceTail(ilog);
         }).catch(function () { iolder.disabled = false; });
+        return;
+      }
+      var iuse = e.target.closest('[data-iuse-draft]');
+      if (iuse) {
+        // AIの案を返信欄へ(人が見て、そのまま送る/直して送る)。送るのは人の手動の返信=24時間の窓・二重送信の防ぎはいつもどおり
+        var dEl = ibox.querySelector('[data-idraft="' + iuse.getAttribute('data-iuse-draft') + '"]');
+        var dta = ibox.querySelector('[data-text]');
+        if (!dta) { if (imsg) { imsg.className = 'lcrm-msg bad'; imsg.textContent = '返信の期限を過ぎたため、この案は送れません'; } return; }
+        if (dEl) { dta.value = dEl.textContent; dta.focus(); }
         return;
       }
       if (e.target.closest('[data-isend]')) {
@@ -5725,10 +6257,10 @@ function __route(url) {
       el('p-total').textContent = fmtN(d.kpi.persons);
       el('p-email').textContent = fmtN(d.kpi.email);
       el('p-line').textContent = fmtN(d.kpi.line);
-      el('p-discord').textContent = fmtN(d.kpi.discord);
+      if (el('p-discord')) el('p-discord').textContent = fmtN(d.kpi.discord);
       el('p-ig').textContent = fmtN(d.kpi.ig || 0);
       el('p-both').textContent = fmtN(d.kpi.both);
-      el('p-meikyou').textContent = fmtN(d.kpi.meikyou);
+      if (el('p-meikyou')) el('p-meikyou').textContent = fmtN(d.kpi.meikyou);
       el('p-buyers').textContent = fmtN(d.kpi.buyers);
       var sg = d.kpi.segments || {};
       el('p-core').textContent = d.kpi.scoredAt ? fmtN(sg.core || 0) : '—';
@@ -5756,7 +6288,7 @@ function __route(url) {
           '<span class="l">' + name + sub + '</span><span class="cnt">' + badges + '</span></div>' +
           '<div class="p-tl" data-tl="' + r.id + '" hidden style="padding:4px 12px 10px 24px"></div>';
       });
-      el('p-list').innerHTML = rows.length ? rows.join('') : '<div class="trow empty">まだ顧客がいません（読者・LINE友だちの登録で自動起票）</div>';
+      el('p-list').innerHTML = rows.length ? rows.join('') : aiEmpty('まだ顧客がいません', 'メールの読者やLINEの友だちが登録すると、ここに自動で並びます。購入やタグ、反応の多さで区分(コア・常連・見込み・休眠)も付きます。', 'Rondo に、前に使っていた配信ツールの読者や購入者の CSV を取り込みたいです。OPTIONS.md の取り込みの手順(import:readers・import:buyers・import:lstep)のどれが合うか教えて、取り込む前に件数を見せてください。');
       var subParts = [];
       if (personsQ) subParts.push('検索: ' + personsQ);
       if (personsSeg && SEG_UI[personsSeg]) subParts.push(SEG_UI[personsSeg][0] + 'のみ');
@@ -7601,8 +8133,10 @@ function __route(url) {
       if (cfg.qs) qs += cfg.qs();
       api(cfg.path + qs).then(function (d) {
         state.total = d.total;
+        // 絞り込み・検索をしていない0件は、画面ごとの案内(cfg.empty)を出す。絞り込みの0件は従来どおり「0件」
+        var bare = !state.q && !state.st && state.offset === 0;
         el(cfg.body).innerHTML = d.rows.length ? d.rows.map(cfg.row).join('') :
-          '<tr><td colspan="' + (cfg.cols || 5) + '" class="dim">0件</td></tr>';
+          '<tr><td colspan="' + (cfg.cols || 5) + '"' + (bare && cfg.empty ? ' style="padding:0">' + cfg.empty() : ' class="dim">0件') + '</td></tr>';
         var from = d.rows.length ? state.offset + 1 : 0;
         var to = state.offset + d.rows.length;
         el(cfg.range).textContent = fmtN(from) + '–' + fmtN(to) + ' ／ ' + fmtN(d.total);
@@ -7798,13 +8332,18 @@ function __route(url) {
       body.innerHTML = '<div class="trow empty">この講座は閉栓中のため、登録ページを公開していません。</div>';
     } else {
       el('g-signup-sub').textContent = '未公開';
-      body.innerHTML = '<div class="trow empty">scenarios.config.mjs のこの講座に page を書いてデプロイすると、登録ページを公開できます。手順は SETUP.md の「登録フォームを置く」です。</div>';
+      body.innerHTML = aiEmpty('登録ページはまだ公開していません', '読者が自分で登録できるページです。題・説明・特典・ボタンの文言を決めると公開できます。',
+        'Rondo の SETUP.md「登録フォームを置く」のとおり、scenarios.config.mjs の講座「' + (SCN_LABEL[gScenario] || gScenario) + '」に登録ページ(page)を書いて公開してください。題・説明・特典の文言は、案を出してから私に確かめてください。');
     }
   }
   var genko = makeList({
     path: '/api/admin/contents', body: 'g-body', range: 'g-range', prev: 'g-prev', next: 'g-next',
     chips: 'g-chips', search: 'g-q', cols: 8,
     qs: function () { return '&scenario=' + encodeURIComponent(gScenario); },
+    empty: function () {
+      return aiEmpty('この講座の原稿はまだありません', 'ステップ配信で順に届くメールの原稿です。原稿を入れると、ここに件名・配信日・開封率が並びます。',
+        'Rondo の SETUP.md §8 のとおり、講座「' + (SCN_LABEL[gScenario] || gScenario) + '」のステップ配信の原稿を contents/steps に書いて、deploy:contents と verify:contents で反映してください。原稿の中身は、案を出してから私に確かめてください。');
+    },
     after: function () { el('g-scn-label').textContent = SCN_LABEL[gScenario] || gScenario; renderSignupCard(); },
     row: function (r) {
       var subj = esc(r.subject);
@@ -8504,6 +9043,12 @@ function __route(url) {
   function setReset(d, key) {
     return d && d.overrides[key] != null ? '<button class="btn ghost sm" type="button" data-set-reset="' + key + '">設定ファイルの値に戻す</button>' : '';
   }
+  // 空の画面の案内: 何がここに出るか＋AIへの頼み方(コピー)。ファイル名やコマンドは頼み方の側に入れる
+  function aiEmpty(title, body, ask) {
+    return '<div class="ai-empty"><b>' + esc(title) + '</b><p>' + esc(body) + '</p>' +
+      (ask ? '<details class="set-how"><summary>AIへの頼み方</summary><pre>' + esc(ask) + '</pre>' +
+        '<button class="btn ghost sm" type="button" data-ai-ask="' + esc(ask) + '">AIへの頼み方をコピー</button></details>' : '') + '</div>';
+  }
   function setHow(text, ask) {
     return '<details class="set-how"><summary>変え方</summary><p>' + text + '</p>' +
       (ask ? '<pre>' + esc(ask) + '</pre><button class="btn ghost sm" type="button" data-set-copy="' + esc(ask) + '">AIへの頼み方をコピー</button>' : '') + '</details>';
@@ -8573,7 +9118,8 @@ function __route(url) {
         '<span class="v ' + (kill.on ? 'bad' : 'ok') + '">' + (kill.on ? '停止中' : '配信中') + '</span><button class="btn ' + (kill.on ? 'ghost' : 'danger') + ' sm" type="button" id="set-kill">' + (kill.on ? '配信を再開' : 'すべて止める') + '</button>') +
       setRow('読者1人あたりの1日の上限', '超えた分は翌日に回します', '<span class="v num">' + fmtN(sf.contactDailyMax) + ' 通</span>') +
       setRow('一斉配信の対象の上限', '超えると、送る前に中止します', '<span class="v num">' + fmtN(sf.castMaxTargets) + ' 人</span>') +
-      setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「この日数のあいだ開封が1件もなく、その間に何通以上届いている」',
+      setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「受信を始めてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
+        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください' : '直近14日に100通以上届いて、開封もクリックも1件も記録されていません。計測の設定を確かめてください') + '</span>' : ''),
         setSw('set-sw-dorm', dm.enabled !== false, false, '休眠の整理') +
         '<input class="set-in n" id="set-in-dormdays" type="number" min="30" max="730" step="1" aria-label="休眠とみなす日数" value="' + esc(dm.days) + '"><span class="sw-l">日</span>' +
         '<input class="set-in n" id="set-in-dormsends" type="number" min="1" max="200" step="1" aria-label="その間に届いた通数" value="' + esc(dm.minSends) + '"><span class="sw-l">通以上</span>' +
@@ -8916,6 +9462,14 @@ function __route(url) {
     }
     var n = e.target.closest('[data-nav]');
     if (n) show(n.dataset.nav);
+  });
+  // 「AIへの頼み方をコピー」(はじめの設定・空の画面の案内)。どの画面でも同じ部品で受ける
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-ai-ask]');
+    if (!t) return;
+    var label = t.textContent;
+    var done = function () { t.textContent = 'コピーしました'; setTimeout(function () { t.textContent = label; }, 2000); };
+    try { navigator.clipboard.writeText(t.getAttribute('data-ai-ask')).then(done, function () {}); } catch (err) { /* コピーできない環境では上の文例を選んで写してもらう */ }
   });
   // レコメンドカードは動的挿入なのでゾーン委譲でナビする
   el('reco-zone').addEventListener('click', function (e) {
