@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="ja" data-robe="habutae">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rondo | LINEも、インスタも、メールも。ひとつの画面で。</title>
+<meta property="og:title" content="Rondo | LINEも、インスタも、メールも。ひとつの画面で。">
+<meta property="og:description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp-v10.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Studio VIBE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rondo | LINEも、インスタも、メールも。ひとつの画面で。">
+<meta name="twitter:description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
+<meta name="twitter:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp-v10.jpg">
+<meta name="description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/rondo-assets/rondo-mark.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/rondo-assets/rondo-icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- 計測: 公開時に有効化する（下書きの閲覧を本番の数字に混ぜない）
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20261009b" data-page="rondo-lp-pre" data-sp-max="760" defer></script>
+-->
+<style>
+/* 羽二重白 — ライト正典（habutae/tokens/habutae.css） */
+:root[data-robe="habutae"]{
+  --bg:#F5F3EC; --surface:#FBF9F5; --surface2:#EDEADF;
+  --ink:#28263C; --ink2:#6F6B86; --ink3:#9B97AC;
+  --accent:#A67C24; --accent-hi:#8A671C; --accent-lacquer:#D9A94C;
+  --ok:#3F7E55; --line:#DEDACB;
+  --shadow:0 10px 30px rgba(40,38,60,.12),0 2px 8px rgba(40,38,60,.08);
+  --shadow-lo:0 4px 14px rgba(40,38,60,.08),0 1px 3px rgba(40,38,60,.06);
+  --font-display:'Shippori Mincho B1',serif;
+  --font-body:'Zen Kaku Gothic New',sans-serif;
+  --font-num:'Outfit',sans-serif;
+  --moon:#ECE8DC;
+  --ch-mail:#4C6FA8; --ch-line:#3F7E55; --ch-ig:#B0476E; --ch-th:#6F6B86; --ch-yt:#B5523B; --ch-x:#28263C;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.85;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--accent-hi)}
+.ph{display:inline-block}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:112px 0;scroll-margin-top:72px}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;color:var(--ink);margin:0;word-break:auto-phrase;text-wrap:balance}
+h2{font-size:clamp(28px,3.4vw,42px);line-height:1.35;letter-spacing:.01em}
+h3{font-size:20px;line-height:1.45}
+.lede{font-size:17px;color:var(--ink2);margin:18px 0 0}
+.center{text-align:center}
+.center .lede{margin-left:auto;margin-right:auto}
+/* 中央ぞろえの見出しの行末の句読点は字面が左半分だけ＝右の空きを詰めて中央に見せる */
+.hang{margin-right:-.5em}
+.kick{font-size:13px;letter-spacing:.06em;color:var(--ink2);margin:0 0 16px}
+.fine{font-size:13px;line-height:1.8;color:var(--ink2);margin:0}
+br.sp{display:none}
+
+/* 漆ボタン（canon §4） */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:8px;
+  font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:3px;text-decoration:none;cursor:pointer;
+  border:1px solid transparent;transition:transform 90ms ease-out,box-shadow 160ms ease-out;white-space:nowrap}
+.btn:active{transform:scale(.965)}
+.btn.pri{color:var(--accent-lacquer);
+  background:linear-gradient(180deg,#262336,#1A1826) padding-box,
+    linear-gradient(180deg,color-mix(in srgb,var(--accent-lacquer) 70%,transparent),color-mix(in srgb,var(--accent-lacquer) 22%,transparent)) border-box;
+  box-shadow:var(--shadow-lo)}
+.btn.pri:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.btn.sec{color:var(--ink);letter-spacing:2px;background:var(--surface);box-shadow:var(--shadow-lo)}
+.btn.sec:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.btn.sm{min-height:44px;padding:0 16px;font-size:13px;letter-spacing:2px}
+.btn:focus-visible,.faq summary:focus-visible,.all summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.face{background:var(--surface);border-radius:14px;box-shadow:var(--shadow)}
+.face-lo{background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo)}
+
+/* ヘッダー */
+header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 94%,transparent);box-shadow:0 1px 0 color-mix(in srgb,var(--line) 70%,transparent)}
+header.top .in{max-width:1120px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink);text-decoration:none}
+.logo img{width:28px;height:28px}
+header.top nav{display:flex;gap:22px;margin-left:auto}
+header.top nav a{color:var(--ink2);font-size:13.5px;text-decoration:none}
+header.top nav a:hover{color:var(--ink)}
+@media (max-width:760px){header.top nav{display:none}header.top .in{padding:10px 16px}header.top .btn.sm{margin-left:auto}}
+
+/* ヒーロー */
+.hero{padding:48px 0 88px}
+.hero .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(34px,4.1vw,54px);line-height:1.24;letter-spacing:.01em;margin:0 0 20px}
+.hero h1 em{font-style:normal}
+.hero .lead{font-size:17px;line-height:1.9;color:var(--ink);margin:0 0 28px}
+.lead,.lede,.jobs p,.cap,.fine,.split p{word-break:auto-phrase}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+/* 事前登録の札（このページの主役。金はここと主ボタンだけ） */
+.offer{padding:22px 24px 18px;box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent)}
+.o-head{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+.o-tag{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent-hi);background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:999px;padding:2px 12px}
+.o-date{font-size:13px;color:var(--ink2)}
+.o-main{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1.4;margin:0 0 16px}
+.o-main b{color:var(--accent-hi);font-size:1.3em}
+.offer .fine{margin-top:12px}
+.proof{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:28px}
+.proof b{display:block;font-family:var(--font-num);font-weight:500;font-size:30px;line-height:1.1;color:var(--ink)}
+.proof span{font-size:12px;color:var(--ink2)}
+.proof-note{margin-top:8px;font-size:12px}
+.shot{overflow:hidden;margin:0}
+.shot .bar{display:flex;align-items:center;gap:6px;height:32px;padding:0 14px;background:var(--surface2);font-family:var(--font-num);font-size:11.5px;color:var(--ink2)}
+.shot .bar i{width:8px;height:8px;border-radius:50%;background:color-mix(in srgb,var(--ink3) 45%,transparent)}
+.shot .bar span{margin-left:8px}
+.shot figcaption{padding:10px 14px 12px;font-size:12px;color:var(--ink2);background:var(--surface)}
+.real{display:block;cursor:zoom-in;background:var(--bg)}
+.real img{width:100%;height:auto}
+.hero-shot .real{aspect-ratio:4/3;overflow:hidden}
+.hero-shot .real img{height:100%;object-fit:cover;object-position:top left}
+@media (max-width:520px){.hero-shot .real{aspect-ratio:auto;max-height:480px}.hero-shot .real img{height:auto}}
+@media (max-width:920px){.hero{padding:28px 0 64px}.hero .grid{grid-template-columns:1fr;gap:40px}}
+
+/* 4つの仕事 */
+.jobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:48px}
+.jobs > div{padding:26px 22px}
+.j-n{margin:0 0 6px;font-size:13px;letter-spacing:.12em;color:var(--accent)}
+.jobs h3{font-size:24px;margin-bottom:8px}
+.jobs p{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink2)}
+@media (max-width:920px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.jobs > div{padding:20px 16px}.jobs p br{display:none}}
+
+/* 実際の画面 */
+#screens{background:var(--surface2)}
+.scr{margin-top:36px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.tab{font:inherit;font-size:14px;color:var(--ink2);background:var(--surface);border:0;border-radius:999px;padding:0 18px;min-height:44px;cursor:pointer;box-shadow:var(--shadow-lo)}
+.tab[aria-selected="true"]{color:var(--surface);background:var(--ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.scr .shot{max-width:1000px;margin:0 auto}
+.scr .shot .real{aspect-ratio:4/3;overflow:hidden}
+.scr .cap{max-width:1000px;margin:16px auto 0;text-align:center;font-size:15px;color:var(--ink)}
+.book{margin:0}
+.phone{max-width:300px;margin:0 auto;border-radius:30px;padding:10px;background:linear-gradient(180deg,#262336,#1A1826);box-shadow:var(--shadow)}
+.phone img{border-radius:22px}
+.demo-cta{display:flex;justify-content:center;margin-top:28px}
+@media (max-width:520px){.scr .shot .real{aspect-ratio:auto;max-height:620px}.real img{object-fit:cover;object-position:top}.tab{padding:0 14px;font-size:13.5px}}
+
+/* つながるもの */
+.chips{list-style:none;margin:36px auto 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:760px}
+.chips li{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--ink);background:var(--surface);border-radius:999px;padding:8px 18px;box-shadow:var(--shadow-lo)}
+.chips i{width:8px;height:8px;border-radius:50%}
+.chips-note{margin-top:18px}
+.all{max-width:1000px;margin:36px auto 0;text-align:left}
+.all summary{list-style:none;cursor:pointer;width:max-content;max-width:100%;margin:0 auto;padding:10px 20px;min-height:44px;border-radius:999px;font-size:14px;color:var(--ink2);box-shadow:inset 0 0 0 1px var(--line)}
+.all summary::-webkit-details-marker{display:none}
+.all summary::after{content:" ＋"}
+.all[open] summary::after{content:" −"}
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0 40px;margin-top:28px}
+.inv > div{padding:20px 0 18px;box-shadow:0 -1px 0 var(--line)}
+.inv h3{display:flex;align-items:center;gap:8px;font-size:17px;margin-bottom:8px}
+.inv h3 i{width:9px;height:9px;border-radius:50%}
+.inv ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.inv li{position:relative;padding-left:16px;font-size:14px;line-height:1.75;color:var(--ink)}
+.inv li::before{content:"";position:absolute;left:1px;top:.78em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
+.inv li small{color:var(--ink2);font-size:12.5px}
+.inv .new{display:none}
+@media (max-width:520px){.inv{grid-template-columns:minmax(0,1fr)}}
+
+/* AI */
+#ai{background:var(--surface2)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:820px;margin:40px auto 0}
+.split > div{padding:26px 24px}
+.split h3{font-size:18px;margin-bottom:8px}
+.split p{margin:0;font-size:15px;color:var(--ink2)}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+
+/* 向く人 */
+.fit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:820px;margin:40px auto 0}
+.fit > div{padding:26px 24px}
+.fit h3{font-size:18px;margin-bottom:10px}
+.fit ul{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:15px}
+.fit .no h3,.fit .no ul{color:var(--ink2)}
+@media (max-width:760px){.fit{grid-template-columns:1fr}}
+
+/* 価格 */
+.buy{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;max-width:920px;margin:44px auto 0;align-items:center}
+.price{padding:36px 30px 28px;text-align:center;box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent)}
+.price .kick{margin:0}
+.price .big{font-family:var(--font-num);font-weight:500;font-size:64px;line-height:1;margin:10px 0 18px}
+.price .big small{font-size:14px;color:var(--ink2);margin-left:6px;font-family:var(--font-body)}
+.price .presale{margin:0 auto;max-width:24em;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,transparent);display:grid;gap:2px}
+.price .presale b{font-size:17px;color:var(--accent-hi)}
+.price .presale span{font-size:13.5px;line-height:1.7;color:var(--ink2)}
+.price .ctas{justify-content:center;margin:22px 0 10px}
+.cost{padding:24px 24px 20px}
+.cost h3{font-size:17px;margin-bottom:6px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:10px 0;box-shadow:0 1px 0 var(--line)}
+.row span{font-size:14.5px}
+.row b{font-family:var(--font-num);font-weight:500;font-size:15px;white-space:nowrap}
+.cost .fine{margin-top:12px}
+@media (max-width:920px){.buy{grid-template-columns:1fr}.price{padding:30px 18px 24px}.price .big{font-size:56px}}
+
+/* 声 */
+.voices{columns:3 300px;column-gap:16px;margin-top:36px}
+.voices .twitter-tweet{break-inside:avoid;margin:0 0 16px !important}
+.voices blockquote{margin:0 0 16px;padding:16px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo);font-size:14px}
+
+/* FAQ */
+.faq{max-width:760px;margin:40px auto 0;display:grid;gap:10px}
+.faq details{background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 48px 18px 20px;font-weight:700;font-size:15.5px;position:relative;min-height:44px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:22px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:1.5px solid var(--ink2);border-bottom:1.5px solid var(--ink2);transform:rotate(45deg);transition:transform 160ms ease-out}
+.faq details[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
+.faq .a{padding:0 20px 20px;font-size:14.5px;line-height:1.9}
+
+/* 終盤 */
+.last{text-align:center;padding:112px 0 128px;background:var(--surface2)}
+.last h2{font-size:clamp(30px,4vw,46px)}
+.last .lede{margin:14px auto 0}
+.last .ctas{justify-content:center;margin-top:28px}
+
+footer{padding:36px 0 110px;box-shadow:0 -1px 0 var(--line)}
+footer .in{max-width:1120px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+footer nav a{color:var(--ink2);font-size:13px;text-decoration:none}
+footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
+
+/* スマホの下に固定する事前登録（ヒーローを過ぎたら・価格と終盤では隠す） */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--surface) 96%,transparent);box-shadow:0 -6px 20px rgba(40,38,60,.10);transform:translateY(110%);transition:transform 200ms ease-out}
+.dock.on{transform:none}
+.dock .p{font-size:12px;line-height:1.4;color:var(--ink2)}
+.dock .p b{display:block;font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--ink)}
+.dock .btn{margin-left:auto;min-height:44px;padding:0 18px;font-size:14px;letter-spacing:2px}
+@media (max-width:760px){.dock{display:flex}body.docked header.top .btn.sm{visibility:hidden}}
+
+@media (max-width:520px){
+  .wrap{padding:0 16px}
+  section{padding:80px 0}
+  .lede{font-size:16px}
+  .lede br{display:none}
+  br.sp{display:inline}
+  .btn{padding:0 20px;letter-spacing:2px}
+  .offer{padding:20px 18px 16px}
+  .offer .ctas .btn{flex:1 1 100%}
+  .o-main{font-size:19px}
+}
+/* 動きを減らす設定（通常の規則より後に置く＝打ち消されない） */
+@media (prefers-reduced-motion:reduce){
+  .btn,.btn.pri:hover,.btn.sec:hover,.btn:active{transition:none;transform:none}
+  .faq summary::after{transition:none}
+  .dock{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top" data-rondo-click-sec="header">
+  <div class="in">
+    <a class="logo" href="#top" data-rondo-label="ヘッダー ロゴ"><img src="/rondo-assets/rondo-mark.svg" alt="" width="28" height="28">Rondo</a>
+    <nav aria-label="ページ内">
+      <a href="#screens" data-rondo-label="ヘッダー 画面">画面</a>
+      <a href="#price" data-rondo-label="ヘッダー 価格">価格</a>
+      <a href="#faq" data-rondo-label="ヘッダー よくある質問">よくある質問</a>
+    </nav>
+    <a class="btn pri sm" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- 1. ヒーロー -->
+<section class="hero" data-sec="hero">
+  <div class="wrap grid">
+    <div>
+      <p class="kick">メール・LINE・Instagram・Threads・YouTube</p>
+      <h1><span class="ph">LINEも、</span><span class="ph">インスタも、</span><span class="ph">メールも。</span><br><em class="ph">ひとつの画面で。</em></h1>
+      <p class="lead">配信も、返信も、売上も。<br>1つの管理画面で回せる、買い切りのマーケティングツールです。</p>
+      <div class="offer face">
+        <p class="o-head"><span class="o-tag">事前登録</span><span class="o-date">発売日は未定</span></p>
+        <p class="o-main">発売当日に、<b>10%オフ</b>。</p>
+        <div class="ctas">
+          <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">無料で事前登録する</a>
+          <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー デモ">デモを触る</a>
+        </div>
+        <p class="fine">割引リンクは、イケハヤのメルマガ（Substack・無料）でお届けします。</p>
+      </div>
+      <div class="proof">
+        <div><b>284</b><span>人がβ版を購入</span></div>
+        <div><b>3,336</b><span>人のメール読者</span></div>
+        <div><b>2,022</b><span>人のLINE友だち</span></div>
+      </div>
+      <p class="fine proof-note">読者と友だちは、イケハヤがRondoで運用している実数（2026年10月8日時点）。</p>
+    </div>
+    <div>
+      <figure class="face shot hero-shot" style="margin:0">
+        <div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
+        <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="ヒーロー 画面の拡大">
+          <picture>
+            <source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262">
+            <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面。チャネルごとの規模と7日の動きが1枚に並んでいる">
+          </picture>
+        </a>
+        <figcaption>管理画面の実物（数字は見本）</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 2. できること -->
+<section id="jobs" data-sec="jobs">
+  <div class="wrap">
+    <h2 class="center">毎日の仕事が、ひとつに<span class="hang">。</span></h2>
+    <div class="jobs">
+      <div class="face-lo"><p class="j-n num">01</p><h3>配る</h3><p>メールとLINEの<br>ステップ配信・一斉配信</p></div>
+      <div class="face-lo"><p class="j-n num">02</p><h3>返す</h3><p>DM・コメント・メールの返信を<br>1つの受信箱で</p></div>
+      <div class="face-lo"><p class="j-n num">03</p><h3>集める</h3><p>セミナーと個別相談の<br>予約ページ</p></div>
+      <div class="face-lo"><p class="j-n num">04</p><h3>数える</h3><p>媒体の反応から売上まで<br>同じ画面で</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 実際の画面 -->
+<section id="screens" data-sec="screens">
+  <div class="wrap">
+    <h2 class="center">実際の画面<span class="hang">。</span></h2>
+    <div class="scr">
+      <div class="tabs" role="tablist" aria-label="管理画面">
+        <button type="button" class="tab" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="true" data-rondo-label="画面 ダッシュボード">ダッシュボード</button>
+        <button type="button" class="tab" role="tab" id="tab-inbox" aria-controls="pane-inbox" aria-selected="false" tabindex="-1" data-rondo-label="画面 受信箱">受信箱</button>
+        <button type="button" class="tab" role="tab" id="tab-mail" aria-controls="pane-mail" aria-selected="false" tabindex="-1" data-rondo-label="画面 メール">メール</button>
+        <button type="button" class="tab" role="tab" id="tab-line" aria-controls="pane-line" aria-selected="false" tabindex="-1" data-rondo-label="画面 LINE">LINE</button>
+        <button type="button" class="tab" role="tab" id="tab-book" aria-controls="pane-book" aria-selected="false" tabindex="-1" data-rondo-label="画面 予約">予約ページ</button>
+      </div>
+      <div role="tabpanel" id="pane-home" aria-labelledby="tab-home">
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの数字と、日別の配信数"></picture></a></figure>
+        <p class="cap">開いて最初に見る画面。売上・読者・友だちと、止まっている配信。</p>
+      </div>
+      <div role="tabpanel" id="pane-inbox" aria-labelledby="tab-inbox" hidden>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="画面 受信箱 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱。LINE・Instagram・YouTube・メールの会話が1つの一覧に並んでいる"></picture></a></figure>
+        <p class="cap">LINE・InstagramのDM・YouTubeのコメント・メールの返信を、1つの一覧で返す。</p>
+      </div>
+      <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-mailch.webp" data-zoom data-rondo-label="画面 メール 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-mailch-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-mailch.webp" width="1600" height="1200" loading="lazy" alt="メールの画面。読者・配信・開封率・クリック率の4枚"></picture></a></figure>
+        <p class="cap">読者・開封率・クリック率。ステップメールの便ごとの成績まで。</p>
+      </div>
+      <div role="tabpanel" id="pane-line" aria-labelledby="tab-line" hidden>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · LINE</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・追加・ブロックの4枚と30日の推移"></picture></a></figure>
+        <p class="cap">友だちの追加とブロックを、日ごとに。流入経路ごとの数も見られます。</p>
+      </div>
+      <div role="tabpanel" id="pane-book" aria-labelledby="tab-book" hidden>
+        <figure class="book"><div class="phone"><img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページ。セミナーの募集ページで、申し込み状況と残りの席数が出ている" width="780" height="1560" loading="lazy"></div></figure>
+        <p class="cap">イケハヤのセミナーで使っている予約ページ。定員・キャンセル待ち・リマインドまで。</p>
+      </div>
+      <div class="demo-cta">
+        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">見本の数字でデモを触る</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. つながるもの -->
+<section id="channels" data-sec="channels">
+  <div class="wrap center">
+    <h2>つながるもの<span class="hang">。</span></h2>
+    <ul class="chips" aria-label="つながるもの">
+      <li><i style="background:var(--ch-mail)"></i>メール</li><li><i style="background:var(--ch-line)"></i>LINE</li><li><i style="background:var(--ch-ig)"></i>Instagram</li><li><i style="background:var(--ch-th)"></i>Threads</li><li><i style="background:var(--ch-yt)"></i>YouTube</li><li><i style="background:var(--ink2)"></i>予約ページ</li><li><i style="background:var(--ink2)"></i>Stripeの売上</li><li><i style="background:var(--ink2)"></i>LP分析</li>
+    </ul>
+    <p class="fine chips-note">X・note・Substackの数字は、あなたのAIがつないで取り込みます。</p>
+    <details class="all" data-rondo-click-sec="all">
+      <summary data-rondo-label="全機能 開く">v1.0の全機能を見る</summary>
+      <div class="inv">
+
+      <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
+        <li>ステップメール・一斉配信</li>
+        <li>複数の講座と、講座ごとの登録ページ<span class="new">NEW</span></li>
+        <li>タグ・購入・名簿の条件を組み合わせた絞り込み<span class="new">NEW</span></li>
+        <li>管理画面からのテスト送信<span class="new">NEW</span></li>
+        <li>押したら動くリンク・本文の分岐・この講座だけ止める<span class="new">NEW</span></li>
+        <li>件名のA/B（勝った方を自動で採用）</li>
+        <li>購入で講座を始める・止める・タグを付ける<span class="new">NEW</span></li>
+        <li>配信への返信とお問い合わせを受信箱で<span class="new">NEW</span></li>
+        <li>旧ツールの読者CSV・購入者CSVの取り込み<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-line)"></i>LINE</h3><ul>
+        <li>ステップ配信・一斉配信・リッチメニュー</li>
+        <li>タグ・友だち情報・分岐・リマインダ<span class="new">NEW</span></li>
+        <li>タグで切り替わるリッチメニュー<span class="new">NEW</span></li>
+        <li>流入経路の計測と、経路ごとの友だち追加<span class="new">NEW</span></li>
+        <li>A/Bテスト・分析<span class="new">NEW</span></li>
+        <li>画像・動画・カルーセル・フォーム<span class="new">NEW</span></li>
+        <li>LステップのCSVからタグと友だち情報<span class="new">NEW</span></li>
+        <li>AIの返事（任意・確認してから送る運用も）<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-ig)"></i>Instagram</h3><ul>
+        <li>DM・ストーリーへの返信・コメント・メンションに自動応答してLINEへ<span class="new">NEW</span></li>
+        <li>DMメニュー（質問ボタン・常設メニュー）<span class="new">NEW</span></li>
+        <li>ストーリーのキャンペーンごとの成果表<span class="new">NEW</span></li>
+        <li>管理画面からDMに返信<span class="new">NEW</span></li>
+        <li>フォロワー・投稿・いいね・コメントの毎日の集計<span class="new">NEW</span></li>
+        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足してつなぎ直す）<span class="new">NEW</span></li>
+        <li>DMのAIの返事（任意・試運転から）<span class="new">NEW</span></li>
+        <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
+        <li>つなぐ・フォロワー数の毎日の集計<span class="new">NEW</span></li>
+        <li>予約投稿と、直後の返信でLINEのリンク<span class="new">NEW</span></li>
+        <li>送信の停止ボタン・1日の本数と間隔の上限<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-yt)"></i>YouTube</h3><ul>
+        <li>登録者・再生・日ごとの視聴の集計<span class="new">NEW</span></li>
+        <li>コメントを受信箱に取り込んで返信<span class="new">NEW</span></li>
+        <li>説明欄のリンクの計測<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
+        <li>LINE・Instagram・YouTube・メールを1つの一覧に<span class="new">NEW</span></li>
+        <li>名前と本文の検索<span class="new">NEW</span></li>
+        <li>会話のラベル・ラベルやタグでの絞り込み<span class="new">NEW</span></li>
+        <li>すべて既読・要対応をすべて対応済みに<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>数字</h3><ul>
+        <li>ダッシュボード（売上・読者と友だち・チャネルの調子）</li>
+        <li>チャネルの「すべて」と、チャネルごとの4枚<span class="new">NEW</span></li>
+        <li>売上と配信（売上・登録・メールの成績）・LP分析（ヒートマップと到達）</li>
+        <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
+        <li>X・note・Substackの数字の受け口</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
+        <li>セミナー（定員・キャンセル待ちと繰り上げ）<span class="new">NEW</span></li>
+        <li>個別相談の空き枠（1枠1人）<span class="new">NEW</span></li>
+        <li>リマインド・Googleカレンダー・参加者のCSV<span class="new">NEW</span></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
+        <li>設定の画面・デザインの7つの衣<span class="new">NEW</span></li>
+        <li>緊急停止・二重送信の防止</li>
+        <li>メールとLINEを合わせた1人1日の上限（任意）<span class="new">NEW</span></li>
+        <li>監査の画面に接続の健康と容量<span class="new">NEW</span></li>
+        <li>毎日のバックアップと復元の練習<span class="new">NEW</span>・過去30日への巻き戻し</li>
+        <li>導入の点検（送信ドメインの検査まで）<span class="new">NEW</span></li>
+        <li>Codexでも導入・運用できる入口<span class="new">NEW</span></li>
+      </ul></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 5. AIで設置・改造 -->
+<section id="ai" data-sec="ai">
+  <div class="wrap">
+    <div class="center">
+      <h2>設置も改造も、<br class="sp">AIに日本語で<span class="hang">。</span></h2>
+      <p class="lede">届くのは、ソースコード一式とAIが読む手順書。<br>Claude CodeやCodexに頼めば、設置から機能の追加まで進みます。</p>
+    </div>
+    <div class="split">
+      <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
+      <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 向く人 -->
+<section id="fit" data-sec="fit">
+  <div class="wrap">
+    <h2 class="center">万人向けではありません<span class="hang">。</span></h2>
+    <div class="fit">
+      <div class="face-lo"><h3>向いている人</h3><ul><li>Claude CodeやCodexを使っている</li><li>発信で商売をしている</li><li>ツールの月額から抜けたい</li></ul></div>
+      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい</li><li>サポート窓口が必要</li><li>独自ドメインを用意できない</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 価格 -->
+<section id="price" data-sec="reserve">
+  <div class="wrap">
+    <h2 class="center">¥9,800、買い切り<span class="hang">。</span></h2>
+    <div class="buy">
+      <div class="face price">
+        <p class="kick">正式版 v1.0 ・ 発売日は未定</p>
+        <p class="big num">¥9,800<small>税込</small></p>
+        <div class="presale"><b>事前登録で10%オフ</b><span>発売当日、期間限定の割引リンクをお届けします。</span></div>
+        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
+        <p class="fine">イケハヤのメルマガ（Substack）に登録すると届きます。</p>
+      </div>
+      <div class="face-lo cost">
+        <h3>別にかかる運用費</h3>
+        <div class="row"><span>Cloudflare（有料プラン）</span><b>月5ドル〜</b></div>
+        <div class="row"><span>独自ドメイン</span><b>年1,000円台〜</b></div>
+        <div class="row"><span>メール送信（Resend）</span><b>無料枠あり</b></div>
+        <div class="row"><span>開発AI（Claude CodeかCodex）</span><b>月3,000円ほど〜</b></div>
+        <p class="fine">LINE公式アカウントやAIの返事の利用料は別です。サポート窓口はありません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. 声 -->
+<section id="voices" data-sec="voices">
+  <div class="wrap">
+    <h2 class="center">β版を使った人の声</h2>
+    <p class="fine center" style="margin-top:10px">β版の購入者ご本人の投稿から、販売者が選んで掲載しています（依頼・謝礼なし・個人の感想）。</p>
+    <div class="voices">
+      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/urasan2785/status/2106303786293846426" data-rondo-label="声 urasan2785">@urasan2785 の投稿をXで見る</a></blockquote>
+      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/omochibigaku/status/2095624022440686035" data-rondo-label="声 omochibigaku">@omochibigaku の投稿をXで見る</a></blockquote>
+      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/kabuco_h/status/2087035751662002419" data-rondo-label="声 kabuco_h">@kabuco_h の投稿をXで見る</a></blockquote>
+      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/hsrk_g_hsrk/status/2088765079605178801" data-rondo-label="声 hsrk_g_hsrk">@hsrk_g_hsrk の投稿をXで見る</a></blockquote>
+      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/siroradio51/status/2088986470547931317" data-rondo-label="声 siroradio51">@siroradio51 の投稿をXで見る</a></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- 9. よくある質問 -->
+<section id="faq" data-sec="faq">
+  <div class="wrap">
+    <h2 class="center">よくある質問</h2>
+    <div class="faq">
+      <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ 発売日">いつ発売ですか？</summary><div class="a">発売日は未定です。事前登録（Substack・無料）の方には、発売のお知らせと、発売当日から使える期間限定の10%オフのリンクをお送りします。登録はいつでも解除できます。</div></details>
+      <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードは開発AIが書きます。ただしノーコードツールではありません。AIに日本語で頼み、結果を自分で確かめられることが前提です。</div></details>
+      <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額">月額はかかりますか？</summary><div class="a">Rondoへの月額はありません。Cloudflare・独自ドメイン・開発AIなどの運用費を、それぞれのサービスに直接払います。</div></details>
+      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入と運用は、あなたと開発AIで行います。v1系の更新は無償でお届けします。</div></details>
+      <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ 乗り換え">いまの配信ツールから乗り換えられますか？</summary><div class="a">メールの読者はCSVで取り込めます。LINEはLステップのCSVから、タグと友だち情報を持ち込めます。</div></details>
+      <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコードを納品するデジタル商品のため、購入者都合の返金はできません（法令に基づく対応を除きます）。</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- 10. 終盤 -->
+<section class="last" data-sec="final">
+  <div class="wrap">
+    <h2>発売日に、10%オフで<span class="hang">。</span></h2>
+    <p class="lede">登録は無料。発売当日に、割引リンクが届きます。</p>
+    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer data-sec="footer">
+  <div class="in">
+    <span class="logo"><img src="/rondo-assets/rondo-mark.svg" alt="" width="28" height="28">Rondo</span>
+    <nav>
+      <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="フッター 特商法">特定商取引法に基づく表記</a>
+      <a href="https://ikehaya.com/privacy/" target="_blank" rel="noopener" data-rondo-label="フッター プライバシー">プライバシーポリシー</a>
+      <a href="/rondo-setup" data-rondo-label="フッター 導入の流れ">導入の流れ</a>
+      <a href="/rondo-guides/setup" data-rondo-label="フッター 導入ガイド">導入ガイド</a>
+      <a href="/contact" data-rondo-label="フッター お問い合わせ">お問い合わせ</a>
+    </nav>
+    <span class="copy">© 2026 Studio VIBE / Rondo</span>
+  </div>
+</footer>
+
+<div class="dock" id="dock" aria-hidden="true" data-rondo-click-sec="dock">
+  <span class="p"><b>発売日に10%オフ</b>事前登録は無料</span>
+  <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録する</a>
+</div>
+
+<script>
+/* スマホの下の固定申込: ヒーローの申込を過ぎたら出す。価格・終盤の申込とフッターが見えている間は隠す */
+(function(){
+  var dock = document.getElementById('dock'); if(!dock) return;
+  var heroCta = document.querySelector('.hero .ctas');
+  var hide = [document.querySelector('.price .ctas'), document.querySelector('.last .ctas'), document.querySelector('footer')];
+  var link = dock.querySelector('a'), queued = false;
+  function inView(el){ if(!el) return false; var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
+  function update(){
+    queued = false;
+    var on = heroCta.getBoundingClientRect().bottom < 0 && !hide.some(inView);
+    dock.classList.toggle('on', on);
+    dock.setAttribute('aria-hidden', on ? 'false' : 'true');
+    link.tabIndex = on ? 0 : -1;
+    document.body.classList.toggle('docked', on);
+  }
+  function req(){ if(!queued){ queued = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', req, { passive: true });
+  window.addEventListener('resize', req);
+  document.addEventListener('toggle', req, true);
+  if('ResizeObserver' in window) new ResizeObserver(req).observe(document.body);
+  update();
+})();
+
+/* 画面の切り替え（タブ） */
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs .tab')); if(!tabs.length) return;
+  function sel(t, focus){
+    tabs.forEach(function(x){ var on = x === t; x.setAttribute('aria-selected', on ? 'true' : 'false'); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+    if(focus) t.focus();
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ sel(t); });
+    t.addEventListener('keydown', function(e){
+      var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
+      if(j === null) return; e.preventDefault(); sel(tabs[(j + tabs.length) % tabs.length], true);
+    });
+  });
+})();
+
+/* 画面の拡大（押すと大きく。スマホは横にスクロールして読む） */
+(function(){
+  var links = document.querySelectorAll('a[data-zoom]'); if(!links.length || typeof HTMLDialogElement !== 'function') return;
+  var dlg = document.createElement('dialog'); dlg.className = 'zoom'; dlg.setAttribute('aria-label', '画面の拡大');
+  dlg.innerHTML = '<div class="zin"><img alt=""></div><button type="button" class="x">閉じる</button>';
+  document.body.appendChild(dlg);
+  var img = dlg.querySelector('img'), back = null;
+  dlg.querySelector('.x').addEventListener('click', function(){ dlg.close(); });
+  dlg.addEventListener('click', function(e){ if(e.target === dlg || e.target.classList.contains('zin')) dlg.close(); });
+  dlg.addEventListener('close', function(){ img.removeAttribute('src'); if(back) back.focus(); });
+  Array.prototype.forEach.call(links, function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault(); back = a;
+      var inner = a.querySelector('img'); img.alt = inner ? inner.alt : ''; img.src = a.getAttribute('href');
+      dlg.showModal(); dlg.querySelector('.zin').scrollTo(0, 0);
+    });
+  });
+})();
+
+/* Xの埋め込みは近づいてから読む */
+(function(){
+  var box = document.getElementById('voices'); if(!box) return;
+  var done = false;
+  function load(){ if(done) return; done = true; var sc = document.createElement('script'); sc.src = 'https://platform.twitter.com/widgets.js'; sc.async = true; sc.charset = 'utf-8'; document.body.appendChild(sc); }
+  if(!('IntersectionObserver' in window)){ load(); return; }
+  var io = new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); load(); } }, { rootMargin: '600px 0px' });
+  io.observe(box);
+})();
+</script>
+</body>
+</html>
