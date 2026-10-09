@@ -27,6 +27,7 @@
 
 
 
+
 const port = Number(443);
 
 
@@ -357,6 +358,8 @@ const channelMocks = {
 
 const dashboard = {
   ok: true,
+  // 左メニューの札(予約=今日の件数・Instagram=DMメニューの要反映)の見え方の確認用
+  navCounts: { bookingsToday: 1, igMenuStale: 'changed' },
   kpi: {
     active: 4118, confirmed7: 96, unsub7: 12, sends7: 3890, sends_prev7: 3604,
     step_active: 4118, step_confirmed7: 96, step_unsub7: 12,
@@ -1057,13 +1060,19 @@ function __route(url) {
       { id: 2, email: 'reader2@example.com', status: 'dormant', confirmed_at: Date.now() - 60 * 86400000, slot: 31, scenario_status: 'done', next_send_at: null },
     ] };
   }
+  // 案内役の栞の見え方の確認用ダミー(RONDO_PREVIEW_SHIORI=off で出さない)
+  else if (url.pathname === '/api/admin/shiori') {
+    body = true ? { ok: true, enabled: false, ready: true }
+      : { ok: true, enabled: true, ready: true, made: true, shiori: { line: '……今週は読者が12人増えました。配信の失敗が3件あるので、先にそちらの頁を開いてみましょうか。', nav: 'sends', at: Date.now() - 5 * 60000 }, wait: false ? 9 * 60000 : 0 };
+  }
   // 設定画面の見え方の確認用ダミー
   else if (url.pathname === '/api/admin/settings') {
     body = {
       ok: true,
       overrides: { sender_name: 'サンプル運営', line_chat_notify: '1' },
-      file: { sender_name: '運用者', audit_alert_email: 'owner@example.com', line_chat_notify: null, ig_chat_notify: null, line_ai_paused: null, ig_ai_paused: null, retention_days: null },
-      effective: { sender_name: 'サンプル運営', audit_alert_email: 'owner@example.com', line_chat_notify: '1', ig_chat_notify: null, line_ai_paused: null, ig_ai_paused: null, retention_days: null },
+      file: { sender_name: '運用者', audit_alert_email: 'owner@example.com', line_chat_notify: null, ig_chat_notify: null, line_ai_paused: null, ig_ai_paused: null, retention_days: null, shiori_guide: null },
+      effective: { sender_name: 'サンプル運営', audit_alert_email: 'owner@example.com', line_chat_notify: '1', ig_chat_notify: null, line_ai_paused: null, ig_ai_paused: null, retention_days: null, shiori_guide: '1' },
+      shiori: { ready: true, provider: 'anthropic' },
       retention: { days: 400, payloadDays: 30, logDays: 180 },
       sender: { fromAddr: 'サンプル <mail@example.com>', txnFromAddr: null, lineOaName: null, privacyOperator: 'サンプル運営', privacyContact: 'https://example.com/contact', footer: '====\n\n発行者: サンプル運営\nお問い合わせ: https://example.com/contact\n\n配信解除はこちら:\n%cancelurl%\n' },
       notify: { webhookSet: true, lineReady: true, igReady: true },
@@ -1160,12 +1169,12 @@ function __route(url) {
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>try{var t=localStorage.getItem("rondo_robe");if(!t&&localStorage.getItem("rondo_theme")==="dark")t="yoiyami";if(/^(auto|sumi|sakura|wakaba|akane|yoiyami|setsugetsu)$/.test(t||""))document.documentElement.setAttribute("data-robe",t)}catch(e){}</script>
+<script>try{var d=document.documentElement,L=localStorage,t=L.getItem("rondo_robe");if(!t&&L.getItem("rondo_theme")==="dark")t="yoiyami";if(/^(auto|sumi|sakura|wakaba|akane|yoiyami|setsugetsu|saas|saas-dark|kawaraban|dagashi|tanmatsu|hougan)$/.test(t||""))d.setAttribute("data-robe",t);if(/^(yoiyami|setsugetsu|saas-dark|tanmatsu)$/.test(t||"")||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches))d.setAttribute("data-tone","dark");var a=L.getItem("rondo_accent"),h=L.getItem("rondo_hfont"),r=L.getItem("rondo_radius");if(/^(ai|shu|midori|sumire|kin|sumi)$/.test(a||""))d.setAttribute("data-accent",a);if(/^(mincho|gothic|maru|tegaki)$/.test(h||""))d.setAttribute("data-hfont",h);if(/^(square|normal|round)$/.test(r||""))d.setAttribute("data-radius",r)}catch(e){}</script>
 <meta name="robots" content="noindex">
 <title>Rondo デモ | 管理画面(見本の数字)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho+B1:wght@700;800&family=Outfit:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho+B1:wght@700;800&family=Outfit:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 <style>
   /* 羽二重（habutae）の衣。既定は羽二重白(明)。設定の「デザイン」で衣を選ぶと html[data-robe] に入り、この端末に覚える。
      「端末に合わせる」(auto)は明=羽二重白・暗=宵闇。色はすべて変数を通す(直書きすると衣を替えた瞬間に破綻する) */
@@ -1189,6 +1198,11 @@ function __route(url) {
     --display:"Shippori Mincho B1","Hiragino Mincho ProN",serif;
     --mono:"Outfit","IBM Plex Mono",Menlo,monospace;
     --r-btn:8px; --r-card:12px; --r-pill:6px;
+    /* 衣の仕立て(縁・影・見出しの太さ・主ボタン)。羽二重は縁なし＋二層影・漆の主ボタン */
+    --edge:none; --elev:var(--shadow-lo);
+    --h1w:800; --h2w:700; --h-ls:.02em;
+    --pri-bg:linear-gradient(180deg,#262336,#1A1826) padding-box,linear-gradient(180deg,color-mix(in srgb,var(--lacquer) 70%,transparent),color-mix(in srgb,var(--lacquer) 22%,transparent)) border-box;
+    --pri-ink:var(--lacquer); --pri-edge:1px solid transparent; --pri-ls:.06em; --pri-shadow:none;
     color-scheme:light;
   }
   :root[data-robe="yoiyami"]{
@@ -1299,6 +1313,173 @@ function __route(url) {
     --shadow-lo:0 4px 16px rgba(0,0,0,.40),0 1px 4px rgba(0,0,0,.30);
     color-scheme:dark;
   }
+  /* ---- SaaS の衣(β版の見た目): 細い縁・影なし・IBM Plex・青の差し色・墨の主ボタン ---- */
+  :root[data-robe="saas"]{
+    --bg:#F7F8FA; --surface:#FFFFFF; --hover:#F1F2F5;
+    --hair:#E7E9EE; --hair-strong:#D8DBE2; --ctl:#868C96;
+    --ink:#17181C; --dim:#5B6069; --note:#646A74;
+    --accent:#2E5CE6; --accent-soft:#E9EFFD; --accent-ink:#2549B0;
+    --lacquer:#2E5CE6; --moon:#ECEEF2;
+    --ok:#136C3E; --ok-soft:#E9F5EE;
+    --series-2:#EB6834;
+    --warn:#946300; --warn-soft:#FCF0DC;
+    --bad:#B5302A; --bad-soft:#FBEAE8;
+    --s1:#2E5CE6; --s2:#EB6834; --src-x:#17181C; --src-member:#155E75; --val:#2549B0;
+    --shadow:0 8px 24px rgba(23,24,28,.10),0 1px 3px rgba(23,24,28,.06);
+    --shadow-lo:0 1px 2px rgba(23,24,28,.05);
+    --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --display:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --edge:1px solid var(--hair); --elev:none;
+    --h1w:600; --h2w:600; --h-ls:0;
+    --pri-bg:#17181C; --pri-ink:#FFFFFF; --pri-edge:1px solid #17181C; --pri-ls:0;
+    color-scheme:light;
+  }
+  :root[data-robe="saas-dark"]{
+    --bg:#0E1013; --surface:#15171B; --hover:#1D2025;
+    --hair:#262A30; --hair-strong:#373C45; --ctl:#6E7581;
+    --ink:#E7E9ED; --dim:#A9AFB9; --note:#949BA6;
+    --accent:#86A2FF; --accent-soft:color-mix(in srgb,#86A2FF 16%,transparent); --accent-ink:#ADBFFF;
+    --lacquer:#86A2FF; --moon:#262A30;
+    --ok:#4CC38A; --ok-soft:color-mix(in srgb,#4CC38A 16%,transparent);
+    --series-2:#F28B5B;
+    --warn:#E3B341; --warn-soft:color-mix(in srgb,#E3B341 15%,transparent);
+    --bad:#F07267; --bad-soft:color-mix(in srgb,#F07267 16%,transparent);
+    --s1:#86A2FF; --s2:#F28B5B; --src-x:#E7E9ED; --src-member:#5FB3C9; --val:#ADBFFF;
+    --src-threads:#7760D2; --src-instagram:#C34184; --src-substack:#E8722C; --src-note:#10A37F; --src-mail:#3F69E8; --src-youtube:#CE3B31; --src-voicy:#B98A1B; --src-spotify:#1DA84F; --src-brain:#0E9BA4; --src-line:#0FA652; --src-f0:#5B76A8; --src-f1:#8A6FB8; --src-f2:#4E8F8B; --src-f3:#A8656F; --src-f4:#7C8A4E; --src-f5:#9C6FA0; --src-direct:#C2C7D0; --src-other:#7E858F; --src-tl-line:#06C755; --src-tl-buy:#E8874F; --src-tl-mail:#7C6AEF; --src-tl-ig:#D2557F; --src-tl-etc:#6FA8E8;
+    --shadow:0 12px 32px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.35);
+    --shadow-lo:none;
+    --sans:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --display:"IBM Plex Sans JP","Hiragino Sans",sans-serif;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --edge:1px solid var(--hair); --elev:none;
+    --h1w:600; --h2w:600; --h-ls:0;
+    --pri-bg:#E7E9ED; --pri-ink:#0E1013; --pri-edge:1px solid #E7E9ED; --pri-ls:0;
+    color-scheme:dark;
+  }
+  /* ---- 遊びの衣 ---- */
+  /* 瓦版: 生成りの紙・墨の罫・明朝の見出し・朱の判の主ボタン */
+  :root[data-robe="kawaraban"]{
+    --bg:#EFE9DC; --surface:#F8F3E8; --hover:#E7DFCE;
+    --hair:#CFC5B0; --hair-strong:#8C8270; --ctl:#7A705E;
+    --ink:#1E1B16; --dim:#4F493E; --note:#5C5548;
+    --accent:#2B4A73; --accent-soft:color-mix(in srgb,#2B4A73 12%,transparent); --accent-ink:#22406A;
+    --lacquer:#E8B79A; --moon:#E7DFCE;
+    --ok:#2F6A45; --ok-soft:color-mix(in srgb,#2F6A45 13%,transparent);
+    --series-2:#A8321C;
+    --warn:#765710; --warn-soft:color-mix(in srgb,#765710 14%,transparent);
+    --bad:#A8352A; --bad-soft:color-mix(in srgb,#A8352A 11%,transparent);
+    --s1:#2B4A73; --s2:#A8321C; --src-x:#1E1B16; --src-member:#155E75; --val:#22406A;
+    --shadow:0 8px 22px rgba(30,27,22,.16);
+    --shadow-lo:none;
+    --display:"Shippori Mincho B1","Hiragino Mincho ProN",serif;
+    --edge:1px solid #1E1B16; --elev:none;
+    --r-btn:2px; --r-card:2px; --r-pill:2px;
+    --h1w:800; --h2w:800; --h-ls:.08em;
+    --pri-bg:#A8321C; --pri-ink:#FFF7EC; --pri-edge:1px solid #86260F; --pri-ls:.14em;
+    color-scheme:light;
+  }
+  :root[data-robe="kawaraban"] .topbar{border-bottom:3px double #1E1B16}
+  :root[data-robe="kawaraban"] .card-head{border-bottom:3px double var(--hair-strong)}
+  /* 駄菓子: クリーム地・太い墨の縁・ずらした影・まる文字・黄色の主ボタン */
+  :root[data-robe="dagashi"]{
+    --bg:#FFF4D6; --surface:#FFFFFF; --hover:#FFECB3;
+    --hair:#EADBAE; --hair-strong:#1A1A1A; --ctl:#1A1A1A;
+    --ink:#1A1A1A; --dim:#4A4536; --note:#585241;
+    --accent:#C2185B; --accent-soft:color-mix(in srgb,#FF5C9D 20%,transparent); --accent-ink:#A3134C;
+    --lacquer:#FFD23F; --moon:#FFECB3;
+    --ok:#196A34; --ok-soft:color-mix(in srgb,#1E7A3C 14%,transparent);
+    --series-2:#1F6FD1;
+    --warn:#7A5600; --warn-soft:color-mix(in srgb,#C99A00 18%,transparent);
+    --bad:#C62828; --bad-soft:color-mix(in srgb,#C62828 12%,transparent);
+    --s1:#C2185B; --s2:#1F6FD1; --src-x:#1A1A1A; --src-member:#155E75; --val:#A3134C;
+    --shadow:6px 6px 0 #1A1A1A;
+    --shadow-lo:3px 3px 0 #1A1A1A;
+    --sans:"Zen Maru Gothic","Zen Kaku Gothic New","Hiragino Maru Gothic ProN",sans-serif;
+    --display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
+    --edge:2px solid #1A1A1A; --elev:4px 4px 0 #1A1A1A;
+    --r-btn:10px; --r-card:16px; --r-pill:8px;
+    --h1w:700; --h2w:700; --h-ls:.02em;
+    --pri-bg:#FFD23F; --pri-ink:#1A1A1A; --pri-edge:2px solid #1A1A1A; --pri-ls:.04em; --pri-shadow:2px 2px 0 #1A1A1A;
+    color-scheme:light;
+  }
+  :root[data-robe="dagashi"] .btn.primary:active{transform:translate(2px,2px);box-shadow:none}
+  /* 端末: 黒い画面・燐光の緑・等幅・「>」と点滅する _ */
+  :root[data-robe="tanmatsu"]{
+    --bg:#07120A; --surface:#0B180E; --hover:#122618;
+    --hair:#1C3A23; --hair-strong:#2E5A38; --ctl:#468553;
+    --ink:#B9F6C3; --dim:#8BD79B; --note:#76C688;
+    --accent:#5DF28C; --accent-soft:color-mix(in srgb,#5DF28C 14%,transparent); --accent-ink:#A2FFC0;
+    --lacquer:#5DF28C; --moon:#122618;
+    --ok:#5DF28C; --ok-soft:color-mix(in srgb,#5DF28C 14%,transparent);
+    --series-2:#F2D35D;
+    --warn:#F2D35D; --warn-soft:color-mix(in srgb,#F2D35D 14%,transparent);
+    --bad:#FF7B6B; --bad-soft:color-mix(in srgb,#FF7B6B 16%,transparent);
+    --s1:#5DF28C; --s2:#F2D35D; --src-x:#B9F6C3; --src-member:#5FD3E0; --val:#A2FFC0;
+    --src-threads:#7760D2; --src-instagram:#C34184; --src-substack:#E8722C; --src-note:#10A37F; --src-mail:#3F69E8; --src-youtube:#CE3B31; --src-voicy:#B98A1B; --src-spotify:#1DA84F; --src-brain:#0E9BA4; --src-line:#0FA652; --src-f0:#5B76A8; --src-f1:#8A6FB8; --src-f2:#4E8F8B; --src-f3:#A8656F; --src-f4:#7C8A4E; --src-f5:#9C6FA0; --src-direct:#C2C7D0; --src-other:#7E858F; --src-tl-line:#06C755; --src-tl-buy:#E8874F; --src-tl-mail:#7C6AEF; --src-tl-ig:#D2557F; --src-tl-etc:#6FA8E8;
+    --shadow:0 0 0 1px #2E5A38,0 12px 32px rgba(0,0,0,.6);
+    --shadow-lo:none;
+    --sans:"IBM Plex Mono","Zen Kaku Gothic New",Menlo,monospace;
+    --display:"IBM Plex Mono","Zen Kaku Gothic New",Menlo,monospace;
+    --mono:"IBM Plex Mono",Menlo,monospace;
+    --edge:1px solid var(--hair-strong); --elev:none;
+    --r-btn:2px; --r-card:2px; --r-pill:2px;
+    --h1w:600; --h2w:600; --h-ls:0;
+    --pri-bg:transparent; --pri-ink:#5DF28C; --pri-edge:1px solid #5DF28C; --pri-ls:.04em;
+    color-scheme:dark;
+  }
+  :root[data-robe="tanmatsu"] h1,:root[data-robe="tanmatsu"] h2{text-shadow:0 0 8px color-mix(in srgb,var(--accent) 40%,transparent)}
+  :root[data-robe="tanmatsu"] .topbar h1::before,:root[data-robe="tanmatsu"] .card-head h2::before{content:"> ";color:var(--accent)}
+  :root[data-robe="tanmatsu"] .topbar h1::after{content:"_";color:var(--accent);margin-left:2px;animation:rondo-blink 1.1s steps(1) infinite}
+  @keyframes rondo-blink{50%{opacity:0}}
+  @media (prefers-reduced-motion: reduce){:root[data-robe="tanmatsu"] .topbar h1::after{animation:none}}
+  /* 方眼: 方眼ノートの地・手書き風の見出し・蛍光ペンの線 */
+  :root[data-robe="hougan"]{
+    --bg:#F6F8FB; --surface:#FFFFFF; --hover:#EDF1F7;
+    --hair:#D9E1EC; --hair-strong:#B6C3D6; --ctl:#7C899E;
+    --ink:#1F2A3A; --dim:#4E5B70; --note:#58657A;
+    --accent:#2D5BB8; --accent-soft:color-mix(in srgb,#2D5BB8 12%,transparent); --accent-ink:#244C9E;
+    --lacquer:#FFD95A; --moon:#EDF1F7;
+    --ok:#2E7048; --ok-soft:color-mix(in srgb,#2E7048 13%,transparent);
+    --series-2:#D0682A;
+    --warn:#765710; --warn-soft:color-mix(in srgb,#9C7420 14%,transparent);
+    --bad:#B3372B; --bad-soft:color-mix(in srgb,#B3372B 11%,transparent);
+    --s1:#2D5BB8; --s2:#D0682A; --src-x:#1F2A3A; --src-member:#155E75; --val:#244C9E;
+    --shadow:0 10px 28px rgba(31,42,58,.12),0 2px 6px rgba(31,42,58,.06);
+    --shadow-lo:0 1px 2px rgba(31,42,58,.06);
+    --display:"Klee One","Zen Kaku Gothic New",sans-serif;
+    --edge:1px solid var(--hair); --elev:0 1px 2px rgba(31,42,58,.05);
+    --r-btn:6px; --r-card:8px; --r-pill:5px;
+    --h1w:600; --h2w:600; --h-ls:.03em;
+    --pri-bg:#2D5BB8; --pri-ink:#FFFFFF; --pri-edge:1px solid #2D5BB8; --pri-ls:.02em;
+    color-scheme:light;
+  }
+  :root[data-robe="hougan"] body{background-image:linear-gradient(rgba(45,91,184,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(45,91,184,.07) 1px,transparent 1px);background-size:20px 20px}
+  :root[data-robe="hougan"] .topbar h1{background:linear-gradient(transparent 62%,rgba(255,217,90,.75) 62%);padding:0 3px}
+
+  /* ---- 細かな調整(衣の上に重ねる・この端末に覚える) ---- */
+  /* 差し色。明るい衣と暗い衣(data-tone="dark")で値を分ける。漆の主ボタンの文字は暗い面の上なので明るい側の値 */
+  :root[data-accent="ai"]{--accent:#2F56C9;--accent-soft:color-mix(in srgb,#2F56C9 13%,transparent);--accent-ink:#2549B0;--s1:#2F56C9;--val:#2549B0;--lacquer:#8AA6F5}
+  :root[data-accent="shu"]{--accent:#B23A22;--accent-soft:color-mix(in srgb,#B23A22 12%,transparent);--accent-ink:#9A3019;--s1:#B23A22;--val:#9A3019;--lacquer:#EE8E72}
+  :root[data-accent="midori"]{--accent:#2D6E47;--accent-soft:color-mix(in srgb,#2D6E47 13%,transparent);--accent-ink:#245C3A;--s1:#2D6E47;--val:#245C3A;--lacquer:#6CC28C}
+  :root[data-accent="sumire"]{--accent:#6A4BB0;--accent-soft:color-mix(in srgb,#6A4BB0 13%,transparent);--accent-ink:#5A3C9C;--s1:#6A4BB0;--val:#5A3C9C;--lacquer:#B49AEE}
+  :root[data-accent="kin"]{--accent:#7A5B18;--accent-soft:color-mix(in srgb,#A67C24 13%,transparent);--accent-ink:#6E5216;--s1:#A67C24;--val:#6E5216;--lacquer:#D9A94C}
+  :root[data-accent="sumi"]{--accent:#44474F;--accent-soft:color-mix(in srgb,#44474F 12%,transparent);--accent-ink:#2F3238;--s1:#44474F;--val:#2F3238;--lacquer:#D3D5DA}
+  :root[data-accent="ai"][data-tone="dark"]{--accent:#8AA6F5;--accent-soft:color-mix(in srgb,#8AA6F5 16%,transparent);--accent-ink:#B0C3F8;--s1:#8AA6F5;--val:#B0C3F8}
+  :root[data-accent="shu"][data-tone="dark"]{--accent:#EE8E72;--accent-soft:color-mix(in srgb,#EE8E72 16%,transparent);--accent-ink:#F5B09B;--s1:#EE8E72;--val:#F5B09B}
+  :root[data-accent="midori"][data-tone="dark"]{--accent:#6CC28C;--accent-soft:color-mix(in srgb,#6CC28C 16%,transparent);--accent-ink:#97D6AE;--s1:#6CC28C;--val:#97D6AE}
+  :root[data-accent="sumire"][data-tone="dark"]{--accent:#B49AEE;--accent-soft:color-mix(in srgb,#B49AEE 16%,transparent);--accent-ink:#CDBDF4;--s1:#B49AEE;--val:#CDBDF4}
+  :root[data-accent="kin"][data-tone="dark"]{--accent:#D9A94C;--accent-soft:color-mix(in srgb,#D9A94C 15%,transparent);--accent-ink:#F0CE7E;--s1:#D9A94C;--val:#F0CE7E}
+  :root[data-accent="sumi"][data-tone="dark"]{--accent:#D3D5DA;--accent-soft:color-mix(in srgb,#D3D5DA 14%,transparent);--accent-ink:#ECEDF0;--s1:#D3D5DA;--val:#ECEDF0}
+  /* 見出しの文字 */
+  :root[data-hfont="mincho"]{--display:"Shippori Mincho B1","Hiragino Mincho ProN",serif}
+  :root[data-hfont="gothic"]{--display:"Zen Kaku Gothic New","Hiragino Sans",sans-serif}
+  :root[data-hfont="maru"]{--display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif}
+  :root[data-hfont="tegaki"]{--display:"Klee One","Zen Kaku Gothic New",sans-serif}
+  /* 角の丸み */
+  :root[data-radius="square"]{--r-btn:2px;--r-card:3px;--r-pill:2px}
+  :root[data-radius="normal"]{--r-btn:8px;--r-card:12px;--r-pill:6px}
+  :root[data-radius="round"]{--r-btn:12px;--r-card:20px;--r-pill:10px}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6}
@@ -1306,16 +1487,43 @@ function __route(url) {
   .num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px}
   button{font-family:var(--sans);touch-action:manipulation}
   button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  h1{font-family:var(--display);font-size:18px;font-weight:800;letter-spacing:.02em;text-wrap:balance}
-  h2{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:.02em;text-wrap:balance}
+  h1{font-family:var(--display);font-size:18px;font-weight:var(--h1w);letter-spacing:var(--h-ls);text-wrap:balance}
+  h2{font-family:var(--display);font-size:15px;font-weight:var(--h2w);letter-spacing:var(--h-ls);text-wrap:balance}
   [hidden]{display:none!important}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .skip-link{position:fixed;left:12px;top:12px;z-index:100;background:var(--ink);color:var(--bg);padding:8px 12px;border-radius:var(--r-btn);transform:translateY(-200%)}
   .skip-link:focus{transform:translateY(0)}
 
+  /* ===== 案内役の栞(右下) ===== */
+  .shiori{position:fixed;right:20px;bottom:20px;z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}
+  .shiori>*{pointer-events:auto}
+  html[data-view="inbox"] .shiori,html[data-view="line"] .shiori,html[data-view="insta"] .shiori{display:none}
+  html[data-shiori] .content{padding-bottom:104px} /* 右下の顔が最後の行に重ならないように */
+  .shiori-face{position:relative;width:56px;height:56px;padding:0;border:2px solid var(--surface);border-radius:50%;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;overflow:visible;transition:transform 160ms ease-out}
+  .shiori-face img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
+  .shiori-face:hover{transform:translateY(-2px)}
+  .shiori-face:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .shiori-new{position:absolute;right:-1px;top:-1px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
+  .shiori-face[aria-busy="true"] img{animation:shiori-breathe 1.4s ease-in-out infinite}
+  @keyframes shiori-breathe{50%{opacity:.6}}
+  .shiori-bubble{position:relative;width:min(320px,calc(100vw - 40px));background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--shadow);padding:12px 14px 12px 16px;display:grid;gap:8px;animation:shiori-in 180ms ease-out}
+  .shiori-bubble::after{content:"";position:absolute;right:22px;bottom:-6px;width:12px;height:12px;background:var(--surface);transform:rotate(45deg);border-right:var(--edge);border-bottom:var(--edge)}
+  @keyframes shiori-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .shiori-top{display:flex;align-items:center;gap:8px}
+  .shiori-top b{font-family:var(--display);font-weight:var(--h2w);font-size:14px;letter-spacing:.08em}
+  .shiori-at{font-size:12px;color:var(--note)}
+  .shiori-x{margin-left:auto;width:28px;height:28px;border:none;border-radius:var(--r-btn);background:transparent;color:var(--note);display:grid;place-items:center;cursor:pointer}
+  .shiori-x:hover{background:var(--hover);color:var(--ink)}
+  .shiori-x svg{width:14px;height:14px}
+  .shiori-line{font-size:14px;line-height:1.8;color:var(--ink);text-wrap:pretty;min-height:1.8em}
+  .shiori-line.dim{color:var(--dim)}
+  .shiori-act{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+  @media (prefers-reduced-motion: reduce){.shiori-bubble{animation:none}.shiori-face{transition:none}.shiori-face[aria-busy="true"] img{animation:none}}
+  @media (max-width:520px){.shiori{right:12px;bottom:12px}.shiori-face{width:48px;height:48px}.shiori-bubble{width:calc(100vw - 24px)}.shiori-act .btn{min-height:40px;padding:6px 14px}.shiori-x{width:40px;height:40px;margin-right:-8px}}
+
   /* ===== ログイン ===== */
   .login{min-height:100vh;display:grid;place-items:center;padding:16px}
-  .login-card{background:var(--surface);border:none;box-shadow:var(--shadow-lo);border-radius:var(--r-card);padding:36px 32px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:14px}
+  .login-card{background:var(--surface);border:var(--edge);box-shadow:var(--elev);border-radius:var(--r-card);padding:36px 32px;width:100%;max-width:360px;display:flex;flex-direction:column;gap:14px}
   .login-logo{width:40px;height:40px;border-radius:10px;overflow:hidden}
   .login-card h1{font-size:17px}
   .login-err{font-size:13px;color:var(--bad);min-height:20px}
@@ -1356,7 +1564,7 @@ function __route(url) {
   .main{flex:1;min-width:0;display:flex;flex-direction:column}
   .topbar{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--hair);background:var(--surface);flex-wrap:wrap}
   .btn{border:none;border-radius:var(--r-btn);padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:opacity 120ms,background 120ms}
-  .btn.primary{color:var(--lacquer);background:linear-gradient(180deg,#262336,#1A1826) padding-box,linear-gradient(180deg,color-mix(in srgb,var(--lacquer) 70%,transparent),color-mix(in srgb,var(--lacquer) 22%,transparent)) border-box;border:1px solid transparent;letter-spacing:.06em}
+  .btn.primary{color:var(--pri-ink);background:var(--pri-bg);border:var(--pri-edge);letter-spacing:var(--pri-ls);box-shadow:var(--pri-shadow)}
   .btn.primary:hover{opacity:.85}
   .btn.ghost{background:transparent;border:1px solid var(--hair-strong);color:var(--dim)}
   .btn.ghost:hover{background:var(--hover);color:var(--ink)}
@@ -1404,6 +1612,15 @@ function __route(url) {
   .robe-pv .lq{position:absolute;right:10px;bottom:12px;width:30px;height:12px;border-radius:4px;background:linear-gradient(180deg,#262336,#1A1826)}
   .robe-pv .lq i{position:absolute;left:8px;right:8px;top:5px;height:2px;border-radius:1px}
   .robe-pv .dt{position:absolute;right:14px;top:14px;width:9px;height:9px;border-radius:50%}
+  .robe-pv .gl{font-size:15px;line-height:1;font-weight:700;margin-bottom:1px}
+  .robe-grp{grid-column:1 / -1;font-size:12px;font-weight:500;color:var(--note);margin:6px 2px -6px}
+  .robe-grp:first-child{margin-top:0}
+  #set-tune .set-row{display:grid;gap:8px}
+  .tune-row{display:flex;flex-wrap:wrap;gap:6px}
+  .tune{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border:1px solid var(--hair-strong);border-radius:var(--r-btn);background:transparent;color:var(--dim);font-size:13px;font-family:var(--sans);cursor:pointer;transition:background 120ms ease-out,color 120ms ease-out}
+  .tune:hover{background:var(--hover);color:var(--ink)}
+  .tune[aria-checked="true"]{background:var(--accent-soft);border-color:transparent;color:var(--accent-ink);font-weight:500}
+  .tune i{width:12px;height:12px;border-radius:50%;flex:none}
   .robe-pv.split{display:grid;grid-template-columns:1fr 1fr}
   .robe-pv.split>div{position:relative}
   .robe-name{display:grid;grid-template-columns:1fr auto;align-items:baseline;column-gap:8px;row-gap:2px;padding:0 2px}
@@ -1455,7 +1672,7 @@ function __route(url) {
 
   /* グリッド項目のmin-width:autoがnowrapテキストのmin-contentを拾って横はみ出しするのを防ぐ */
   .card,.kpi{min-width:0}
-  .card{background:var(--surface);border:none;border-radius:var(--r-card);box-shadow:var(--shadow-lo)}
+  .card{background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--elev)}
   .card-head{display:flex;align-items:baseline;gap:10px;padding:14px 16px;border-bottom:1px solid var(--hair)}
   /* 見出しは縮めない(長い .sub に押されて「トーク」が1字ずつ縦に折れていた 10-06)。狭い幅では .sub を下の行へ */
   .card-head h2{flex:none;max-width:100%}
@@ -1484,7 +1701,7 @@ function __route(url) {
   #chn-kpis{grid-template-columns:repeat(4,1fr)}
   /* すべてのチャネル: 1枚=1チャネル。丸印だけがチャネル色(面は塗らない) */
   .chn-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:12px}
-  .chn-tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;background:var(--surface);border:none;border-radius:var(--r-card);box-shadow:var(--shadow-lo);padding:14px 16px 12px;min-width:0;transition:background-color 140ms ease-out}
+  .chn-tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--elev);padding:14px 16px 12px;min-width:0;transition:background-color 140ms ease-out}
   .chn-tile:hover{background:var(--hover)}
   .chn-tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .chn-tile .ct-h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink)}
@@ -1517,7 +1734,7 @@ function __route(url) {
   .eng-line:first-of-type{border-top:0}
   .eng-line .l{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .eng-line .n{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
-  .kpi{background:var(--surface);border:none;box-shadow:var(--shadow-lo);border-radius:var(--r-card);padding:14px 16px}
+  .kpi{background:var(--surface);border:var(--edge);box-shadow:var(--elev);border-radius:var(--r-card);padding:14px 16px}
   .kpi .k{font-size:12px;color:var(--note)}
   .kpi .v{font-size:22px;font-weight:600;letter-spacing:-.01em;margin-top:2px}
   .kpi .v small{font-size:13px;font-weight:500;color:var(--dim)}
@@ -1630,7 +1847,7 @@ function __route(url) {
   /* ダッシュボード最上段の帯: 要アクション＋見立て(2026-10-05 本人裁定。カードの常設をやめて1本に) */
   .strip{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
   /* 帯は .stb(小さい丸札 .st と同名で後勝ちし、丸札が全部42pxの箱になっていた 10-06) */
-  .stb{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--r-card);background:var(--surface);border:none;box-shadow:var(--shadow-lo);font-size:13px;font-weight:500;line-height:20px;min-width:0}
+  .stb{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:var(--r-card);background:var(--surface);border:var(--edge);box-shadow:var(--elev);font-size:13px;font-weight:500;line-height:20px;min-width:0}
   .stb.warn{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
   .stb.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
   .stb.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
@@ -1641,7 +1858,7 @@ function __route(url) {
   .stb .note{font-size:12px;color:var(--note);white-space:nowrap}
   .stb .link{margin-left:auto;font-size:12px;color:var(--accent);border:none;background:none;cursor:pointer;font-family:var(--sans);white-space:nowrap}
   /* 大きいカード4枚の下の細い1行(事業ごとの補助の数字) */
-  .subk{display:flex;flex-wrap:wrap;background:var(--surface);border:none;box-shadow:var(--shadow-lo);border-radius:var(--r-card)}
+  .subk{display:flex;flex-wrap:wrap;background:var(--surface);border:var(--edge);box-shadow:var(--elev);border-radius:var(--r-card)}
   .subk .sk{display:flex;align-items:baseline;gap:8px;padding:9px 16px;border-right:1px solid var(--hair);font-size:12px;min-width:0}
   .subk .sk:last-child{border-right:none}
   .subk .sk[data-nav]{cursor:pointer}
@@ -2070,7 +2287,16 @@ function __route(url) {
     *{transition:none!important}
     .busybar::after,html[data-busy] .kpi .v:empty::before,html[data-busy] .skel:empty::before{animation:none}
   }
+  /* 左メニューの区切り(見出しは置かない)と、要対応の札(予約=今日の件数・Instagram=要反映・稼働状況=要確認) */
+  .side-sep{height:1px;background:var(--hair);margin:10px 10px}
+  .nav-a .nb.warn,.nav-a .nb.bad{font-family:var(--sans);font-size:11px;border-color:transparent}
+  .nav-a .nb.warn,.fnb.warn{background:var(--warn-soft);color:var(--warn)}
+  .nav-a .nb.bad,.fnb.bad{background:var(--bad-soft);color:var(--bad)}
+  .fnb{margin-left:6px;font-size:11px;line-height:16px;padding:0 6px;border-radius:999px;background:var(--hover);color:var(--ink)}
+  .mtab-dot{position:absolute;top:5px;left:calc(50% + 8px);width:7px;height:7px;border-radius:50%;background:var(--bad)}
+  .mtab-dot.warn{background:var(--warn)}
   .need-analytics{display:none!important}
+  .gate-booking-alt{display:none!important}
 </style>
 </head>
 <body>
@@ -2104,30 +2330,31 @@ function __route(url) {
       <div class="ws-pop" id="ws-pop" hidden role="listbox" aria-label="プロジェクト切り替え"></div>
     </div>
     <nav id="nav-main">
-      <button class="nav-a cur" data-nav="home"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8.5 8 3l6 5.5M3.5 7.5V13h9V7.5"/></svg>ダッシュボード</button>
+      <!-- 並びは「毎日見るもの → 届ける → 数字 → 守る」(10-09)。見出しは置かず区切り線だけ。
+           つないでいない機能(LINE・Instagram・予約)は gate-* で隠す(renderAdminHtml の .gate-booking-alt{display:none!important}) -->
+      <button class="nav-a cur" data-nav="home"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8.5 8 3l6 5.5M3.5 7.5V13h9V7.5"/></svg>ホーム</button>
       <button class="nav-a" data-nav="inbox"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9.5 3.8 3h8.4L14 9.5V13H2z"/><path d="M2 9.5h3.5l1 1.5h3l1-1.5H14"/></svg>受信箱<span class="nb" id="nav-ibx-n" hidden></span></button>
+      <button class="nav-a gate-booking" data-nav="booking"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3M5 9.5l2 2 4-4"/></svg>予約<span class="nb" id="nav-bk-n" hidden title="今日の予約"></span></button>
       <button class="nav-a" data-nav="cal"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"/></svg>カレンダー</button>
       <button class="nav-a" data-nav="persons"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M3.5 13.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5"/><path d="M12.5 3.5 14 5l-1.5 1.5M3.5 3.5 2 5l1.5 1.5"/></svg>顧客</button>
-      <button class="nav-a" data-nav="sends"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3.5" width="12" height="9" rx="1.5"/><path d="m2.5 4.5 5.5 4 5.5-4"/></svg>配信ログ</button>
-      <div class="side-sec">配信</div>
-      <button class="nav-a" data-nav="genko" data-group="genko mlist tokuten"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13M6 8h4M6 10.5h4"/></svg>メール</button>
-      <button class="nav-a" data-nav="line"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 7.2c0 3-2.5 5.2-5.5 5.2-.6 0-1.2-.1-1.7-.2L3.5 13l.4-2.1C2.7 10 2 8.7 2 7.2 2 4.2 4.7 2 8 2s5.5 2.2 5.5 5.2Z"/></svg>LINE</button>
-      <button class="nav-a" data-nav="insta"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.8"/><circle cx="11.6" cy="4.4" r=".6" fill="currentColor"/></svg>Instagram</button>
-      <button class="nav-a" data-nav="booking"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3M5 9.5l2 2 4-4"/></svg>予約</button>
-      <div class="side-sec">分析</div>
+      <div class="side-sep" role="separator"></div>
+      <button class="nav-a" data-nav="genko" data-group="genko mlist tokuten sends channels:mail"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13M6 8h4M6 10.5h4"/></svg>メール</button>
+      <button class="nav-a gate-line" data-nav="line" data-group="line channels:line"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 7.2c0 3-2.5 5.2-5.5 5.2-.6 0-1.2-.1-1.7-.2L3.5 13l.4-2.1C2.7 10 2 8.7 2 7.2 2 4.2 4.7 2 8 2s5.5 2.2 5.5 5.2Z"/></svg>LINE</button>
+      <button class="nav-a gate-ig" data-nav="insta" data-group="insta channels:ig"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.8"/><circle cx="11.6" cy="4.4" r=".6" fill="currentColor"/></svg>Instagram<span class="nb warn" id="nav-ig-n" hidden>要反映</span></button>
+      <button class="nav-a" data-nav="channels" id="nav-channels"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="12" r="1.8"/><path d="m5.6 7.2 4.8-2.4M5.6 8.8l4.8 2.4"/></svg>SNS<span class="ch-badge" id="side-ch-badge"></span></button>
+      <div class="side-sep" role="separator"></div>
       <button class="nav-a" data-nav="report"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13.5h12M4 13V8M8 13V4M12 13V6"/></svg>売上と配信</button>
       <button class="nav-a" data-nav="heat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><circle cx="6.2" cy="6.2" r="1.6"/><circle cx="10.2" cy="9.8" r="2.4"/></svg>LP分析</button>
-      <button class="nav-a" data-nav="channels" id="nav-channels"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="12" r="1.8"/><path d="m5.6 7.2 4.8-2.4M5.6 8.8l4.8 2.4"/></svg>チャネル<span class="ch-badge" id="side-ch-badge"></span></button>
 
-      <div class="side-sec">運用</div>
 
-      <button class="nav-a" data-nav="audit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2 2.5 4.5v3.6c0 3.2 2.3 5.4 5.5 6.4 3.2-1 5.5-3.2 5.5-6.4V4.5L8 2Z"/><path d="M5.8 8.2 7.3 9.7l3-3.2"/></svg>監査</button>
+      <div class="side-sep" role="separator"></div>
+      <button class="nav-a" data-nav="audit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2 2.5 4.5v3.6c0 3.2 2.3 5.4 5.5 6.4 3.2-1 5.5-3.2 5.5-6.4V4.5L8 2Z"/><path d="M5.8 8.2 7.3 9.7l3-3.2"/></svg>稼働状況<span class="nb" id="nav-aud-n" hidden>要確認</span></button>
     </nav>
     <nav id="nav-project" hidden>
       <button class="nav-a cur" data-nav="project"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8.5 8 3l6 5.5M3.5 7.5V13h9V7.5"/></svg>ダッシュボード</button>
       <button class="nav-a" data-nav="pimprove"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 13.5h12M4 13V8M8 13V4M12 13V6"/></svg>コンテンツ改善</button>
       <button class="nav-a" data-nav="pheat"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><circle cx="6.2" cy="6.2" r="1.6"/><circle cx="10.2" cy="9.8" r="2.4"/></svg>LP分析</button>
-      <button class="nav-a" data-nav="paudit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2 2.5 4.5v3.6c0 3.2 2.3 5.4 5.5 6.4 3.2-1 5.5-3.2 5.5-6.4V4.5L8 2Z"/><path d="M5.8 8.2 7.3 9.7l3-3.2"/></svg>監査</button>
+      <button class="nav-a" data-nav="paudit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2 2.5 4.5v3.6c0 3.2 2.3 5.4 5.5 6.4 3.2-1 5.5-3.2 5.5-6.4V4.5L8 2Z"/><path d="M5.8 8.2 7.3 9.7l3-3.2"/></svg>稼働状況</button>
     </nav>
     <div id="side-project-channels" hidden>
       <div class="side-sec">チャネル</div>
@@ -2164,25 +2391,25 @@ function __route(url) {
     <div class="mobile-theme"><button class="fchip" type="button" data-nav="settings">設定</button></div>
     <div class="mobile-nav" id="mobile-prof" hidden></div>
     <div class="mobile-nav" id="mobile-nav-main">
-      <button class="fchip on" data-nav="home">ダッシュボード</button>
+      <button class="fchip on" data-nav="home">ホーム</button>
       <button class="fchip" data-nav="inbox">受信箱</button>
+      <button class="fchip gate-booking" data-nav="booking">予約</button>
       <button class="fchip" data-nav="cal">カレンダー</button>
       <button class="fchip" data-nav="persons">顧客</button>
-      <button class="fchip" data-nav="sends">配信ログ</button>
-      <button class="fchip" data-nav="genko">メール</button>
-      <button class="fchip" data-nav="line">LINE</button>
-      <button class="fchip" data-nav="insta">Instagram</button>
-      <button class="fchip" data-nav="booking">予約</button>
+      <button class="fchip" data-nav="genko" data-group="genko mlist tokuten sends channels:mail">メール</button>
+      <button class="fchip gate-line" data-nav="line" data-group="line channels:line">LINE</button>
+      <button class="fchip gate-ig" data-nav="insta" data-group="insta channels:ig">Instagram<span class="fnb warn" id="fchip-ig-n" hidden>要反映</span></button>
+      <button class="fchip" data-nav="channels">SNS</button>
       <button class="fchip" data-nav="report">売上と配信</button>
       <button class="fchip" data-nav="heat">LP分析</button>
-      <button class="fchip" data-nav="channels">チャネル</button>
 
 
-      <button class="fchip" data-nav="audit">監査</button>
+      <button class="fchip" data-nav="audit">稼働状況<span class="fnb" id="fchip-aud-n" hidden>要確認</span></button>
     </div>
     <div class="mobile-nav" id="mobile-nav-project" hidden></div>
     <div class="subbar" id="step-subnav" hidden>
       <div class="subbar-row"><span class="subbar-l">ステップ</span><button class="fchip" data-nav="genko" data-scenario="course">7日間講座</button></div>
+      <div class="subbar-row"><span class="subbar-l">記録</span><button class="fchip" data-nav="sends">配信ログ</button><button class="fchip" data-nav="channels" data-ch="mail">数字と読者</button></div>
     </div>
     <div class="subbar" id="heat-subnav" hidden>
       <div class="subbar-row"><span class="subbar-l">ページ</span><button class="fchip" data-nav="heat">計測タグの設置</button></div>
@@ -2191,7 +2418,7 @@ function __route(url) {
     <!-- ダッシュボード -->
     <section class="view v-home">
       <header class="topbar">
-        <h1>ダッシュボード</h1>
+        <h1>ホーム</h1>
         <span class="st mute" id="home-phase" hidden></span>
         <span class="upd" id="home-upd"></span>
         <button class="btn ghost sm push" id="home-reload">更新</button>
@@ -2220,7 +2447,7 @@ function __route(url) {
           <div class="card-body chart-wrap" id="chart-body"><svg id="chart" width="100%" height="280" role="img" aria-label="直近30日の推移"></svg><div class="tip" id="chart-tip"></div></div>
         </div>
         <div class="card">
-          <div class="card-head"><h2>チャネルの調子</h2><span class="sub">7日</span><button class="link" data-nav="channels" data-ch="all" style="margin-left:auto">すべてのチャネル →</button></div>
+          <div class="card-head"><h2>チャネルの調子</h2><span class="sub">7日</span><button class="link" data-nav="channels" data-ch="all" style="margin-left:auto">SNS →</button></div>
           <div class="tbl-scroll"><table>
             <thead><tr><th>チャネル</th><th class="r">規模</th><th class="r">増減 7日</th><th class="r">発信 7日</th><th class="r">前週比</th></tr></thead>
             <tbody id="ch-body"></tbody>
@@ -2494,6 +2721,7 @@ function __route(url) {
       <header class="topbar">
         <h1>LINE</h1>
         <span class="upd" id="line-upd"></span>
+        <button class="btn ghost sm push" type="button" data-nav="channels" data-ch="line">流入と出入り →</button>
       </header>
       <div class="content">
         <div class="filters" id="line-prof-chips" hidden></div>
@@ -2639,6 +2867,7 @@ function __route(url) {
       <header class="topbar">
         <h1>Instagram</h1>
         <span class="upd" id="ig-upd"></span>
+        <button class="btn ghost sm push" type="button" data-nav="channels" data-ch="ig">投稿の数字 →</button>
       </header>
       <div class="content">
         <!-- 上の数字の行(10-09 本人「フォロワー数や主要な数字も上の方で」) -->
@@ -2686,17 +2915,18 @@ function __route(url) {
     </section>
     <section class="view v-channels">
       <header class="topbar">
-        <h1>チャネル</h1>
+        <button class="btn ghost sm" type="button" id="chn-back" hidden></button>
+        <h1 id="chn-h1">SNS</h1>
         <span class="upd" id="chn-upd"></span>
         <button class="btn ghost sm push" id="chn-reload">更新</button>
       </header>
       <div class="content">
         <div class="filters" id="chn-chips">
           <button class="fchip" data-ch="all">すべて</button>
-          <button class="fchip" data-ch="mail">メール</button>
+          <button class="fchip" data-ch="mail" data-own="1" hidden>メール</button>
           <button class="fchip" data-ch="threads">Threads</button>
-          <button class="fchip" data-ch="ig">Instagram</button>
-          <button class="fchip" data-ch="line">LINE</button>
+          <button class="fchip" data-ch="ig" data-own="1" hidden>Instagram</button>
+          <button class="fchip" data-ch="line" data-own="1" hidden>LINE</button>
           <button class="fchip" data-ch="youtube">YouTube</button>
           <button class="fchip" data-ch="x">X</button>
           <button class="fchip" data-ch="note">note</button>
@@ -2919,7 +3149,8 @@ function __route(url) {
     <!-- 監査 -->
     <section class="view v-audit">
       <header class="topbar">
-        <h1>監査</h1>
+        <h1>稼働状況</h1>
+        <span class="upd">障害・配信の停止栓・送信の上限・届き方・操作の記録</span>
         <span class="upd" id="aud-upd"></span>
         <button class="btn ghost sm push" id="aud-reload">更新</button>
       </header>
@@ -3084,7 +3315,7 @@ function __route(url) {
     <!-- プロジェクト: 監査(データ源が生きているか) -->
     <section class="view v-paudit">
       <header class="topbar">
-        <h1>監査</h1>
+        <h1>稼働状況</h1>
         <span class="upd" id="pau-upd"></span>
         <button class="btn ghost sm push" id="pau-reload">更新</button>
       </header>
@@ -3103,8 +3334,9 @@ function __route(url) {
       </header>
       <div class="content">
         <div class="card" id="set-design">
-          <div class="card-head"><h2>デザイン</h2><span class="sub">管理画面の色。選ぶとすぐ切り替わり、この端末に覚えます</span></div>
+          <div class="card-head"><h2>デザイン</h2><span class="sub">管理画面の衣と細かな調整。選ぶとすぐ切り替わり、この端末に覚えます</span></div>
           <div class="robe-grid" id="set-robes" role="radiogroup" aria-label="デザイン"></div>
+          <div class="set-list" id="set-tune"></div>
           <p class="set-note">ほかの端末やブラウザでは、それぞれで選び直します。読者に見えるページ(登録・予約など)の色は変わりません。</p>
         </div>
         <div class="card" id="set-conns-card">
@@ -3118,6 +3350,10 @@ function __route(url) {
         <div class="card">
           <div class="card-head"><h2>AIの返事</h2><span class="sub">オフにすると、AIは新しい返事を作らず、作りかけの返事も送りません</span></div>
           <div class="set-list" id="set-ai"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>案内役の栞</h2><span class="sub">右下の栞が、マーケティングのいまを一言で伝えます</span></div>
+          <div class="set-list" id="set-shiori"></div>
         </div>
         <div class="card">
           <div class="card-head"><h2>通知</h2><span class="sub">新しいメッセージや、見張りで問題が見つかったときの知らせ</span></div>
@@ -3146,6 +3382,16 @@ function __route(url) {
       </div>
     </section>
   </main>
+  <!-- 案内役の栞(右下)。設定の「案内役の栞」がオンで、AIのキーがあるときだけ出す(shiori.mjs) -->
+  <div class="shiori" id="shiori" hidden>
+    <div class="shiori-bubble" id="shiori-bubble" role="dialog" aria-labelledby="shiori-name" hidden>
+      <div class="shiori-top"><b id="shiori-name">栞</b><span class="shiori-at" id="shiori-at"></span>
+        <button class="shiori-x" id="shiori-close" type="button" aria-label="栞の一言を閉じる"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></div>
+      <p class="shiori-line" id="shiori-line" aria-live="polite"></p>
+      <div class="shiori-act"><button class="btn ghost sm" type="button" id="shiori-go" hidden>見に行く</button><button class="btn ghost sm" type="button" id="shiori-again">もう一言</button></div>
+    </div>
+    <button class="shiori-face" id="shiori-face" type="button" aria-expanded="false" aria-controls="shiori-bubble" aria-label="栞の一言を開く"><img src="/shiori.webp" alt="" width="52" height="52" decoding="async"><span class="shiori-new" id="shiori-new" hidden></span></button>
+  </div>
 </div>
 
 <script>window.RONDO_CFG = {"senderName":"運用者","defaultScenarioKey":"course","defaultScenarioLabel":"7日間講座","scenarioLabels":{"course":"7日間講座"},"mailChannelName":"メール","memberSiteName":"会員サイト","memberKpiLabel":"無料会員","memberSiteConnected":false,"memberShortName":"会員サイト","offerLpName":"教材LP","lineOaName":"","lineChannelId":"","baseHost":"example.com","discordName":"コミュニティ Discord","discordConnected":false,"financieConnected":false,"analyticsConnected":false,"salesConnected":false,"financieName":"トークン価格"};</script>
@@ -3157,16 +3403,27 @@ function __route(url) {
   var RONDO_MARK = '<svg class="rondo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1F1C2E"/><circle cx="16" cy="16" r="8.6" fill="none" stroke="#ECE8DC" stroke-width="1.6"/><circle cx="22.1" cy="9.9" r="2.6" fill="#D9A94C"/></svg>';
   // デザイン(衣)。既定は羽二重(明)。選んだ衣はこの端末に覚える(旧「表示: 暗い」は宵闇として引き継ぐ)。
   // 保存できない環境でも、いま選んだ衣はメモリで持つ(Astra 羽二重 r1-1)
+  // [名前, 表示名, 説明, 見本の色(地・面・文字・点・線), 見本の仕立て(縁・角・影・主ボタン・見出しの書体), 組]
   var ROBES = [
-    ['habutae', '羽二重', '明るい・既定', ['#F5F3EC', '#FBF9F5', '#28263C', '#A67C24', '#D9A94C']],
-    ['sumi', '墨', '明るい・色を抑える', ['#F4F2ED', '#FAF8F4', '#26241F', '#A8352A', '#D8D2C2']],
-    ['sakura', '桜', '明るい・薄紅', ['#F8F0EF', '#FDF7F6', '#3B2B34', '#B4536A', '#E08A9B']],
-    ['wakaba', '若葉', '明るい・若草', ['#F2F4EA', '#F9FAF2', '#2A362B', '#5E7C3A', '#9DBC72']],
-    ['akane', '茜', '明るい・夕茜', ['#F6EFE7', '#FBF5EE', '#3A2C26', '#B4622B', '#E0904F']],
-    ['yoiyami', '宵闇', '暗い', ['#131320', '#181626', '#E8E4D8', '#D9A94C', '#D9A94C']],
-    ['setsugetsu', '雪月', '暗い・青白い月光', ['#10151E', '#151B26', '#DCE4EC', '#7FA8C9', '#7FA8C9']],
-    ['auto', '端末に合わせる', '羽二重 ⇄ 宵闇', null],
+    ['habutae', '羽二重', '明るい・既定', ['#F5F3EC', '#FBF9F5', '#28263C', '#A67C24', '#D9A94C'], null, 'wa'],
+    ['sumi', '墨', '明るい・色を抑える', ['#F4F2ED', '#FAF8F4', '#26241F', '#A8352A', '#D8D2C2'], null, 'wa'],
+    ['sakura', '桜', '明るい・薄紅', ['#F8F0EF', '#FDF7F6', '#3B2B34', '#B4536A', '#E08A9B'], null, 'wa'],
+    ['wakaba', '若葉', '明るい・若草', ['#F2F4EA', '#F9FAF2', '#2A362B', '#5E7C3A', '#9DBC72'], null, 'wa'],
+    ['akane', '茜', '明るい・夕茜', ['#F6EFE7', '#FBF5EE', '#3A2C26', '#B4622B', '#E0904F'], null, 'wa'],
+    ['yoiyami', '宵闇', '暗い', ['#131320', '#181626', '#E8E4D8', '#D9A94C', '#D9A94C'], null, 'wa'],
+    ['setsugetsu', '雪月', '暗い・青白い月光', ['#10151E', '#151B26', '#DCE4EC', '#7FA8C9', '#7FA8C9'], null, 'wa'],
+    ['auto', '端末に合わせる', '羽二重 ⇄ 宵闇', null, null, 'wa'],
+    ['saas', 'SaaS', '明るい・β版の見た目', ['#F7F8FA', '#FFFFFF', '#17181C', '#2E5CE6', '#FFFFFF'], { edge: '1px solid #E7E9EE', r: 6, btn: '#17181C', font: 'IBM Plex Sans JP' }, 'saas'],
+    ['saas-dark', 'SaaS 夜', '暗い・β版の見た目', ['#0E1013', '#15171B', '#E7E9ED', '#86A2FF', '#0E1013'], { edge: '1px solid #262A30', r: 6, btn: '#E7E9ED', font: 'IBM Plex Sans JP' }, 'saas'],
+    ['kawaraban', '瓦版', '生成りの紙・墨の罫・朱の判', ['#EFE9DC', '#F8F3E8', '#1E1B16', '#2B4A73', '#FFF7EC'], { edge: '1px solid #1E1B16', r: 1, btn: '#A8321C' }, 'asobi'],
+    ['dagashi', '駄菓子', '太い縁・ずらした影・まる文字', ['#FFF4D6', '#FFFFFF', '#1A1A1A', '#C2185B', '#1A1A1A'], { edge: '2px solid #1A1A1A', r: 9, sh: '3px 3px 0 #1A1A1A', btn: '#FFD23F', btnEdge: '1.5px solid #1A1A1A', font: 'Zen Maru Gothic' }, 'asobi'],
+    ['tanmatsu', '端末', '黒い画面・燐光の緑・等幅', ['#07120A', '#0B180E', '#B9F6C3', '#5DF28C', '#5DF28C'], { edge: '1px solid #2E5A38', r: 1, btn: 'transparent', btnEdge: '1px solid #5DF28C', font: 'IBM Plex Mono' }, 'asobi'],
+    ['hougan', '方眼', '方眼ノート・手書き風の見出し', ['#F6F8FB', '#FFFFFF', '#1F2A3A', '#2D5BB8', '#FFFFFF'], { edge: '1px solid #D9E1EC', r: 5, btn: '#2D5BB8', font: 'Klee One', grid: 1 }, 'asobi'],
   ];
+  var ROBE_GROUPS = [['wa', '和の衣'], ['saas', 'SaaS'], ['asobi', '遊び']];
+  var DARK_ROBES = { yoiyami: 1, setsugetsu: 1, 'saas-dark': 1, tanmatsu: 1 };
+  var darkMq = null;
+  try { darkMq = window.matchMedia('(prefers-color-scheme: dark)'); } catch (e) { darkMq = null; }
   var robeState = (function () {
     try {
       var t = localStorage.getItem('rondo_robe');
@@ -3174,23 +3431,41 @@ function __route(url) {
       return ROBES.some(function (r) { return r[0] === t; }) ? t : 'habutae';
     } catch (e) { return 'habutae'; }
   })();
-  function robePreview(c) {
-    return '<div class="pc" style="background:' + c[1] + '"><div class="ln" style="background:' + c[2] + '"></div><div class="ln s" style="background:' + c[2] + '"></div></div>' +
-      '<span class="dt" style="background:' + c[3] + '"></span><span class="lq"><i style="background:' + c[4] + '"></i></span>';
+  function robePreview(c, x) {
+    x = x || {};
+    var pc = 'background:' + c[1] + (x.edge ? ';border:' + x.edge : '') + (x.r != null ? ';border-radius:' + x.r + 'px' : '') + (x.sh ? ';box-shadow:' + x.sh : '');
+    var lq = x.btn ? ' style="background:' + x.btn + (x.btnEdge ? ';border:' + x.btnEdge : '') + (x.r != null ? ';border-radius:' + Math.min(x.r, 4) + 'px' : '') + '"' : '';
+    return '<div class="pc" style="' + pc + '"><span class="gl" style="color:' + c[2] + ';font-family:' + (x.font || 'Shippori Mincho B1') + ',serif">あ</span>' +
+      '<div class="ln" style="background:' + c[2] + '"></div><div class="ln s" style="background:' + c[2] + '"></div></div>' +
+      '<span class="dt" style="background:' + c[3] + '"></span><span class="lq"' + lq + '><i style="background:' + c[4] + '"></i></span>';
+  }
+  function robeButton(r) {
+    var x = r[4] || {};
+    var grid = x.grid ? ';background-image:linear-gradient(rgba(45,91,184,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(45,91,184,.10) 1px,transparent 1px);background-size:10px 10px' : '';
+    var pv = r[3] ? '<div class="robe-pv" style="background:' + r[3][0] + grid + '">' + robePreview(r[3], r[4]) + '</div>'
+      : '<div class="robe-pv split"><div style="background:#F5F3EC">' + robePreview(ROBES[0][3]) + '</div><div style="background:#131320">' + robePreview(ROBES[5][3]) + '</div></div>';
+    var on = r[0] === robeState;
+    return '<button class="robe" type="button" role="radio" data-robe="' + r[0] + '" aria-checked="' + on + '" tabindex="' + (on ? 0 : -1) + '">' + pv +
+      '<div class="robe-name"><b>' + r[1] + '</b><span class="on">使用中</span><span>' + r[2] + '</span></div></button>';
   }
   function renderRobes() {
     var box = document.getElementById('set-robes'); if (!box) return;
-    box.innerHTML = ROBES.map(function (r) {
-      var pv = r[3] ? '<div class="robe-pv" style="background:' + r[3][0] + '">' + robePreview(r[3]) + '</div>'
-        : '<div class="robe-pv split"><div style="background:#F5F3EC">' + robePreview(ROBES[0][3]) + '</div><div style="background:#131320">' + robePreview(ROBES[5][3]) + '</div></div>';
-      var on = r[0] === robeState;
-      return '<button class="robe" type="button" role="radio" data-robe="' + r[0] + '" aria-checked="' + on + '" tabindex="' + (on ? 0 : -1) + '">' + pv +
-        '<div class="robe-name"><b>' + r[1] + '</b><span class="on">使用中</span><span>' + r[2] + '</span></div></button>';
+    box.innerHTML = ROBE_GROUPS.map(function (g) {
+      return '<p class="robe-grp" aria-hidden="true">' + g[1] + '</p>' + ROBES.filter(function (r) { return r[5] === g[0]; }).map(robeButton).join('');
     }).join('');
+  }
+  // 暗い衣か(差し色の値を明暗で分けるのに使う)。「端末に合わせる」は端末の明暗に従い、変わったら追いかける
+  function applyTone() {
+    var dark = !!DARK_ROBES[robeState] || (robeState === 'auto' && !!(darkMq && darkMq.matches));
+    if (dark) document.documentElement.setAttribute('data-tone', 'dark'); else document.documentElement.removeAttribute('data-tone');
+  }
+  if (darkMq) {
+    try { darkMq.addEventListener('change', applyTone); } catch (e) { try { darkMq.addListener(applyTone); } catch (e2) { /* 古いブラウザは読み込み時の明暗のまま */ } }
   }
   function applyRobe(t, save) {
     robeState = t;
     if (t === 'habutae') document.documentElement.removeAttribute('data-robe'); else document.documentElement.setAttribute('data-robe', t);
+    applyTone();
     if (save) {
       try { localStorage.setItem('rondo_robe', t); localStorage.removeItem('rondo_theme'); } catch (e) { /* 覚えられなくても切り替える */ }
     }
@@ -3206,15 +3481,70 @@ function __route(url) {
     box.addEventListener('click', function (ev) {
       var b = ev.target.closest('.robe'); if (b) applyRobe(b.dataset.robe, true);
     });
-    // 選択肢の矢印キー移動(radiogroup の作法)
+    // 選択肢の矢印キー移動(radiogroup の作法)。並びは画面の並び(組の順)
     box.addEventListener('keydown', function (ev) {
       var k = ev.key, d = (k === 'ArrowRight' || k === 'ArrowDown') ? 1 : (k === 'ArrowLeft' || k === 'ArrowUp') ? -1 : 0;
       if (!d) return;
       ev.preventDefault();
-      var i = ROBES.findIndex(function (r) { return r[0] === robeState; });
-      var n = ROBES[(i + d + ROBES.length) % ROBES.length][0];
+      var order = Array.prototype.map.call(box.querySelectorAll('.robe'), function (b) { return b.dataset.robe; });
+      var i = order.indexOf(robeState);
+      var n = order[(i + d + order.length) % order.length];
       applyRobe(n, true);
       var nb = box.querySelector('[data-robe="' + n + '"]'); if (nb) nb.focus();
+    });
+  })();
+  // 細かな調整(差し色・見出しの文字・角の丸み)。衣の上に重ね、この端末に覚える。空=衣に合わせる
+  var TUNES = [
+    ['accent', 'rondo_accent', '差し色', '選んでいる印・リンク・グラフの1本目の色', [['', '衣に合わせる'], ['ai', '藍', '#2F56C9'], ['shu', '朱', '#B23A22'], ['midori', '翠', '#2D6E47'], ['sumire', '菫', '#6A4BB0'], ['kin', '金', '#A67C24'], ['sumi', '墨', '#44474F']]],
+    ['hfont', 'rondo_hfont', '見出しの文字', '画面の見出しとカードの題', [['', '衣に合わせる'], ['mincho', '明朝', null, 'Shippori Mincho B1,serif'], ['gothic', 'ゴシック', null, 'Zen Kaku Gothic New,sans-serif'], ['maru', 'まる', null, 'Zen Maru Gothic,sans-serif'], ['tegaki', '手書き風', null, 'Klee One,sans-serif']]],
+    ['radius', 'rondo_radius', '角の丸み', 'カード・ボタン・札の角', [['', '衣に合わせる'], ['square', '角ばる'], ['normal', 'ふつう'], ['round', 'まるい']]],
+  ];
+  var tuneState = {};
+  TUNES.forEach(function (t) {
+    var v = '';
+    try { v = localStorage.getItem(t[1]) || ''; } catch (e) { v = ''; }
+    tuneState[t[0]] = t[4].some(function (o) { return o[0] === v; }) ? v : '';
+  });
+  function applyTune(key, v, save) {
+    tuneState[key] = v;
+    if (v) document.documentElement.setAttribute('data-' + key, v); else document.documentElement.removeAttribute('data-' + key);
+    var def = TUNES.filter(function (t) { return t[0] === key; })[0];
+    if (save && def) {
+      try { if (v) localStorage.setItem(def[1], v); else localStorage.removeItem(def[1]); } catch (e) { /* 覚えられなくても切り替える */ }
+    }
+    document.querySelectorAll('#set-tune [data-tune="' + key + '"]').forEach(function (b) {
+      var on = b.dataset.v === v;
+      b.setAttribute('aria-checked', String(on)); b.tabIndex = on ? 0 : -1;
+    });
+  }
+  function renderTunes() {
+    var box = document.getElementById('set-tune'); if (!box) return;
+    box.innerHTML = TUNES.map(function (t) {
+      return '<div class="set-row"><div class="l"><b>' + t[2] + '</b><small>' + t[3] + '</small></div>' +
+        '<div class="c tune-row" role="radiogroup" aria-label="' + t[2] + '">' + t[4].map(function (o) {
+          var on = tuneState[t[0]] === o[0];
+          return '<button class="tune" type="button" role="radio" data-tune="' + t[0] + '" data-v="' + o[0] + '" aria-checked="' + on + '" tabindex="' + (on ? 0 : -1) + '"' +
+            (o[3] ? ' style="font-family:' + o[3] + '"' : '') + '>' + (o[2] ? '<i style="background:' + o[2] + '"></i>' : '') + o[1] + '</button>';
+        }).join('') + '</div></div>';
+    }).join('');
+  }
+  renderTunes();
+  TUNES.forEach(function (t) { applyTune(t[0], tuneState[t[0]], false); });
+  (function () {
+    var box = document.getElementById('set-tune'); if (!box) return;
+    box.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.tune'); if (b) applyTune(b.dataset.tune, b.dataset.v, true);
+    });
+    box.addEventListener('keydown', function (ev) {
+      var b = ev.target.closest('.tune'); if (!b) return;
+      var k = ev.key, d = (k === 'ArrowRight' || k === 'ArrowDown') ? 1 : (k === 'ArrowLeft' || k === 'ArrowUp') ? -1 : 0;
+      if (!d) return;
+      ev.preventDefault();
+      var all = Array.prototype.slice.call(box.querySelectorAll('[data-tune="' + b.dataset.tune + '"]'));
+      var i = all.indexOf(b);
+      var nb = all[(i + d + all.length) % all.length];
+      applyTune(nb.dataset.tune, nb.dataset.v, true);
+      nb.focus();
     });
   })();
   var CFG = window.RONDO_CFG || {};
@@ -3477,7 +3807,7 @@ function __route(url) {
     },
     actions: function (d) {
       var list = d.actions || [];
-      var head = '<div class="card-head"><h2>要アクション</h2><span class="sub">' + fmtN(list.length) + '件</span><button class="link" data-nav="audit">監査 →</button></div>';
+      var head = '<div class="card-head"><h2>要アクション</h2><span class="sub">' + fmtN(list.length) + '件</span><button class="link" data-nav="audit">稼働状況 →</button></div>';
       var rows = list.map(function (a) {
         return '<div class="trow act-row" data-nav="' + esc(a.nav) + '"><span class="adot ' + esc(a.level) + '"></span>' +
           '<span class="l">' + esc(a.text) + '</span><span class="cnt">→</span></div>';
@@ -3540,7 +3870,7 @@ function __route(url) {
       left = '<div class="stb ' + lv + '"><span class="adot ' + lv + '"></span><b>要アクション ' + fmtN(acts.length) + '件</b>' +
         '<span class="st-t">' + acts.map(function (a) {
           return '<span class="st-a" data-nav="' + esc(a.nav) + '">' + esc(a.text) + '</span>';
-        }).join(' · ') + '</span><button class="link" data-nav="audit">監査 →</button></div>';
+        }).join(' · ') + '</span><button class="link" data-nav="audit">稼働状況 →</button></div>';
     } else {
       left = '<div class="stb ok"><span class="act-ok">✓</span><b>要アクションなし</b></div>';
     }
@@ -3569,9 +3899,41 @@ function __route(url) {
 
   // ---- ダッシュボード ----
   var lastDash = null;
+  // 左メニュー・スマホのメニューの札(ダッシュボードの応答から)。予約=今日の予約の件数、Instagram=DMメニューの反映し直し、
+  // 稼働状況=稼働状況へ行く要アクション(赤・黄)があるとき。札は「いま人が手を打つもの」だけ(過去の累計は出さない)
+  function renderNavBadges(d) {
+    var nc = d.navCounts || {};
+    var bk = Number(nc.bookingsToday) || 0;
+    [['nav-bk-n', bk ? fmtN(bk) : ''], ['mtab-bk-n', bk > 99 ? '99+' : (bk ? fmtN(bk) : '')]].forEach(function (p) {
+      var b = el(p[0]); if (!b) return;
+      b.textContent = p[1]; b.hidden = !p[1];
+    });
+    var ig = !!nc.igMenuStale;
+    ['nav-ig-n', 'fchip-ig-n'].forEach(function (id) { var b = el(id); if (b) b.hidden = !ig; });
+    var worst = null;
+    (d.actions || []).forEach(function (a) {
+      if (a.nav !== 'audit') return;
+      if (a.level === 'bad') worst = 'bad';
+      else if (a.level === 'warn' && worst !== 'bad') worst = 'warn';
+    });
+    ['nav-aud-n', 'fchip-aud-n'].forEach(function (id) {
+      var b = el(id); if (!b) return;
+      b.hidden = !worst;
+      b.classList.toggle('bad', worst === 'bad');
+      b.classList.toggle('warn', worst === 'warn');
+    });
+    // スマホの「その他」: 下のタブに無い画面(Instagram・稼働状況)に要対応があれば点を打つ
+    var dot = el('mtab-more-dot');
+    if (dot) {
+      var lv = worst === 'bad' ? 'bad' : (worst || ig ? 'warn' : null);
+      dot.hidden = !lv;
+      dot.classList.toggle('warn', lv === 'warn');
+    }
+  }
   function renderHome(d) {
     lastDash = d;
     el('home-upd').textContent = fmtT(Date.now()) + ' 更新';
+    renderNavBadges(d);
 
     // 主の数字=ステップ配信(既定シナリオ)の読者。宛先リスト全体(購入者の取り込み込み)は補助の1行
     // (2026-10-05 本人裁定)。旧サーバーの応答には step_* が無いので全体へ戻す
@@ -6073,6 +6435,8 @@ function __route(url) {
   function loadIgMenu(live) {
     api('/api/admin/ig/menu' + (live ? '?live=1' : '')).then(function (d) {
       el('ig-menu-card').hidden = !d.hasMenu;
+      // 左メニューの「要反映」も、いまの反映の状態に合わせる(反映した直後に消える)
+      ['nav-ig-n', 'fchip-ig-n'].forEach(function (id) { var b = el(id); if (b) b.hidden = !d.hasMenu || !!d.upToDate; });
       if (!d.hasMenu) return;
       var c = d.configured || { questions: [], items: [] };
       var rows = [];
@@ -6636,6 +7000,10 @@ function __route(url) {
   var chnSort = 'date';
   var chnReadersLoaded = false; // 読者台帳の初回ロード済みフラグ(メールチャネル)
   var CH_NAME = { all: 'すべてのチャネル', mail: CFG.mailChannelName || 'メール', threads: 'Threads', ig: 'Instagram', line: 'LINE', youtube: 'YouTube', x: 'X', note: 'note', substack: 'Substack', meikyou: CFG.memberSiteName || '会員サイト', kyozai: CFG.offerLpName || '教材LP', discord: CFG.discordName || 'Discord', financie: CFG.financieName || 'トークン価格' };
+  // 自前の画面があるチャネル。ここの数字(メールの読者台帳・A/B・LINE の出入り・Instagram の投稿)は SNS ではなく
+  // それぞれの画面の続きとして開く(左メニューもその画面が点く・10-09 左メニューの整理)。値 = [見出し, 戻る先の画面]
+  var CH_OWN = { mail: ['メールの数字と読者', 'genko', 'メール'], line: ['LINE の流入と出入り', 'line', 'LINE'], ig: ['Instagram の投稿の数字', 'insta', 'Instagram'] };
+  var SNS_LABEL = (el('chn-h1') && el('chn-h1').textContent) || 'SNS';
   var SOCIAL_ST = { published: 'sent', dead: 'failed' };
   var LINE_LBL = { follow: '友だち追加', unfollow: 'ブロック', message: 'メッセージ受信' };
   function wowTxt(cur, prev) {
@@ -6858,7 +7226,7 @@ function __route(url) {
   }
   function chnList() {
     return Array.prototype.map.call(document.querySelectorAll('#chn-chips .fchip'), function (b) { return b.dataset.ch; })
-      .filter(function (c) { return c && c !== 'all'; });
+      .filter(function (c) { return c && c !== 'all' && !CH_OWN[c]; });
   }
   function sparkSvg(rows, color, label) {
     var pts = (rows || []).map(function (r) { return Number(r.n); }).filter(function (v) { return isFinite(v); });
@@ -7188,7 +7556,7 @@ function __route(url) {
           if (r.line && r.line.menu) acts.push('メニュー ' + esc(r.line.menu));
           return engLine(esc(r.product) + ' <span style="color:var(--note)">' + acts.join(' · ') + '</span>', fmtN(r.done) + '件');
         }).join('');
-        if (d.purchase_rules_dead) mb += '<div style="color:var(--bad);font-size:12px">打ち止め ' + fmtN(d.purchase_rules_dead) + '件 · 監査画面で確かめてください</div>';
+        if (d.purchase_rules_dead) mb += '<div style="color:var(--bad);font-size:12px">打ち止め ' + fmtN(d.purchase_rules_dead) + '件 · 稼働状況の画面で確かめてください</div>';
       }
       // 便C1: 計測リンク(本文の %link:キー%)。押した人数と、押したら動くこと。鍵が無いと記録も操作もしない
       var mls = d.mail_links || [];
@@ -7428,6 +7796,12 @@ function __route(url) {
     document.querySelectorAll('#chn-chips .fchip').forEach(function (c) {
       c.classList.toggle('on', c.dataset.ch === chCur);
     });
+    var own = CH_OWN[chCur];
+    el('chn-h1').textContent = own ? own[0] : SNS_LABEL;
+    el('chn-chips').hidden = !!own;
+    el('chn-back').hidden = !own;
+    if (own) { el('chn-back').textContent = '← ' + own[2]; el('chn-back').dataset.back = own[1]; }
+    placeSubbars(document.documentElement.dataset.view);
     syncNav();
     if (document.documentElement.dataset.view === 'channels') writeViewUrl('channels', 'replace');
     var all = chCur === 'all';
@@ -7726,6 +8100,7 @@ function __route(url) {
     loadChannel();
   });
   el('chn-reload').addEventListener('click', function () { loadChannel(true); });
+  el('chn-back').addEventListener('click', function () { show(el('chn-back').dataset.back || 'home'); });
   el('chn-tiles').addEventListener('click', function (e) {
     var t = e.target.closest('.chn-tile');
     if (!t) return;
@@ -8583,7 +8958,18 @@ function __route(url) {
     setViewState('tokuten');
     loadTokuten();
   });
+  // メールの帯の「記録」: 配信ログ(ステップメールの1通ごとの送達)と、メールの数字と読者台帳(チャネル画面のメール)
+  var MAIL_MORE_ROW = '<div class="subbar-row"><span class="subbar-l">記録</span><button class="fchip" data-nav="sends">配信ログ</button><button class="fchip" data-nav="channels" data-ch="mail">数字と読者</button></div>';
   el('step-subnav').addEventListener('click', function (e) {
+    var m = e.target.closest('[data-nav="sends"],[data-nav="channels"]');
+    if (m) {
+      if (m.dataset.nav === 'sends') { show('sends'); return; }
+      chCur = 'mail';
+      loaded.channels = true;
+      setViewState('channels');
+      loadChannel();
+      return;
+    }
     var b = e.target.closest('[data-scenario],[data-list],[data-offer]');
     if (!b) return;
     if (b.dataset.offer) {
@@ -8633,7 +9019,7 @@ function __route(url) {
       }).join('')) +
       row('特典配布', tk.length ? '<select id="tk-sel" aria-label="特典配布のリスト"><option value="">特典配布 ' + tk.length + '本</option>' +
         tk.map(function (r) { return '<option value="' + esc(r.key) + '">' + esc(r.label) + '</option>'; }).join('') +
-        '</select>' : '');
+        '</select>' : '') + MAIL_MORE_ROW;
     syncNav();
   }).catch(function () {});
 
@@ -8841,7 +9227,7 @@ function __route(url) {
   var PROJECT_MOBILE_BASE = '<button class="fchip" data-nav="project">ダッシュボード</button>' +
     '<button class="fchip" data-nav="pimprove">コンテンツ改善</button>' +
     '<button class="fchip" data-nav="pheat">LP分析</button>' +
-    '<button class="fchip" data-nav="paudit">監査</button>';
+    '<button class="fchip" data-nav="paudit">稼働状況</button>';
   function renderProjectNav(channels) {
     var nav = el('side-pch-nav');
     var mob = el('mobile-nav-project');
@@ -9181,6 +9567,14 @@ function __route(url) {
       setRow('Instagram', '<span class="v ' + ia[1] + '">' + ia[0] + '</span>', setSw('set-sw-igai', !(igAi && igAi.paused) && ia[2], !ia[2], 'InstagramのAIの返事')) +
       setHow('AIを初めて使うときは、設定ファイル(LINEは line.config.mjs、Instagramは ig.config.mjs)でAIの返事を有効にし、AIのキーを登録します。ここのスイッチは、その後の一時停止と再開に使います。',
         'RondoのLINEのAIの返事を有効にしたい。OPTIONS.md の手順どおりに、line.config.mjs とAIのキーの登録を一緒に進めて');
+    // 案内役の栞
+    var sh = d.shiori || {}, shOn = d.effective.shiori_guide === '1';
+    el('set-shiori').innerHTML =
+      setRow('栞の一言', '一言は、あなたのAIのキー(' + (sh.provider === 'openai' ? 'OpenAI' : sh.provider === 'anthropic' ? 'Claude' : 'Claude または OpenAI') + ')で作ります。そのぶんAIの利用料がかかります。自動で作るのは3時間に1回まで、「もう一言」と合わせて1日12回まで。AIに渡すのはホームの数の要約だけで、読者の名前やメールアドレスは渡しません',
+        (sh.ready ? '' : '<span class="v bad">AIのキーがまだありません</span>') +
+        setSw('set-sw-shiori', shOn && !!sh.ready, !sh.ready, '案内役の栞') + setSrc(d, 'shiori_guide') + setReset(d, 'shiori_guide')) +
+      (sh.ready ? '' : setHow('AIの返事と同じキー(ANTHROPIC_API_KEY か OPENAI_API_KEY)を、秘密の値として登録します。', 'Rondoの案内役の栞を使いたい。OPTIONS.md の手順で、AIのキー(ANTHROPIC_API_KEY)を wrangler secret に入れて'));
+    syncShioriSetting(shOn && !!sh.ready);
     // 通知
     var n = d.notify || {};
     el('set-notify').innerHTML =
@@ -9197,14 +9591,15 @@ function __route(url) {
     // 配信の安全装置
     var sf = d.safety || {}, dm = sf.dormancy || {}, kill = sf.kill || {}, wu = sf.warmup || {};
     el('set-safety').innerHTML =
-      setRow('緊急停止', kill.on ? 'すべての配信を止めています' + (kill.reason ? '(' + esc(kill.reason) + ')' : '') : 'いまは配信しています。押すと、メールとLINEの配信をすべて今すぐ止めます',
-        '<span class="v ' + (kill.on ? 'bad' : 'ok') + '">' + (kill.on ? '停止中' : '配信中') + '</span><button class="btn ' + (kill.on ? 'ghost' : 'danger') + ' sm" type="button" id="set-kill">' + (kill.on ? '配信を再開' : 'すべて止める') + '</button>') +
+      // 緊急停止の操作は稼働状況の画面だけに置く(押す場所を1つにする・10-09 左メニューの整理)。ここは状態と行き先だけ
+      setRow('緊急停止', kill.on ? 'すべての配信を止めています' + (kill.reason ? '(' + esc(kill.reason) + ')' : '') : 'いまは配信しています。止めるときは稼働状況の画面の「配信を停止」から',
+        '<span class="v ' + (kill.on ? 'bad' : 'ok') + '">' + (kill.on ? '停止中' : '配信中') + '</span><button class="btn ghost sm" type="button" data-set-nav="audit">稼働状況を開く</button>') +
       setRow('読者1人あたりの1日の上限', '超えた分は翌日に回します', '<span class="v num">' + fmtN(sf.contactDailyMax) + ' 通</span>') +
       setRow('一斉配信の対象の上限', '超えると、送る前に中止します', '<span class="v num">' + fmtN(sf.castMaxTargets) + ' 人</span>') +
       setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「Rondo が最初に届けてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
-        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください'
+        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。稼働状況の「開封・クリック計測」を確かめてください'
           : dm.hold === 'no_reactions' ? '直近14日に100通以上届いて、開封が1件も記録されていません。計測の設定を確かめてください'
-            : 'いまの送信ドメインの計測を Resend で確かめられていません(送信専用の鍵・Resend の障害・送信ドメインを変えた直後など)。監査で計測が確かめられると再開します。送信専用の鍵では動きません') + '</span>' : ''),
+            : 'いまの送信ドメインの計測を Resend で確かめられていません(送信専用の鍵・Resend の障害・送信ドメインを変えた直後など)。稼働状況で計測が確かめられると再開します。送信専用の鍵では動きません') + '</span>' : ''),
         setSw('set-sw-dorm', dm.enabled !== false, false, '休眠の整理') +
         '<input class="set-in n" id="set-in-dormdays" type="number" min="30" max="730" step="1" aria-label="休眠とみなす日数" value="' + esc(dm.days) + '"><span class="sw-l">日</span>' +
         '<input class="set-in n" id="set-in-dormsends" type="number" min="1" max="200" step="1" aria-label="その間に届いた通数" value="' + esc(dm.minSends) + '"><span class="sw-l">通以上</span>' +
@@ -9308,6 +9703,8 @@ function __route(url) {
   }
   el('view-settings-root').addEventListener('click', function (ev) {
     var t = ev.target.closest('button'); if (!t || t.disabled) return;
+    if (t.dataset.setNav) { show(t.dataset.setNav); return; }
+    if (t.dataset.setCh && CH_OWN[t.dataset.setCh]) { show(CH_OWN[t.dataset.setCh][1]); return; }
     if (t.dataset.setCh) {
       var led = document.querySelector('#side-channels [data-ch="' + t.dataset.setCh + '"]');
       if (led) led.click();
@@ -9324,11 +9721,12 @@ function __route(url) {
       saveSetting(p, null);
       return;
     }
-    var sw = { 'set-sw-lineai': ['line_ai_paused', true], 'set-sw-igai': ['ig_ai_paused', true], 'set-sw-linenotify': ['line_chat_notify', false], 'set-sw-ignotify': ['ig_chat_notify', false] }[t.id];
+    var sw = { 'set-sw-lineai': ['line_ai_paused', true], 'set-sw-igai': ['ig_ai_paused', true], 'set-sw-linenotify': ['line_chat_notify', false], 'set-sw-ignotify': ['ig_chat_notify', false], 'set-sw-shiori': ['shiori_guide', false] }[t.id];
     if (sw) {
       var on = t.getAttribute('aria-checked') !== 'true';
       var q = {}; q[sw[0]] = sw[1] ? !on : on; // 「止める」の値は、スイッチのオンと逆
       t.disabled = true;
+      if (t.id === 'set-sw-shiori' && !on) syncShioriSetting(false); // オフは保存を待たずに隠す
       saveSetting(q, null).then(function () { t.disabled = false; });
       return;
     }
@@ -9355,14 +9753,6 @@ function __route(url) {
         if (!r.ok) { setMsg('set-msg-dorm', '保存できませんでした。日数は30〜730、通数は1〜200です', 'bad'); return; }
         setPending = ['set-msg-dorm', '保存しました', 'ok']; loadSettings();
       }).catch(function () { setMsg('set-msg-dorm', '保存できませんでした。通信を確かめて、もう一度お試しください', 'bad'); });
-    }
-    if (t.id === 'set-kill') {
-      var killing = t.textContent === 'すべて止める';
-      if (!armTwice(t, killing ? 'もう一度押すと全配信を今すぐ止める' : 'もう一度押すと配信を再開(原因は解消済み?)')) return;
-      t.disabled = true;
-      api('/api/admin/send-kill', { method: 'POST', body: JSON.stringify({ on: killing, reason: killing ? '設定画面から手動停止' : null }) })
-        .then(function () { loaded.audit = false; loadSettings(); })
-        .catch(function () { t.disabled = false; });
     }
   });
 
@@ -9420,9 +9810,11 @@ function __route(url) {
   function syncNav() {
     var view = document.documentElement.dataset.view;
     document.querySelectorAll('[data-nav]').forEach(function (n) {
-      // data-group = 束ねた入口(サイドバーの「メール」はシナリオ・購入者・特典の3ビューで点く)
-      var on = n.dataset.group ? n.dataset.group.split(' ').indexOf(view) >= 0 :
-        n.dataset.nav === view && (!n.dataset.ch || n.dataset.ch === chCur) &&
+      // data-group = 束ねた入口(サイドバーの「メール」はシナリオ・購入者・特典・配信ログと、メールの数字で点く)。
+      // 「channels:mail」= チャネル画面でそのチャネルを開いているとき。自前の画面があるチャネル(CH_OWN)を開いているあいだは SNS を点けない
+      var ownCh = view === 'channels' && CH_OWN[chCur];
+      var on = n.dataset.group ? n.dataset.group.split(' ').some(function (g) { return g === view ? !ownCh : g === view + ':' + chCur; }) :
+        n.dataset.nav === view && (!n.dataset.ch || n.dataset.ch === chCur) && (!ownCh || !!n.dataset.ch) &&
         (!n.dataset.pch || n.dataset.pch === pchCur) &&
         (!n.dataset.scenario || n.dataset.scenario === gScenario) &&
         (!n.dataset.list || n.dataset.list === mlCur) &&
@@ -9444,11 +9836,11 @@ function __route(url) {
     if (hsel && hsel.selectedIndex < 0) hsel.value = '';
   }
   // 画面内の切り替え帯を、表示中ビューの見出し(topbar)の直下へ移す。該当しないビューでは隠す
-  var SUBBARS = [['step-subnav', ['genko', 'mlist', 'tokuten']], ['heat-subnav', ['heat']]];
+  var SUBBARS = [['step-subnav', ['genko', 'mlist', 'tokuten', 'sends', 'channels:mail']], ['heat-subnav', ['heat']]];
   function placeSubbars(view) {
     SUBBARS.forEach(function (b) {
       var bar = el(b[0]);
-      var on = b[1].indexOf(view) >= 0;
+      var on = b[1].indexOf(view) >= 0 || (view === 'channels' && b[1].indexOf('channels:' + chCur) >= 0);
       bar.hidden = !on;
       if (!on) return;
       var tb = document.querySelector('.view.v-' + view + ' > .topbar');
@@ -9457,7 +9849,7 @@ function __route(url) {
   }
   // チャネルの接続状態(台帳 #side-channels の ✓)を、サイドバーのバッジとチャネル画面のチップへ写す
   function syncChBadge() {
-    var marks = Array.prototype.slice.call(document.querySelectorAll('#side-channels [data-ch]'));
+    var marks = Array.prototype.slice.call(document.querySelectorAll('#side-channels [data-ch]')).filter(function (b) { return !CH_OWN[b.dataset.ch]; });
     var ok = 0;
     marks.forEach(function (b) {
       var st = b.querySelector('span');
@@ -9513,7 +9905,15 @@ function __route(url) {
     n.addEventListener('click', function () {
       // シナリオ項目は#step-subnavの、LP項目は#heat-subnavの委譲ハンドラが受け持つ(二重発火防止)
       if (n.dataset.scenario || n.dataset.offer) return;
-      if (n.closest('#heat-subnav')) return;
+      if (n.closest('#heat-subnav') || n.closest('#step-subnav')) return;
+      // 左メニューの「SNS」: メール・LINE・Instagram の数字を見ていたら、SNS の一覧へ戻す
+      if (n.dataset.nav === 'channels' && !n.dataset.ch && CH_OWN[chCur]) {
+        chCur = 'all';
+        loaded.channels = true;
+        setViewState('channels');
+        loadChannel();
+        return;
+      }
       // サイドバーのチャネル項目は選択チャネルを切り替えて必ず再読込
       if (n.dataset.ch) {
         chCur = n.dataset.ch;
@@ -9586,6 +9986,168 @@ function __route(url) {
     }, 150);
   });
 
+  // ---- 案内役の栞(右下) ----
+  // 一言はサーバーが覚えていて、古いときだけ作り直す(所有者のAIの利用料がかかるので、開くたびには作らない)。
+  // 新しい一言が来たら吹き出しを開くが、フォーカスは奪わない。見たことのある一言は顔だけ出す
+  var shioriCur = null, shioriBusy = false, shioriWaitTimer = null;
+  function shioriSeen() { try { return localStorage.getItem('rondo_shiori_seen') || ''; } catch (e) { return ''; } }
+  function shioriMarkSeen(at) { try { localStorage.setItem('rondo_shiori_seen', String(at)); } catch (e) { /* 覚えられなくても動く */ } el('shiori-new').hidden = true; }
+  function shioriOpen(open) {
+    el('shiori-bubble').hidden = !open;
+    el('shiori-face').setAttribute('aria-expanded', String(open));
+    el('shiori-face').setAttribute('aria-label', open ? '栞の一言を閉じる' : '栞の一言を開く');
+    if (open && shioriCur && shioriCur.at) shioriMarkSeen(shioriCur.at);
+  }
+  function shioriAgainLabel(waitMs) {
+    var b = el('shiori-again');
+    clearTimeout(shioriWaitTimer);
+    if (waitMs > 0) {
+      b.disabled = true;
+      b.textContent = 'もう一言(あと' + Math.max(1, Math.ceil(waitMs / 60000)) + '分)';
+      shioriWaitTimer = setTimeout(function () { shioriAgainLabel(waitMs - 60000); }, Math.min(60000, waitMs));
+    } else { b.disabled = false; b.textContent = 'もう一言'; }
+  }
+  function renderShiori(d, opened) {
+    var box = el('shiori');
+    if (!d || !d.enabled || !d.ready) { box.hidden = true; document.documentElement.removeAttribute('data-shiori'); shioriOpen(false); return; }
+    box.hidden = false;
+    document.documentElement.setAttribute('data-shiori', '');
+    var line = el('shiori-line');
+    shioriCur = d.shiori || null;
+    if (shioriCur && shioriCur.line) {
+      line.textContent = shioriCur.line; line.className = 'shiori-line';
+      el('shiori-at').textContent = shioriCur.at ? fmtDT(shioriCur.at) : '';
+      el('shiori-go').hidden = !shioriCur.nav || shioriCur.nav === 'none';
+      el('shiori-go').dataset.nav = shioriCur.nav || '';
+    } else {
+      line.textContent = ((d.ok === false && d.error !== 'late') || d.failed) ? '……すみません、いまは頁がめくれません。AIのキーと、利用の残りを確かめてみてください'
+        : d.limited ? '……今日は、ここまでにしておきますね' : '……いま、頁を読んでいます';
+      line.className = 'shiori-line dim';
+      el('shiori-at').textContent = '';
+      el('shiori-go').hidden = true;
+    }
+    var aiFailed = (d.ok === false && d.error !== 'late') || d.failed; // late=送る前に枠を返した(AI には送っていない)
+    if (aiFailed && shioriCur && shioriCur.line) el('shiori-at').textContent = '新しい一言は作れませんでした';
+    if (d.limited) el('shiori-at').textContent = '今日の一言はここまでです';
+    shioriAgainLabel(d.limited ? 0 : (d.wait || 0));
+    el('shiori-again').dataset.limited = d.limited ? '1' : '';
+    el('shiori-again').disabled = !!d.limited || (d.wait || 0) > 0 || shioriBusy;
+    var fresh = !!(shioriCur && shioriCur.at && String(shioriCur.at) !== shioriSeen());
+    el('shiori-new').hidden = !fresh;
+    if (opened || (fresh && el('shiori-bubble').hidden && d.made !== false)) shioriOpen(true);
+    else if (fresh && el('shiori-bubble').hidden) el('shiori-new').hidden = false;
+  }
+  // 読み込みの世代。設定でオフにした・読み直した後に届いた古い応答は捨てる(Astra 栞 r1-8)
+  var shioriGen = 0;
+  function shioriFetch(post, again) {
+    var req = post
+      ? fetch('/api/admin/shiori', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(again ? { again: true } : {}) })
+      : fetch('/api/admin/shiori');
+    return req.then(function (r) {
+      if (r.status === 401) { showLogin(loginMessage()); throw new Error('unauthorized'); }
+      return r.json();
+    });
+  }
+  // GET は覚えている一言だけ(AI は呼ばない)。古ければ(due)続けて POST で作る。「もう一言」は POST {again}。
+  // 自動の読み込みは1本にまとめる(重なると先の成功を後の応答が消す・Astra 栞 r2-4/5)。shioriGen を進めるのは設定でオフにしたときだけ
+  var shioriAuto = null, shioriAutoOpen = false, shioriRetried = false, shioriLateRetried = false, shioriRecheck = false;
+  function shioriEnd(my) {
+    if (my !== shioriGen) return;
+    shioriBusy = false;
+    el('shiori-face').removeAttribute('aria-busy');
+    if (el('shiori-again').textContent === 'もう一言' && !el('shiori-again').dataset.limited) el('shiori-again').disabled = false;
+  }
+  function shioriStart() {
+    shioriBusy = true;
+    el('shiori-face').setAttribute('aria-busy', 'true');
+    el('shiori-again').disabled = true;
+  }
+  function loadShiori(again, opened) {
+    var my = shioriGen;
+    if (!again) {
+      if (opened) shioriAutoOpen = true;
+      if (shioriAuto) return shioriAuto;
+      shioriStart();
+      var p = shioriFetch(false).then(function (d) {
+        if (my !== shioriGen) return null;
+        if (d && d.enabled && d.ready && d.due) {
+          if (d.shiori) renderShiori(d, false); // 前の一言を先に出しておき、新しい一言が来たら差し替える
+          return shioriFetch(true, false);
+        }
+        return d;
+      }).then(function (d) {
+        if (!d || my !== shioriGen) return;
+        shioriRetried = false;
+        if (d.error !== 'late') shioriLateRetried = false;
+        renderShiori(d, shioriAutoOpen);
+        // ほかの画面が作っている最中・送り始めに間に合わず枠を返した(late)なら、少し待って一度だけ読み直す(Astra 栞 r4-3)
+        if (d.busy || (d.error === 'late' && !shioriLateRetried)) {
+          if (d.error === 'late') shioriLateRetried = true;
+          setTimeout(function () { if (my === shioriGen) loadShiori(false, false); }, d.busy ? 6000 : 3000);
+        }
+      }).catch(function (e) {
+        if (e && e.message === 'unauthorized') return;
+        // 通信の失敗は20秒後に一度だけ読み直す
+        if (!shioriRetried && my === shioriGen) { shioriRetried = true; setTimeout(function () { if (my === shioriGen) loadShiori(false, false); }, 20000); }
+      });
+      var q = p.then(function () {
+        if (shioriAuto === q) { shioriAuto = null; shioriAutoOpen = false; } // 設定でオフ→オンの後の新しい読み込みは消さない
+        shioriEnd(my);
+        if (shioriRecheck && my === shioriGen) {
+          shioriRecheck = false;
+          if (shioriSettingOn && el('shiori').hidden) setTimeout(function () { if (my === shioriGen) loadShiori(false, true); }, 3000);
+        }
+      });
+      shioriAuto = q;
+      return q;
+    }
+    shioriStart();
+    el('shiori-line').textContent = '……'; el('shiori-line').className = 'shiori-line dim';
+    return shioriFetch(true, true).then(function (d) {
+      if (!d || my !== shioriGen) return;
+      renderShiori(d, true);
+      // 送る前に枠を返した(late)なら、3秒後に一度だけ「もう一言」をやり直す(Astra 栞 r5-2)
+      if (d.error === 'late' && !shioriLateRetried) {
+        shioriLateRetried = true;
+        setTimeout(function () { if (my === shioriGen) loadShiori(true); }, 3000);
+      } else if (d.error !== 'late') shioriLateRetried = false;
+    }).catch(function (e) {
+      if (e && e.message === 'unauthorized') return;
+      if (my === shioriGen) renderShiori({ ok: false, enabled: true, ready: true, shiori: shioriCur }, true);
+    }).then(function () { shioriEnd(my); });
+  }
+  // 設定で切り替えた・設定ファイルの値に戻したとき: 値が変わったら、それまでの読み込み(共有中のものも)・再試行の印を捨てる。
+  // オフなら今すぐ隠し、オンなら新しく読む(Astra 栞 r1-8/r3-4/r3-5)。値が同じなら何もしない
+  var shioriSettingOn = null;
+  function syncShioriSetting(on) {
+    if (on === shioriSettingOn) {
+      // 値は同じでも、オンなのに出ていない(ほかの処理の古い設定で隠れた等)なら読み直す(Astra 栞 r4-2)
+      if (on && el('shiori').hidden) {
+        if (shioriAuto) shioriRecheck = true; // 読み込み中なら、終わったときにもう一度確かめる(Astra 栞 r5-1)
+        else loadShiori(false, true);
+      }
+      return;
+    }
+    shioriSettingOn = on;
+    shioriGen++;
+    shioriAuto = null; shioriAutoOpen = false; shioriRetried = false; shioriLateRetried = false; shioriRecheck = false;
+    shioriBusy = false;
+    el('shiori-face').removeAttribute('aria-busy');
+    if (!on) { renderShiori(null); return; }
+    loadShiori(false, el('shiori').hidden);
+  }
+
+  el('shiori-face').addEventListener('click', function () { shioriOpen(el('shiori-bubble').hidden); });
+  el('shiori-close').addEventListener('click', function () { shioriOpen(false); el('shiori-face').focus(); });
+  el('shiori-again').addEventListener('click', function () { loadShiori(true); });
+  el('shiori-go').addEventListener('click', function () {
+    var v = el('shiori-go').dataset.nav;
+    if (v) { shioriOpen(false); show(v); }
+  });
+  el('shiori').addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && !el('shiori-bubble').hidden) { shioriOpen(false); el('shiori-face').focus(); }
+  });
+
   // ---- 起動 ----
   var initialView = restoreUrlState();
   // 枠(メニュー・見出し・骨組み)を先に出し、開いた画面の読み込みとダッシュボードの読み込みを同時に始める。
@@ -9598,6 +10160,8 @@ function __route(url) {
   if (initialView !== 'inbox') loadLineChats();
   api('/api/admin/dashboard').then(function (d) {
     renderHome(d);
+    // 栞はホームの数を読み終えてから(古いときはサーバーが同じ集計をもう一度読むので、重ねて走らせない)
+    loadShiori(false);
   }).catch(function (e) {
     // 401はapi()がログイン画面へ。それ以外（ネットワーク断など）はエラーバー
     if (e && e.message === 'unauthorized') return;
