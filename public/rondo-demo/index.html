@@ -1024,7 +1024,8 @@ const heatDemo = (url) => {
   };
   return { ok: true, pages, page, pageLabel: pages.find((p) => p.page === page).label, days: 30, report: { all, sp: { views: Math.round(views * 0.72) }, pc: { views: Math.round(views * 0.28) } },
     // 診断は本物の buildHeatFindings(src/heat.mjs をそのまま写したもの)に見本の数字を通した結果(Astra LP r12)
-    findings: __heatFindings(all), viewerUrl: null, tag, usage: { used: Math.round(41200 * f), max: 200000 } };
+    // 閲覧リンクはデモの見本のLP(make_demo_lp.mjs が作る /rondo-demo/<ページ>/)へ。ヒートマップは本物の描画で見本の数字を重ねる
+    findings: __heatFindings(all), viewerUrl: `/rondo-demo/${page}/#rondoheat=demo`, tag, usage: { used: Math.round(41200 * f), max: 200000 } };
 };
 
 // --- 以下は rondo/src/heat.mjs の写し(生成のたびに写す) ---
