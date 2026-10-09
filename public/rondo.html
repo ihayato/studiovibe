@@ -123,7 +123,7 @@ header.top nav a:hover{color:var(--ink)}
 @media (max-width:920px){.hero{padding:28px 0 64px}.hero .grid{grid-template-columns:1fr;gap:40px}}
 
 /* 配信ツールの主な機能を、ひとつに（インスタのDM自動返信を主役に） */
-.vs{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:44px;align-items:stretch}
+.vs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:44px;align-items:stretch}
 .vs article{padding:26px 24px 24px}
 .vs-kick{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0 0 10px;font-size:14px;font-weight:700;color:var(--ink)}
 .vs-kick i{width:9px;height:9px;border-radius:50%}
@@ -132,14 +132,22 @@ header.top nav a:hover{color:var(--ink)}
 .vs ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
 .vs li{position:relative;padding-left:18px;font-size:14.5px;line-height:1.65}
 .vs li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--ink3)}
-.vs-ig{box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--ch-ig) 30%,transparent)}
-.vs-ig h3{font-size:24px}
-.vs-ig li::before{background:var(--ch-ig)}
 .vs-plus{margin:28px 0 0;text-align:center;font-size:16px;color:var(--ink2)}
 .vs-plus b{color:var(--ink);font-weight:700}
 .vs-note{margin-top:10px;font-size:12px}
 @media (max-width:920px){.vs{grid-template-columns:minmax(0,1fr);max-width:560px;margin-left:auto;margin-right:auto}}
 @media (max-width:520px){.vs article{padding:22px 18px 20px}.vs-plus{font-size:15px}}
+
+/* 受信箱 */
+.inbox{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:56px;align-items:center}
+.inbox h2{margin-bottom:0}
+.bul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:8px}
+.bul li{position:relative;padding-left:18px;font-size:15.5px}
+.bul li::before{content:"";position:absolute;left:2px;top:.75em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.inbox-note{margin-top:18px}
+.inbox .shot .real{aspect-ratio:1500/1324}
+@media (max-width:920px){.inbox{grid-template-columns:minmax(0,1fr);gap:32px}}
+@media (max-width:520px){.inbox .shot .real{aspect-ratio:auto;max-height:620px}}
 
 /* 実際の画面 */
 #screens{background:var(--surface2)}
@@ -213,7 +221,17 @@ header.top nav a:hover{color:var(--ink)}
 @media (max-width:920px){.buy{grid-template-columns:1fr}.price{padding:30px 18px 24px}.price .big{font-size:56px}}
 
 /* 声（X風の静的カード。押すと元の投稿へ） */
-.voices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:36px;align-items:stretch}
+.vcar{margin-top:36px}
+.voices{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 32px) / 3);gap:16px;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 4px;padding:6px 4px 18px;margin:0 -4px;scrollbar-width:none}
+.voices::-webkit-scrollbar{display:none}
+.voices:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:14px}
+.voices .xcard{scroll-snap-align:start}
+.vnav{display:flex;justify-content:center;gap:12px;margin-top:6px}
+.vbtn{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:var(--surface);box-shadow:var(--shadow-lo);cursor:pointer;color:var(--ink)}
+.vbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.vbtn:hover{box-shadow:var(--shadow)}
+.vbtn:disabled{opacity:.35;cursor:default;box-shadow:none}
+.vbtn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .xcard{display:flex;flex-direction:column;gap:12px;padding:18px 18px 14px;background:var(--surface);border-radius:14px;box-shadow:var(--shadow-lo);color:var(--ink);text-decoration:none;transition:box-shadow 160ms ease-out,transform 160ms ease-out}
 .xcard:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .xcard:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -227,7 +245,8 @@ header.top nav a:hover{color:var(--ink)}
 .x-body p:last-child{margin-bottom:0}
 .x-foot{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:10px;box-shadow:0 -1px 0 var(--line);font-size:12.5px;color:var(--ink2)}
 .x-go{margin-left:auto;color:var(--accent-hi)}
-@media (max-width:920px){.voices{grid-template-columns:minmax(0,1fr);max-width:560px;margin-left:auto;margin-right:auto}}
+@media (max-width:920px){.voices{grid-auto-columns:calc((100% - 16px) / 2)}}
+@media (max-width:620px){.voices{grid-auto-columns:86%}}
 @media (prefers-reduced-motion:reduce){.xcard,.xcard:hover{transition:none;transform:none}}
 
 /* FAQ */
@@ -358,16 +377,6 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
       <h2>LINE、メール、インスタ。<br>別々だった配信ツールを、ひとつに<span class="hang">。</span></h2>
     </div>
     <div class="vs">
-      <article class="face vs-ig">
-        <p class="vs-kick"><i style="background:var(--ch-ig)"></i>Instagram</p>
-        <h3>インスタのDMに、自動で返信。</h3>
-        <ul>
-          <li>DM・コメント・ストーリーへの返信に、自動でDMを返す</li>
-          <li>質問ボタンと常設メニューで、DMの中を案内</li>
-          <li>DMからLINEの友だち追加へつなぐ</li>
-          <li>ストーリーのキャンペーンごとに成果を集計</li>
-        </ul>
-      </article>
       <article class="face-lo">
         <p class="vs-kick"><i style="background:var(--ch-line)"></i>LINE</p>
         <h3>LINEのステップ配信。</h3>
@@ -389,13 +398,46 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
           <li>購入で講座を始める・止める</li>
         </ul>
       </article>
+      <article class="face-lo">
+        <p class="vs-kick"><i style="background:var(--ch-ig)"></i>Instagram</p>
+        <h3>インスタのDMに、自動で返信。</h3>
+        <ul>
+          <li>DM・コメント・ストーリーへの返信に、自動でDMを返す</li>
+          <li>質問ボタンと常設メニューで、DMの中を案内</li>
+          <li>DMからLINEの友だち追加へつなぐ</li>
+          <li>ストーリーのキャンペーンごとに成果を集計</li>
+        </ul>
+      </article>
     </div>
-    <p class="vs-plus">さらに、<b>1つの受信箱</b>・<b>予約ページ</b>・<b>売上とLP分析</b>も同じ画面に。</p>
+    <p class="vs-plus">さらに、<b>予約ページ</b>と<b>売上・LP分析</b>も同じ画面に。</p>
     <p class="fine center vs-note">コメントへの自動返信には、Metaの追加の許可が要ります。</p>
   </div>
 </section>
 
-<!-- 3. 実際の画面 -->
+<!-- 3. 受信箱 -->
+<section id="inbox" data-sec="inbox">
+  <div class="wrap inbox">
+    <div>
+      <p class="kick">受信箱</p>
+      <h2>DMも、コメントも、<br>メールの返信も。<br>1つの受信箱で返す<span class="hang">。</span></h2>
+      <p class="lede">LINE・Instagram・YouTube・メール。返事が要るものが1つの一覧に並び、その場で返せます。</p>
+      <ul class="bul">
+        <li>要対応・未読・AIの確認待ちで絞り込み</li>
+        <li>名前と本文で検索、自分のラベルで整理</li>
+        <li>メールは、どの配信への返信かが分かる</li>
+        <li>DMの返事をAIに任せることも（任意）</li>
+      </ul>
+      <p class="fine inbox-note">Instagramは相手の最後のメッセージから24時間まで、YouTubeは投稿から30日以内のコメントが対象です。</p>
+    </div>
+    <figure class="face shot">
+      <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
+      <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱の実物。LINE・Instagram・YouTube・メールの会話が、要対応やAIの確認待ちの札、ラベルつきで1つの一覧に並んでいる"></picture></a>
+      <figcaption>受信箱の実物（名前と本文は見本）</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 4. 実際の画面 -->
 <section id="screens" data-sec="screens">
   <div class="wrap">
     <h2 class="center">実際の画面<span class="hang">。</span></h2>
@@ -403,7 +445,6 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
     <div class="scr">
       <div class="tabs" role="tablist" aria-label="管理画面">
         <button type="button" class="tab" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="true" data-rondo-label="画面 ダッシュボード">ダッシュボード</button>
-        <button type="button" class="tab" role="tab" id="tab-inbox" aria-controls="pane-inbox" aria-selected="false" tabindex="-1" data-rondo-label="画面 受信箱">受信箱</button>
         <button type="button" class="tab" role="tab" id="tab-mail" aria-controls="pane-mail" aria-selected="false" tabindex="-1" data-rondo-label="画面 メール">メール</button>
         <button type="button" class="tab" role="tab" id="tab-line" aria-controls="pane-line" aria-selected="false" tabindex="-1" data-rondo-label="画面 LINE">LINE</button>
         <button type="button" class="tab" role="tab" id="tab-book" aria-controls="pane-book" aria-selected="false" tabindex="-1" data-rondo-label="画面 予約">予約ページ</button>
@@ -412,11 +453,6 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
           <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの数字と、日別の配信数"></picture></a></figure>
         <p class="cap">開いて最初に見る画面。売上・読者・友だちと、止まっている配信。</p>
-      </div>
-      <div role="tabpanel" id="pane-inbox" aria-labelledby="tab-inbox" hidden>
-        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="画面 受信箱 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱。LINE・Instagram・YouTube・メールの会話が1つの一覧に並んでいる"></picture></a></figure>
-        <p class="cap">LINE・InstagramのDM・YouTubeのコメント・メールの返信を、1つの一覧で返す。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
         <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
@@ -527,12 +563,13 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   </div>
 </section>
 
-<!-- 4. 声 -->
+<!-- 5. 声 -->
 <section id="voices" data-sec="voices">
   <div class="wrap">
     <h2 class="center">β版を使った人の声</h2>
     <p class="fine center" style="margin-top:10px">β版の購入者ご本人の投稿から、販売者が選んで掲載しています（依頼・謝礼なし・個人の感想）。</p>
-    <div class="voices">
+    <div class="vcar">
+      <div class="voices" id="vtrack" tabindex="0" role="region" aria-label="β版を使った人の声（横に送れます）">
       <a class="xcard" href="https://x.com/urasan2785/status/2106303786293846426" target="_blank" rel="noopener" data-rondo-label="声 urasan2785">
         <div class="x-head"><img src="/rondo-assets/voices/urasan2785.webp" alt="" width="48" height="48" loading="lazy"><span class="x-who"><b>うらさん</b><span>@urasan2785</span></span><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
         <div class="x-body"><p>UTAGEの代替アプリ完成した。過去3周くらい挑戦して納得いかずに挫折したけど、イケハヤさんのRondoのおかげで一気に進んだ。月額2万→月額1500円くらいで運用できるのはデカい😅</p></div>
@@ -548,11 +585,26 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <div class="x-body"><p>【Claude Code５日目】<br>どうしても気になってしまい『マーケティングOS』といわれるものを導入してみました。</p><p>1️⃣人を集めるための入り口<br>2️⃣誰がいつどこから登録したかの名簿<br>3️⃣集めた人へのメッセージ配信<br>4️⃣どんな動きをしたかの計測</p><p>👆これを1か所で管理できるみたい。…</p></div>
         <div class="x-foot"><time datetime="2026-09-03">2026年9月3日</time><span class="x-go">続きをXで読む →</span></div>
       </a>
+      <a class="xcard" href="https://x.com/hsrk_g_hsrk/status/2088765079605178801" target="_blank" rel="noopener" data-rondo-label="声 hsrk_g_hsrk">
+        <div class="x-head"><img src="/rondo-assets/voices/hsrk_g_hsrk.webp" alt="" width="48" height="48" loading="lazy"><span class="x-who"><b>ヒロ(HG)｜実務で使えるAI活用</b><span>@hsrk_g_hsrk</span></span><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+        <div class="x-body"><p>イケハヤさん（@IHayato）が開発した『Rondo』、<br>テスター5日目。</p><p>今日は、「5日間使って分かったこと」です。</p><p>まず、初日に設定したメール講座が今朝の5通目で完走✅毎朝7時の定時配信、ここまで8送信・エラー0。…</p></div>
+        <div class="x-foot"><time datetime="2026-08-15">2026年8月15日</time><span class="x-go">続きをXで読む →</span></div>
+      </a>
+      <a class="xcard" href="https://x.com/siroradio51/status/2088986470547931317" target="_blank" rel="noopener" data-rondo-label="声 siroradio51">
+        <div class="x-head"><img src="/rondo-assets/voices/siroradio51.webp" alt="" width="48" height="48" loading="lazy"><span class="x-who"><b>えい｜倒れないための自動化</b><span>@siroradio51</span></span><svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+        <div class="x-body"><p>イケハヤさん（@IHayato）のマーケOS「Rondo」の２日目レポートがFable5から上がってきました。<br>今日は、僕の願望を実行してくれました。導線だけじゃなく会社のマーケ部門が集約してきたの最高！</p></div>
+        <div class="x-foot"><time datetime="2026-08-16">2026年8月16日</time><span class="x-go">Xで見る →</span></div>
+      </a>
+      </div>
+      <div class="vnav">
+        <button type="button" class="vbtn" data-dir="-1" aria-label="前の声" data-rondo-label="声 前へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="vbtn" data-dir="1" aria-label="次の声" data-rondo-label="声 次へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 5. 設置と運用・向く人 -->
+<!-- 6. 設置と運用・向く人 -->
 <section id="ai" data-sec="ai-fit">
   <div class="wrap">
     <div class="center">
@@ -567,7 +619,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   </div>
 </section>
 
-<!-- 6. 価格 -->
+<!-- 7. 価格 -->
 <section id="price" data-sec="price">
   <div class="wrap">
     <h2 class="center">¥9,800、買い切り<span class="hang">。</span></h2>
@@ -592,7 +644,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   </div>
 </section>
 
-<!-- 7. よくある質問 -->
+<!-- 8. よくある質問 -->
 <section id="faq" data-sec="faq">
   <div class="wrap">
     <h2 class="center">よくある質問</h2>
@@ -608,7 +660,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   </div>
 </section>
 
-<!-- 8. 終盤 -->
+<!-- 9. 終盤 -->
 <section class="last" data-sec="final">
   <div class="wrap">
     <h2>発売日に、10%オフで<span class="hang">。</span></h2>
@@ -697,6 +749,19 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   });
 })();
 
+
+/* 声のカルーセル: 前後のボタンで1枚ずつ送る。端ではボタンを止める */
+(function(){
+  var t = document.getElementById('vtrack'); if(!t) return;
+  var btns = document.querySelectorAll('.vbtn');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function step(){ var c = t.querySelector('.xcard'); return c ? c.getBoundingClientRect().width + 16 : t.clientWidth; }
+  function upd(){ var max = t.scrollWidth - t.clientWidth - 2; btns[0].disabled = t.scrollLeft <= 2; btns[1].disabled = t.scrollLeft >= max; }
+  Array.prototype.forEach.call(btns, function(b){ b.addEventListener('click', function(){ t.scrollBy({ left: step() * Number(b.dataset.dir), behavior: reduce ? 'auto' : 'smooth' }); }); });
+  t.addEventListener('scroll', function(){ requestAnimationFrame(upd); }, { passive: true });
+  window.addEventListener('resize', upd);
+  upd();
+})();
 </script>
 </body>
 </html>
