@@ -55,7 +55,9 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;color:var(--ink);margin
 h2{font-size:clamp(28px,3.4vw,42px);line-height:1.3;letter-spacing:.01em}
 h3{font-size:21px;line-height:1.45}
 .lede{font-size:17px;color:var(--ink2);margin:18px 0 0;max-width:40em}
-.center{text-align:center}.center .lede{margin-left:auto;margin-right:auto}
+.center{text-align:center}
+/* 中央ぞろえの見出しの行末の句読点は字面が左半分だけ＝右の空きを詰めて中央に見せる(10-08 本人指摘の直しを v1.0 にも) */
+.hang{margin-right:-.5em}.center .lede{margin-left:auto;margin-right:auto}
 .kick{font-size:13px;letter-spacing:.06em;color:var(--ink2);margin:0 0 16px}
 .fine{font-size:13px;line-height:1.8;color:var(--ink2);margin:0}
 
@@ -437,7 +439,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="screens" data-sec="screens" style="padding-top:24px">
   <div class="wrap">
     <div class="center">
-      <h2><span class="ph">全部の数字を、</span><span class="ph">実際の画面で。</span></h2>
+      <h2><span class="ph">全部の数字を、</span><span class="ph">実際の画面で<span class="hang">。</span></span></h2>
       <p class="lede">ここに並べたのは、Rondoの管理画面そのものです。売上とファネルから、チャネルの合計、メールの便ごとの開封まで、押していくだけで降りていけます。</p>
       <div class="demo-cta">
         <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">管理画面のデモを触る</a>
@@ -459,7 +461,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <div role="tabpanel" id="pane-ch" aria-labelledby="tab-ch" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
           <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが並ぶ"></picture></a></figure>
-        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramのビューは許可を足したとき、Threadsの投稿とビュー、X・note・Substackは収集の仕組みをつないだときに出ます。</p>
+        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramのビューは許可を足してその許可つきでつなぎ直したとき、Threadsの投稿とビュー、X・note・Substackは収集の仕組みをつないだときに出ます。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
         <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
@@ -489,7 +491,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="channels" data-sec="channels">
   <div class="wrap">
     <div class="center">
-      <h2><span class="ph">ひとつの画面に、</span><span class="ph">つながるもの。</span></h2>
+      <h2><span class="ph">ひとつの画面に、</span><span class="ph">つながるもの<span class="hang">。</span></span></h2>
       <p class="lede">メール・LINE・Instagram・Threads・YouTubeは標準で入っています（初回は各サービスの設定が必要です）。X・note・Substackの数字は、あなたのAIが受け口につないで取り込みます。</p>
     </div>
     <div class="chgrid">
@@ -585,7 +587,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="ai" data-sec="ai">
   <div class="wrap">
     <div class="center">
-      <h2><span class="ph">設置も改造も、</span><span class="ph">AIに日本語で。</span></h2>
+      <h2><span class="ph">設置も改造も、</span><span class="ph">AIに日本語で<span class="hang">。</span></span></h2>
       <p class="lede">届くのは、自分のCloudflareに設置して使う、ソースコード一式と手順書です。手順書はAIに読ませる前提で書いてあり、Claude CodeやCodexが設置の作業を進めます。足りない機能は、AIに頼んで足せます。</p>
     </div>
     <div class="split">
@@ -605,7 +607,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="v10" data-sec="v10">
   <div class="wrap">
     <div class="center">
-      <h2><span class="ph">v1.0に、</span><span class="ph">入っているもの。</span></h2>
+      <h2><span class="ph">v1.0に、</span><span class="ph">入っているもの<span class="hang">。</span></span></h2>
       <p class="lede">β版から足した機能も含めて、全部です。<b class="new" style="font-family:var(--font-num);font-weight:600;font-size:12px;letter-spacing:.06em;color:var(--accent-hi)">NEW</b> はβ版のあとに入ったものです。</p>
     </div>
     <div class="inv">
@@ -685,7 +687,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="fit" data-sec="fit">
   <div class="wrap">
     <div class="center">
-      <h2><span class="ph">正直に言うと、</span><span class="ph">万人向けではありません。</span></h2>
+      <h2><span class="ph">正直に言うと、</span><span class="ph">万人向けではありません<span class="hang">。</span></span></h2>
       <p class="lede">サポート窓口はありません。自信がない人は、買わないでください。</p>
     </div>
     <div class="fit">
@@ -714,7 +716,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="price" data-sec="reserve">
   <div class="wrap">
     <div class="center">
-      <h2>¥9,800、買い切り。</h2>
+      <h2>¥9,800、買い切り<span class="hang">。</span></h2>
       <p class="lede">ソースコード一式と、導入・更新の手順書つき。v1系の更新は無償です。</p>
     </div>
     <div class="buy">
@@ -787,7 +789,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <!-- 10. 終盤 -->
 <section class="last" data-sec="final">
   <div class="wrap">
-    <h2><span class="ph">ひとつの画面で、</span><span class="ph">商売を回す。</span></h2>
+    <h2><span class="ph">ひとつの画面で、</span><span class="ph">商売を回す<span class="hang">。</span></span></h2>
     <p class="lede" style="margin-left:auto;margin-right:auto">本体は¥9,800の買い切り。運用費は別にかかります。</p>
     <div class="ctas"><a class="btn pri" href="/rondo-apply" data-rondo-label="CTA 最終購入" data-rondo-cta="apply">購入手続きへ（¥9,800）</a></div>
   </div>

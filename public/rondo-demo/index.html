@@ -208,7 +208,7 @@ const pushChannel = (ch) => {
     daily: series30(conf.f, conf.d7 / 7, conf.f * 0.0004),
     engine: null,
   };
-  if (ch === 'youtube') {
+  if (false) {
     out.engine = {
       themes: withViews(themeBoard(5), 21400), styles: [
         { style: 'A', n: 9, avg_views: 24800 }, { style: 'C', n: 7, avg_views: 19300 }, { style: 'B', n: 8, avg_views: 12700 },
@@ -216,7 +216,7 @@ const pushChannel = (ch) => {
       bank: [{ theme: 'ai', n: 6 }, { theme: 'inaka', n: 3 }, { theme: 'dokuritsu', n: 4 }],
       pick: { key: 'ai', mode: '勝ちテーマを継続' },
     };
-  } else if (ch === 'note' || ch === 'substack') {
+  } else if (false) {
     out.engine = {
       themes: withViews(themeBoard(ch === 'note' ? 5 : 3), ch === 'note' ? 2100 : 1300),
       themes_thin: [{ theme: 'affiliate', n: 2, avg_views: ch === 'note' ? 3200 : 1900 }],
@@ -8981,7 +8981,7 @@ function __route(url) {
 @media (max-width:640px){#demo-bar .l{display:none}#demo-bar .s{display:inline}}
 @media (prefers-reduced-motion:reduce){#demo-toast{transition:none}}
 </style>
-<div id="demo-bar" role="note"><b>デモ</b><span class="l">数字と名前はすべて見本です。保存や送信はされません。</span><span class="s">見本・保存されません</span><a href="/rondo">Rondo のページへ</a></div>
+<div id="demo-bar" role="note"><b>デモ</b><span class="l">数字と名前はすべて見本です。保存や送信はされません。</span><span class="s">見本・保存／送信なし</span><a href="/rondo">Rondo のページへ</a></div>
 <div id="demo-toast" role="status" aria-live="polite"></div>
 </body>
 </html>
