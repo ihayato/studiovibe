@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ja" data-view="home">
 <head>
+<meta charset="utf-8">
 <meta name="robots" content="noindex">
 <script>
 /* Rondo デモ: 管理画面の API をブラウザの中の見本で返す(保存・送信・外部のログインはしない) */
@@ -9188,7 +9189,7 @@ function __route(url) {
       setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「Rondo が最初に届けてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
         (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください'
           : dm.hold === 'no_reactions' ? '直近14日に100通以上届いて、開封が1件も記録されていません。計測の設定を確かめてください'
-            : '直近14日に開封の記録が無く、Resend の計測の設定も確かめられていません。開封が記録されるか、監査で計測が確かめられると再開します') + '</span>' : ''),
+            : 'いまの送信ドメインの計測を Resend で確かめられていません(送信専用の鍵・Resend の障害・送信ドメインを変えた直後など)。監査で計測が確かめられると再開します。送信専用の鍵では動きません') + '</span>' : ''),
         setSw('set-sw-dorm', dm.enabled !== false, false, '休眠の整理') +
         '<input class="set-in n" id="set-in-dormdays" type="number" min="30" max="730" step="1" aria-label="休眠とみなす日数" value="' + esc(dm.days) + '"><span class="sw-l">日</span>' +
         '<input class="set-in n" id="set-in-dormsends" type="number" min="1" max="200" step="1" aria-label="その間に届いた通数" value="' + esc(dm.minSends) + '"><span class="sw-l">通以上</span>' +
