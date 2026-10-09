@@ -29,6 +29,15 @@
 
 
 const port = Number(443);
+// アプリのDL数(APP_DL_APPS)は個人の運用だけの画面なので、RONDO_PREVIEW_APPS=1 のときだけ出す(デモの元にもなるため既定は出さない)
+const previewApps = undefined === '1';
+const appsDemo = {
+  apps: [
+    { key: 'ga', name: 'ゲームA', total: 9193, d7: 162, d30: 731, prev30: 650, statDay: '2026-10-08', last: { day: '2026-10-08', n: 24 }, ios: { total: 6120 }, android: { total: 3073 }, daily: [] },
+    { key: 'gb', name: 'ゲームB', total: 2410, d7: 38, d30: 170, prev30: 190, statDay: '2026-10-08', last: { day: '2026-10-08', n: 5 }, ios: { total: 1880 }, android: { total: 530 }, daily: [] },
+  ],
+  since: '2026-08-11',
+};
 
 
 // Threads(便1)の接続カードと予約投稿カードの見え方の確認用ダミー
@@ -844,7 +853,7 @@ const bookingAll = () => [
 ];
 const bookingGroups = () => {
   const m = new Map();
-  for (const b of bookingAll()) {
+  for (const b of bkSemRows().concat(bkConsultRows())) {
     if (!['booked', 'pending', 'done'].includes(b.status)) continue;
     const k = b.key + '|' + b.startAt;
     const g = m.get(k) || { at: b.startAt, title: b.title, booked: 0, pending: 0 };
@@ -874,6 +883,125 @@ const bookingParticipantsDemo = (url) => {
   return { ok: true, label: jfmt(at, at + 90 * 60000), title: 'オンラインセミナー',
     participants: ps.map((b) => ({ id: b.id, name: b.name, channel: b.channel, status: b.status, answerList: b.answerList })) };
 };
+// ---- 予約: 予約ページごとの見方(/api/admin/bookings/pages・board・roster・week・詳細。形は src/booking-admin.mjs と同じ) ----
+const bkYmd = (ms) => new Date(ms + 9 * JH).toISOString().slice(0, 10);
+const bkHmOf = (ms) => { const d = new Date(ms + 9 * JH); return `${d.getUTCHours()}:${String(d.getUTCMinutes()).padStart(2, '0')}`; };
+const BK_PRE = ['aya', 'ben', 'chi', 'dai', 'emi', 'fum', 'gen', 'har', 'iku', 'jun', 'kao', 'kei', 'mai', 'nao', 'rio', 'sak', 'tak', 'yui', 'yuk', 'wat', 'sor', 'hik', 'mom', 'ryo'];
+const S3 = () => bkAt(3, 20);
+// 見本の行に、申し込み日時と取り消せるかを足す(本物の rowOf と同じ形)
+const bkRowOf = (b) => {
+  const now = Date.now();
+  const st = b.status === 'booked' && b.endAt <= now ? 'done' : b.status;
+  const createdAt = b.startAt - (3 + (b.id % 9)) * JDAY - (b.id % 7) * JH;
+  return { ...b, status: st, createdAt, createdLabel: jfmt(createdAt),
+    canCancel: (b.status === 'booked' && b.endAt > now) || ((b.status === 'pending' || b.status === 'waiting') && b.startAt > now) };
+};
+const bkSemRows = () => {
+  const named = bookingAll().filter((b) => b.key === 'seminar');
+  const syn = [];
+  for (let i = 0; i < 58; i++) syn.push(bkMk(600 + i, 'seminar', 'オンラインセミナー', S2(), 90, i % 19 === 7 ? 'pending' : i % 23 === 11 ? 'canceled' : 'booked', 'email', `${BK_PRE[i % BK_PRE.length]}***`, []));
+  for (let i = 0; i < 26; i++) syn.push(bkMk(700 + i, 'seminar', 'オンラインセミナー', S3(), 90, 'booked', i % 3 ? 'email' : 'line', i % 3 ? `${BK_PRE[(i + 5) % BK_PRE.length]}***` : ['松本 りな', '井上 しん', '木村 あや', '林 だいち', '清水 ほのか', '山口 けい', '森 ゆうと', '池田 みお', '橋本 そう'][i / 3], []));
+  syn.forEach((b, i) => { if (i % 17 === 4) b.blocked = true; });
+  return named.concat(syn).map(bkRowOf);
+};
+const BK_SEM = () => [{ startAt: S1(), cap: 2 }, { startAt: S2(), cap: 100 }, { startAt: S3(), cap: 30 }];
+const bkSemSession = (at, cap, rows) => {
+  const now = Date.now();
+  const r = rows.filter((b) => b.startAt === at);
+  const confirmed = r.filter((b) => b.status === 'booked' || b.status === 'done').length;
+  const pending = r.filter((b) => b.status === 'pending').length;
+  const waiting = r.filter((b) => b.status === 'waiting').length;
+  const seats = confirmed + pending;
+  const endAt = at + 90 * 60000, closesAt = at - JH;
+  const state = endAt <= now ? 'ended' : at <= now ? 'live' : now >= closesAt ? 'closed' : seats >= cap ? 'waitlist' : 'open';
+  return { startAt: at, endAt, label: jfmt(at, endAt), note: 'Zoom', inConfig: true, capacity: cap, growBy: null, seats, confirmed, pending, waiting, state, closesAt, closesLabel: jfmt(closesAt) };
+};
+const bookingBoardDemo = () => {
+  const rows = bkSemRows();
+  const all = BK_SEM().map((x) => bkSemSession(x.startAt, x.cap, rows));
+  return { ok: true, key: 'seminar', title: 'オンラインセミナー', upcoming: all.filter((x) => x.state !== 'ended'),
+    past: all.filter((x) => x.state === 'ended').reverse(), notify: { count: 12, csvCount: 11 }, remind: ['1d', '1h'] };
+};
+const bookingRosterDemo = (url) => {
+  const at = Number(url.searchParams.get('session'));
+  const st = url.searchParams.get('st') || 'active';
+  const q = (url.searchParams.get('q') || '').trim();
+  const off = Math.max(Number(url.searchParams.get('offset')) || 0, 0);
+  const lim = Math.min(Math.max(Number(url.searchParams.get('limit')) || 100, 1), 200);
+  const base = bkSemRows().filter((b) => b.startAt === at);
+  const want = st === 'all' ? null : st === 'booked' ? ['booked', 'done'] : ['pending', 'waiting', 'canceled'].includes(st) ? [st] : ['booked', 'pending', 'waiting', 'done'];
+  const order = { booked: 0, done: 0, pending: 1, waiting: 2 };
+  const hit = base.filter((b) => (!want || want.includes(b.status)) && (!q || b.name.includes(q)))
+    .sort((p, r) => (order[p.status] ?? 3) - (order[r.status] ?? 3) || p.createdAt - r.createdAt);
+  const cnt = (s) => base.filter((b) => b.status === s).length;
+  return { ok: true, key: 'seminar', title: 'オンラインセミナー', rows: hit.slice(off, off + lim), total: hit.length, offset: off, limit: lim, hasMore: hit.length > off + lim,
+    counts: { booked: cnt('booked'), pending: cnt('pending'), waiting: cnt('waiting'), canceled: cnt('canceled'), done: cnt('done'), expired: 0 } };
+};
+const BK_CONSULT = { minutes: 30, daysAhead: 14, leadHours: 2, ranges: [[10, 12], [14, 17]] };
+const bkConsultRows = () => bookingAll().filter((b) => b.key === 'consult' && ['booked', 'pending', 'done'].includes(b.status)).map(bkRowOf);
+const bkBlocks = () => [{ id: 1, day: bkYmd(bkAt(-8, 12)), startAt: null }, { id: 2, day: bkYmd(bkAt(-3, 10)), startAt: bkAt(-3, 10), endAt: bkAt(-3, 10, 30) }];
+const bookingWeekDemo = (url) => {
+  const now = Date.now();
+  const today = bkYmd(now);
+  const minDay = bkYmd(now - 56 * JDAY);
+  let s = /^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get('start') || '') ? url.searchParams.get('start') : today;
+  if (s < minDay) s = minDay;
+  const from = Date.parse(`${s}T00:00:00+09:00`);
+  const rows = bkConsultRows();
+  const blocks = bkBlocks();
+  const lastDay = bkYmd(Date.parse(`${today}T00:00:00+09:00`) + (BK_CONSULT.daysAhead - 1) * JDAY);
+  const lead = now + BK_CONSULT.leadHours * JH;
+  const days = [];
+  let count = 0;
+  for (let i = 0; i < 7; i++) {
+    const d0 = from + i * JDAY;
+    const day = bkYmd(d0);
+    const wd = new Date(d0 + 9 * JH).getUTCDay();
+    const dayBlock = blocks.find((x) => x.day === day && x.startAt == null) || null;
+    const slots = [];
+    for (const [a, z] of wd === 0 ? [] : BK_CONSULT.ranges) {
+      for (let m = a * 60; m + 30 <= z * 60; m += 30) {
+        const startAt = d0 + m * 60000, endAt = startAt + 30 * 60000;
+        const hit = rows.filter((r) => r.startAt < endAt && r.endAt > startAt);
+        const blk = blocks.filter((x) => x.day === day && x.startAt != null && x.startAt < endAt && x.endAt > startAt);
+        const state = hit.length ? 'booked' : endAt <= now ? 'past' : dayBlock ? 'dayblock' : blk.length ? 'blocked' : startAt < lead ? 'lead' : day > lastDay ? 'later' : 'free';
+        count += hit.filter((r) => r.status !== 'done').length;
+        slots.push({ startAt, endAt, label: bkHmOf(startAt), state, blockIds: blk.map((x) => x.id), bookings: hit });
+      }
+    }
+    days.push({ day, label: `${Number(day.slice(5, 7))}/${Number(day.slice(8))}`, dow: WK_JA[wd], weekend: wd === 0 || wd === 6, today: day === today,
+      holiday: false, dayBlockId: dayBlock ? dayBlock.id : null, past: d0 + JDAY <= now, later: day > lastDay, slots, extra: [] });
+  }
+  // 枠に当たらない予約(受付時間の外)はその日の「枠の外」へ
+  const used = new Set(days.flatMap((d) => d.slots.flatMap((x) => x.bookings.map((b) => b.id))));
+  for (const r of rows) {
+    if (used.has(r.id)) continue;
+    const d = days.find((x) => x.day === bkYmd(r.startAt));
+    if (d) { d.extra.push(r); if (r.status !== 'done') count++; }
+  }
+  const prev = bkYmd(from - 7 * JDAY);
+  return { ok: true, key: 'consult', title: '個別相談', start: s, label: `${jfmt(from).replace(/\d+:\d+$/, '')}〜${jfmt(from + 6 * JDAY).replace(/\d+:\d+$/, '')}`,
+    prev: prev >= minDay ? prev : (s > minDay ? minDay : null), next: bkYmd(from + 7 * JDAY), today, minutes: 30, days, count,
+    canceled: bookingAll().filter((b) => b.key === 'consult' && b.status === 'canceled' && b.startAt >= from && b.startAt < from + 7 * JDAY).map(bkRowOf) };
+};
+const bookingPagesDemo = () => {
+  const rows = bkSemRows();
+  const up = BK_SEM().map((x) => bkSemSession(x.startAt, x.cap, rows)).filter((x) => x.state !== 'ended');
+  const now = Date.now();
+  const wk = bkConsultRows().filter((b) => b.status !== 'done' && b.endAt > now && b.startAt < now + 7 * JDAY);
+  return { ok: true, orphans: 0, pages: [
+    { key: 'seminar', title: 'オンラインセミナー', kind: 'sessions', upcoming: up.length, people: up.reduce((n, x) => n + x.seats, 0),
+      next: up[0] ? { startAt: up[0].startAt, label: up[0].label, seats: up[0].seats, capacity: up[0].capacity } : null },
+    { key: 'consult', title: '個別相談', kind: 'slots', week: wk.length, pending: wk.filter((b) => b.status === 'pending').length, nextAt: wk[0] ? wk[0].startAt : null, nextLabel: wk[0] ? jfmt(wk[0].startAt) : null },
+  ] };
+};
+const bookingDetailDemo = (url) => {
+  const id = Number(url.pathname.split('/').pop());
+  const b = bkSemRows().concat(bkConsultRows()).find((x) => x.id === id);
+  if (!b) return { ok: false, error: 'not_found' };
+  const mail = b.channel === 'email' ? (b.name.endsWith('***') ? `${b.name.slice(0, 3)}${['.k', '_m', '.t', '23', '.s'][b.id % 5]}@example.jp` : 'ken.suzuki@example.jp') : null;
+  return { ok: true, booking: { ...b, contact: mail || b.name, realName: b.channel === 'email' && !b.name.endsWith('***') ? b.name : null, chatKey: null, inConfig: true } };
+};
 const heatDemo = (url) => {
   const pages = [
     { page: 'sample-lp', url: 'https://example.com/lp', updated_at: ago(2), label: 'サンプルLP' },
@@ -885,7 +1013,7 @@ const heatDemo = (url) => {
   const f = page === 'seminar-lp' ? 0.4 : 1;
   const views = Math.round(3860 * f);
   const all = {
-    views, ctaRate: 0.124, ctaViews: views, ctaVisits: Math.round(views * 0.124), interactionClicks: Math.round(2310 * f), dwellTotalMs: views * 74000, rageTotal: Math.round(14 * f),
+    views, ctaRate: 0.124, ctaViews: views, ctaVisits: Math.round(views * 0.124), interactionClicks: Math.round(2310 * f), activeAvgMs: 74000, activeVisits: views, dwellTotalMs: views * 74000, rageTotal: Math.round(14 * f), anomalies: [], dropped: [],
     sections: [['ヒーロー', 1, 9800], ['悩みの共感', 0.82, 14200], ['解決策', 0.64, 18600], ['実績', 0.36, 11300], ['料金', 0.29, 16900], ['よくある質問', 0.19, 8200]].map(([sec, reachRate, dwellAvgMs], idx) => ({ sec, idx, reachRate, dwellAvgMs })),
     elements: [
       { sel: 'a.cta-main|申し込みボタン', sec: '料金', clicks: Math.round(612 * f), clicksPerView: 0.16, rage: 3 },
@@ -896,7 +1024,7 @@ const heatDemo = (url) => {
   };
   return { ok: true, pages, page, pageLabel: pages.find((p) => p.page === page).label, days: 30, report: { all, sp: { views: Math.round(views * 0.72) }, pc: { views: Math.round(views * 0.28) } },
     // 診断は本物の buildHeatFindings(src/heat.mjs をそのまま写したもの)に見本の数字を通した結果(Astra LP r12)
-    findings: __heatFindings(all), viewerUrl: null, tag };
+    findings: __heatFindings(all), viewerUrl: null, tag, usage: { used: Math.round(41200 * f), max: 200000 } };
 };
 
 // --- 以下は rondo/src/heat.mjs の写し(生成のたびに写す) ---
@@ -978,8 +1106,9 @@ function __route(url) {
       const { rows, engine, best, line, slots, casts, lists, mail_links, purchase_rules, watch, inbound, ...light } = m;
       channels[c] = { ...light, ch: c };
     }
-    body = { ok: true, channels };
+    body = { ok: true, channels, apps: previewApps ? { n: 2, total: 11603, ios: 8000, android: 3603, d7: 200, d30: 901, prev30: 840, last: { day: '2026-10-08', n: 29 } } : null };
   }
+  else if (url.pathname === '/api/admin/apps') body = previewApps ? { ok: true, ...appsDemo } : { ok: true, apps: null };
   else if (url.pathname === '/api/admin/line') {
     body = { ok: true, connected: true, followers: 12034, blocks: 1852, delta7: 134,
       events: [{ type: 'follow', n: 612 }, { type: 'message', n: 438 }, { type: 'unfollow', n: 96 }],
@@ -1052,6 +1181,11 @@ function __route(url) {
   else if (url.pathname === '/api/admin/mail-stats') body = mailStatsDemo;
   else if (url.pathname === '/api/admin/mail-list') body = mailListDemo(url.searchParams.get('product'));
   else if (url.pathname === '/api/admin/calendar') body = calendarDemo(url);
+  else if (url.pathname === '/api/admin/bookings/pages') body = bookingPagesDemo();
+  else if (url.pathname === '/api/admin/bookings/seminar/board') body = bookingBoardDemo();
+  else if (/^\/api\/admin\/bookings\/[^/]+\/roster$/.test(url.pathname)) body = bookingRosterDemo(url);
+  else if (url.pathname === '/api/admin/bookings/consult/week') body = bookingWeekDemo(url);
+  else if (/^\/api\/admin\/bookings\/\d+$/.test(url.pathname)) body = bookingDetailDemo(url);
   else if (url.pathname === '/api/admin/bookings') body = bookingsDemo(url.searchParams.get('view'));
   else if (/^\/api\/admin\/bookings\/[^/]+\/participants$/.test(url.pathname)) body = bookingParticipantsDemo(url);
   else if (url.pathname === '/api/admin/contacts') {
@@ -1731,6 +1865,10 @@ function __route(url) {
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   .kpis.auto{grid-template-columns:repeat(auto-fit,minmax(132px,1fr))}
   #chn-kpis{grid-template-columns:repeat(4,1fr)}
+  #chn-kpis.k5{grid-template-columns:repeat(5,1fr)}
+  .kpi.go{cursor:pointer;transition:background-color 140ms ease-out}
+  .kpi.go:hover{background:var(--hover)}
+  .kpi.go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   /* すべてのチャネル: 1枚=1チャネル。丸印だけがチャネル色(面は塗らない) */
   .chn-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:12px}
   .chn-tile{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--elev);padding:14px 16px 12px;min-width:0;transition:background-color 140ms ease-out}
@@ -1948,24 +2086,119 @@ function __route(url) {
   .lan-ab-h .p{font-family:var(--mono);font-size:12px;color:var(--note)}
   /* 分析の札: .st は状態の帯の定義が後から上書きする(余白10px 16px)ので、分析には専用の小さな札を使う */
   /* 便7: 予約 */
-  .lbk-row{padding:10px 16px;border-bottom:1px solid var(--hair)}
-  .lbk-row:last-child{border-bottom:none}
-  .lbk-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
-  .lbk-top .when{font-family:var(--mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
-  .lbk-top .who{font-weight:500;min-width:0;overflow-wrap:anywhere}
-  .lbk-top .kind{flex:0 1 auto;max-width:100%;font-size:12px;color:var(--note);min-width:0;overflow-wrap:anywhere}
-  .lbk-top .lan-pill{margin-left:auto}
-  #lbook-part{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:var(--surface)}
-  .lbk-part-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px 16px}
-  .lbk-part-head b{min-width:0;overflow-wrap:anywhere}.lbk-part-head span{color:var(--note);font-size:13px}
-  .lbk-row.off .when,.lbk-row.off .who{color:var(--note);text-decoration:line-through}
-  .lbk-row details{margin-top:6px;font-size:13px}
-  .lbk-row summary{cursor:pointer;color:var(--dim)}
-  .lbk-ans{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
-  .lbk-act{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
-  .lbk-act input{flex:1 1 160px;min-width:0;border:1px solid var(--hair-strong);border-radius:var(--r-btn);padding:5px 8px;font:inherit;font-size:12px}
-  .lbk-block{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;border-top:1px solid var(--hair)}
-  .lbk-block select,.lbk-block input{border:1px solid var(--hair-strong);border-radius:var(--r-btn);padding:5px 8px;font:inherit;font-size:13px;background:var(--surface)}
+  /* 予約: 予約ページごとに見る。セミナーは「回」のカードと名簿、個別相談は週の予定表 */
+  .bk-pages{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:8px;align-items:center}
+  .bk-pages .fchip{display:inline-flex;align-items:baseline;gap:8px;padding:5px 14px}
+  .bk-pages .fchip .num{color:var(--note)}
+  .bk-pages select{border:1px solid var(--hair-strong);border-radius:var(--r-btn);padding:6px 10px;font:inherit;font-size:13px;background:var(--surface);color:var(--ink);max-width:100%}
+  .bk-notice.ok{color:var(--ok);background:var(--ok-soft)}
+  .bk-notice{font-size:13px;color:var(--warn);background:var(--warn-soft);border-radius:var(--r-btn);padding:8px 12px;margin:0}
+  .bk-sess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .bk-sess{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;cursor:pointer;background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--elev);padding:14px 16px;min-width:0;transition:background-color 140ms ease-out}
+  .bk-sess:hover{background:var(--hover)}
+  .bk-sess:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .bk-sess[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--accent),var(--elev)}
+  .bk-sess .bs-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-width:0}
+  .bk-sess .bs-when{font-family:var(--mono);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+  .bk-sess .bs-top .lan-pill{margin-left:auto}
+  .bk-sess .bs-main{display:flex;align-items:baseline;gap:6px;color:var(--note);font-size:13px}
+  .bk-sess .bs-main b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:28px;font-weight:600;line-height:1.1;color:var(--ink)}
+  .bk-gauge{height:6px;border-radius:999px;background:var(--hover);overflow:hidden}
+  .bk-gauge i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+  .bk-sess .bs-foot{font-size:12px;color:var(--note);line-height:1.7}
+  .bk-sess .bs-foot b{font-weight:600;color:var(--dim)}
+  .bk-side{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:var(--edge);border-radius:var(--r-card);box-shadow:var(--elev);padding:14px 16px;min-width:0}
+  .bk-side .bs-k{font-size:12px;color:var(--note)}
+  .bk-side .bs-main{font-size:13px;color:var(--note)}
+  .bk-side .bs-main b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:28px;font-weight:600;color:var(--ink)}
+  .bk-side .bs-foot{font-size:12px;color:var(--note);line-height:1.7}
+  .bk-side .btn{align-self:flex-start;text-decoration:none}
+  .bk-rhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 16px;border-bottom:1px solid var(--hair)}
+  .bk-rhead h2{min-width:0;overflow-wrap:anywhere}
+  .bk-rhead .sub{font-size:12px;color:var(--note)}
+  .bk-rhead .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .bk-rhead .acts .btn{text-decoration:none}
+  .bk-rtools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--hair)}
+  .bk-rtools input{flex:1 1 200px;min-width:0;border:1px solid var(--hair-strong);border-radius:var(--r-btn);padding:6px 10px;font:inherit;font-size:13px;background:var(--surface);color:var(--ink)}
+  .bk-rtools .fchip .num{color:var(--note);margin-left:4px}
+  .bk-p{border-bottom:1px solid var(--hair)}
+  .bk-p:last-child{border-bottom:none}
+  .bk-p-row{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;width:100%;padding:10px 16px;cursor:pointer;font-size:13px}
+  .bk-p-row:hover{background:var(--hover)}
+  .bk-p-row:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .bk-p-row .who{font-weight:500;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+  .bk-p-row .when{font-family:var(--mono);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .bk-p-row .meta{font-size:12px;color:var(--note)}
+  .bk-p-row .pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .bk-p-row .chev{color:var(--note);transition:transform 140ms ease-out}
+  .bk-p.open .bk-p-row .chev{transform:rotate(90deg)}
+  .bk-p.off .who{color:var(--note);text-decoration:line-through}
+  .lan-pill.warn{color:var(--warn);background:var(--warn-soft)}
+  .lan-pill.bad{color:var(--bad);background:var(--bad-soft)}
+  .bk-det{padding:4px 16px 14px;font-size:13px;display:grid;gap:10px}
+  .bk-det dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0}
+  .bk-det dt{color:var(--note);font-size:12px;padding-top:1px;overflow-wrap:anywhere}
+  .bk-wcx{border-top:1px solid var(--hair)}
+  .bk-det dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+  .bk-det .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .bk-det .acts .btn{text-decoration:none}
+  .bk-cancel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px dashed var(--hair-strong);padding-top:10px}
+  .bk-cancel input{flex:1 1 220px;min-width:0;border:1px solid var(--hair-strong);border-radius:var(--r-btn);padding:6px 10px;font:inherit;font-size:13px;background:var(--surface);color:var(--ink)}
+  .bk-cancel .hint{flex-basis:100%;font-size:12px;color:var(--note)}
+  .bk-more{display:flex;justify-content:center;padding:10px 16px}
+  .bk-past summary{cursor:pointer;padding:14px 16px;font-size:14px;color:var(--dim);list-style:none;display:flex;align-items:center;gap:8px}
+  .bk-past summary::-webkit-details-marker{display:none}
+  .bk-past summary::before{content:'›';color:var(--note);transition:transform 140ms ease-out;display:inline-block}
+  .bk-past[open] summary::before{transform:rotate(90deg)}
+  .bk-past .trow{cursor:pointer}
+  .bk-past .trow:hover{background:var(--hover)}
+  .bk-whead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+  .bk-whead b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;color:var(--ink)}
+  .bk-whead .sub{font-size:12px;color:var(--note);margin-left:auto}
+  .bk-wgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--hair)}
+  .bk-day{background:var(--surface);padding:10px 8px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .bk-day.past{background:color-mix(in srgb,var(--hover) 55%,var(--surface))}
+  .bk-day-h{display:flex;align-items:baseline;gap:6px;padding:0 2px 4px}
+  .bk-day-h b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;color:var(--ink)}
+  .bk-day-h span{font-size:12px;color:var(--note)}
+  .bk-day-h .today{color:var(--accent-ink);background:var(--accent-soft);border-radius:999px;padding:0 8px;font-size:11px;font-weight:600}
+  .bk-day.we .bk-day-h span{color:var(--dim)}
+  .bk-slots{display:flex;flex-direction:column;gap:4px}
+  .bk-slot{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px;min-height:36px;padding:6px 8px;border-radius:var(--r-btn);font-size:12px;line-height:1.35;min-width:0}
+  .bk-slot .t{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+  .bk-slot .s{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  button.bk-slot{cursor:pointer}
+  button.bk-slot:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .bk-slot.st-free,.bk-slot.st-later{border:1px dashed var(--hair-strong);color:var(--dim)}
+  .bk-slot.st-free:hover,.bk-slot.st-later:hover{background:var(--hover);color:var(--ink)}
+  .bk-slot.st-later{color:var(--note)}
+  .bk-slot.st-booked{background:var(--accent-soft);color:var(--accent-ink);box-shadow:inset 3px 0 0 var(--accent)}
+  .bk-slot.st-booked .s{font-weight:600;color:var(--ink);flex:1 1 100%}
+  .bk-slot.st-booked:hover{box-shadow:inset 3px 0 0 var(--accent),inset 0 0 0 1px var(--accent)}
+  .bk-slot.st-booked.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+  .bk-slot.st-booked.pend{background:transparent;color:var(--warn);border:1px dashed var(--warn);box-shadow:none}
+  .bk-slot.st-booked.done{background:var(--hover);color:var(--note);box-shadow:none}
+  .bk-slot.st-booked.done .s{color:var(--dim)}
+  .bk-slot.st-blocked,.bk-slot.st-dayblock{color:var(--note);border:1px solid var(--hair);background:repeating-linear-gradient(135deg,var(--hover) 0 5px,transparent 5px 10px)}
+  button.bk-slot.st-blocked:hover{color:var(--ink);border-color:var(--hair-strong)}
+  .bk-slot.st-holiday,.bk-slot.st-lead,.bk-slot.st-past{color:var(--note);opacity:.75}
+  .bk-slot.armed{border:1px solid var(--bad);color:var(--bad);background:transparent;opacity:1}
+  .bk-day-x{font-size:11px;color:var(--note);padding:2px 2px 0}
+  .bk-day-act{all:unset;cursor:pointer;font-size:12px;color:var(--accent);padding:4px 2px 0;align-self:flex-start}
+  .bk-day-act:hover{text-decoration:underline}
+  .bk-day-act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .bk-day-act.armed{color:var(--bad)}
+  .bk-day-none{font-size:12px;color:var(--note);padding:6px 2px}
+  .bk-legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:10px 16px;border-top:1px solid var(--hair);font-size:12px;color:var(--note)}
+  .bk-legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .bk-legend .lg-free{border:1px dashed var(--hair-strong)}
+  .bk-legend .lg-bk{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+  .bk-legend .lg-pend{border:1px dashed var(--warn)}
+  .bk-legend .lg-cl{border:1px solid var(--hair);background:repeating-linear-gradient(135deg,var(--hover) 0 3px,transparent 3px 6px)}
+  .bk-wmsg{padding:0 16px;font-size:12px;color:var(--bad)}
+  .bk-wmsg:empty{display:none}
+  .bk-wdet{border-top:1px solid var(--hair);background:var(--surface)}
+  .bk-wdet .bk-rhead{border-bottom:none;padding-bottom:4px}
   .lan-pill{display:inline-block;flex:none;font-size:12px;font-weight:500;border-radius:999px;padding:0 10px;line-height:20px;white-space:nowrap}
   .lan-pill.ok{color:var(--ok);background:var(--ok-soft)}
   .lan-pill.mute{color:var(--dim);background:var(--hover)}
@@ -2260,8 +2493,8 @@ function __route(url) {
   .range-label{font-family:var(--mono);font-size:13px}
 
   @media (max-width:960px){
-    .kpis,.kpis.auto,#chn-kpis{grid-template-columns:repeat(2,1fr)}
-    .kpis.auto .kpi:last-child:nth-child(odd){grid-column:1/-1}
+    .kpis,.kpis.auto,#chn-kpis,#chn-kpis.k5{grid-template-columns:repeat(2,1fr)}
+    .kpis.auto .kpi:last-child:nth-child(odd),#chn-kpis.k5 .kpi:last-child{grid-column:1/-1}
     .strip{grid-template-columns:1fr}
     .hf{flex-wrap:wrap}
     .ha{display:none}
@@ -2273,6 +2506,17 @@ function __route(url) {
   }
   .mobile-theme{display:none}
   @media (max-width:860px){
+    /* 予約: 週の予定表は日ごとの縦並び・詳細はその日のすぐ下 */
+    .bk-wgrid{grid-template-columns:minmax(0,1fr)}
+    .bk-day{padding:10px 12px}
+    .bk-day-h{padding-bottom:2px}
+    .bk-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+    .bk-slot.st-booked{grid-column:span 2}
+    .bk-slot.st-past{display:none}
+    .bk-det dl{grid-template-columns:minmax(0,1fr);gap:2px 0}
+    .bk-det dd{margin-bottom:6px}
+    .bk-wdet{border:1px solid var(--hair);border-radius:var(--r-card)}
+    .bk-rhead .acts{margin-left:0}
     .ibx-desc{display:none}
     .ibx-more-f{display:inline-flex}
     .ibx-bar:not(.f-open) #ibx-chf,.ibx-bar:not(.f-open) #ibx-lf,.ibx-bar:not(.f-open) .ibx-bulk{display:none}
@@ -2882,11 +3126,11 @@ function __route(url) {
       </div>
     </section>
 
-    <!-- 予約(便3: LINE の画面から独立) -->
+    <!-- 予約: 予約ページごとに見る(セミナー=回と名簿・個別相談=週の予定表) -->
     <section class="view v-booking">
       <header class="topbar">
         <h1>予約</h1>
-        <span class="upd">予約ページ（セミナー・個別相談）</span>
+        <span class="upd" id="bk-upd">セミナーは回ごと、個別相談は週ごとに見ます</span>
       </header>
       <div class="content">
         <div class="card" id="lbook-empty" hidden>
@@ -2894,27 +3138,13 @@ function __route(url) {
             <details class="set-how"><summary>AIへの頼み方</summary><pre>Rondo の OPTIONS.md §10-18 のとおり、予約ページを作ってください(bookings.config.mjs の BOOKINGS)。日時・定員・案内文は、案を出してから私に確かめてください。</pre>
             <button class="btn ghost sm" type="button" data-ai-ask="Rondo の OPTIONS.md §10-18 のとおり、予約ページを作ってください(bookings.config.mjs の BOOKINGS)。日時・定員・案内文は、案を出してから私に確かめてください。">AIへの頼み方をコピー</button></details></div>
         </div>
-        <div class="card" id="lbook-card">
-          <div class="card-head"><h2>予約</h2><span class="sub">取り消すと本人に知らせる（LINE／メール）· 回の「参加者」から CSV と .ics</span>
-            <span id="lbook-chips" style="margin-left:auto">
-              <button type="button" class="fchip on" data-lbk-view="upcoming">これから</button>
-              <button type="button" class="fchip" data-lbk-view="past">過去7日</button>
-            </span>
-          </div>
-          <p id="lbook-notice" role="status" style="font-size:13px;color:var(--warn);margin:8px 0" hidden></p>
-          <div id="lbook-sessions"></div>
-          <div id="lbook-part" hidden></div>
-          <div id="lbook-list"></div>
-          <div class="lbk-block">
-            <span style="font-size:13px;font-weight:600">枠を閉じる</span>
-            <select id="lbk-key" aria-label="予約の種類"></select>
-            <input type="date" id="lbk-day" aria-label="日付">
-            <input type="time" id="lbk-time" step="300" aria-label="時刻（空ならその日全部）">
-            <button type="button" class="btn ghost sm" id="lbk-close">閉じる</button>
-            <span id="lbk-msg" style="font-size:12px;color:var(--note)"></span>
-          </div>
-          <div id="lbook-blocks"></div>
+        <div class="card" id="bk-err" hidden>
+          <div class="ai-empty"><b>予約を読み込めませんでした</b><p>通信が切れたか、サーバーが応えませんでした。少し待ってからもう一度読み込んでください。</p>
+            <p><button type="button" class="btn ghost sm" id="bk-retry">もう一度読み込む</button></p></div>
         </div>
+        <nav class="bk-pages" id="bk-pages" aria-label="予約ページ" hidden></nav>
+        <p class="bk-notice" id="lbook-notice" role="status" hidden></p>
+        <div id="bk-body" style="display:grid;gap:16px"></div>
       </div>
     </section>
 
@@ -3169,7 +3399,7 @@ function __route(url) {
         </div>
         <div id="ht-main" hidden style="display:grid;gap:16px">
           <div class="kpis">
-            <div class="kpi"><div class="k">訪問 30日</div><div class="v" id="ht-views"></div><div class="d" id="ht-views-d"></div></div>
+            <div class="kpi"><div class="k" id="ht-views-k">訪問 30日</div><div class="v" id="ht-views"></div><div class="d" id="ht-views-d"></div></div>
             <div class="kpi"><div class="k">CTA反応率</div><div class="v" id="ht-cta"></div><div class="d"><span id="ht-cta-d">CTA反応訪問÷計測対象訪問</span></div></div>
             <div class="kpi"><div class="k">平均滞在</div><div class="v" id="ht-dwell"></div><div class="d"><span>1訪問あたり</span></div></div>
             <div class="kpi"><div class="k">短時間の連打</div><div class="v" id="ht-rage"></div><div class="d"><span>800ms内に同じ要素を3回以上</span></div></div>
@@ -3188,7 +3418,7 @@ function __route(url) {
             <div class="card-body" id="ht-secs"></div>
           </div>
           <div class="card">
-            <div class="card-head"><h2>要素クリック台帳</h2><span class="sub">押された要素 · 30日</span></div>
+            <div class="card-head"><h2>要素クリック台帳</h2><span class="sub" id="ht-el-sub">押された要素 · 30日</span></div>
             <div class="tbl-scroll"><table>
               <thead><tr><th>要素</th><th>セクション</th><th class="r">クリック</th><th class="r">回/訪問</th><th class="r">連打</th></tr></thead>
               <tbody id="ht-els"></tbody>
@@ -3454,7 +3684,7 @@ function __route(url) {
   </div>
 </div>
 
-<script>window.RONDO_CFG = {"senderName":"運用者","defaultScenarioKey":"course","defaultScenarioLabel":"7日間講座","scenarioLabels":{"course":"7日間講座"},"mailChannelName":"メール","memberSiteName":"会員サイト","memberKpiLabel":"無料会員","memberSiteConnected":false,"memberShortName":"会員サイト","offerLpName":"教材LP","lineOaName":"","lineChannelId":"","baseHost":"example.com","discordName":"コミュニティ Discord","discordConnected":false,"financieConnected":false,"analyticsConnected":false,"salesConnected":false,"financieName":"トークン価格"};</script>
+<script>window.RONDO_CFG = {"appsConnected":false,"senderName":"運用者","defaultScenarioKey":"course","defaultScenarioLabel":"7日間講座","scenarioLabels":{"course":"7日間講座"},"mailChannelName":"メール","memberSiteName":"会員サイト","memberKpiLabel":"無料会員","memberSiteConnected":false,"memberShortName":"会員サイト","offerLpName":"教材LP","lineOaName":"","lineChannelId":"","baseHost":"example.com","discordName":"コミュニティ Discord","discordConnected":false,"financieConnected":false,"analyticsConnected":false,"salesConnected":false,"financieName":"トークン価格"};</script>
 <script>
 (function () {
   'use strict';
@@ -6001,131 +6231,492 @@ function __route(url) {
     e.preventDefault();
     openChat(row.getAttribute('data-ck'));
   });
-  // ---- 予約(便7・便1で /api/admin/bookings に。LINE とメールの予約) ----
-  var lbk = { view: 'upcoming', gen: 0 };
+  // ---- 予約: 予約ページごとに見る(セミナー=回のカードと名簿・個別相談=週の予定表・設定から外れた予約) ----
+  // 読むのは /api/admin/bookings/pages・/<キー>/board・/<キー>/roster・/<キー>/week・/orphans・/<番号>。
+  // 取り消しと枠を閉じる/開けるは既存の /api/admin/bookings/<番号>/cancel と /api/admin/booking-blocks
+  var lbk = { gen: 0, pages: [], orphans: 0, cur: null, roster: null, bgen: 0, wgen: 0, weekStart: null, week: null, ogen: 0, orows: [] };
+  try { lbk.cur = localStorage.getItem('rondo_bk_page'); } catch (e) { lbk.cur = null; }
+  var BK_ST = { booked: ['ok', '予約中'], pending: ['warn', '確認待ち'], waiting: ['plan', 'キャンセル待ち'], done: ['mute', '済み'], expired: ['mute', '待ちのまま終了'], canceled: ['mute', '取り消し'] };
+  var BK_SESS_ST = { open: ['ok', '受付中'], full: ['mute', '満席'], waitlist: ['plan', '満席（待ちを受付中）'], closed: ['mute', '受付終了'], live: ['plan', '開催中'], ended: ['mute', '終了'] };
+  function bkKeyUrl(key) { return '/api/admin/bookings/' + encodeURIComponent(key); }
+  function bkPad(n) { return (n < 10 ? '0' : '') + n; }
+  function bkHm(ms) { var d = new Date(ms + 9 * 3600000); return bkPad(d.getUTCHours()) + ':' + bkPad(d.getUTCMinutes()); }
+  function bkStatusPill(b) {
+    var s = BK_ST[b.status] || ['mute', b.status];
+    return '<span class="lan-pill ' + s[0] + '">' + (b.status === 'canceled' && b.canceledBy === 'admin' ? '取り消し（管理画面）' : s[1]) + '</span>';
+  }
+  function bkBlockedPill(b) {
+    return b.blocked ? '<span class="lan-pill bad" title="' + (b.channel === 'email' ? '配信停止のため、このメールアドレスには届きません' : 'ブロックされているため、LINE は届きません') + '">' + (b.channel === 'email' ? 'メールが届かない' : 'LINEが届かない') + '</span>' : '';
+  }
+  function bkRemindText(list) {
+    return (list || []).map(function (s) {
+      var n = parseInt(s, 10), u = String(s).slice(-1);
+      return u === 'd' ? (n === 1 ? '前日' : n + '日前') : u === 'h' ? n + '時間前' : u === 'm' ? n + '分前' : s;
+    }).join('・');
+  }
+  function bkShowNotice(text, ok) {
+    var nt = el('lbook-notice');
+    nt.textContent = text || '';
+    nt.className = 'bk-notice' + (ok ? ' ok' : '');
+    nt.hidden = !text;
+  }
+  // 予約ページの切り替え(1つだけなら出さない・6つ以上は選ぶ欄)
+  function bkPageIds() {
+    var ids = lbk.pages.map(function (p) { return p.key; });
+    if (lbk.orphans) ids.push('_orphans');
+    return ids;
+  }
+  function bkPageLabel(p) {
+    if (p.kind === 'sessions') return [p.title, p.next ? fmtN(p.people) + '人' : '回なし'];
+    return [p.title, '今週 ' + fmtN(p.week) + '件'];
+  }
+  function paintBkPages() {
+    var nav = el('bk-pages');
+    var ids = bkPageIds();
+    nav.hidden = ids.length <= 1;
+    if (ids.length <= 1) { nav.innerHTML = ''; return; }
+    var items = lbk.pages.map(function (p) { return [p.key, bkPageLabel(p)]; });
+    if (lbk.orphans) items.push(['_orphans', ['設定にない予約', fmtN(lbk.orphans) + '件']]);
+    if (ids.length > 5) {
+      nav.innerHTML = '<select id="bk-page-sel" aria-label="予約ページを選ぶ">' + items.map(function (x) {
+        return '<option value="' + esc(x[0]) + '"' + (x[0] === lbk.cur ? ' selected' : '') + '>' + esc(x[1][0] + '（' + x[1][1] + '）') + '</option>';
+      }).join('') + '</select>';
+      return;
+    }
+    nav.innerHTML = items.map(function (x) {
+      var on = x[0] === lbk.cur;
+      return '<button type="button" class="fchip' + (on ? ' on' : '') + '" data-bk-page="' + esc(x[0]) + '" aria-pressed="' + on + '">' + esc(x[1][0]) + '<span class="num">' + esc(x[1][1]) + '</span></button>';
+    }).join('');
+  }
+  function bkPickPage(v) {
+    if (!v || v === lbk.cur) return;
+    lbk.cur = v;
+    try { localStorage.setItem('rondo_bk_page', v); } catch (e) { /* 覚えられなくても動く */ }
+    bkShowNotice('');
+    paintBkPages();
+    openBkPage();
+  }
+  el('bk-pages').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-bk-page]') : null;
+    if (b) bkPickPage(b.getAttribute('data-bk-page'));
+  });
+  el('bk-pages').addEventListener('change', function (e) { if (e.target.id === 'bk-page-sel') bkPickPage(e.target.value); });
+  el('bk-retry').addEventListener('click', function () { loadLineBookings(); });
   function loadLineBookings() {
     var gen = ++lbk.gen;
-    api('/api/admin/bookings?view=' + lbk.view).then(function (d) {
+    el('bk-err').hidden = true;
+    api('/api/admin/bookings/pages').then(function (d) {
       if (gen !== lbk.gen) return;
-      var keys = d.keys || [];
-      var rows = d.bookings || [];
-      // 設定から予約を消しても、残っている予約は見えて取り消せるようにカードを出す(便7監査1)。何も無ければ始め方
-      el('lbook-card').hidden = !keys.length && !rows.length;
-      el('lbook-empty').hidden = !!(keys.length || rows.length);
-      if (!keys.length && !rows.length) return;
-      // 枠を閉じるのは個別相談(slots)だけ。セミナーは回ごとのまとめを出す
-      var slotKeys = keys.filter(function (k) { return k.kind !== 'sessions'; });
-      document.querySelector('#lbook-card .lbk-block').hidden = !slotKeys.length;
-      var sel = el('lbk-key');
-      if (!sel.options.length) sel.innerHTML = slotKeys.map(function (k) { return '<option value="' + esc(k.key) + '">' + esc(k.title) + '</option>'; }).join('');
-      var ss = lbk.view === 'past' ? [] : (d.sessions || []);
-      el('lbook-sessions').innerHTML = ss.map(function (x) {
-        var full = x.booked >= x.capacity;
-        return '<div class="trow"><span class="l"><span class="num">' + esc(x.label) + '</span> ' + esc(x.title) + (x.note ? ' <span style="color:var(--note)">' + esc(x.note) + '</span>' : '') + '</span>' +
-          '<span class="cnt"><span class="num">' + fmtN(x.booked) + ' / ' + fmtN(x.capacity) + '</span>' + (x.waiting ? ' <span class="lan-pill plan">待ち ' + fmtN(x.waiting) + '</span>' : full ? ' <span class="lan-pill mute">満席</span>' : '') +
-          ' <button type="button" class="btn ghost sm" data-lbk-part="' + esc(x.key) + '" data-lbk-at="' + x.startAt + '">参加者</button></span></div>';
-      }).join('');
-      // 次回のご案内を受け取る人(満席・受付終了のあとに預かったメール)
-      el('lbook-sessions').innerHTML += (d.notify || []).map(function (x) {
-        return '<div class="trow"><span class="l">次回のご案内 <span style="color:var(--note)">' + esc(x.title) + '</span></span>' +
-          '<span class="cnt"><span class="num">' + fmtN(x.count) + '人</span> <a class="btn ghost sm" style="text-decoration:none" href="/api/admin/bookings/' + encodeURIComponent(x.key) + '/notify.csv" download>CSV</a></span></div>';
-      }).join('');
-      el('lbook-list').innerHTML = rows.length ? rows.map(function (b) {
-        var off = b.status === 'canceled';
-        var ans = (b.answerList || []).map(function (a) { return '<b>' + esc(a.label) + '</b>　' + esc(a.value); }).join('<br>');
-        return '<div class="lbk-row' + (off ? ' off' : '') + '"><div class="lbk-top"><span class="when">' + esc(b.label) + '</span><span class="who">' + esc(b.name) + '</span>' +
-          '<span class="kind">' + esc(b.title) + (b.channel === 'email' ? ' · メール' : ' · LINE') + (b.blocked ? (b.channel === 'email' ? ' · 配信停止（メールは届きません）' : ' · ブロック中（LINEは届きません）') : '') + '</span><span class="lan-pill ' + (b.status === 'booked' ? 'ok' : b.status === 'waiting' ? 'plan' : 'mute') + '">' + (b.status === 'booked' ? '予約中' : b.status === 'waiting' ? 'キャンセル待ち' : b.status === 'pending' ? '確認待ち' : b.status === 'done' ? '済み' : b.status === 'expired' ? '待ちのまま終了' : (b.canceledBy === 'admin' ? '取り消し（管理画面）' : '取り消し')) + '</span></div>' +
-          '<details><summary>答え・操作</summary>' + (ans ? '<div class="lbk-ans">' + ans + '</div>' : '<div class="lbk-ans" style="color:var(--note)">答えはありません</div>') +
-          '<div class="lbk-act"><a class="btn ghost sm" style="text-decoration:none" href="/api/admin/bookings/' + b.id + '.ics" download>カレンダー(.ics)</a>' +
-          ((b.status !== 'booked' && b.status !== 'waiting' && b.status !== 'pending') || lbk.view === 'past' ? '' : '<input type="text" placeholder="取り消しの理由（任意・本人に届く）" data-lbk-reason="' + b.id + '" maxlength="200"><button type="button" class="btn ghost sm" data-lbk-cancel="' + b.id + '">取り消す</button>') +
-          '</div></details></div>';
-      }).join('') : '<div class="trow empty">' + (lbk.view === 'past' ? '過去7日の予約はありません' : '予約はまだありません。原稿に @button 予約する | booking:' + esc(keys[0].key) + ' を書くと始まります') + '</div>';
-      var blocks = d.blocks || [];
-      el('lbook-blocks').innerHTML = blocks.map(function (x) {
-        return '<div class="trow"><span class="l">閉じた枠: <span class="num">' + esc(x.label) + '</span> <span style="color:var(--note)">' + esc(x.title) + '</span></span>' +
-          '<span class="cnt"><button type="button" class="btn ghost sm" data-lbk-open="' + x.id + '">開ける</button></span></div>';
-      }).join('');
-    }).catch(function () { if (gen === lbk.gen) el('lbook-card').hidden = true; });
+      lbk.pages = d.pages || [];
+      lbk.orphans = d.orphans || 0;
+      // 設定から予約ページを消しても、残っている予約は「設定にない予約」から見えて取り消せる
+      var none = !lbk.pages.length && !lbk.orphans;
+      el('lbook-empty').hidden = !none;
+      if (none) { el('bk-pages').hidden = true; el('bk-body').innerHTML = ''; return; }
+      if (bkPageIds().indexOf(lbk.cur) < 0) lbk.cur = bkPageIds()[0];
+      paintBkPages();
+      openBkPage();
+    }).catch(function (err) {
+      if (gen !== lbk.gen || (err && err.message === 'unauthorized')) return;
+      // 読めなかったときは「まだ無い」と見分けがつくように出す
+      el('lbook-empty').hidden = true;
+      el('bk-pages').hidden = true;
+      el('bk-body').innerHTML = '';
+      el('bk-err').hidden = false;
+    });
   }
-  el('lbook-chips').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('[data-lbk-view]') : null;
-    if (!b) return;
-    lbk.view = b.getAttribute('data-lbk-view');
-    el('lbook-chips').querySelectorAll('.fchip').forEach(function (x) { x.classList.toggle('on', x === b); });
-    loadLineBookings();
-  });
-  // 便3: 回の参加者(名前・道・状態・答え)と CSV・.ics
-  el('lbook-sessions').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('[data-lbk-part]') : null;
-    if (!b) return;
-    var key = b.getAttribute('data-lbk-part');
-    var at = b.getAttribute('data-lbk-at');
-    var box = el('lbook-part');
-    var q = encodeURIComponent(key) + '/participants?session=' + encodeURIComponent(at);
+  // 取り消しや枠の操作のあと: タブの数と、いま開いているページを読み直す(開いている回・週はそのまま)
+  function refreshBk() {
+    api('/api/admin/bookings/pages').then(function (d) {
+      lbk.pages = d.pages || [];
+      lbk.orphans = d.orphans || 0;
+      if (bkPageIds().indexOf(lbk.cur) < 0) { loadLineBookings(); return; }
+      paintBkPages();
+    }).catch(function () { /* タブの数は次に開いたときに直る */ });
+    var p = lbk.pages.filter(function (x) { return x.key === lbk.cur; })[0];
+    if (lbk.cur === '_orphans') loadBkOrphans(false, lbk.roster);
+    else if (p && p.kind === 'sessions') loadBkBoard(p.key, lbk.roster ? lbk.roster.at : null, true);
+    else if (p) loadBkWeek(p.key, lbk.weekStart, true);
+  }
+  function openBkPage() {
+    lbk.roster = null;
+    lbk.week = null;
+    lbk.weekStart = null;
+    var p = lbk.pages.filter(function (x) { return x.key === lbk.cur; })[0];
+    el('bk-body').innerHTML = '<div class="card"><div class="trow empty">読み込み中…</div></div>';
+    if (lbk.cur === '_orphans') loadBkOrphans(false);
+    else if (p && p.kind === 'sessions') loadBkBoard(p.key, null, false);
+    else if (p) loadBkWeek(p.key, null, false);
+  }
+  function bkLoadFail(box) {
+    box.innerHTML = '<div class="card"><div class="ai-empty"><b>読み込めませんでした</b><p>少し待ってから、もう一度読み込んでください。</p><p><button type="button" class="btn ghost sm" data-bk-reload>もう一度読み込む</button></p></div></div>';
+  }
+
+  // ---- セミナー: 回のカード・先行案内・名簿・終わった回 ----
+  function bkSessCard(x, d, sel) {
+    var st = x.inConfig ? (BK_SESS_ST[x.state] || ['mute', x.state]) : ['mute', '設定にない回'];
+    var pct = x.capacity ? Math.min(100, Math.round(x.seats / x.capacity * 100)) : 0;
+    var foot = [];
+    if (x.pending) foot.push('確認待ち <b>' + fmtN(x.pending) + '</b>人');
+    if (x.waiting) foot.push('キャンセル待ち <b>' + fmtN(x.waiting) + '</b>人');
+    var lines = [];
+    if (x.note) lines.push(esc(x.note));
+    if (foot.length) lines.push(foot.join(' · '));
+    if (!x.inConfig) lines.push('設定から外した回です。残っている予約は名簿から取り消せます。');
+    else if (x.state === 'open' || x.state === 'full' || x.state === 'waitlist') lines.push('受付は ' + esc(x.closesLabel) + ' まで');
+    else if (x.state === 'closed') lines.push('受付を締め切りました（開催前）');
+    if (x.inConfig && x.state !== 'live' && d.remind && d.remind.length) lines.push('リマインド ' + esc(bkRemindText(d.remind)) + '（時刻になると順に送ります）');
+    return '<button type="button" class="bk-sess" data-bk-sess="' + x.startAt + '" aria-pressed="' + (sel ? 'true' : 'false') + '">' +
+      '<span class="bs-top"><span class="bs-when">' + esc(x.label) + '</span><span class="lan-pill ' + st[0] + '">' + st[1] + '</span></span>' +
+      '<span class="bs-main"><b>' + fmtN(x.confirmed) + '</b>人 確定' + (x.capacity != null ? '<span style="margin-left:auto">定員 ' + fmtN(x.capacity) + (x.growBy ? '（自動で増席）' : '') + '</span>' : '') + '</span>' +
+      (x.capacity != null ? '<span class="bk-gauge" role="img" aria-label="席の埋まり ' + pct + '%"><i style="width:' + pct + '%"></i></span>' : '') +
+      (lines.length ? '<span class="bs-foot">' + lines.join('<br>') + '</span>' : '') + '</button>';
+  }
+  function bkNotifyCard(key, n) {
+    var off = n.count - n.csvCount;
+    return '<div class="bk-side"><span class="bs-k">次回の先行案内</span><span class="bs-main"><b>' + fmtN(n.count) + '</b>人が登録</span>' +
+      '<span class="bs-foot">満席・受付終了のあとに預かったメールです。' + (off > 0 ? 'CSV には配信停止の' + fmtN(off) + '人を除いた' + fmtN(n.csvCount) + '人が入ります。' : '') + '</span>' +
+      '<a class="btn ghost sm" href="' + bkKeyUrl(key) + '/notify.csv" download>CSV</a></div>';
+  }
+  function loadBkBoard(key, keepAt, quiet) {
+    var gen = ++lbk.bgen;
+    api(bkKeyUrl(key) + '/board').then(function (d) {
+      if (gen !== lbk.bgen || lbk.cur !== key) return;
+      var all = (d.upcoming || []).concat(d.past || []);
+      var sel = all.filter(function (x) { return x.startAt === keepAt; })[0] || (d.upcoming || [])[0] || null;
+      var html = '<div class="bk-sess-grid">' + (d.upcoming || []).map(function (x) { return bkSessCard(x, d, sel && sel.startAt === x.startAt); }).join('') +
+        (d.notify ? bkNotifyCard(key, d.notify) : '') + '</div>';
+      if (!(d.upcoming || []).length) html += '<div class="card"><div class="ai-empty"><b>これからの回はありません</b><p>次の回は予約の設定（bookings.config.mjs の sessions）に足します。終わった回の名簿は下から開けます。</p></div></div>';
+      html += '<div class="card" id="bk-roster" hidden></div>';
+      if ((d.past || []).length) {
+        html += '<details class="card bk-past"' + (sel && sel.state === 'ended' ? ' open' : '') + '><summary>終わった回 <span class="num">' + fmtN(d.past.length) + '</span></summary>' + d.past.map(function (x) {
+          return '<div class="trow" role="button" tabindex="0" data-bk-sess="' + x.startAt + '"><span class="l"><span class="num">' + esc(x.label) + '</span>' + (x.inConfig ? '' : ' <span style="color:var(--note)">設定にない回</span>') + '</span><span class="cnt">参加 ' + fmtN(x.confirmed) + '人</span></div>';
+        }).join('') + '</details>';
+      }
+      lbk.board = { key: key, all: all };
+      el('bk-body').innerHTML = html;
+      if (sel) openRoster(key, sel, quiet && lbk.roster ? { q: lbk.roster.q, st: lbk.roster.st } : null);
+    }).catch(function (err) { if (gen === lbk.bgen && lbk.cur === key && !(err && err.message === 'unauthorized')) bkLoadFail(el('bk-body')); });
+  }
+  function openRoster(key, x, keep) {
+    clearTimeout(bkSearchT);
+    var ended = x.state === 'ended';
+    var r = { key: key, at: x.startAt, label: x.label, ended: ended, q: keep ? keep.q : '', st: keep && !(ended && keep.st === 'active') ? keep.st : (ended ? 'booked' : 'active'), rows: [], gen: 0, loading: false };
+    lbk.roster = r;
+    el('bk-body').querySelectorAll('.bk-sess').forEach(function (c) { c.setAttribute('aria-pressed', String(Number(c.getAttribute('data-bk-sess')) === x.startAt)); });
+    var box = el('bk-roster');
+    var q = 'session=' + x.startAt;
     box.hidden = false;
-    box.innerHTML = '<div class="trow empty">読み込み中…</div>';
-    api('/api/admin/bookings/' + q).then(function (d) {
-      var st = { booked: ['ok', '予約中'], pending: ['mute', '確認待ち'], waiting: ['plan', 'キャンセル待ち'] };
-      var base = '/api/admin/bookings/' + encodeURIComponent(key);
-      box.innerHTML = '<div class="lbk-part-head"><b>' + esc(d.label) + ' ' + esc(d.title) + '</b><span>' + fmtN(d.participants.length) + '人</span>' +
-        '<a class="btn ghost sm" style="text-decoration:none" href="' + base + '/participants.csv?session=' + encodeURIComponent(at) + '" download>CSV</a>' +
-        '<a class="btn ghost sm" style="text-decoration:none" href="' + base + '/session.ics?session=' + encodeURIComponent(at) + '" download>カレンダー(.ics)</a>' +
-        '<button type="button" class="btn ghost sm" data-lbk-part-close>閉じる</button></div>' +
-        (d.participants.length ? d.participants.map(function (p) {
-          var s = st[p.status] || ['mute', p.status];
-          var ans = (p.answerList || []).map(function (a) { return '<b>' + esc(a.label) + '</b>　' + esc(a.value); }).join('<br>');
-          // 一覧(100件まで)から漏れた人もここで取り消せる(監査2 便3)
-          return '<div class="lbk-row"><div class="lbk-top"><span class="who">' + esc(p.name) + '</span><span class="kind">' + (p.channel === 'email' ? 'メール' : 'LINE') + '</span>' +
-            '<span class="lan-pill ' + s[0] + '">' + s[1] + '</span></div>' + (ans ? '<div class="lbk-ans">' + ans + '</div>' : '') +
-            '<div class="lbk-act"><input type="text" placeholder="取り消しの理由（任意・本人に届く）" data-lbk-preason="' + p.id + '" maxlength="200"><button type="button" class="btn ghost sm" data-lbk-pcancel="' + p.id + '">取り消す</button></div></div>';
-        }).join('') : '<div class="trow empty">まだ参加者はいません</div>');
-    }).catch(function () { box.innerHTML = '<div class="trow empty">読み込めませんでした</div>'; });
+    box.innerHTML = '<div class="bk-rhead"><h2>' + esc(x.label) + (r.ended ? ' の参加者' : ' の名簿') + '</h2><span class="sub" id="bk-rtotal"></span>' +
+      '<span class="acts"><a class="btn ghost sm" href="' + bkKeyUrl(key) + '/participants.csv?' + q + '" download>CSV</a><a class="btn ghost sm" href="' + bkKeyUrl(key) + '/session.ics?' + q + '" download>カレンダー(.ics)</a></span></div>' +
+      '<div class="bk-rtools"><input type="search" id="bk-rq" placeholder="メールアドレス・名前で探す" aria-label="名簿を探す" value="' + esc(r.q) + '"><span id="bk-rst" style="display:flex;flex-wrap:wrap;gap:6px"></span></div>' +
+      '<div id="bk-rlist"><div class="trow empty">読み込み中…</div></div><div class="bk-more" id="bk-rmore" hidden></div>';
+    loadRoster(false);
+  }
+  function loadRoster(more) {
+    var r = lbk.roster;
+    if (!r || (more && r.loading)) return;
+    var gen = ++r.gen;
+    if (!more) {
+      r.rows = [];
+      r.loading = true;
+      el('bk-rmore').hidden = true;
+      el('bk-rmore').innerHTML = '';
+    }
+    var off = more ? r.rows.length : 0;
+    api(bkKeyUrl(r.key) + '/roster?session=' + r.at + '&st=' + r.st + '&q=' + encodeURIComponent(r.q) + '&offset=' + off + '&limit=100').then(function (d) {
+      if (r !== lbk.roster || gen !== r.gen) return;
+      r.loading = false;
+      r.rows = more ? r.rows.concat(d.rows) : d.rows;
+      var c = d.counts || {};
+      var chips = r.ended ? [['booked', '参加した人', (c.booked || 0) + (c.done || 0)]]
+        : [['active', '申し込み中', (c.booked || 0) + (c.pending || 0) + (c.waiting || 0) + (c.done || 0)]];
+      if (!r.ended && (c.pending || 0) > 0) chips.push(['pending', '確認待ち', c.pending]);
+      var waits = (c.waiting || 0) + (c.expired || 0); // 始まった回の待ちは expired に書き換わる
+      if (waits > 0) chips.push(['waiting', r.ended ? '待ちのまま終了' : 'キャンセル待ち', waits]);
+      if ((c.canceled || 0) > 0 || r.st === 'canceled') chips.push(['canceled', '取り消した人', c.canceled || 0]);
+      el('bk-rst').innerHTML = chips.length > 1 ? chips.map(function (x) {
+        return '<button type="button" class="fchip' + (r.st === x[0] ? ' on' : '') + '" data-bk-rst="' + x[0] + '" aria-pressed="' + (r.st === x[0]) + '">' + x[1] + '<span class="num">' + fmtN(x[2]) + '</span></button>';
+      }).join('') : '';
+      el('bk-rtotal').textContent = (r.q ? '「' + r.q + '」で ' : '') + fmtN(d.total) + '人';
+      el('bk-rlist').innerHTML = r.rows.length ? r.rows.map(function (b) { return bkPersonRow(b, null); }).join('')
+        : '<div class="trow empty">' + (r.q ? '見つかりませんでした' : r.st === 'active' ? 'まだ申し込みはありません' : r.ended && r.st === 'booked' ? '参加した人はいません' : 'この条件の人はいません') + '</div>';
+      var left = d.total - r.rows.length;
+      el('bk-rmore').hidden = !d.hasMore;
+      el('bk-rmore').innerHTML = d.hasMore ? '<button type="button" class="btn ghost sm" data-bk-rmore>もっと見る（あと ' + fmtN(left) + '人）</button>' : '';
+    }).catch(function (err) {
+      if (r !== lbk.roster || gen !== r.gen || (err && err.message === 'unauthorized')) return;
+      r.loading = false;
+      el('bk-rlist').innerHTML = '<div class="trow empty">読み込めませんでした <button type="button" class="btn ghost sm" data-bk-rretry>もう一度</button></div>';
+    });
+  }
+  var bkSearchT = null;
+  el('bk-body').addEventListener('input', function (e) {
+    if (e.target.id !== 'bk-rq' || !lbk.roster) return;
+    clearTimeout(bkSearchT);
+    var rr = lbk.roster, v = e.target.value.trim();
+    bkSearchT = setTimeout(function () { if (lbk.roster !== rr) return; rr.q = v; loadRoster(false); }, 300);
   });
-  el('lbook-part').addEventListener('click', function (e) {
-    if (e.target.closest && e.target.closest('[data-lbk-part-close]')) { el('lbook-part').hidden = true; return; }
-    var b = e.target.closest ? e.target.closest('[data-lbk-pcancel]') : null;
-    if (!b || !armTwice(b, 'もう一度押すと取り消す')) return;
-    var id = b.getAttribute('data-lbk-pcancel');
-    var r = el('lbook-part').querySelector('[data-lbk-preason="' + id + '"]');
-    b.disabled = true;
-    api('/api/admin/bookings/' + id + '/cancel', { method: 'POST', body: JSON.stringify({ reason: r ? r.value : '' }) })
-      .then(function () { var row = b.closest('.lbk-row'); if (row) row.remove(); loadLineBookings(); })
-      .catch(function () { b.disabled = false; b.textContent = '取り消せませんでした'; });
-  });
-  el('lbook-list').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('[data-lbk-cancel]') : null;
-    if (!b || !armTwice(b, 'もう一度押すと取り消す')) return;
-    var id = b.getAttribute('data-lbk-cancel');
-    var r = el('lbook-list').querySelector('[data-lbk-reason="' + id + '"]');
-    b.disabled = true;
-    api('/api/admin/bookings/' + id + '/cancel', { method: 'POST', body: JSON.stringify({ reason: r ? r.value : '' }) })
-      .then(function (d) {
-        loadLineBookings();
-        // 本人への知らせが届いていなければ、ここで伝える(緊急停止中・送信の失敗。ブロック中・配信停止の人へは送らないのが正しい・release/1.0 5d9fda5)
-        var why = d && d.notice === 'killed' ? '緊急停止中のため' : d && (d.notice === 'failed' || d.notice === 'unknown') ? '送れなかったため' : '';
-        var nt = el('lbook-notice');
-        nt.textContent = why ? '予約は取り消しました。' + why + '、本人への知らせは届いていません。LINE のトークかメールで直接お知らせください。' : '';
-        nt.hidden = !why;
-      }).catch(function () { b.disabled = false; b.textContent = '取り消せませんでした'; });
-  });
-  el('lbook-blocks').addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('[data-lbk-open]') : null;
-    if (!b) return;
-    b.disabled = true;
-    api('/api/admin/booking-blocks/' + b.getAttribute('data-lbk-open'), { method: 'DELETE' }).then(function () { loadLineBookings(); }).catch(function () { b.disabled = false; });
-  });
-  el('lbk-close').addEventListener('click', function () {
-    var msg = el('lbk-msg');
-    var day = el('lbk-day').value;
-    if (!day) { msg.textContent = '日付を選んでください'; return; }
-    msg.textContent = '';
-    fetch('/api/admin/booking-blocks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ key: el('lbk-key').value, day: day, time: el('lbk-time').value }) })
+
+  // ---- 1人の行と詳細(名簿・週・設定にない予約で同じ形) ----
+  function bkPersonRow(b, opts) {
+    var off = b.status === 'canceled' || b.status === 'expired';
+    return '<div class="bk-p' + (off ? ' off' : '') + '" data-bkp="' + b.id + '"><button type="button" class="bk-p-row" aria-expanded="false">' +
+      (opts && opts.when ? '<span class="when">' + esc(b.label) + '</span>' : '') +
+      '<span class="who">' + esc(b.name) + '</span><span class="meta">' + (b.channel === 'email' ? 'メール' : 'LINE') +
+      (opts && opts.title ? ' · ' + esc(b.title) : '') + (b.createdLabel ? ' · ' + esc(b.createdLabel) + ' に申し込み' : '') + '</span>' +
+      '<span class="pills">' + bkBlockedPill(b) + bkStatusPill(b) + '</span><span class="chev" aria-hidden="true">›</span></button><div class="bk-det-box"></div></div>';
+  }
+  function bkDetailHtml(b) {
+    var rows = [['日時', b.label]];
+    if (b.channel === 'email') rows.push(['メール', (b.contact || '（記録なし）') + (b.realName ? '　' + b.realName : '')]);
+    else rows.push(['LINE', b.contact || b.name]);
+    (b.answerList || []).forEach(function (a) { rows.push([a.label, a.value]); });
+    if (!b.inConfig) rows.push(['予約ページ', b.title + '（設定にありません）']);
+    var acts = '<a class="btn ghost sm" href="/api/admin/bookings/' + b.id + '.ics" download>カレンダー(.ics)</a>' +
+      (b.chatKey ? '<button type="button" class="btn ghost sm" data-bk-chat="' + esc(b.chatKey) + '">トークを開く</button>' : '') +
+      (!b.inConfig ? '<a class="btn ghost sm" href="' + bkKeyUrl(b.key) + '/participants.csv?session=' + b.startAt + '" download>同じ日時の予約（CSV）</a>' : '');
+    var hint = b.status === 'pending' ? '確認前の申し込みなので、本人には知らせません。'
+      : b.blocked ? (b.channel === 'email' ? 'このアドレスは配信停止のため、取り消しの知らせは届きません。' : 'ブロックされているため、取り消しの知らせは LINE に届きません。')
+      : b.status === 'waiting' ? 'キャンセル待ちから外し、本人に' + (b.channel === 'email' ? 'メール' : 'LINE') + 'で知らせます。'
+      : '本人に' + (b.channel === 'email' ? 'メール' : 'LINE') + 'で知らせます。空いた席・枠は、また申し込めるようになります。';
+    var cancel = b.canCancel ? '<div class="bk-cancel"><input type="text" maxlength="200" placeholder="取り消しの理由（任意・本人に届きます）" aria-label="取り消しの理由" data-bk-reason>' +
+      '<button type="button" class="btn danger sm" data-bk-cancel="' + b.id + '">この予約を取り消す</button><span class="hint">' + hint + '</span></div>' : '';
+    return '<div class="bk-det"><dl>' + rows.map(function (x) { return '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd>'; }).join('') + '</dl><div class="acts">' + acts + '</div>' + cancel + '</div>';
+  }
+  // 詳細(メールは全文)。閉じたあとに遅れて届いた応答は書き戻さない(閉じた行にアドレスを出さない)
+  function bkLoadDetail(id, box) {
+    var tok = (box._tok || 0) + 1;
+    box._tok = tok;
+    box.hidden = false;
+    box.innerHTML = '<div class="bk-det" style="color:var(--note)">読み込み中…</div>';
+    api('/api/admin/bookings/' + id).then(function (d) { if (box._tok === tok && !box.hidden && box.isConnected) box.innerHTML = bkDetailHtml(d.booking); })
+      .catch(function () { if (box._tok === tok && !box.hidden) box.innerHTML = '<div class="bk-det" style="color:var(--note)">読み込めませんでした</div>'; });
+  }
+  function bkCloseDetail(box) {
+    box._tok = (box._tok || 0) + 1;
+    box.hidden = true;
+    box.innerHTML = '';
+  }
+  function bkCancel(btn) {
+    if (!armTwice(btn, 'もう一度押すと取り消す')) return;
+    var id = btn.getAttribute('data-bk-cancel');
+    var r = btn.closest('.bk-cancel').querySelector('[data-bk-reason]');
+    btn.disabled = true;
+    api('/api/admin/bookings/' + id + '/cancel', { method: 'POST', body: JSON.stringify({ reason: r ? r.value : '' }) }).then(function (d) {
+      // 本人への知らせが届いていなければ、どの入口から取り消してもここで伝える(緊急停止中・送信の失敗)
+      var why = d && d.notice === 'killed' ? '緊急停止中のため' : d && (d.notice === 'failed' || d.notice === 'unknown') ? '送れなかったため' : '';
+      if (why) bkShowNotice('予約は取り消しました。' + why + '、本人への知らせは届いていません。LINE のトークかメールで直接お知らせください。', false);
+      else bkShowNotice('予約を取り消しました。' + (d && d.notice === 'sent' ? '本人に知らせました。' : '') + (d && d.promoted && d.promoted.length ? 'キャンセル待ちの' + d.promoted.length + '人が繰り上がりました。' : ''), true);
+      refreshBk();
+    }).catch(function () { btn.disabled = false; btn.textContent = '取り消せませんでした（読み直してください）'; });
+  }
+
+  // ---- 個別相談: 週の予定表 ----
+  function bkSlotBooked(b, t) {
+    var cls = b.status === 'pending' ? ' pend' : b.status === 'done' ? ' done' : '';
+    var tag = b.status === 'pending' ? '確認待ち' : b.status === 'done' ? '済み' : '';
+    return '<button type="button" class="bk-slot st-booked' + cls + '" data-bk-bid="' + b.id + '" aria-label="' + esc(b.label + ' ' + b.name + (tag ? ' ' + tag : '') + (b.blocked ? ' 知らせが届かない' : '')) + '">' +
+      '<span class="t">' + esc(t) + '</span>' + (tag ? '<span>' + tag + '</span>' : '') + (b.blocked ? '<span>届かない</span>' : '') + '<span class="s">' + esc(b.name) + '</span></button>';
+  }
+  function bkSlot(s, day) {
+    var t = '<span class="t">' + esc(s.label) + '</span>';
+    if (s.state === 'booked') return s.bookings.map(function (b) { return bkSlotBooked(b, s.label); }).join('');
+    if (s.state === 'free' || s.state === 'later') {
+      var w = s.state === 'free' ? '空き' : '受付前';
+      return '<button type="button" class="bk-slot st-' + s.state + '" data-bk-close="' + day.day + '" data-at="' + s.startAt + '" aria-label="' + esc(day.label + '（' + day.dow + '）' + s.label + ' ' + w + '。押すとこの枠を閉じます') + '">' + t + '<span class="s">' + w + '</span></button>';
+    }
+    if (s.state === 'blocked') return '<button type="button" class="bk-slot st-blocked" data-bk-open="' + s.blockIds.join(',') + '" aria-label="' + esc(day.label + '（' + day.dow + '）' + s.label + ' 閉じた枠。押すと開けます') + '">' + t + '<span class="s">閉じた枠</span></button>';
+    var w2 = { dayblock: '閉じた日', holiday: '休み', lead: '締切後', past: '' }[s.state] || '';
+    return '<div class="bk-slot st-' + s.state + '">' + t + (w2 ? '<span class="s">' + w2 + '</span>' : '') + '</div>';
+  }
+  function bkDayCol(day) {
+    var h = '<div class="bk-day' + (day.past ? ' past' : '') + (day.weekend ? ' we' : '') + '" data-day="' + day.day + '"><div class="bk-day-h"><b>' + esc(day.label) + '</b><span>' + esc(day.dow) + '</span>' + (day.today ? '<span class="today">今日</span>' : '') + '</div>';
+    h += '<div class="bk-slots">' + (day.slots.length ? day.slots.map(function (s) { return bkSlot(s, day); }).join('') : (day.extra.length ? '' : '<div class="bk-day-none">受付なし</div>')) + '</div>';
+    if (day.extra.length) h += '<div class="bk-day-x">枠の外の予約</div><div class="bk-slots">' + day.extra.map(function (b) { return bkSlotBooked(b, bkHm(b.startAt)); }).join('') + '</div>';
+    var openable = day.slots.some(function (s) { return s.state === 'free' || s.state === 'later'; });
+    var busy = day.slots.some(function (s) { return s.state === 'booked' && s.bookings.some(function (b) { return b.status !== 'done'; }); }) || day.extra.length;
+    if (day.holiday) h += '<div class="bk-day-x">休み（予約の設定の closed）</div>';
+    else if (day.dayBlockId && !day.past) h += '<button type="button" class="bk-day-act" data-bk-dayopen="' + day.dayBlockId + '">この日の閉鎖を解除</button>';
+    else if (!day.past && openable && !busy) h += '<button type="button" class="bk-day-act" data-bk-dayclose="' + day.day + '">この日を全部閉じる</button>';
+    return h + '</div>';
+  }
+  function loadBkWeek(key, start, quiet) {
+    var gen = ++lbk.wgen;
+    api(bkKeyUrl(key) + '/week' + (start ? '?start=' + start : '')).then(function (d) {
+      if (gen !== lbk.wgen || lbk.cur !== key) return;
+      var keepSel = quiet && lbk.week && lbk.week.sel;
+      lbk.week = { key: key, data: d, sel: null };
+      lbk.weekStart = d.start;
+      el('bk-body').innerHTML = '<div class="card bk-week"><div class="bk-whead">' +
+        '<button type="button" class="btn ghost sm" data-bkw="' + (d.prev || '') + '"' + (d.prev ? '' : ' disabled') + '>← 前の週</button>' +
+        '<b>' + esc(d.label) + '</b>' +
+        '<button type="button" class="btn ghost sm" data-bkw="' + d.next + '">次の週 →</button>' +
+        (d.start !== d.today ? '<button type="button" class="btn ghost sm" data-bkw="' + d.today + '">今日へ</button>' : '') +
+        '<span class="sub">この週の予約 ' + fmtN(d.count) + '件 · ' + fmtN(d.minutes) + '分の枠</span></div>' +
+        '<p class="bk-wmsg" id="bk-wmsg" role="status"></p>' +
+        '<div class="bk-wgrid" id="bk-wgrid">' + d.days.map(bkDayCol).join('') + '</div>' +
+        '<div class="bk-wdet" id="bk-wdet" hidden></div>' +
+        '<div class="bk-legend"><span><i class="lg-bk"></i>予約</span><span><i class="lg-pend"></i>確認待ち</span><span><i class="lg-free"></i>空き（押すと閉じる）</span><span><i class="lg-cl"></i>閉じた枠（押すと開ける）</span></div>' +
+        ((d.canceled || []).length ? '<details class="bk-past bk-wcx"><summary>取り消した予約（この週の日時） <span class="num">' + fmtN(d.canceledTotal || d.canceled.length) + '</span></summary>' +
+          d.canceled.map(function (b) { return bkPersonRow(b, { when: true }); }).join('') +
+          ((d.canceledTotal || 0) > d.canceled.length ? '<div class="bk-more"><button type="button" class="btn ghost sm" data-bk-cmore="' + d.canceled.length + '">もっと見る（あと ' + fmtN(d.canceledTotal - d.canceled.length) + '件）</button></div>' : '') + '</details>' : '') + '</div>';
+      if (keepSel) { var b = el('bk-body').querySelector('[data-bk-bid="' + keepSel + '"]'); if (b) bkWeekDetail(b); }
+    }).catch(function (err) { if (gen === lbk.wgen && lbk.cur === key && !(err && err.message === 'unauthorized')) bkLoadFail(el('bk-body')); });
+  }
+  function bkWeekMsg(t) { var m = el('bk-wmsg'); if (m) m.textContent = t || ''; }
+  // 予約を押したら詳細。広い画面は表の下、狭い画面(1列)はその日のすぐ下に出す
+  function bkWeekDetail(btn) {
+    var det = el('bk-wdet');
+    var id = btn.getAttribute('data-bk-bid');
+    el('bk-body').querySelectorAll('.bk-slot.sel').forEach(function (x) { x.classList.remove('sel'); });
+    if (lbk.week && lbk.week.sel === id && !det.hidden) { var ob = det.querySelector('.bk-det-box'); if (ob) bkCloseDetail(ob); det.hidden = true; lbk.week.sel = null; return; }
+    btn.classList.add('sel');
+    if (lbk.week) lbk.week.sel = id;
+    var narrow = window.matchMedia && window.matchMedia('(max-width:860px)').matches;
+    var col = btn.closest('.bk-day');
+    if (narrow && col) col.after(det); else el('bk-wgrid').after(det);
+    det.hidden = false;
+    det.innerHTML = '<div class="bk-rhead"><h2>' + esc(btn.getAttribute('aria-label') || '') + '</h2><span class="acts"><button type="button" class="btn ghost sm" data-bk-wclose>閉じる</button></span></div><div class="bk-det-box"></div>';
+    bkLoadDetail(id, det.querySelector('.bk-det-box'));
+  }
+  // 1つの枠を閉じる(押し間違い防止に2回押し)。予約が先に入っていたら、その旨を出して読み直す
+  function bkArmSlot(b, label) {
+    if (b.classList.contains('armed')) { clearTimeout(b._armT); b.classList.remove('armed'); return true; }
+    b._armH = b.innerHTML;
+    b.classList.add('armed');
+    b.innerHTML = '<span class="t">' + label + '</span>';
+    b._armT = setTimeout(function () { b.classList.remove('armed'); b.innerHTML = b._armH; }, 4000);
+    return false;
+  }
+  function bkBlockPost(payload, btn, fail) {
+    btn.disabled = true;
+    fetch('/api/admin/booking-blocks', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
       .then(function (r) {
         if (r.status === 401) { showLogin(loginMessage()); throw new Error('unauthorized'); }
         return r.json().then(function (j) { return { ok: r.ok, j: j }; });
       })
-      .then(function (x) { msg.textContent = x.ok ? '閉じました' : ((x.j.details || [])[0] || '閉じられませんでした'); if (x.ok) loadLineBookings(); })
-      .catch(function () { msg.textContent = '閉じられませんでした'; });
+      .then(function (x) {
+        // 断られた理由は、週を描き直しても消えない上の欄に出す
+        if (!x.ok) bkShowNotice((x.j.details || [])[0] || fail, false); else bkShowNotice('');
+        refreshBk();
+      })
+      .catch(function (err) { if (err && err.message === 'unauthorized') return; btn.disabled = false; bkWeekMsg(fail); });
+  }
+  function bkBlockDelete(ids, btn) {
+    btn.disabled = true;
+    Promise.all(ids.map(function (id) { return api('/api/admin/booking-blocks/' + id, { method: 'DELETE' }); }))
+      .then(function () { refreshBk(); })
+      .catch(function () { btn.disabled = false; bkWeekMsg('開けられませんでした。もう一度押してください'); });
+  }
+
+  // ---- 設定にない予約 ----
+  // 予約ページと日時ごとにまとめる(まとまりの見出しに、その日時の名簿の CSV と .ics)
+  function bkOrphanGroups(rows) {
+    var out = '', last = null;
+    rows.forEach(function (b) {
+      var g = b.key + '|' + b.startAt;
+      if (g !== last) {
+        last = g;
+        var q = 'session=' + b.startAt;
+        out += '<div class="bk-rhead"><h2>' + esc(b.title) + '　' + esc(b.label) + '</h2><span class="acts">' +
+          '<a class="btn ghost sm" href="' + bkKeyUrl(b.key) + '/participants.csv?' + q + '" download>CSV</a>' +
+          '<a class="btn ghost sm" href="' + bkKeyUrl(b.key) + '/session.ics?' + q + '" download>カレンダー(.ics)</a>' +
+          '<button type="button" class="btn ghost sm" data-bk-oroster="' + esc(b.key) + '" data-at="' + b.startAt + '" data-ended="' + (b.ended ? '1' : '') + '" data-label="' + esc(b.title + '　' + b.label) + '">名簿を開く</button></span></div>';
+      }
+      out += bkPersonRow(b, null);
+    });
+    return out;
+  }
+  function loadBkOrphans(more, keepRoster) {
+    var gen = ++lbk.ogen;
+    var off = more ? lbk.orows.length : 0;
+    api('/api/admin/bookings/orphans?offset=' + off).then(function (d) {
+      if (gen !== lbk.ogen || lbk.cur !== '_orphans') return;
+      lbk.orows = more ? lbk.orows.concat(d.rows) : d.rows;
+      var list = (lbk.orows.length ? bkOrphanGroups(lbk.orows) : '<div class="trow empty">ありません</div>') +
+        (d.hasMore ? '<div class="bk-more"><button type="button" class="btn ghost sm" data-bk-omore>もっと見る</button></div>' : '');
+      // 続きを読んだときは一覧だけ描き直す(開いている名簿・検索語はそのまま)
+      if (more && el('bk-olist')) { el('bk-olist').innerHTML = list; return; }
+      el('bk-body').innerHTML = '<div class="card" id="bk-roster" hidden></div><div class="card"><div class="card-head"><h2>設定にない予約</h2><span class="sub">設定から外した予約ページに残っている予約です（終わったものは7日分）。取り消しと連絡はここからできます。</span></div>' +
+        '<div id="bk-olist">' + list + '</div></div>';
+      // 取り消しのあとは、開いていた名簿を検索語・絞り込みごと開き直す(続けて取り消せる)
+      var kr = keepRoster;
+      if (kr && lbk.roster === kr) openRoster(kr.key, { startAt: kr.at, label: kr.label, state: kr.ended ? 'ended' : 'open' }, { q: kr.q, st: kr.st });
+    }).catch(function (err) { if (gen === lbk.ogen && lbk.cur === '_orphans' && !(err && err.message === 'unauthorized')) bkLoadFail(el('bk-body')); });
+  }
+
+  // ---- 予約の画面のクリック(まとめて受ける) ----
+  el('bk-body').addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : null;
+    if (!t) return;
+    var x;
+    if ((x = t.closest('[data-bk-reload]'))) { openBkPage(); return; }
+    if ((x = t.closest('[data-bk-sess]'))) {
+      var at = Number(x.getAttribute('data-bk-sess'));
+      var s = lbk.board && lbk.board.all.filter(function (y) { return y.startAt === at; })[0];
+      if (s) { openRoster(lbk.board.key, s, null); var rb = el('bk-roster'); if (rb && rb.scrollIntoView) rb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      return;
+    }
+    if ((x = t.closest('[data-bk-rst]'))) { if (lbk.roster) { lbk.roster.st = x.getAttribute('data-bk-rst'); loadRoster(false); } return; }
+    if (t.closest('[data-bk-rmore]')) { loadRoster(true); return; }
+    if (t.closest('[data-bk-rretry]')) { loadRoster(false); return; }
+    if (t.closest('[data-bk-omore]')) { loadBkOrphans(true); return; }
+    if ((x = t.closest('[data-bk-oroster]'))) {
+      // 設定から外した予約ページでも、その日時の名簿(検索・絞り込み)を開ける
+      openRoster(x.getAttribute('data-bk-oroster'), { startAt: Number(x.getAttribute('data-at')), label: x.getAttribute('data-label'), state: x.getAttribute('data-ended') ? 'ended' : 'open' }, null);
+      var ob2 = el('bk-roster'); if (ob2 && ob2.scrollIntoView) ob2.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      return;
+    }
+    if ((x = t.closest('[data-bk-cmore]'))) {
+      // 週の取り消しの続き(200件ずつ)
+      if (!lbk.week || x.disabled) return;
+      var wk = lbk.week, cbox = x.closest('.bk-more');
+      x.disabled = true;
+      api(bkKeyUrl(wk.key) + '/week?start=' + wk.data.start + '&coffset=' + x.getAttribute('data-bk-cmore')).then(function (d) {
+        if (lbk.week !== wk || !cbox.isConnected) return;
+        // 日付が変わって週の始まりが補正されたら、続きを足さずにその週を先頭から読み直す
+        if (d.start !== wk.data.start) { loadBkWeek(wk.key, d.start, false); return; }
+        var shown = Number(x.getAttribute('data-bk-cmore')) + d.canceled.length;
+        cbox.insertAdjacentHTML('beforebegin', d.canceled.map(function (b) { return bkPersonRow(b, { when: true }); }).join(''));
+        if (shown < d.canceledTotal && d.canceled.length) { x.setAttribute('data-bk-cmore', String(shown)); x.textContent = 'もっと見る（あと ' + fmtN(d.canceledTotal - shown) + '件）'; x.disabled = false; }
+        else cbox.remove();
+      }).catch(function () { x.disabled = false; });
+      return;
+    }
+    if ((x = t.closest('[data-bk-cancel]'))) { bkCancel(x); return; }
+    if ((x = t.closest('[data-bk-chat]'))) { var ck = x.getAttribute('data-bk-chat'); show('inbox'); openChat(ck); return; }
+    if ((x = t.closest('.bk-p-row'))) {
+      var p = x.closest('.bk-p');
+      var open = !p.classList.contains('open');
+      p.classList.toggle('open', open);
+      x.setAttribute('aria-expanded', String(open));
+      var box = p.querySelector('.bk-det-box');
+      if (open) bkLoadDetail(p.getAttribute('data-bkp'), box); else bkCloseDetail(box);
+      return;
+    }
+    if ((x = t.closest('[data-bkw]'))) { if (!x.disabled && lbk.week) loadBkWeek(lbk.week.key, x.getAttribute('data-bkw'), false); return; }
+    if ((x = t.closest('[data-bk-bid]'))) { bkWeekDetail(x); return; }
+    if (t.closest('[data-bk-wclose]')) { var wb = el('bk-wdet').querySelector('.bk-det-box'); if (wb) bkCloseDetail(wb); el('bk-wdet').hidden = true; if (lbk.week) lbk.week.sel = null; el('bk-body').querySelectorAll('.bk-slot.sel').forEach(function (y) { y.classList.remove('sel'); }); return; }
+    if ((x = t.closest('[data-bk-close]'))) {
+      if (x.disabled || !lbk.week || !bkArmSlot(x, 'もう一度で閉じる')) return;
+      bkWeekMsg('');
+      bkBlockPost({ key: lbk.week.key, day: x.getAttribute('data-bk-close'), time: bkHm(Number(x.getAttribute('data-at'))) }, x, '閉じられませんでした');
+      return;
+    }
+    if ((x = t.closest('[data-bk-open]'))) { bkWeekMsg(''); bkBlockDelete(x.getAttribute('data-bk-open').split(','), x); return; }
+    if ((x = t.closest('[data-bk-dayclose]'))) {
+      if (!lbk.week || !armTwice(x, 'もう一度押すとこの日を全部閉じる')) return;
+      bkWeekMsg('');
+      bkBlockPost({ key: lbk.week.key, day: x.getAttribute('data-bk-dayclose') }, x, 'この日は閉じられませんでした');
+      return;
+    }
+    if ((x = t.closest('[data-bk-dayopen]'))) { bkWeekMsg(''); bkBlockDelete([x.getAttribute('data-bk-dayopen')], x); return; }
+  });
+  el('bk-body').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var x = e.target.closest ? e.target.closest('.trow[data-bk-sess]') : null;
+    if (x) { e.preventDefault(); x.click(); }
   });
   // ---- 回答フォーム(LINE C段) ----
   function loadLineForms() {
@@ -7604,7 +8195,16 @@ function __route(url) {
       mt('ビュー 7日', hasViews ? views : null, viewsPrevOk ? { wow: viewsPrev } : null),
       mt('つないでいるチャネル', on.length, { note: wait.length ? '読み込み中 ' + wait.length : (list.length - on.length ? '未接続 ' + (list.length - on.length) : 'すべて') }),
     ];
-    el('chn-kpis').innerHTML = head.map(metricHtml).join('');
+    // アプリの総DL数(10-09 本人「アプリの総DL数もいれて」)。押すとアプリ画面へ。未収集の環境では出さない
+    var ap = got.$apps, apHtml = '';
+    if (CFG.appsConnected && ap !== null) {
+      // 下の行は他のカードと同じ「+N ／ 7日」。内訳(本数・iOS・Android)は指を乗せると出る
+      apHtml = metricHtml(ap ? mt('アプリ 累計DL', ap.total, { d: ap.d7 }) : mt('アプリ 累計DL', null))
+        .replace('<div class="kpi">', '<div class="kpi go" role="link" tabindex="0" data-go="apps" title="' +
+          (ap ? esc(ap.n + '本 · iOS ' + fmtN(ap.ios) + ' · Android ' + fmtN(ap.android)) : 'アプリのDL数') + '">');
+    }
+    el('chn-kpis').classList.toggle('k5', !!apHtml);
+    el('chn-kpis').innerHTML = head.map(metricHtml).join('') + apHtml;
   }
   // 「すべて」は一覧専用の軽い集計 /api/admin/channels/summary を1回だけ読む(10-09 本人「一覧専用の軽い集計APIも」)。
   // 中身はチャネル画面と同じ定義の上4枚・30日の線だけ。2分は使い回し、読み込み中は共有、古い応答は新しい結果を上書きしない
@@ -7628,6 +8228,7 @@ function __route(url) {
       p = api('/api/admin/channels/summary?ch=' + encodeURIComponent(key)).then(function (r) {
         var got = r.channels || {};
         list.forEach(function (c) { if (!got[c]) got[c] = { ch: c, err: true }; });
+        got.$apps = r.apps || null;
         if (my === chnSumReq) chnSum = { key: key, at: Date.now(), d: got };
         return my === chnSumReq || !chnSum ? got : chnSum.d;
       });
@@ -7638,7 +8239,7 @@ function __route(url) {
     }
     p.then(show).catch(function (e) {
       if (seq !== chnOverviewSeq || chCur !== 'all') return;
-      var got = {};
+      var got = { $apps: null };
       list.forEach(function (c) { got[c] = { ch: c, err: true }; });
       renderOverview(list, got);
       loadFail(function () { loadChnOverview(true); })(e);
@@ -7662,6 +8263,7 @@ function __route(url) {
     }
     var kp = el('chn-kpis');
     kp.style.gridTemplateColumns = '';
+    kp.classList.remove('k5');
     kp.innerHTML = chnMetrics(d).map(metricHtml).join('');
     if (d.ch === 'financie') {
       var finSt = el('side-fin-st');
@@ -8428,6 +9030,13 @@ function __route(url) {
   });
   el('chn-reload').addEventListener('click', function () { loadChannel(true); });
   el('chn-back').addEventListener('click', function () { show(el('chn-back').dataset.back || 'home'); });
+  // 「すべて」の上の「アプリ 累計DL」→ アプリ画面
+  el('chn-kpis').addEventListener('click', function (e) {
+    if (e.target.closest('[data-go="apps"]')) show('apps');
+  });
+  el('chn-kpis').addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-go="apps"]')) { e.preventDefault(); show('apps'); }
+  });
   el('chn-tiles').addEventListener('click', function (e) {
     var t = e.target.closest('.chn-tile');
     if (!t) return;
@@ -8850,6 +9459,11 @@ function __route(url) {
       el('ht-main').hidden = !has;
       if (!has) { el('ht-tag').textContent = d.tag || ''; return; }
       var a = d.report.all;
+      // 計測を始めたのが30日より後のページ(差し替えたばかりのLP)は、期間をその日からと書く
+      var per = d.sinceDay ? d.sinceDay.slice(5).replace('-', '/').replace(/^0/, '') + '〜' : '30日';
+      el('ht-views-k').textContent = '訪問 ' + per;
+      el('ht-sec-sub').textContent = '上から下への読み進み · ' + per;
+      el('ht-el-sub').textContent = '押された要素 · ' + per;
       el('ht-views').textContent = fmtN(a.views);
       el('ht-views-d').textContent = 'SP ' + fmtN(d.report.sp.views) + ' · PC ' + fmtN(d.report.pc.views);
       el('ht-cta').textContent = htPct(a.ctaRate);
