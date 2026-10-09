@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rondo | LINEも、インスタも、メールも。ひとつの画面で。</title>
 <meta property="og:title" content="Rondo | LINEも、インスタも、メールも。ひとつの画面で。">
-<meta property="og:description" content="配信も、返信も、予約も、売上も。各媒体の反応、流入元ごとの登録、購入と売上が1つの管理画面に並ぶ。ソースコードごと¥9,800の買い切り。運用費は別途。">
+<meta property="og:description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://vibe.co.jp/rondo">
 <meta property="og:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp-v10.jpg">
@@ -15,33 +15,30 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://vibe.co.jp/rondo">
 <meta name="twitter:title" content="Rondo | LINEも、インスタも、メールも。ひとつの画面で。">
-<meta name="twitter:description" content="配信も、返信も、予約も、売上も。各媒体の反応、流入元ごとの登録、購入と売上が1つの管理画面に並ぶ。ソースコードごと¥9,800の買い切り。運用費は別途。">
+<meta name="twitter:description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
 <meta name="twitter:image" content="https://vibe.co.jp/rondo-assets/rondo-ogp-v10.jpg">
-<meta name="description" content="メール・LINE・Instagram・Threads・YouTubeの配信と返信、予約、売上を1つの管理画面に。DMもコメントもメールの返信も1つの受信箱で。各媒体の反応、流入元ごとの登録、購入と売上が同じ画面に並ぶ、買い切りのマーケティングの仕組み。Xは数字の取り込みに対応。ソースコードごと¥9,800（税込）。設置も改造もClaude CodeやCodexに日本語で。運用費は別途。">
+<meta name="description" content="配信も、返信も、売上も。メール・LINE・Instagram・Threads・YouTubeを1つの管理画面で回せる、買い切りのマーケティングツール。発売日は未定。事前登録（無料）で、発売当日に10%オフのリンクをお届けします。">
 <link rel="icon" href="/rondo-assets/rondo-mark.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/rondo-assets/rondo-icon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/rondo-assets/rondo-icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://rondo.nubonba.workers.dev/heat.js?v=20261009b" data-page="rondo-lp-v10" data-sp-max="760" defer></script>
+<script src="https://rondo.nubonba.workers.dev/heat.js?v=20261009b" data-page="rondo-lp-pre" data-sp-max="760" defer></script>
 <style>
 /* 羽二重白 — ライト正典（habutae/tokens/habutae.css） */
 :root[data-robe="habutae"]{
   --bg:#F5F3EC; --surface:#FBF9F5; --surface2:#EDEADF;
   --ink:#28263C; --ink2:#6F6B86; --ink3:#9B97AC;
   --accent:#A67C24; --accent-hi:#8A671C; --accent-lacquer:#D9A94C;
-  --seal:#A8352A; --ok:#3F7E55; --warn:#9C7420; --danger:#A8352A;
-  --line:#DEDACB;
+  --ok:#3F7E55; --line:#DEDACB;
   --shadow:0 10px 30px rgba(40,38,60,.12),0 2px 8px rgba(40,38,60,.08);
   --shadow-lo:0 4px 14px rgba(40,38,60,.08),0 1px 3px rgba(40,38,60,.06);
-  --veil-1:#FFFDF8; --veil-2:#FBF9F5; --veil-3:#F0EDE2;
   --font-display:'Shippori Mincho B1',serif;
   --font-body:'Zen Kaku Gothic New',sans-serif;
   --font-num:'Outfit',sans-serif;
-  /* チャネルの識別色（流れの図と札だけに使う・面塗りしない） */
-  --moon:#ECE8DC; /* 漆の副ボタンの文字（月白） */
-  --ch-mail:#4C6FA8; --ch-line:#3F7E55; --ch-ig:#B0476E; --ch-th:#6F6B86; --ch-yt:#B5523B; --ch-x:#28263C; --ch-note:#2F8A79; --ch-ss:#C07A2C;
+  --moon:#ECE8DC;
+  --ch-mail:#4C6FA8; --ch-line:#3F7E55; --ch-ig:#B0476E; --ch-th:#6F6B86; --ch-yt:#B5523B; --ch-x:#28263C;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -52,20 +49,22 @@ a{color:var(--accent-hi)}
 .ph{display:inline-block}
 .num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-section{padding:96px 0;scroll-margin-top:72px}
-h1,h2,h3{font-family:var(--font-display);font-weight:800;color:var(--ink);margin:0}
-h2{font-size:clamp(28px,3.4vw,42px);line-height:1.3;letter-spacing:.01em}
-h3{font-size:21px;line-height:1.45}
-.lede{font-size:17px;color:var(--ink2);margin:18px 0 0;max-width:40em}
+section{padding:112px 0;scroll-margin-top:72px}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;color:var(--ink);margin:0;word-break:auto-phrase;text-wrap:balance}
+h2{font-size:clamp(28px,3.4vw,42px);line-height:1.35;letter-spacing:.01em}
+h3{font-size:20px;line-height:1.45}
+.lede{font-size:17px;color:var(--ink2);margin:18px 0 0}
 .center{text-align:center}
-/* 中央ぞろえの見出しの行末の句読点は字面が左半分だけ＝右の空きを詰めて中央に見せる(10-08 本人指摘の直しを v1.0 にも) */
-.hang{margin-right:-.5em}.center .lede{margin-left:auto;margin-right:auto}
+.center .lede{margin-left:auto;margin-right:auto}
+/* 中央ぞろえの見出しの行末の句読点は字面が左半分だけ＝右の空きを詰めて中央に見せる */
+.hang{margin-right:-.5em}
 .kick{font-size:13px;letter-spacing:.06em;color:var(--ink2);margin:0 0 16px}
 .fine{font-size:13px;line-height:1.8;color:var(--ink2);margin:0}
+br.sp{display:none}
 
 /* 漆ボタン（canon §4） */
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;border-radius:8px;
-  font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:4px;text-decoration:none;cursor:pointer;
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:8px;
+  font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:3px;text-decoration:none;cursor:pointer;
   border:1px solid transparent;transition:transform 90ms ease-out,box-shadow 160ms ease-out;white-space:nowrap}
 .btn:active{transform:scale(.965)}
 .btn.pri{color:var(--accent-lacquer);
@@ -73,14 +72,11 @@ h3{font-size:21px;line-height:1.45}
     linear-gradient(180deg,color-mix(in srgb,var(--accent-lacquer) 70%,transparent),color-mix(in srgb,var(--accent-lacquer) 22%,transparent)) border-box;
   box-shadow:var(--shadow-lo)}
 .btn.pri:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.btn.sec{color:var(--moon);letter-spacing:2px;box-shadow:var(--shadow-lo);
-  background:linear-gradient(180deg,#262336,#1A1826) padding-box,linear-gradient(180deg,color-mix(in srgb,var(--moon) 42%,transparent),color-mix(in srgb,var(--moon) 12%,transparent)) border-box}
+.btn.sec{color:var(--ink);letter-spacing:2px;background:var(--surface);box-shadow:var(--shadow-lo)}
 .btn.sec:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .btn.sm{min-height:44px;padding:0 16px;font-size:13px;letter-spacing:2px}
-.btn:focus-visible,.faq summary:focus-visible,.sh-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.btn:focus-visible,.faq summary:focus-visible,.all summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
-
-/* 面（縁なし・二層影） */
 .face{background:var(--surface);border-radius:14px;box-shadow:var(--shadow)}
 .face-lo{background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo)}
 
@@ -95,209 +91,135 @@ header.top nav a:hover{color:var(--ink)}
 @media (max-width:760px){header.top nav{display:none}header.top .in{padding:10px 16px}header.top .btn.sm{margin-left:auto}}
 
 /* ヒーロー */
-.hero{padding:40px 0 72px}
-.hero .grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:48px;align-items:center}
+.hero{padding:48px 0 88px}
+.hero .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
 .hero h1{font-size:clamp(34px,4.1vw,54px);line-height:1.24;letter-spacing:.01em;margin:0 0 20px}
 .hero h1 em{font-style:normal}
-.hero .lead{font-size:17px;line-height:1.95;color:var(--ink);margin:0 0 28px;max-width:33em}
-.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-.proof{display:flex;flex-wrap:wrap;gap:12px 32px;margin-top:30px;padding-top:22px;box-shadow:0 -1px 0 var(--line)}
-.proof b{display:block;font-family:var(--font-num);font-weight:500;font-size:30px;line-height:1.1;color:var(--accent-hi)}
+.hero .lead{font-size:17px;line-height:1.9;color:var(--ink);margin:0 0 28px}
+.lead,.lede,.jobs p,.cap,.fine,.split p{word-break:auto-phrase}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+/* 事前登録の札（このページの主役。金はここと主ボタンだけ） */
+.offer{padding:22px 24px 18px;box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent)}
+.o-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 6px}
+.o-tag{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent-hi);background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:999px;padding:2px 12px}
+.o-date{font-size:13px;color:var(--ink2)}
+.o-main{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1.4;margin:0 0 16px}
+.o-main b{color:var(--accent-hi);font-size:1.3em}
+.offer .fine{margin-top:12px}
+.proof{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:28px}
+.proof b{display:block;font-family:var(--font-num);font-weight:500;font-size:30px;line-height:1.1;color:var(--ink)}
 .proof span{font-size:12px;color:var(--ink2)}
-.shot{overflow:hidden}
+.proof-note{margin-top:8px;font-size:12px}
+.shot{overflow:hidden;margin:0}
 .shot .bar{display:flex;align-items:center;gap:6px;height:32px;padding:0 14px;background:var(--surface2);font-family:var(--font-num);font-size:11.5px;color:var(--ink2)}
 .shot .bar i{width:8px;height:8px;border-radius:50%;background:color-mix(in srgb,var(--ink3) 45%,transparent)}
 .shot .bar span{margin-left:8px}
-.shot figcaption{padding:10px 14px 12px;font-size:12px;line-height:1.7;color:var(--ink2);background:var(--surface)}
-.chlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.chlist span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);background:var(--surface);border-radius:999px;padding:4px 11px;box-shadow:var(--shadow-lo)}
-.chlist i{width:7px;height:7px;border-radius:50%}
-/* 前提の帯 */
-.premise{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.premise div{padding:18px 20px}
-.premise b{display:block;font-family:var(--font-display);font-size:16px;margin-bottom:4px}
-.premise span{font-size:13.5px;line-height:1.75;color:var(--ink2)}
-@media (max-width:760px){.premise{grid-template-columns:1fr}}
-/* 実画面（管理画面のスクリーンショット） */
+.shot figcaption{padding:10px 14px 12px;font-size:12px;color:var(--ink2);background:var(--surface)}
 .real{display:block;cursor:zoom-in;background:var(--bg)}
 .real img{width:100%;height:auto}
 .hero-shot .real{aspect-ratio:4/3;overflow:hidden}
 .hero-shot .real img{height:100%;object-fit:cover;object-position:top left}
-@media (max-width:520px){.hero-shot .real{aspect-ratio:auto;max-height:560px}.hero-shot .real img{height:auto}}
-@media (max-width:920px){.hero{padding:28px 0 56px}.hero .grid{grid-template-columns:1fr;gap:36px}}
+@media (max-width:520px){.hero-shot .real{aspect-ratio:auto;max-height:480px}.hero-shot .real img{height:auto}}
+@media (max-width:920px){.hero{padding:28px 0 64px}.hero .grid{grid-template-columns:1fr;gap:40px}}
 
-/* つながる（流れの図＝シグネチャー: 糸が撚られて1本の糸になる） */
-.weave{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
-.weave svg{width:100%;height:auto;display:block}
-.weave .steps{display:grid;gap:14px;margin-top:28px}
-.weave .steps > div{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;align-items:start;padding:16px 18px}
-.weave .steps b.n{font-family:var(--font-num);font-weight:500;font-size:22px;color:var(--accent)}
-.weave .steps h3{font-size:17px}
-.weave .steps p{margin:4px 0 0;font-size:14px;color:var(--ink2);line-height:1.75}
-@keyframes flow{to{stroke-dashoffset:-40}}
-.weave .strand{stroke-dasharray:6 14;animation:flow 2.4s linear 2}
-@media (prefers-reduced-motion:reduce){.weave .strand{animation:none;stroke-dasharray:none}}
-@media (max-width:920px){.weave{grid-template-columns:1fr;gap:32px}}
+/* 4つの仕事 */
+.jobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:48px}
+.jobs > div{padding:26px 22px}
+.j-n{margin:0 0 6px;font-size:13px;letter-spacing:.12em;color:var(--accent)}
+.jobs h3{font-size:24px;margin-bottom:8px}
+.jobs p{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink2)}
+@media (max-width:920px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.jobs > div{padding:20px 16px}.jobs p br{display:none}}
 
-/* チャネルの札 */
-.chgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:44px}
-.ch{padding:22px 20px 20px;display:flex;flex-direction:column;gap:8px;transition:transform 160ms ease-out,box-shadow 160ms ease-out}
-.ch:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.ch .hd{display:flex;align-items:center;gap:8px}
-.ch .hd i{width:9px;height:9px;border-radius:50%}
-.ch h3{font-size:18px}
-.ch p{margin:0;font-size:13.5px;line-height:1.75;color:var(--ink2)}
-.ch .how{margin-top:auto;padding-top:8px;font-size:12px;letter-spacing:.02em;color:var(--ink2)}
-.ch .how.std{color:var(--ok)}
-.ch .how.ai{color:var(--accent-hi)}
-@media (max-width:1000px){.chgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.chgrid{grid-template-columns:1fr}}
-@media (prefers-reduced-motion:reduce){.ch,.ch:hover{transition:none;transform:none}}
-
-/* 2つの仕事（返す・会う） */
-.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
-.duo + .duo{margin-top:96px}
-.duo.rev > :first-child{order:2}
-.duo.wide{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:48px}
-.job{font-family:var(--font-num);font-size:12px;letter-spacing:.2em;color:var(--ink2);margin:0 0 12px}
-.bul{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:8px}
-.bul li{position:relative;padding-left:18px;font-size:15px;color:var(--ink)}
-.bul li::before{content:"";position:absolute;left:2px;top:.75em;width:6px;height:6px;border-radius:50%;background:var(--ink3)}
-.note{margin-top:18px;font-size:13px;line-height:1.8;color:var(--ink2)}
-@media (max-width:920px){.duo,.duo.wide{grid-template-columns:1fr;gap:32px}.duo.rev > :first-child{order:0}.duo + .duo{margin-top:72px}}
-
-/* 画面の切り替え（全部の数字） */
-.scr{margin-top:40px}
+/* 実際の画面 */
+#screens{background:var(--surface2)}
+.scr{margin-top:36px}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
 .tab{font:inherit;font-size:14px;color:var(--ink2);background:var(--surface);border:0;border-radius:999px;padding:0 18px;min-height:44px;cursor:pointer;box-shadow:var(--shadow-lo)}
 .tab[aria-selected="true"]{color:var(--surface);background:var(--ink)}
 .tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .scr .shot{max-width:1000px;margin:0 auto}
 .scr .shot .real{aspect-ratio:4/3;overflow:hidden}
-@media (max-width:520px){.scr .shot .real{aspect-ratio:auto}.real{max-height:620px;overflow:hidden}.real img{object-fit:cover;object-position:top}}
-.scr .cap{max-width:1000px;margin:14px auto 0;font-size:14.5px;line-height:1.8;color:var(--ink)}
-.grammar{max-width:1000px;margin:36px auto 0}
-.grammar > p{margin:0 0 12px;text-align:center;font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--ink)}
-.grammar ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:g}
-.grammar li{position:relative;background:var(--surface);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow-lo);font-size:13px;line-height:1.6;color:var(--ink2)}
-.grammar li b{display:block;font-family:var(--font-display);font-size:17px;color:var(--ink);font-weight:800;margin-bottom:2px}
-.grammar li + li::before{content:"›";position:absolute;left:-10px;top:50%;transform:translate(-50%,-50%);color:var(--ink3);font-size:16px}
-@media (max-width:760px){.grammar ol{grid-template-columns:repeat(2,minmax(0,1fr))}.grammar li + li::before{display:none}}
-.demo-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:26px}
-.demo-cta .fine{max-width:34em}
-/* 設定 */
-.robe-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
-.robe-row span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);background:var(--surface);border-radius:999px;padding:4px 11px;box-shadow:var(--shadow-lo)}
-.robe-row i{width:16px;height:16px;border-radius:5px;background:radial-gradient(circle at 70% 32%,var(--d) 0 22%,transparent 26%),var(--b);box-shadow:inset 0 0 0 1px rgba(40,38,60,.2)}
-/* v1.0 に入っているもの */
-.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 40px;margin-top:44px}
-@media (max-width:520px){.inv{grid-template-columns:minmax(0,1fr)}}
-.inv > div{padding:22px 0 20px;box-shadow:0 -1px 0 var(--line)}
+.scr .cap{max-width:1000px;margin:16px auto 0;text-align:center;font-size:15px;color:var(--ink)}
+.book{margin:0}
+.phone{max-width:300px;margin:0 auto;border-radius:30px;padding:10px;background:linear-gradient(180deg,#262336,#1A1826);box-shadow:var(--shadow)}
+.phone img{border-radius:22px}
+.demo-cta{display:flex;justify-content:center;margin-top:28px}
+@media (max-width:520px){.scr .shot .real{aspect-ratio:auto;max-height:620px}.real img{object-fit:cover;object-position:top}.tab{padding:0 14px;font-size:13.5px}}
+
+/* つながるもの */
+.chips{list-style:none;margin:36px auto 0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:760px}
+.chips li{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--ink);background:var(--surface);border-radius:999px;padding:8px 18px;box-shadow:var(--shadow-lo)}
+.chips i{width:8px;height:8px;border-radius:50%}
+.chips-note{margin-top:18px}
+.all{max-width:1000px;margin:36px auto 0;text-align:left}
+.all summary{list-style:none;cursor:pointer;width:max-content;max-width:100%;margin:0 auto;padding:10px 20px;min-height:44px;border-radius:999px;font-size:14px;color:var(--ink2);box-shadow:inset 0 0 0 1px var(--line)}
+.all summary::-webkit-details-marker{display:none}
+.all summary::after{content:" ＋"}
+.all[open] summary::after{content:" −"}
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0 40px;margin-top:28px}
+.inv > div{padding:20px 0 18px;box-shadow:0 -1px 0 var(--line)}
 .inv h3{display:flex;align-items:center;gap:8px;font-size:17px;margin-bottom:8px}
 .inv h3 i{width:9px;height:9px;border-radius:50%}
 .inv ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
 .inv li{position:relative;padding-left:16px;font-size:14px;line-height:1.75;color:var(--ink)}
 .inv li::before{content:"";position:absolute;left:1px;top:.78em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
 .inv li small{color:var(--ink2);font-size:12.5px}
-.inv .new{font-family:var(--font-num);font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--accent-hi);margin-left:6px;vertical-align:1px}
-/* 画面の拡大 */
-dialog.zoom{max-width:none;max-height:none;width:100vw;height:100dvh;margin:0;padding:0;border:0;background:rgba(26,24,38,.88)}
-dialog.zoom::backdrop{background:rgba(26,24,38,.6)}
-dialog.zoom .zin{width:100%;height:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:grid;place-items:start center;padding:56px 12px 24px}
-dialog.zoom img{width:min(1600px,100%);height:auto;border-radius:10px;box-shadow:var(--shadow)}
-@media (max-width:760px){dialog.zoom img{width:auto;max-width:none;height:auto;min-width:900px}}
-dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px;padding:0 16px;border:0;border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;box-shadow:var(--shadow-lo)}
-/* 予約の実物 */
-.phone{max-width:300px;margin:0 auto;border-radius:30px;padding:10px;background:linear-gradient(180deg,#262336,#1A1826);box-shadow:var(--shadow)}
-.phone img{border-radius:22px}
-.phone + figcaption{text-align:center;font-size:12px;color:var(--ink2);margin-top:14px;line-height:1.7}
+
+@media (max-width:520px){.inv{grid-template-columns:minmax(0,1fr)}}
 
 /* AI */
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:40px}
+#ai{background:var(--surface2)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:820px;margin:40px auto 0}
 .split > div{padding:26px 24px}
-.split h3{font-size:18px;margin-bottom:10px}
-.split ol{margin:0;padding-left:1.3em;display:grid;gap:6px;font-size:14.5px;color:var(--ink)}
-.guard{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px}
-.guard div{padding:20px}
-.guard b{display:block;font-family:var(--font-display);font-size:16px;margin-bottom:6px}
-.guard span{font-size:13px;line-height:1.75;color:var(--ink2)}
-@media (max-width:920px){.split{grid-template-columns:1fr}.guard{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.guard{grid-template-columns:1fr}}
+.split h3{font-size:18px;margin-bottom:8px}
+.split p{margin:0;font-size:15px;color:var(--ink2)}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
 
-/* 向く人・向かない人・診断 */
-.fit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:40px}
+/* 向く人 */
+.fit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;max-width:820px;margin:40px auto 0}
 .fit > div{padding:26px 24px}
-.fit h3{font-size:18px;margin-bottom:12px}
-.fit ul{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:15px;color:var(--ink)}
-.fit .no h3{color:var(--ink2)}
+.fit h3{font-size:18px;margin-bottom:10px}
+.fit ul{margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:15px}
+.fit .no h3,.fit .no ul{color:var(--ink2)}
 @media (max-width:760px){.fit{grid-template-columns:1fr}}
-.shindan{max-width:640px;margin:48px auto 0;padding:28px 26px}
-.sh-lede{text-align:center;font-family:var(--font-display);font-size:20px;font-weight:800;margin:56px 0 0;scroll-margin-top:80px}
-.sh-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.sh-step{font-family:var(--font-num);font-size:13px;color:var(--ink2)}
-.sh-dots{display:flex;gap:5px}
-.sh-dot{width:7px;height:7px;border-radius:50%;background:var(--surface2)}
-.sh-dot.on{background:var(--accent)}
-.sh-back{margin-left:auto;background:none;border:0;color:var(--ink2);font:inherit;font-size:13px;cursor:pointer;min-height:44px}
-.sh-q{font-family:var(--font-display);font-size:19px;font-weight:800;line-height:1.55;margin:0 0 16px}
-.sh-choices{display:grid;gap:8px}
-.sh-choice{position:relative;text-align:left;font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:0;border-radius:10px;padding:13px 16px 13px 44px;min-height:48px;cursor:pointer;box-shadow:var(--shadow-lo);transition:box-shadow 160ms ease-out}
-.sh-choice::before{content:"";position:absolute;left:16px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--ink3)}
-.sh-choice:hover{box-shadow:var(--shadow)}
-.sh-q:focus,.sh-title:focus{outline:none}
-.sh-verdict{text-align:left}
-.sh-pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 12px}
-.sh-pill.a{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
-.sh-pill.b{color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent)}
-.sh-pill.c{color:var(--ink2);background:var(--surface2)}
-.sh-title{font-family:var(--font-display);font-size:21px;font-weight:800;margin:12px 0 8px}
-.sh-body{font-size:15px;color:var(--ink);margin:0 0 10px}
-.sh-next{margin:0 0 10px;padding-left:1.2em;font-size:14.5px;color:var(--ink)}
-.sh-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.sh-retry{background:none;border:0;color:var(--ink2);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;min-height:44px}
+
+/* 価格 */
+.buy{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;max-width:920px;margin:44px auto 0;align-items:center}
+.price{padding:36px 30px 28px;text-align:center;box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent)}
+.price .kick{margin:0}
+.price .big{font-family:var(--font-num);font-weight:500;font-size:64px;line-height:1;margin:10px 0 18px}
+.price .big small{font-size:14px;color:var(--ink2);margin-left:6px;font-family:var(--font-body)}
+.price .presale{margin:0 auto;max-width:24em;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,transparent);display:grid;gap:2px}
+.price .presale b{font-size:17px;color:var(--accent-hi)}
+.price .presale span{font-size:13.5px;line-height:1.7;color:var(--ink2)}
+.price .ctas{justify-content:center;margin:22px 0 10px}
+.cost{padding:24px 24px 20px}
+.cost h3{font-size:17px;margin-bottom:6px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:10px 0;box-shadow:0 1px 0 var(--line)}
+.row span{font-size:14.5px}
+.row b{font-family:var(--font-num);font-weight:500;font-size:15px;white-space:nowrap}
+.cost .fine{margin-top:12px}
+@media (max-width:920px){.buy{grid-template-columns:1fr}.price{padding:30px 18px 24px}.price .big{font-size:56px}}
 
 /* 声 */
-.voices{columns:3 300px;column-gap:16px;margin-top:40px}
+.voices{columns:3 300px;column-gap:16px;margin-top:36px}
 .voices .twitter-tweet{break-inside:avoid;margin:0 0 16px !important}
 .voices blockquote{margin:0 0 16px;padding:16px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo);font-size:14px}
 
-/* 費用と価格 */
-.buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin-top:44px;align-items:start}
-.cost{padding:26px 24px}
-.cost h3{font-size:18px;margin-bottom:8px}
-.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:12px 0;box-shadow:0 1px 0 var(--line)}
-.row:last-of-type{box-shadow:none}
-.row span{font-size:14.5px}
-.row small{display:block;font-size:12.5px;color:var(--ink2);line-height:1.6}
-.row b{font-family:var(--font-num);font-weight:500;font-size:15px;white-space:nowrap}
-.price{padding:34px 30px;text-align:center}
-.price .big{font-family:var(--font-num);font-weight:500;font-size:64px;line-height:1;color:var(--ink);margin:6px 0 4px}
-.price .tag{font-size:13px;color:var(--ink2)}
-.price h3{font-size:16px;margin:26px 0 10px}
-.price ul{list-style:none;margin:0 auto;padding:0;max-width:26em;text-align:left;display:grid;gap:8px}
-.price li{position:relative;padding-left:26px;font-size:14.5px;line-height:1.7}
-.price li::before{content:"";position:absolute;left:2px;top:.35em;width:14px;height:14px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--ink2)}
-.price .terms{margin:22px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink2);text-align:left}
-.price .ctas{justify-content:center;margin:24px 0 0}
-.price .presale{margin:18px auto 0;max-width:26em;padding:12px 16px;border-radius:12px;background:color-mix(in srgb,var(--accent) 9%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent);display:grid;gap:4px}
-.price .presale b{font-size:15px;color:var(--accent-hi)}
-.price .presale span{font-size:13px;line-height:1.7;color:var(--ink2)}
-.presale-note{margin:0 0 12px;font-size:14px;line-height:1.75;color:var(--ink2)}
-.presale-note b{color:var(--ink)}
-@media (max-width:920px){.buy{grid-template-columns:1fr}.buy .price{order:-1}.price{padding:28px 18px}.price .big{font-size:54px}}
-
 /* FAQ */
-.faq{max-width:780px;margin:40px auto 0;display:grid;gap:10px}
+.faq{max-width:760px;margin:40px auto 0;display:grid;gap:10px}
 .faq details{background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo)}
 .faq summary{list-style:none;cursor:pointer;padding:18px 48px 18px 20px;font-weight:700;font-size:15.5px;position:relative;min-height:44px}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"";position:absolute;right:22px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:1.5px solid var(--ink2);border-bottom:1.5px solid var(--ink2);transform:rotate(45deg);transition:transform 160ms ease-out}
 .faq details[open] summary::after{transform:rotate(-135deg);margin-top:-2px}
-.faq .a{padding:0 20px 20px;font-size:14.5px;line-height:1.9;color:var(--ink)}
+.faq .a{padding:0 20px 20px;font-size:14.5px;line-height:1.9}
 
 /* 終盤 */
-.last{text-align:center;padding:96px 0 120px}
-.last h2{font-size:clamp(30px,4vw,48px)}
+.last{text-align:center;padding:112px 0 128px;background:var(--surface2)}
+.last h2{font-size:clamp(30px,4vw,46px)}
+.last .lede{margin:14px auto 0}
 .last .ctas{justify-content:center;margin-top:28px}
 
 footer{padding:36px 0 110px;box-shadow:0 -1px 0 var(--line)}
@@ -306,30 +228,55 @@ footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
 footer nav a{color:var(--ink2);font-size:13px;text-decoration:none}
 footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 
-/* スマホの下に固定する申込（ヒーローを過ぎたら・価格と終盤では隠す） */
+/* スマホの下に固定する事前登録（ヒーローを過ぎたら・価格と終盤では隠す） */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:45;display:none;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
   background:color-mix(in srgb,var(--surface) 96%,transparent);box-shadow:0 -6px 20px rgba(40,38,60,.10);transform:translateY(110%);transition:transform 200ms ease-out}
 .dock.on{transform:none}
 .dock .p{font-size:12px;line-height:1.4;color:var(--ink2)}
-.dock .p b{display:block;font-family:var(--font-num);font-weight:500;font-size:18px;color:var(--ink)}
+.dock .p b{display:block;font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--ink)}
 .dock .btn{margin-left:auto;min-height:44px;padding:0 18px;font-size:14px;letter-spacing:2px}
 @media (max-width:760px){.dock{display:flex}body.docked header.top .btn.sm{visibility:hidden}}
-@media (prefers-reduced-motion:reduce){.dock{transition:none}}
 
 @media (max-width:520px){
   .wrap{padding:0 16px}
-  section{padding:72px 0}
+  section{padding:80px 0}
   .lede{font-size:16px}
+  .lede br{display:none}
+  br.sp{display:inline}
   .btn{padding:0 20px;letter-spacing:2px}
+  .offer{padding:20px 18px 16px}
+  .offer .ctas .btn{flex:1 1 100%}
+  .o-main{font-size:19px}
 }
 /* 動きを減らす設定（通常の規則より後に置く＝打ち消されない） */
 @media (prefers-reduced-motion:reduce){
   .btn,.btn.pri:hover,.btn.sec:hover,.btn:active{transition:none;transform:none}
   .faq summary::after{transition:none}
-  .ch,.ch:hover{transition:none;transform:none}
-  .sh-choice{transition:none}
-  .tab{transition:none}
+  .dock{transition:none}
 }
+/* 画面の拡大（v4 から移植） */
+dialog.zoom{max-width:none;max-height:none;width:100vw;height:100dvh;margin:0;padding:0;border:0;background:rgba(26,24,38,.88)}
+dialog.zoom::backdrop{background:rgba(26,24,38,.6)}
+dialog.zoom .zin{width:100%;height:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:grid;place-items:start center;padding:56px 12px 24px}
+dialog.zoom img{width:min(1600px,100%);height:auto;border-radius:10px;box-shadow:var(--shadow)}
+@media (max-width:760px){dialog.zoom img{width:auto;max-width:none;height:auto;min-width:900px}}
+dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px;padding:0 16px;border:0;border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;box-shadow:var(--shadow-lo)}
+.o-price{margin:-8px 0 16px;font-size:15px;color:var(--ink2)}
+.o-price b{font-size:20px;font-weight:600;color:var(--ink)}
+.demo-link{margin:14px 0 0;font-size:14px}
+.demo-link a{text-underline-offset:4px}
+@media (max-width:360px){header.top .btn.sm{letter-spacing:1px;padding:0 12px}}
+.connect{max-width:1000px;margin:72px auto 0;text-align:center}
+.connect > h3{font-size:22px}
+.connect .chips{margin-top:20px}
+#ai .fit{margin-top:16px}
+.terms{max-width:920px;margin:20px auto 0;text-align:center;font-size:12.5px;line-height:1.8;color:var(--ink2)}
+.terms a{margin-left:6px}
+.fit-kick{margin:40px 0 0}
+.row small{display:block;font-size:12px;color:var(--ink2);line-height:1.6}
+.fit-note{max-width:820px;margin:28px auto 0;text-align:center;font-size:15px;color:var(--ink2);word-break:auto-phrase}
+@media (max-width:520px){.fit-note br{display:none}.fit-note{text-align:left}}
+@media (max-width:420px){.row{grid-template-columns:1fr;gap:2px}.cost{padding:22px 18px 18px}}
 </style>
 </head>
 <body>
@@ -339,11 +286,10 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
     <a class="logo" href="#top" data-rondo-label="ヘッダー ロゴ"><img src="/rondo-assets/rondo-mark.svg" alt="" width="28" height="28">Rondo</a>
     <nav aria-label="ページ内">
       <a href="#screens" data-rondo-label="ヘッダー 画面">画面</a>
-      <a href="#v10" data-rondo-label="ヘッダー できること">できること</a>
-      <a href="#price" data-rondo-label="ヘッダー 費用">費用</a>
+      <a href="#price" data-rondo-label="ヘッダー 価格">価格</a>
       <a href="#faq" data-rondo-label="ヘッダー よくある質問">よくある質問</a>
     </nav>
-    <a class="btn pri sm" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
+    <a class="btn pri sm" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
   </div>
 </header>
 
@@ -353,21 +299,25 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section class="hero" data-sec="hero">
   <div class="wrap grid">
     <div>
-      <p class="kick">メール・LINE・Instagram・Threads・YouTube・X</p>
+      <p class="kick">Claude Code・Codexで、発信の商売を回す人へ。</p>
       <h1><span class="ph">LINEも、</span><span class="ph">インスタも、</span><span class="ph">メールも。</span><br><em class="ph">ひとつの画面で。</em></h1>
-      <p class="lead">配信も、返信も、予約も、売上も。各媒体の反応、流入元ごとの登録、購入と売上が、1つの管理画面に並びます。ソースコードごと¥9,800の買い切り。設置も改造も、いつものClaude CodeやCodexに日本語で頼めます。</p>
-      <div class="ctas">
-        <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
-        <a class="btn sec" href="#shindan" data-rondo-label="CTA ヒーロー適性診断">30秒の適性診断</a>
+      <p class="lead">配信も、返信も、売上も。<br>自分のCloudflareに設置する、ソースコードごとの買い切りです。</p>
+      <div class="offer face">
+        <p class="o-head"><span class="o-tag">事前登録・無料</span><span class="o-date">発売日は未定</span></p>
+        <p class="o-main">発売当日、<b>10%オフ</b>で買えます。</p>
+        <p class="o-price num">¥9,800 → <b>¥8,820</b></p>
+        <div class="ctas">
+          <a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">無料で事前登録する</a>
+        </div>
+        <p class="fine">押すとイケハヤのメルマガ（Substack）が開きます。メールアドレスを入れて登録すれば完了です。</p>
       </div>
-      <p class="presale-note"><b>発売日は未定です。</b>Substackでメールを登録した方に、発売当日、期間限定の10%オフのリンクをお送りします（登録は無料）。</p>
-      <p class="fine">税込・買い切り。運用費は別です（Cloudflare 月5ドル〜・独自ドメイン・開発AIなど）。サポート窓口はありません。各サービスの初回の設定が必要です。Xは数字の取り込みのみで、投稿・DMの操作は含みません。販売条件は<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="ヒーロー 特商法">特定商取引法に基づく表記</a>をご覧ください。</p>
+      <p class="demo-link"><a href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモ">先に触ってみる：見本の数字で動くデモ →</a></p>
       <div class="proof">
         <div><b>284</b><span>人がβ版を購入</span></div>
-        <div><b>3,336</b><span>人のメール読者</span></div>
-        <div><b>2,022</b><span>人のLINE友だち</span></div>
+        <div><b>3,336</b><span>イケハヤのメール読者</span></div>
+        <div><b>2,022</b><span>イケハヤのLINE友だち</span></div>
       </div>
-      <p class="fine" style="margin-top:10px">3つとも2026年10月8日時点。読者と友だちは、イケハヤの商売がこの仕組みで届けている実数です。</p>
+      <p class="fine proof-note">2026年10月8日時点。読者と友だちは、Rondoで運用中の実数です。</p>
     </div>
     <div>
       <figure class="face shot hero-shot" style="margin:0">
@@ -375,434 +325,235 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="ヒーロー 画面の拡大">
           <picture>
             <source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262">
-            <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面の実物。チャネル画面の「すべて」で、つながり合計・投稿7日・ビュー7日と、チャネルごとのタイルに規模と7日の増減と30日の推移が並んでいる">
+            <img src="/rondo-assets/rondo-admin-channels.webp" srcset="/rondo-assets/rondo-admin-channels.webp 1600w, /rondo-assets/rondo-admin-channels@2x.webp 2400w" sizes="(max-width:920px) 100vw, 540px" width="1600" height="1200" fetchpriority="high" alt="Rondoの管理画面。チャネルごとの規模と7日の動きが1枚に並んでいる">
           </picture>
         </a>
-        <figcaption>管理画面の実物です（チャネル → すべて）。数字は見本です。<a href="/rondo-demo/?view=channels&amp;channel=all" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモを開く">見本の数字でデモを触る</a></figcaption>
+        <figcaption>管理画面の実物（数字は見本）</figcaption>
       </figure>
-      <div class="chlist" aria-label="つながるもの">
-        <span><i style="background:var(--ch-mail)"></i>メール</span><span><i style="background:var(--ch-line)"></i>LINE</span><span><i style="background:var(--ch-ig)"></i>Instagram</span><span><i style="background:var(--ch-th)"></i>Threads</span><span><i style="background:var(--ch-yt)"></i>YouTube</span><span><i style="background:var(--ch-x)"></i>X</span><span><i style="background:var(--ink2)"></i>予約・売上</span>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- 前提（よく開かれる不安への短い答え） -->
-<section data-sec="premise" style="padding:0 0 24px">
-  <div class="wrap premise">
-    <div class="face-lo"><b>コードは、AIが扱います</b><span>設置も改造も、Claude CodeやCodexに日本語で頼みます。あなたがコードを書く必要はありません。</span></div>
-    <div class="face-lo"><b>設定と確認は、あなたが</b><span>各サービスのアカウント作成と承認、動いたかの確認は人の仕事です。</span></div>
-    <div class="face-lo"><b>サポートなし・運用費は別</b><span>窓口はありません。Cloudflare 月5ドル〜などが別にかかります。</span></div>
-  </div>
-</section>
-
-<!-- 2. つながって見える -->
-<section id="connect" data-sec="connect" style="padding-top:24px">
-  <div class="wrap weave">
-    <div>
-      <h2><span class="ph">バラバラだった数字を、</span><br><span class="ph">1枚に。</span></h2>
-      <p class="lede">メールはこのツール、LINEはあのツール、インスタは別のアプリ。ツールが分かれていると、数字も分かれます。Rondoでは、媒体ごとの反応から、流入元ごとの登録、購入と売上までが、同じ管理画面に並びます。</p>
-      <div class="steps">
-        <div class="face-lo"><b class="n">1</b><div><h3>媒体ごとの反応</h3><p>メールとLINEは配信と友だちの台帳から数えます。YouTubeは登録者・再生・日ごとの視聴を、Threadsはフォロワー数を、Instagramはフォロワー・投稿・いいね・コメントを毎日集計します（Instagramのビュー・リーチ・プロフィール訪問は、Metaアプリに許可を足し、その許可つきでつなぎ直すと取れます）。Threadsの投稿ごとのビュー、X・note・Substackの数字は、あなたのAIが作る収集の仕組みで取り込みます。</p></div></div>
-        <div class="face-lo"><b class="n">2</b><div><h3>流入元ごとの登録</h3><p>リンクに流入元の印を付け、メールとLINEの登録を流入元ごとに数えます。LINEは経路ごとに、リンクを開いた数も。LPはLP分析で、ページ全体の訪問・到達・クリックを見ます。連携リンクやコードで結び付いたメール読者とLINE友だちは、同じ顧客としてまとめます。</p></div></div>
-        <div class="face-lo"><b class="n">3</b><div><h3>購入と売上</h3><p>Stripeの決済の通知を受けて、購入と売上を台帳に記録します。決済ページはStripeで用意します。</p></div></div>
-      </div>
-    </div>
-    <div>
-      <svg viewBox="0 0 590 420" role="img" aria-label="メール、LINE、Instagram、Threads、YouTube、Xの6本の糸が右へ進むにつれて寄り合い、1本の糸にまとまって1つの管理画面に届く図">
-        <g transform="translate(60,0)">
-        <g fill="none" stroke-width="2.4" stroke-linecap="round">
-          <path d="M40 60 C200 60 230 210 360 210" stroke="var(--ch-mail)" opacity=".9"/>
-          <path d="M40 120 C190 120 230 210 360 210" stroke="var(--ch-line)" opacity=".9"/>
-          <path d="M40 180 C180 180 230 210 360 210" stroke="var(--ch-ig)" opacity=".9"/>
-          <path d="M40 240 C180 240 230 210 360 210" stroke="var(--ch-th)" opacity=".9"/>
-          <path d="M40 300 C190 300 230 210 360 210" stroke="var(--ch-yt)" opacity=".9"/>
-          <path d="M40 360 C200 360 230 210 360 210" stroke="var(--ch-x)" opacity=".9"/>
-          <path class="strand" d="M40 60 C200 60 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
-          <path class="strand" d="M40 240 C180 240 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
-          <path class="strand" d="M40 360 C200 360 230 210 360 210" stroke="var(--surface)" stroke-width="1.2"/>
-          <path d="M360 210 L452 210" stroke="var(--ink2)" stroke-width="4"/>
-        </g>
-        <g font-family="Zen Kaku Gothic New, sans-serif" font-size="14" fill="var(--ink2)">
-          <text x="34" y="52" text-anchor="end" dx="-6">メール</text>
-          <text x="34" y="112" text-anchor="end" dx="-6">LINE</text>
-          <text x="34" y="172" text-anchor="end" dx="-6">IG</text>
-          <text x="34" y="232" text-anchor="end" dx="-6">Threads</text>
-          <text x="34" y="292" text-anchor="end" dx="-6">YouTube</text>
-          <text x="34" y="352" text-anchor="end" dx="-6">X</text>
-        </g>
-        <g fill="var(--surface)">
-          <circle cx="40" cy="60" r="5" stroke="var(--ch-mail)" stroke-width="2"/><circle cx="40" cy="120" r="5" stroke="var(--ch-line)" stroke-width="2"/><circle cx="40" cy="180" r="5" stroke="var(--ch-ig)" stroke-width="2"/><circle cx="40" cy="240" r="5" stroke="var(--ch-th)" stroke-width="2"/><circle cx="40" cy="300" r="5" stroke="var(--ch-yt)" stroke-width="2"/><circle cx="40" cy="360" r="5" stroke="var(--ch-x)" stroke-width="2"/>
-        </g>
-        <circle cx="452" cy="210" r="9" fill="var(--ink2)"/>
-        <text x="452" y="246" text-anchor="middle" font-family="Shippori Mincho B1, serif" font-weight="800" font-size="17" fill="var(--ink)">ひとつの画面</text>
-        <text x="452" y="268" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-size="12.5" fill="var(--ink2)">反応・登録・売上</text>
-      </g>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<!-- 2b. 全部の数字（実画面） -->
-<section id="screens" data-sec="screens" style="padding-top:24px">
+<!-- 2. できること -->
+<section id="jobs" data-sec="jobs">
   <div class="wrap">
-    <div class="center">
-      <h2><span class="ph">全部の数字を、</span><span class="ph">実際の画面で<span class="hang">。</span></span></h2>
-      <p class="lede">ここに並べたのは、Rondoの管理画面そのものです。売上と配信から、チャネルの合計、メールの便ごとの開封まで、押していくだけで降りていけます。</p>
-      <div class="demo-cta">
-        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">管理画面のデモを触る</a>
-        <p class="fine">見本の数字で、ダッシュボード・チャネル・受信箱・設定まで実際に操作できます。保存や送信はされません（新しいタブで開きます）。</p>
-      </div>
+    <h2 class="center">配信・返信・予約・売上を、ひとつに<span class="hang">。</span></h2>
+    <div class="jobs">
+      <div class="face-lo"><p class="j-n num">01</p><h3>配る</h3><p>メールとLINEの<br>ステップ配信・一斉配信</p></div>
+      <div class="face-lo"><p class="j-n num">02</p><h3>返す</h3><p>DM・コメント・メールの返信を<br>1つの受信箱で</p></div>
+      <div class="face-lo"><p class="j-n num">03</p><h3>集める</h3><p>セミナーと個別相談の<br>予約ページ</p></div>
+      <div class="face-lo"><p class="j-n num">04</p><h3>数える</h3><p>媒体の反応から売上まで<br>同じ画面で</p></div>
     </div>
+  </div>
+</section>
+
+<!-- 3. 実際の画面 -->
+<section id="screens" data-sec="screens">
+  <div class="wrap">
+    <h2 class="center">実際の画面<span class="hang">。</span></h2>
+    <p class="fine center" style="margin-top:10px">管理画面の実物です。表示している数字は見本です。</p>
     <div class="scr">
       <div class="tabs" role="tablist" aria-label="管理画面">
         <button type="button" class="tab" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="true" data-rondo-label="画面 ダッシュボード">ダッシュボード</button>
-        <button type="button" class="tab" role="tab" id="tab-ch" aria-controls="pane-ch" aria-selected="false" tabindex="-1" data-rondo-label="画面 すべて">すべてのチャネル</button>
+        <button type="button" class="tab" role="tab" id="tab-inbox" aria-controls="pane-inbox" aria-selected="false" tabindex="-1" data-rondo-label="画面 受信箱">受信箱</button>
         <button type="button" class="tab" role="tab" id="tab-mail" aria-controls="pane-mail" aria-selected="false" tabindex="-1" data-rondo-label="画面 メール">メール</button>
         <button type="button" class="tab" role="tab" id="tab-line" aria-controls="pane-line" aria-selected="false" tabindex="-1" data-rondo-label="画面 LINE">LINE</button>
+        <button type="button" class="tab" role="tab" id="tab-book" aria-controls="pane-book" aria-selected="false" tabindex="-1" data-rondo-label="画面 予約">予約ページ</button>
       </div>
       <div role="tabpanel" id="pane-home" aria-labelledby="tab-home">
-        <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの数字、イケハヤAIの見立て、日別配信数"></picture></a></figure>
-        <p class="cap">開いて最初に見る画面です。売上30日・講座の読者・LINE友だち。止まっている配信や、伸ばせそうなところがあれば、いちばん上に出ます。下には、日ごとの配信数と、全チャネルの調子の表が続きます。売上・登録・メールの成績は「売上と配信」の画面で。</p>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-home.webp" data-zoom data-rondo-label="画面 ダッシュボード 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-home-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-home.webp" width="1600" height="1200" loading="lazy" alt="ダッシュボード。売上30日・講座の読者・LINE友だちの数字と、日別の配信数"></picture></a></figure>
+        <p class="cap">開いて最初に見る画面。売上・読者・友だちと、止まっている配信。</p>
       </div>
-      <div role="tabpanel" id="pane-ch" aria-labelledby="tab-ch" hidden>
-        <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · すべて</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-channels@2x.webp" data-zoom data-rondo-label="画面 すべて 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-channels-sp.webp" width="600" height="1262"><img src="/rondo-assets/rondo-admin-channels.webp" width="1600" height="1200" loading="lazy" alt="チャネル画面の「すべて」。上に全チャネルの合計の4枚、下にチャネルごとのタイルが並ぶ"></picture></a></figure>
-        <p class="cap">上の4枚は、全チャネルのつながりの合計・7日の投稿・7日のビュー・つないでいるチャネル。その下に、チャネルごとの規模と7日の動き、30日の線。タイルを押すと、そのチャネルの画面に入ります。Instagramのビューは許可を足してその許可つきでつなぎ直したとき、Threadsの投稿とビュー、X・note・Substackは収集の仕組みをつないだときに出ます。</p>
+      <div role="tabpanel" id="pane-inbox" aria-labelledby="tab-inbox" hidden>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="画面 受信箱 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱。LINE・Instagram・YouTube・メールの会話が1つの一覧に並んでいる"></picture></a></figure>
+        <p class="cap">LINE・InstagramのDM・YouTubeのコメント・メールの返信を、1つの一覧で返す。</p>
       </div>
       <div role="tabpanel" id="pane-mail" aria-labelledby="tab-mail" hidden>
-        <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-mailch.webp" data-zoom data-rondo-label="画面 メール 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-mailch-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-mailch.webp" width="1600" height="1200" loading="lazy" alt="メールの画面。読者・配信7日・開封率30日・クリック率30日の4枚と、配信の設定と実験の欄"></picture></a></figure>
-        <p class="cap">読者・配信・開封率・クリック率の4枚。件名のA/Bの途中経過、購入で動くルール、押した人を数える計測リンク、一斉配信の予定。その下に、ステップメールの便ごとの開封とクリックが並びます。</p>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · メール</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-mailch.webp" data-zoom data-rondo-label="画面 メール 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-mailch-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-mailch.webp" width="1600" height="1200" loading="lazy" alt="メールの画面。読者・配信・開封率・クリック率の4枚"></picture></a></figure>
+        <p class="cap">読者・開封率・クリック率。ステップメールの便ごとの成績まで。</p>
       </div>
       <div role="tabpanel" id="pane-line" aria-labelledby="tab-line" hidden>
-        <figure class="face shot" style="margin:0 auto"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · LINE</span></div>
-          <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・友だち追加7日・ブロック7日・ブロック累計の4枚と、友だち追加の30日の推移"></picture></a></figure>
-        <p class="cap">友だち・追加・ブロックの4枚と、友だち追加の30日の推移。出入りは1件ずつ時刻つきで残ります。流入経路ごとの友だち追加やA/Bの結果は、LINEの分析の画面で見られます。</p>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · チャネル · LINE</span></div>
+          <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・追加・ブロックの4枚と30日の推移"></picture></a></figure>
+        <p class="cap">友だちの追加とブロックを、日ごとに。流入経路ごとの数も見られます。</p>
       </div>
-      <div class="grammar">
-        <p>どのチャネルも、上に主な数字を4枚。</p>
-        <ol>
-          <li><b>メール</b>読者・配信・開封率・クリック率</li>
-          <li><b>LINE</b>友だち・追加・ブロック・ブロック累計</li>
-          <li><b>YouTube</b>登録者・投稿・ビュー・平均ビュー</li>
-          <li><b>Threads</b>フォロワー・投稿・ビュー・平均ビュー</li>
-        </ol>
+      <div role="tabpanel" id="pane-book" aria-labelledby="tab-book" hidden>
+        <figure class="book"><div class="phone"><img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページ。セミナーの募集ページで、申し込み状況と残りの席数が出ている" width="780" height="1560" loading="lazy"></div></figure>
+        <p class="cap">イケハヤのセミナーで使っている予約ページ。定員・キャンセル待ち・リマインドまで。</p>
       </div>
-      <p class="fine center" style="margin-top:16px">画面は実物で、数字は見本です。設定と原稿を入れ、各チャネルをつないだ状態の見本です。</p>
-    </div>
-  </div>
-</section>
+      <div class="connect">
+      <h3 class="center">つながるもの</h3>
+    <ul class="chips" aria-label="つながるもの">
+      <li><i style="background:var(--ch-mail)"></i>メール</li><li><i style="background:var(--ch-line)"></i>LINE</li><li><i style="background:var(--ch-ig)"></i>Instagram</li><li><i style="background:var(--ch-th)"></i>Threads</li><li><i style="background:var(--ch-yt)"></i>YouTube</li><li><i style="background:var(--ink2)"></i>予約ページ</li><li><i style="background:var(--ink2)"></i>Stripeの売上</li><li><i style="background:var(--ink2)"></i>LP分析</li>
+    </ul>
+    <p class="fine chips-note">連携には各サービスの初回設定が必要です。X・note・Substackの数字は、あなたのAIがつないで取り込みます。</p>
+    <details class="all" data-rondo-click-sec="all">
+      <summary data-rondo-label="全機能 開く">v1.0の全機能を見る</summary>
+      <div class="inv">
+      <div><h3>連携の条件</h3><ul>
+        <li>各サービスのアカウント・アプリ登録と初回設定が必要</li>
+        <li>Instagramの返信は、相手の最後のメッセージから24時間まで</li>
+        <li>YouTubeは投稿から30日以内のコメントを取り込み</li>
+        <li>X・note・Substackの数字は、あなたのAIが作る収集の仕組みで</li>
+        <li>予約ページで参加費の決済はできません</li>
+      </ul></div>
 
-<!-- 3. つながるもの -->
-<section id="channels" data-sec="channels">
-  <div class="wrap">
-    <div class="center">
-      <h2><span class="ph">ひとつの画面に、</span><span class="ph">つながるもの<span class="hang">。</span></span></h2>
-      <p class="lede">メール・LINE・Instagram・Threads・YouTubeは標準で入っています（初回は各サービスの設定が必要です）。X・note・Substackの数字は、あなたのAIが受け口につないで取り込みます。</p>
-    </div>
-    <div class="chgrid">
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-mail)"></i><h3>メール</h3></div><p>ステップメール、メルマガの一斉配信、登録ページ。件名のA/B、押した人で分ける。購入の通知で講座を始める・止める。返信とお問い合わせは受信箱へ。</p><span class="how std">標準（独自ドメインとResendの設定）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-line)"></i><h3>LINE</h3></div><p>ステップ配信、タグ、分岐、リッチメニューの出し分け、流入経路の計測、A/Bテスト、画像・動画・カルーセル、フォーム、リマインダ。LステップのCSVを取り込めます。</p><span class="how std">標準（LINE公式アカウントとMessaging APIの設定）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-ig)"></i><h3>Instagram</h3></div><p>DM・ストーリーへの返信・コメント・メンションに自動で返信してLINEへ案内。DMメニュー、ストーリーのキャンペーンごとの成果表。フォロワーと投稿を毎日集計（ビューはMetaの許可を足してつなぎ直すと）。</p><span class="how std">標準（プロアカウントとMetaのアプリ登録）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-th)"></i><h3>Threads</h3></div><p>つなぐとフォロワー数を毎日集計。予約投稿と、投稿の直後に返信でリンク（予約投稿は自分でオンにして使います）。</p><span class="how std">標準（Metaのアプリ登録）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-yt)"></i><h3>YouTube</h3></div><p>登録者と再生の数字を毎日集計。説明欄のリンクを計測。コメントを受信箱に取り込んで、管理画面から返信。</p><span class="how std">標準（Google Cloudの設定）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ch-x)"></i><h3>X・note・Substack</h3></div><p>リンクの計測は標準。フォロワーと投稿の数字は、あなたのAIが作る収集の仕組みで取り込みます。投稿やDMの操作は含みません。</p><span class="how ai">あなたのAIがつなぐ（XのAPIは有料）</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ink2)"></i><h3>予約ページ</h3></div><p>セミナーの募集と、個別相談の空き枠。リマインドまで、読者と同じ台帳で動きます。</p><span class="how std">最初から入っています</span></article>
-      <article class="ch face-lo"><div class="hd"><i style="background:var(--ink2)"></i><h3>顧客台帳・売上・LP</h3></div><p>購入と売上を記録し、結び付いた人を1人の顧客にまとめて、コア・常連・見込み・休眠に分けます。LPのヒートマップとセクションの到達も。</p><span class="how std">標準（Stripeの決済通知の設定）</span></article>
-    </div>
-  </div>
-</section>
-
-<!-- 4. 返す(受信箱) と 会う(予約) -->
-<section id="jobs" data-sec="jobs" style="padding-top:24px">
-  <div class="wrap">
-    <div class="duo wide">
-      <div>
-        <p class="job">返す ・ 受信箱</p>
-        <h2><span class="ph">DMも、コメントも、</span><br><span class="ph">メールの返信も。</span><br><span class="ph">1つの受信箱で返す。</span></h2>
-        <p class="lede">LINEのトーク、InstagramのDM、YouTubeのコメント、メールの返信とお問い合わせ。返事が要るものが1つの一覧に並び、その場で返せます。</p>
-        <ul class="bul">
-          <li>要対応・AIの返信の確認待ち・未読で絞り込み、チャネルでも絞り込み</li>
-          <li>名前と本文で検索（メールは件名とアドレス、YouTubeは動画名も）</li>
-          <li>会話に自分のラベル（名前と色）を付けて、ラベルや、LINEのタグ・購入者のタグで絞り込み（タグは結び付いた相手が対象・YouTubeを除く）</li>
-          <li>「すべて既読にする」「要対応をすべて対応済みに」。押し間違えないよう2回押し</li>
-          <li>メールは、どの配信への返信かが見え、添付も読めます。自動応答は要対応にしません</li>
-          <li>LINEとInstagramのDMは、AIに返事を任せることもできる（任意・最初は止まった状態で、試運転から始める）</li>
-          <li>同じ返信を二度送らない仕組み。Instagramは返信できる残り時間を表示</li>
-        </ul>
-        <p class="note">Instagramは相手の最後のメッセージから24時間まで返信できます（Instagramの決まり）。YouTubeは投稿から30日以内のコメントを取り込みます。一部の大きなチャンネルでは、Googleの判断で接続が一時的に止められることがあります。メールの返信を受け取るには、受信用のサブドメインとResendの受信の初回設定が要ります。</p>
-      </div>
-      <figure class="face shot" style="margin:0">
-        <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
-        <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱の実物。LINE・Instagram・YouTube・メールの会話が要対応やAIの確認待ちの札、ラベルつきで1つの一覧に並んでいる"></picture></a>
-        <figcaption>受信箱の実物です。名前と本文は見本です。押すと大きく見られます。</figcaption>
-      </figure>
-    </div>
-
-    <div class="duo rev">
-      <div>
-        <p class="job">会う ・ 予約ページ</p>
-        <h2><span class="ph">セミナーも個別相談も、</span><br><span class="ph">予約ページまで。</span></h2>
-        <p class="lede">募集のページ、定員、キャンセル待ち、前日のリマインド、終わった後のアーカイブの案内まで。申し込んだ人は、読者や友だちと同じ台帳に入ります。</p>
-        <ul class="bul">
-          <li>セミナー: 回ごとの定員・申し込み状況・キャンセル待ちと繰り上げ</li>
-          <li>個別相談: 曜日ごとの受付時間から空き枠を出し、1枠1人</li>
-          <li>メールかLINEでリマインド。Googleカレンダーに追加</li>
-          <li>参加者の一覧とCSV</li>
-        </ul>
-        <p class="note">参加費の決済は含みません。</p>
-      </div>
-      <figure style="margin:0">
-        <div class="phone"><img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページの実物。AI動画編集と動画生成の実演セミナーの募集ページで、申し込み状況のゲージと残りの席数が出ている" width="780" height="1560" loading="lazy"></div>
-        <figcaption>イケハヤのセミナーの予約ページ（実物）。<br>画面の申込数はイケハヤ主催のセミナーの数です（2026年10月7日時点）。</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- 4b. 設定 -->
-<section id="settings" data-sec="settings" style="padding-top:24px">
-  <div class="wrap">
-    <div class="duo wide">
-      <div>
-        <p class="job">整える ・ 設定</p>
-        <h2><span class="ph">運用の切り替えも、</span><br><span class="ph">画面で。</span></h2>
-        <p class="lede">管理画面の左下に「設定」があります。見た目の色、AIの返事の一時停止、新しいメッセージの知らせ、配信の緊急停止などを、設置し直さずに画面から切り替えられます。</p>
-        <ul class="bul">
-          <li>デザインは7つの衣から（明るい5・暗い2）。端末に合わせることも</li>
-          <li>AIの返事の一時停止</li>
-          <li>新しいメッセージの知らせのオン・オフと、見張りの知らせを受けるメールの宛先</li>
-          <li>配信の緊急停止と、反応のない読者の休眠の整理</li>
-          <li>差出人の名前、データを残す日数、受信箱のラベルの名前と色</li>
-          <li>1人あたりの上限や一斉配信の上限は、ここで確かめられます</li>
-        </ul>
-        <div class="robe-row" aria-label="7つの衣">
-          <span><i style="--b:#F5F3EC;--d:#B08A2E"></i>羽二重</span><span><i style="--b:#EEEDEA;--d:#B5413A"></i>墨</span><span><i style="--b:#F7ECEE;--d:#C25A73"></i>桜</span><span><i style="--b:#EEF2E7;--d:#5E8A3A"></i>若葉</span><span><i style="--b:#F8EEE6;--d:#C2652E"></i>茜</span><span><i style="--b:#1A1826;--d:#D9A94C"></i>宵闇</span><span><i style="--b:#161B26;--d:#8FB3D9"></i>雪月</span>
-        </div>
-      </div>
-      <figure class="face shot" style="margin:0">
-        <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 設定</span></div>
-        <a class="real" href="/rondo-assets/rondo-admin-robes.webp" data-zoom data-rondo-label="設定 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-settings-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-robes.webp" width="1500" height="900" loading="lazy" alt="設定の画面の実物。デザインの欄に、羽二重・墨・桜・若葉・茜・宵闇・雪月と端末に合わせるの8つの見本が並んでいる"></picture></a>
-        <figcaption>設定の実物です。APIの鍵などの秘密の値は、画面では扱いません。</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- 5. AIで設置・改造 -->
-<section id="ai" data-sec="ai">
-  <div class="wrap">
-    <div class="center">
-      <h2><span class="ph">設置も改造も、</span><span class="ph">AIに日本語で<span class="hang">。</span></span></h2>
-      <p class="lede">届くのは、自分のCloudflareに設置して使う、ソースコード一式と手順書です。手順書はAIに読ませる前提で書いてあり、Claude CodeやCodexが設置の作業を進めます。足りない機能は、AIに頼んで足せます。</p>
-    </div>
-    <div class="split">
-      <div class="face-lo"><h3>あなたがやること</h3><ol><li>各サービスのアカウントを作り、ログインする</li><li>権限の承認と、課金の確認</li><li>秘密の値を入れる</li><li>動いたかを、自分の目で確かめる</li></ol></div>
-      <div class="face-lo"><h3>開発AIがやること</h3><ol><li>手順書を読み、設置の作業を進める</li><li>メールやLINEの原稿を、設定ファイルに入れる</li><li>エラーを読んで、直す</li><li>「こういう機能がほしい」を形にする</li></ol></div>
-    </div>
-    <div class="guard">
-      <div class="face-lo"><b>一斉配信は人が決める</b><span>AIは下書きまで。送る内容と相手は、人が確かめて決める運用です。</span></div>
-      <div class="face-lo"><b>送りすぎを防ぐ</b><span>1人あたりの上限や、同じメールを二度送らない仕組みを重ねています。</span></div>
-      <div class="face-lo"><b>止まったら知らせる</b><span>通知先（Discordなど）を設定すると、配信や接続の停止を知らせます。</span></div>
-      <div class="face-lo"><b>戻せる</b><span>データベースは過去30日の時点に戻せます。バックアップと復元の手順つき。</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5b. v1.0 に入っているもの -->
-<section id="v10" data-sec="v10">
-  <div class="wrap">
-    <div class="center">
-      <h2><span class="ph">v1.0に、</span><span class="ph">入っているもの<span class="hang">。</span></span></h2>
-      <p class="lede">β版から足した機能も含めて、全部です。<b class="new" style="font-family:var(--font-num);font-weight:600;font-size:12px;letter-spacing:.06em;color:var(--accent-hi)">NEW</b> はβ版のあとに入ったものです。</p>
-    </div>
-    <div class="inv">
       <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
         <li>ステップメール・一斉配信</li>
-        <li>複数の講座と、講座ごとの登録ページ<span class="new">NEW</span></li>
-        <li>タグ・購入・名簿の条件を組み合わせた絞り込み<span class="new">NEW</span></li>
-        <li>管理画面からのテスト送信<span class="new">NEW</span></li>
-        <li>押したら動くリンク・本文の分岐・この講座だけ止める<span class="new">NEW</span></li>
+        <li>複数の講座と、講座ごとの登録ページ</li>
+        <li>タグ・購入・名簿の条件を組み合わせた絞り込み</li>
+        <li>管理画面からのテスト送信</li>
+        <li>押したら動くリンク・本文の分岐・この講座だけ止める</li>
         <li>件名のA/B（勝った方を自動で採用）</li>
-        <li>購入で講座を始める・止める・タグを付ける<span class="new">NEW</span></li>
-        <li>配信への返信とお問い合わせを受信箱で<span class="new">NEW</span></li>
-        <li>旧ツールの読者CSV・購入者CSVの取り込み<span class="new">NEW</span></li>
+        <li>購入で講座を始める・止める・タグを付ける</li>
+        <li>配信への返信とお問い合わせを受信箱で</li>
+        <li>旧ツールの読者CSV・購入者CSVの取り込み</li>
       </ul></div>
       <div><h3><i style="background:var(--ch-line)"></i>LINE</h3><ul>
         <li>ステップ配信・一斉配信・リッチメニュー</li>
-        <li>タグ・友だち情報・分岐・リマインダ<span class="new">NEW</span></li>
-        <li>タグで切り替わるリッチメニュー<span class="new">NEW</span></li>
-        <li>流入経路の計測と、経路ごとの友だち追加<span class="new">NEW</span></li>
-        <li>A/Bテスト・分析<span class="new">NEW</span></li>
-        <li>画像・動画・カルーセル・フォーム<span class="new">NEW</span></li>
-        <li>LステップのCSVからタグと友だち情報<span class="new">NEW</span></li>
-        <li>AIの返事（任意・確認してから送る運用も）<span class="new">NEW</span></li>
+        <li>タグ・友だち情報・分岐・リマインダ</li>
+        <li>タグで切り替わるリッチメニュー</li>
+        <li>流入経路の計測と、経路ごとの友だち追加</li>
+        <li>A/Bテスト・分析</li>
+        <li>画像・動画・カルーセル・フォーム</li>
+        <li>LステップのCSVからタグと友だち情報</li>
+        <li>AIの返事（任意・確認してから送る運用も）</li>
       </ul></div>
       <div><h3><i style="background:var(--ch-ig)"></i>Instagram</h3><ul>
-        <li>DM・ストーリーへの返信・コメント・メンションに自動応答してLINEへ<span class="new">NEW</span></li>
-        <li>DMメニュー（質問ボタン・常設メニュー）<span class="new">NEW</span></li>
-        <li>ストーリーのキャンペーンごとの成果表<span class="new">NEW</span></li>
-        <li>管理画面からDMに返信<span class="new">NEW</span></li>
-        <li>フォロワー・投稿・いいね・コメントの毎日の集計<span class="new">NEW</span></li>
-        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足してつなぎ直す）<span class="new">NEW</span></li>
-        <li>DMのAIの返事（任意・試運転から）<span class="new">NEW</span></li>
+        <li>DM・ストーリーへの返信・コメント・メンションに自動応答してLINEへ</li>
+        <li>DMメニュー（質問ボタン・常設メニュー）</li>
+        <li>ストーリーのキャンペーンごとの成果表</li>
+        <li>管理画面からDMに返信</li>
+        <li>フォロワー・投稿・いいね・コメントの毎日の集計</li>
+        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足してつなぎ直す）</li>
+        <li>DMのAIの返事（任意・試運転から）</li>
         <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
       </ul></div>
       <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
-        <li>つなぐ・フォロワー数の毎日の集計<span class="new">NEW</span></li>
-        <li>予約投稿と、直後の返信でLINEのリンク<span class="new">NEW</span></li>
-        <li>送信の停止ボタン・1日の本数と間隔の上限<span class="new">NEW</span></li>
+        <li>つなぐ・フォロワー数の毎日の集計</li>
+        <li>予約投稿と、直後の返信でLINEのリンク</li>
+        <li>送信の停止ボタン・1日の本数と間隔の上限</li>
       </ul></div>
       <div><h3><i style="background:var(--ch-yt)"></i>YouTube</h3><ul>
-        <li>登録者・再生・日ごとの視聴の集計<span class="new">NEW</span></li>
-        <li>コメントを受信箱に取り込んで返信<span class="new">NEW</span></li>
-        <li>説明欄のリンクの計測<span class="new">NEW</span></li>
+        <li>登録者・再生・日ごとの視聴の集計</li>
+        <li>コメントを受信箱に取り込んで返信</li>
+        <li>説明欄のリンクの計測</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
-        <li>LINE・Instagram・YouTube・メールを1つの一覧に<span class="new">NEW</span></li>
-        <li>名前と本文の検索<span class="new">NEW</span></li>
-        <li>会話のラベル・ラベルやタグでの絞り込み<span class="new">NEW</span></li>
-        <li>すべて既読・要対応をすべて対応済みに<span class="new">NEW</span></li>
+        <li>LINE・Instagram・YouTube・メールを1つの一覧に</li>
+        <li>名前と本文の検索</li>
+        <li>会話のラベル・ラベルやタグでの絞り込み</li>
+        <li>すべて既読・要対応をすべて対応済みに</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>数字</h3><ul>
         <li>ダッシュボード（売上・読者と友だち・チャネルの調子）</li>
-        <li>チャネルの「すべて」と、チャネルごとの4枚<span class="new">NEW</span></li>
+        <li>チャネルの「すべて」と、チャネルごとの4枚</li>
         <li>売上と配信（売上・登録・メールの成績）・LP分析（ヒートマップと到達）</li>
         <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
         <li>X・note・Substackの数字の受け口</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
-        <li>セミナー（定員・キャンセル待ちと繰り上げ）<span class="new">NEW</span></li>
-        <li>個別相談の空き枠（1枠1人）<span class="new">NEW</span></li>
-        <li>リマインド・Googleカレンダー・参加者のCSV<span class="new">NEW</span></li>
+        <li>セミナー（定員・キャンセル待ちと繰り上げ）</li>
+        <li>個別相談の空き枠（1枠1人）</li>
+        <li>リマインド・Googleカレンダー・参加者のCSV</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
-        <li>設定の画面・デザインの7つの衣<span class="new">NEW</span></li>
+        <li>設定の画面・デザインの7つの衣</li>
         <li>緊急停止・二重送信の防止</li>
-        <li>メールとLINEを合わせた1人1日の上限（任意）<span class="new">NEW</span></li>
-        <li>監査の画面に接続の健康と容量<span class="new">NEW</span></li>
-        <li>毎日のバックアップと復元の練習<span class="new">NEW</span>・過去30日への巻き戻し</li>
-        <li>導入の点検（送信ドメインの検査まで）<span class="new">NEW</span></li>
-        <li>Codexでも導入・運用できる入口<span class="new">NEW</span></li>
+        <li>メールとLINEを合わせた1人1日の上限（任意）</li>
+        <li>監査の画面に接続の健康と容量</li>
+        <li>毎日のバックアップと復元の練習・過去30日への巻き戻し</li>
+        <li>導入の点検（送信ドメインの検査まで）</li>
+        <li>Codexでも導入・運用できる入口</li>
       </ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. 向く人・向かない人・診断 -->
-<section id="fit" data-sec="fit">
-  <div class="wrap">
-    <div class="center">
-      <h2><span class="ph">正直に言うと、</span><span class="ph">万人向けではありません<span class="hang">。</span></span></h2>
-      <p class="lede">サポート窓口はありません。自信がない人は、買わないでください。</p>
-    </div>
-    <div class="fit">
-      <div class="face-lo"><h3>Rondoが向いている人</h3><ul><li>Claude CodeやCodexを、ふだんから使っている人</li><li>発信で商売をしている個人・小さなチーム</li><li>ツールの月額と仕様に縛られたくない人</li></ul></div>
-      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい人</li><li>完成品のアプリを期待する人</li><li>開発AIを使う予定がない人</li><li>独自ドメインを用意する予定がない人</li><li>サポート窓口が必要な人</li></ul></div>
-    </div>
-    <p class="sh-lede" id="shindan">導入の準備ができているか、6問・約30秒で確かめられます。</p>
-    <div class="shindan face">
-      <div id="sh-quiz">
-        <div class="sh-top">
-          <span class="sh-step" id="sh-step">1 / 6</span>
-          <span class="sh-dots" id="sh-dots" aria-hidden="true"></span>
-          <button type="button" class="sh-back" id="sh-back" data-rondo-label="診断 前の質問" style="visibility:hidden">前の質問へ</button>
-        </div>
-        <div aria-live="polite">
-          <p class="sh-q" id="sh-q"></p>
-          <div class="sh-choices" id="sh-choices"></div>
-        </div>
       </div>
-      <div id="sh-result" class="sh-verdict" aria-live="polite" hidden></div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. 費用と価格 -->
-<section id="price" data-sec="reserve">
-  <div class="wrap">
-    <div class="center">
-      <h2>¥9,800、買い切り<span class="hang">。</span></h2>
-      <p class="lede">ソースコード一式と、導入・更新の手順書つき。v1系の更新は無償です。</p>
-    </div>
-    <div class="buy">
-      <div class="face-lo cost" id="cost">
-        <h3>本体のほかに、かかる費用</h3>
-        <div class="row"><span>Cloudflare（動かす場所）<small>有料プランが必須。処理量が大きく増えると従量の追加あり</small></span><b>月5ドル〜</b></div>
-        <div class="row"><span>Resend（メール送信）<small>無料枠は月3,000通・1日100通まで。送信量が増えると上位プランや追加の料金があります</small></span><b>無料枠あり／月20ドル〜</b></div>
-        <div class="row"><span>開発AI（Claude CodeかCodex）<small>契約中のものを使えます。利用量によって追加の費用がかかることがあります</small></span><b>月3,000円ほど〜</b></div>
-        <div class="row"><span>独自ドメイン<small>メールの送信元に必須</small></span><b>年1,000円台〜</b></div>
-        <div class="row"><span>サポート窓口<small>運用は、あなたと開発AIで行います</small></span><b>なし</b></div>
-        <p class="fine" style="margin-top:14px">LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料は別にかかります。決済ページはStripeなどで用意し、Rondoは決済の通知を受けて記録します。予約ページで参加費を集める機能はありません。</p>
+    </details>
       </div>
-      <div class="face price">
-        <p class="kick" style="margin:0">正式版 v1.0 ・ 発売日未定</p>
-        <p class="big num">¥9,800</p>
-        <p class="tag">税込・買い切り・購入時の審査なし</p>
-        <div class="presale"><b>事前登録で10%オフ</b><span>発売当日、期間限定の割引リンクをメールでお送りします。</span></div>
-        <h3>買う前に、確かめてください</h3>
-        <ul>
-          <li>開発AIを使って、導入・運用する商品です</li>
-          <li>Cloudflare有料プランなどの運用費がかかります</li>
-          <li>メールの送信元に、独自ドメインが必要です</li>
-          <li>設定・動作の確認・障害対応は、あなたと開発AIで行います</li>
-        </ul>
-        <p class="terms">お支払いは購入時に一括で、Stripeの決済ページで行います（クレジットカードなど、表示される方法から選べます。カード情報が当サイトに渡ることはありません）。決済が終わると、すぐに納品のメールでダウンロードのリンクをお送りします。技術サポートはありません。購入者都合の返金・キャンセルは受け付けません（法令に基づき必要な対応を除きます）。</p>
-        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>
-        <p class="fine" style="margin-top:10px">Substack（イケハヤのメールマガジン）が開きます。メールアドレスを入れて登録してください（無料）。</p>
-        <p class="fine" style="margin-top:12px"><a href="/rondo-setup" data-rondo-label="購入 動作環境">動作環境と導入の流れ</a> ・ <a href="#shindan" data-rondo-label="CTA 価格上の適性診断">適性診断（6問・30秒）</a> ・ <a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="購入 特商法">特定商取引法に基づく表記</a></p>
+      <div class="demo-cta">
+        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">見本の数字でデモを触る</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 7. 声 -->
-<section id="voices" data-sec="voices" style="padding-top:24px">
+<!-- 4. 声 -->
+<section id="voices" data-sec="voices">
   <div class="wrap">
-    <div class="center">
-      <h2>β版を使った人の声</h2>
-      <p class="lede">β版を購入した方が、ご自身で投稿したものです。投稿の依頼や謝礼はしていません。その中から販売者が選んで掲載しています（Xの埋め込み・個人の感想です）。</p>
-    </div>
+    <h2 class="center">β版を使った人の声</h2>
+    <p class="fine center" style="margin-top:10px">β版の購入者ご本人の投稿から、販売者が選んで掲載しています（依頼・謝礼なし・個人の感想）。</p>
     <div class="voices">
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/urasan2785/status/2106303786293846426" data-rondo-label="声 urasan2785">@urasan2785 の投稿をXで見る</a></blockquote>
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/omochibigaku/status/2095624022440686035" data-rondo-label="声 omochibigaku">@omochibigaku の投稿をXで見る</a></blockquote>
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/kabuco_h/status/2087035751662002419" data-rondo-label="声 kabuco_h">@kabuco_h の投稿をXで見る</a></blockquote>
-      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/hsrk_g_hsrk/status/2088765079605178801" data-rondo-label="声 hsrk_g_hsrk">@hsrk_g_hsrk の投稿をXで見る</a></blockquote>
-      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/siroradio51/status/2088986470547931317" data-rondo-label="声 siroradio51">@siroradio51 の投稿をXで見る</a></blockquote>
     </div>
   </div>
 </section>
 
-<!-- 9. よくある質問（開かれた順） -->
-<section id="faq" data-sec="faq" style="padding-top:24px">
+<!-- 5. 設置と運用・向く人 -->
+<section id="ai" data-sec="ai-fit">
+  <div class="wrap">
+    <div class="center">
+      <h2>設置と運用は、<br class="sp">あなたと開発AIで<span class="hang">。</span></h2>
+      <p class="lede">届くのは、ソースコード一式とAIが読む手順書。<br>Claude CodeやCodexに頼めば、設置から機能の追加まで進みます。</p>
+    </div>
+    <div class="split">
+      <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
+      <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
+    </div>
+    <p class="fit-note">ノーコードで完結したい人、サポート窓口が必要な人には向きません。<br>メールの送信元に、独自ドメインが必要です。</p>
+  </div>
+</section>
+
+<!-- 6. 価格 -->
+<section id="price" data-sec="price">
+  <div class="wrap">
+    <h2 class="center">¥9,800、買い切り<span class="hang">。</span></h2>
+    <div class="buy">
+      <div class="face price">
+        <p class="kick">正式版 v1.0 ・ 発売日は未定</p>
+        <p class="big num">¥9,800<small>税込</small></p>
+        <div class="presale"><b>事前登録で10%オフ（¥8,820）</b><span>発売当日、期間限定の割引リンクをメールでお届けします。</span></div>
+        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
+        <p class="fine">Substackが開きます。メールアドレスを入れて登録すれば完了です（無料）。</p>
+      </div>
+      <div class="face-lo cost">
+        <h3>別にかかる運用費</h3>
+        <div class="row"><span>Cloudflare（有料プラン）</span><b>月5ドル〜</b></div>
+        <div class="row"><span>独自ドメイン</span><b>年1,000円台〜</b></div>
+        <div class="row"><span>メール送信（Resend）<small>無料枠は月3,000通・1日100通まで</small></span><b>無料〜月20ドル</b></div>
+        <div class="row"><span>開発AI（Claude CodeかCodex）</span><b>月3,000円ほど〜</b></div>
+        <p class="fine">配信量・利用量に応じて増えることがあります。LINE公式アカウントやAIの返事の利用料は別です。</p>
+      </div>
+    </div>
+    <p class="terms">v1系の更新は無償（時期・内容の保証なし）・技術サポートなし・購入者都合の返金は不可（法令に基づく対応を除く）。<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="価格 特商法">特定商取引法に基づく表記</a></p>
+  </div>
+</section>
+
+<!-- 7. よくある質問 -->
+<section id="faq" data-sec="faq">
   <div class="wrap">
     <h2 class="center">よくある質問</h2>
     <div class="faq">
-      <details><summary data-rondo-click-sec="faq-13" data-rondo-label="FAQ 発売日と事前登録">いつ発売ですか？ 事前登録とは？</summary><div class="a">発売日は未定です。<a href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="FAQ Substack登録">Substack（イケハヤのメールマガジン）</a>にメールを登録しておくと、発売のお知らせと、発売当日だけ使える期間限定の10%オフのリンクをお送りします。登録は無料で、いつでも解除できます。</div></details>
-      <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードを書くのは開発AIの仕事なので、あなたが書く必要はありません。ただしノーコードツールではありません。開発AIに日本語で指示を出し、結果を自分で確かめられることが前提です。</div></details>
-      <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入・運用・トラブル対応は、あなたとあなたの開発AIで行います。不具合は<a href="/rondo-report" data-rondo-label="FAQ 報告フォーム">報告フォーム</a>で受け付けています（個別の返信はしていません）。</div></details>
-      <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額費用">本体のほかに、いくらかかりますか？</summary><div class="a">Cloudflareの有料プラン（月5ドル〜）、独自ドメイン（年1,000円台〜）、メール送信のResend（小規模なら無料）、開発AIの利用料がかかります。LINE公式アカウントの利用料と、AIの返事を使う場合のAIの利用料も別です。読者が増えると、配信量に応じて費用が増えることがあります。</div></details>
-      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ 決済サブスク">月額のサブスクではありませんか？</summary><div class="a">本体は¥9,800の買い切りで、Rondoへの月額の支払いはありません。かかるのは上の運用費だけで、それぞれのサービスに直接払います。</div></details>
-      <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ アップデート">アップデートはありますか？</summary><div class="a">v1系の更新は、購入者のみなさんに無償でお届けします（時期・内容の保証はありません）。新しい版が出たらメールでお知らせし、納品メールのリンクから最新版を受け取れます。次の大きな版（v2）は別商品として、既購入者に優待価格を予定しています。</div></details>
-      <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ AIモデル">どの開発AIで使えますか？</summary><div class="a">Claude CodeとCodexを想定して手順書を書いています。どちらも、契約中のプランで使えます。</div></details>
-      <details><summary data-rondo-click-sec="faq-7" data-rondo-label="FAQ 乗り換え">いま使っている配信ツールから乗り換えられますか？</summary><div class="a">はい。メールの読者はCSVで取り込め、解除・不達の人は配信停止の台帳へ入り、旧ツールの登録日から「続きの通」で始められます。LINEは、LステップのCSVからタグと友だち情報を持ち込めます（友だちとの結び付けは人が確かめます）。</div></details>
-      <details><summary data-rondo-click-sec="faq-8" data-rondo-label="FAQ 導入の流れ">購入後は、どういう流れで使い始めますか？</summary><div class="a">決済が終わると、すぐに納品のメールが届きます。ソースコード一式（zip）と導入手順書を受け取り、開発AIに読ませて、あなたのCloudflareへ設置します。全体の流れは<a href="/rondo-setup" data-rondo-label="FAQ 導入の流れリンク">「導入の流れ」</a>、作業の手順は<a href="/rondo-guides/setup" data-rondo-label="FAQ 初回セットアップガイド">初回セットアップガイド</a>で公開しています。</div></details>
-      <details><summary data-rondo-click-sec="faq-9" data-rondo-label="FAQ メールの返信">配信したメールに読者が返信したら、どこに届きますか？</summary><div class="a">Rondoの受信箱に届きます。配信の返信先が受信箱につながり、どの配信への返信かも分かります。お問い合わせのメールも同じ一覧に入り、そこから返信できます。使うには、受信用のサブドメインとResendの受信の初回設定（MXの記録・Webhook・設定の値）が要ります。手順は導入の手順書にあります。</div></details>
-      <details><summary data-rondo-click-sec="faq-10" data-rondo-label="FAQ 購入連動">購入した人だけに配信できますか？</summary><div class="a">できます。決済ページはStripeで用意し、決済の通知を受けると、タグ付け・メール講座の開始と停止・LINEの切り替えが動きます（商品と購入のルールの設定が必要です。LINEの切り替えは、メールとLINEが結び付いた人が対象です）。サブスクの管理は標準には入っていません（開発AIに作らせることはできます）。</div></details>
-      <details><summary data-rondo-click-sec="faq-11" data-rondo-label="FAQ マーケ相談">マーケティングの相談には乗ってもらえますか？</summary><div class="a">個別の相談は受けていません。Rondoには、管理画面の数字を読んで改善の案を出す診断用のAIが同梱されています。</div></details>
-      <details><summary data-rondo-click-sec="faq-12" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコード一式を納品するデジタル商品のため、購入者都合の返金・キャンセルは受け付けていません（法令に基づき必要な対応を除きます）。迷いがあるうちは、適性診断と公開中のガイドを先に確かめてください。</div></details>
+      <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ 発売日">いつ発売ですか？</summary><div class="a">発売日は未定です。事前登録（Substack・無料）の方には、発売のお知らせと、発売当日から使える期間限定の10%オフのリンクをお送りします。登録はいつでも解除できます。</div></details>
+      <details><summary data-rondo-click-sec="faq-7" data-rondo-label="FAQ 登録済み">もうイケハヤのメルマガを読んでいます。</summary><div class="a">登録済みなら、何もしなくて大丈夫です。発売のお知らせと割引リンクは、いま届いているメルマガでお送りします。</div></details>
+      <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードは開発AIが書きます。ただしノーコードツールではありません。AIに日本語で頼み、結果を自分で確かめられることが前提です。</div></details>
+      <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額">月額はかかりますか？</summary><div class="a">Rondoへの月額はありません。Cloudflare・独自ドメイン・開発AIなどの運用費を、それぞれのサービスに直接払います。</div></details>
+      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入と運用は、あなたと開発AIで行います。v1系の更新は無償でお届けします（時期・内容の保証はありません）。</div></details>
+      <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ 乗り換え">いまの配信ツールから乗り換えられますか？</summary><div class="a">メールの読者はCSVで取り込めます。LINEはLステップのCSVから、タグと友だち情報を持ち込めます。</div></details>
+      <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコードを納品するデジタル商品のため、購入者都合の返金はできません（法令に基づく対応を除きます）。</div></details>
     </div>
   </div>
 </section>
 
-<!-- 10. 終盤 -->
+<!-- 8. 終盤 -->
 <section class="last" data-sec="final">
   <div class="wrap">
-    <h2><span class="ph">ひとつの画面で、</span><span class="ph">商売を回す<span class="hang">。</span></span></h2>
-    <p class="lede" style="margin-left:auto;margin-right:auto">本体は¥9,800の買い切り。運用費は別にかかります。<br>発売日は未定。事前登録の方には、発売当日に期間限定の10%オフをお届けします。</p>
-    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>
+    <h2>発売日に、10%オフで<span class="hang">。</span></h2>
+    <p class="lede">イケハヤのメルマガ（Substack）に無料登録すると、<br>発売のお知らせと当日の割引リンクが届きます。</p>
+    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
   </div>
 </section>
 
@@ -823,82 +574,11 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 </footer>
 
 <div class="dock" id="dock" aria-hidden="true" data-rondo-click-sec="dock">
-  <span class="p"><b>¥9,800</b>発売日未定・事前登録で10%オフ</span>
-  <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
+  <span class="p"><b>発売日に10%オフ</b>Substackで無料登録</span>
+  <a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録する</a>
 </div>
 
 <script>
-/* 適性診断（いまのLPと同じ判定） */
-(function(){
-  var QS = [
-    { q: 'いまの発信・商売に近いものは？', c: [['メールやLINEのリストがあり、配信している', 2],['発信はしているが、リスト配信はこれから', 1],['発信も商売も、これから始める', 0]]},
-    { q: 'Claude CodeやCodexなどの開発AIは？', c: [['ふだんから使っている', 2],['触ったことはある', 1],['使ったことがない', 0]]},
-    { q: '開発AIへの月の投資は？', c: [['すでに払っている', 0],['月3,000円ほどなら払える', 0],['払えない・払いたくない', 0]]},
-    { q: 'メールの送信元に使う独自ドメインは？', c: [['持っている（運用中サイトのドメインでも可）', 0],['持っていない・これから取得する', 0],['よくわからない', 0]]},
-    { q: 'Rondoは完成品のアプリではなく、自分のCloudflareに設置して使うソースコード一式です。どう感じますか？', c: [['むしろ楽しみ', 2],['AIに任せられるなら、大丈夫', 1],['不安。完成品のアプリがいい', 0]]},
-    { q: 'いまの配信ツールについては？', c: [['月額と仕様の縛りから抜けたい', 2],['不満はあるが、乗り換えは面倒', 1],['特に困っていない', 0]]}
-  ];
-  var quiz = document.getElementById('sh-quiz'); if(!quiz) return;
-  var elQ = document.getElementById('sh-q'), elC = document.getElementById('sh-choices'), elStep = document.getElementById('sh-step');
-  var elDots = document.getElementById('sh-dots'), elBack = document.getElementById('sh-back'), elResult = document.getElementById('sh-result');
-  var answers = [], moved = false;
-  function esc(s){ var d = document.createElement('span'); d.textContent = s; return d.innerHTML; }
-  function renderQ(){
-    var i = answers.length;
-    elStep.textContent = (i + 1) + ' / ' + QS.length;
-    elDots.innerHTML = QS.map(function(_, j){ return '<span class="sh-dot' + (j <= i ? ' on' : '') + '"></span>'; }).join('');
-    elBack.style.visibility = i === 0 ? 'hidden' : 'visible';
-    elQ.textContent = QS[i].q; elC.innerHTML = '';
-    if(i > 0 || moved){ elQ.setAttribute('tabindex','-1'); elQ.focus({preventScroll:true}); }
-    QS[i].c.forEach(function(ch, j){
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'sh-choice'; b.textContent = ch[0];
-      b.setAttribute('data-rondo-label', '診断 Q' + (i + 1) + ' A' + (j + 1));
-      b.addEventListener('click', function(){ moved = true; answers.push(j); if(answers.length === QS.length){ renderResult(); } else { renderQ(); } });
-      elC.appendChild(b);
-    });
-  }
-  function score(){ return answers.reduce(function(t, j, i){ return t + QS[i].c[j][1]; }, 0); }
-  function verdict(){
-    var s = score(), wantsFinished = answers[4] === 2, noBudget = answers[2] === 2, noDomain = answers[3] === 2, domainLater = answers[3] === 1;
-    if(wantsFinished || noBudget || noDomain || s <= 2) return 'c';
-    if(domainLater || answers[0] !== 0 || answers[1] !== 0 || s <= 5) return 'b';
-    return 'a';
-  }
-  function renderResult(){
-    var v = verdict(), html = '';
-    var noBudget = answers[2] === 2, noDomain = answers[3] === 2, wantsFinished = answers[4] === 2, s = score();
-    if(v === 'a'){
-      html = '<span class="sh-pill a">向いています</span><p class="sh-title">Rondoは、あなたのための道具です。</p>'
-        + '<p class="sh-body">リストがあり、開発AIが手元にある。それがRondoの想定する使い手です。発売日は未定です。事前登録しておくと、発売当日に期間限定の10%オフのリンクが届きます。</p>'
-        + '<div class="sh-ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 診断A事前登録" data-rondo-cta="presale">事前登録で10%オフ</a></div>';
-    } else if(v === 'b'){
-      var next = [];
-      if(answers[1] >= 1) next.push('まず、Claude CodeかCodexを日常に入れてください。月3,000円ほどのプランから始められます。Rondoの導入も改造も、開発AIが担当します。');
-      if(answers[3] === 1) next.push('メールの送信元に使う独自ドメインを先に取得してください（年1,000円台〜）。取得できたら、導入を始められます。');
-      if(answers[0] === 2) next.push('配る相手を作るのが先です。Rondoは、リストがあってこそ生きます。');
-      if(!next.length) next.push('「向いている人」の条件は、あとひとつで揃います。上の一覧をもう一度見てください。');
-      html = '<span class="sh-pill b">もう一歩</span><p class="sh-title">準備が整えば、使えます。</p>'
-        + '<p class="sh-body">いま買っても、準備が足りずに導入の途中で止まるかもしれません。先に次のことを済ませてください。</p>'
-        + '<ul class="sh-next">' + next.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
-        + '<div class="sh-ctas"><a class="btn sec" href="/rondo-setup" data-rondo-label="CTA 診断B導入の流れ">導入の流れを見る</a><a class="btn sec" href="#price" data-rondo-label="CTA 診断B購入条件">購入の条件を見る</a></div>';
-    } else {
-      var reasons = [];
-      if(noDomain) reasons.push('メールの送信元に使う独自ドメインが必須です。独自ドメインが何かを調べるところからなら、先にドメインを1つ取得してみてください（年1,000円台〜）。');
-      if(noBudget) reasons.push('Rondoの運用は、Claude CodeやCodexなどの開発AI（月3,000円ほど〜）が最低ラインです。この投資ができないうちは、導入しても止まります。');
-      if(wantsFinished || s <= 2) reasons.push('Rondoは、自分のCloudflareに設置して使うソースコード一式です。完成品の使い心地とサポート窓口が必要なら、月額の配信サービスの方が合っています。');
-      html = '<span class="sh-pill c">今は向いていません</span><p class="sh-title">正直に言います。今は買わない方がいいです。</p>'
-        + '<p class="sh-body">Rondoは上級者向けの製品で、サポート窓口はありません。</p>'
-        + reasons.map(function(t){ return '<p class="sh-body">' + esc(t) + '</p>'; }).join('');
-    }
-    html += '<div class="sh-ctas"><button type="button" class="sh-retry" id="sh-retry" data-rondo-label="診断 再実行">もう一度診断する</button></div>';
-    quiz.hidden = true; elResult.innerHTML = html; elResult.hidden = false;
-    var t = elResult.querySelector('.sh-title'); if(t){ t.setAttribute('tabindex','-1'); t.focus({preventScroll:true}); }
-    document.getElementById('sh-retry').addEventListener('click', function(){ answers = []; elResult.hidden = true; quiz.hidden = false; renderQ(); });
-  }
-  elBack.addEventListener('click', function(){ if(answers.length){ moved = true; answers.pop(); renderQ(); } });
-  renderQ();
-})();
-
 /* スマホの下の固定申込: ヒーローの申込を過ぎたら出す。価格・終盤の申込とフッターが見えている間は隠す */
 (function(){
   var dock = document.getElementById('dock'); if(!dock) return;
