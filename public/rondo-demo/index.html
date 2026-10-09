@@ -734,7 +734,9 @@ const reportDemo = (() => {
     daily: daily30(556, 220),
     // 計測基盤(ANALYTICS_DB)の無い配布版の標準: 売れた導線・ファネルの期間・流入元の内訳は null(10-09 本人裁定(b)・Astra LP r11)
     offers: null,
-    funnel: { d7: null, d30: null, p7: null, p30: null, offerLabel: null, sources: null },
+    // 売上・注文は Stripe の購入の台帳、登録はメール・LINE(軽い形 lite・feat/v10-p0-kaizen 944438e1)
+    funnel: (() => { const lite = (rev, o, m, l) => ({ lite: true, visits7: null, clicks7: null, signupRate: null, clickRate: null, cvr: null, signups7: m + l, mail7: m, line7: l, revenue7: rev, orders7: o });
+      return { d7: lite(126000, 11, 84, 34), d30: lite(482000, 41, 372, 150), p7: lite(112000, 10, 77, 30), p30: lite(421000, 36, 331, 140), offerLabel: null, sources: null }; })(),
     events30: { open: 9420, click: 1860, unsubscribe: 52 }, eventsPrev30: { open: 8650, click: 1710, unsubscribe: 61 },
   };
 })();
@@ -864,7 +866,7 @@ const heatDemo = (url) => {
   const views = Math.round(3860 * f);
   const all = {
     views, ctaRate: 0.124, ctaViews: views, ctaVisits: Math.round(views * 0.124), interactionClicks: Math.round(2310 * f), dwellTotalMs: views * 74000, rageTotal: Math.round(14 * f),
-    sections: [['ヒーロー', 1, 9800], ['悩みの共感', 0.82, 14200], ['解決策', 0.64, 18600], ['実績', 0.47, 11300], ['料金', 0.31, 16900], ['よくある質問', 0.19, 8200]].map(([sec, reachRate, dwellAvgMs]) => ({ sec, reachRate, dwellAvgMs })),
+    sections: [['ヒーロー', 1, 9800], ['悩みの共感', 0.82, 14200], ['解決策', 0.64, 18600], ['実績', 0.36, 11300], ['料金', 0.29, 16900], ['よくある質問', 0.19, 8200]].map(([sec, reachRate, dwellAvgMs], idx) => ({ sec, idx, reachRate, dwellAvgMs })),
     elements: [
       { sel: 'a.cta-main|申し込みボタン', sec: '料金', clicks: Math.round(612 * f), clicksPerView: 0.16, rage: 3 },
       { sel: 'a.cta-hero|最初のボタン', sec: 'ヒーロー', clicks: Math.round(498 * f), clicksPerView: 0.13, rage: 1 },
@@ -873,12 +875,51 @@ const heatDemo = (url) => {
     ],
   };
   return { ok: true, pages, page, pageLabel: pages.find((p) => p.page === page).label, days: 30, report: { all, sp: { views: Math.round(views * 0.72) }, pc: { views: Math.round(views * 0.28) } },
-    findings: [
-      { level: 'ok', text: '申し込みボタンの反応は、訪問の12%です。' },
-      { level: 'warn', text: '料金の手前で、読む人が3割まで減っています。料金の見出しを手前に置くと、届く人が増えます。' },
-      { level: 'info', text: '実績の画像は、押せると思われて連打されています。リンクにするか、押せない見た目にします。' },
-    ], viewerUrl: null, tag };
+    // 診断は本物の buildHeatFindings(src/heat.mjs をそのまま写したもの)に見本の数字を通した結果(Astra LP r12)
+    findings: __heatFindings(all), viewerUrl: null, tag };
 };
+
+// --- 以下は rondo/src/heat.mjs の写し(生成のたびに写す) ---
+function __heatFindings(side) {
+  const out = [];
+  if (!side || side.views < 50) {
+    out.push({ level: 'info', text: '訪問がまだ少ないため評価は保留しています(50訪問から判定)。' });
+    return out;
+  }
+  const secs = side.sections.filter((s) => s.reachRate !== null && s.idx >= 0);
+  let worst = null;
+  for (let i = 1; i < secs.length; i += 1) {
+    const drop = secs[i - 1].reachRate - secs[i].reachRate;
+    if (drop >= 0.25 && (!worst || drop > worst.drop)) worst = { from: secs[i - 1], to: secs[i], drop };
+  }
+  if (worst) {
+    out.push({
+      level: 'warn',
+      text: `離脱の集中: 「${worst.from.sec}」→「${worst.to.sec}」で到達が ${pctTxt(worst.from.reachRate)}→${pctTxt(worst.to.reachRate)} に落ちています。`,
+    });
+  }
+  // 空クリックは通常の背景タップも含む観察データ。自動で「イライラ」と断定せず、
+  // 800ms内に同じ要素を3回以上押したrageだけを警告材料にする。
+  const frustrated = side.rageTotal;
+  if (frustrated >= 10 && frustrated >= side.views * 0.01) {
+    const worstEl = [...side.elements].sort((a, b) => b.rage - a.rage)[0];
+    const at = worstEl && worstEl.rage > 0 ? ` 最多は ${labelOf(worstEl.sel)}。` : '';
+    out.push({ level: 'warn', text: `短時間の連打が ${frustrated}件。反応しない見た目のボタンや重い要素を疑ってください。${at}` });
+  }
+  if (side.ctaViews >= 50 && side.ctaRate !== null && side.ctaRate < 0.02) {
+    out.push({ level: 'warn', text: `CTA反応率が ${pctTxt(side.ctaRate)} と低めです。CTAの位置と文言を見直す余地があります。` });
+  }
+  if (!out.length) out.push({ level: 'ok', text: '目立った問題は見つかっていません。' });
+  return out;
+}
+
+function pctTxt(x) { return `${Math.round(x * 100)}%`; }
+
+function labelOf(sel) {
+  const i = String(sel ?? '').indexOf('|');
+  const label = i >= 0 ? sel.slice(i + 1) : '';
+  return label ? `「${label}」` : `「${sel}」`;
+}
 
 const delayMs = Number(undefined || 0);
 
@@ -939,7 +980,7 @@ function __route(url) {
     const P = (id, seg, score, email, line, ig, tags, n, total) => ({ id, created_at: Date.now() - id * 9 * H, score, segment: seg, email, line_id: line ? `U${String(id).padStart(32, '0')}` : null,
       discord_id: null, ig_id: ig ? `1784${id}0000` : null, ig_username: ig, kinds: [email, line, ig].filter(Boolean).length, tags, meikyou_tier: null,
       purchase_n: n, purchase_total: total, purchase_estimated: false });
-    let rows = [P(48, 'core', 92, 'yukari@example.com', true, 'yukari.writes', ['教材A 購入者', 'セミナー申込'], 3, 39400),
+    let rows = [P(48, 'core', 92, 'yukari@example.com', true, 'yukari.writes', ['教材A 購入者', '教材B 購入者', 'セミナー申込'], 3, 39400),
       P(47, 'regular', 71, 'ken@example.com', true, null, ['講座A 修了'], 1, 9800), P(46, 'prospect', 54, null, true, 'sakura.design', ['興味: 集客'], 0, 0),
       P(45, 'regular', 66, 'odawara@example.com', true, null, ['個別相談'], 1, 4980), P(44, 'prospect', 41, 'info@shop.example.jp', false, null, [], 0, 0),
       P(43, 'dormant', 12, 'reader2@example.com', false, null, ['講座A 修了'], 0, 0), P(42, 'core', 88, 'mikan@example.com', true, 'mikan.video', ['教材A 購入者', '教材B 購入者'], 2, 29600)];
@@ -951,9 +992,17 @@ function __route(url) {
       segments: { core: 212, regular: 1380, prospect: 4210, dormant: 2950 }, scoredAt: Date.now() - 5 * H }, rows };
   }
   else if (url.pathname === '/api/admin/persons/timeline') {
-    body = { ok: true, identities: [{ kind: 'email', key: 'yukari@example.com' }, { kind: 'line', key: 'U…' }],
-      events: [{ at: Date.now() - 2 * H, ch: 'メール', label: '「7日間講座」3通目を開封' }, { at: Date.now() - 26 * H, ch: 'LINE', label: '個別相談を予約' },
-        { at: Date.now() - 4 * 24 * H, ch: '購入', label: '教材A（¥9,800）' }, { at: Date.now() - 9 * 24 * H, ch: 'Instagram', label: 'ストーリーに返信' }] };
+    const id = Number(url.searchParams.get('id'));
+    const T = {
+      48: { ids: [['email', 'yukari@example.com'], ['line', 'U…48'], ['ig', '17844800000']], ev: [[2, 'メール', '「7日間講座」3通目を開封'], [26, 'LINE', '個別相談を予約'], [96, '購入', '教材B（¥19,800）'], [150, 'Instagram', 'ストーリーに返信'], [400, '購入', '教材A（¥9,800）'], [700, '購入', '教材A の特典（¥9,800）']] },
+      47: { ids: [['email', 'ken@example.com'], ['line', 'U…47']], ev: [[5, 'LINE', 'タグ「講座A 修了」'], [72, 'メール', '「7日間講座」7通目のリンクを押した'], [300, '購入', '教材A（¥9,800）']] },
+      46: { ids: [['line', 'U…46'], ['ig', '17844600000']], ev: [[1, 'Instagram', 'DM「特典」→ LINEへ案内'], [1.2, 'LINE', '友だち追加（経路 Instagram）']] },
+      45: { ids: [['email', 'odawara@example.com'], ['line', 'U…45']], ev: [[20, 'LINE', '個別相談の日程を質問'], [200, '購入', '講座の個別相談（¥4,980）']] },
+      44: { ids: [['email', 'info@shop.example.jp']], ev: [[20, 'メール', 'お問い合わせ「取材のご依頼」']] },
+      43: { ids: [['email', 'reader2@example.com']], ev: [[60 * 24, 'メール', '休眠へ（90日間 開封なし）']] },
+      42: { ids: [['email', 'mikan@example.com'], ['line', 'U…42'], ['ig', '17844200000']], ev: [[3, 'Instagram', 'リールにコメント'], [120, '購入', '教材B（¥19,800）'], [500, '購入', '教材A（¥9,800）']] },
+    }[id] || { ids: [], ev: [] };
+    body = { ok: true, identities: T.ids.map(([kind, key]) => ({ kind, key })), events: T.ev.map(([h, ch, label]) => ({ at: Date.now() - h * H, ch, label })) };
   }
   else if (url.pathname === '/api/admin/line/friends') body = friendsDemo(url);
   else if (url.pathname === '/api/admin/line/friend') body = friendDemo(url);
@@ -7718,6 +7767,7 @@ function __route(url) {
   function renderFunnel() {
     var fn = lastReport && lastReport.funnel;
     var f = fn ? fn[fnlPeriod] : null;
+    if (f && f.lite) return; // 計測基盤の無い環境ではファネルのカード自体を出さない(.need-analytics)
     el('fnl-title').textContent = fn && fn.offerLabel ? fn.offerLabel + ' ファネル' : 'ファネル';
     el('fnl-sub').textContent = (fnlPeriod === 'd7' ? '直近7日' : '直近30日') + ' · 率は同期間の概算';
     if (!f) {
@@ -7878,7 +7928,8 @@ function __route(url) {
       el('rp-rev').innerHTML = f30 && f30.revenue7 != null
         ? '<small>¥</small>' + fmtN(Math.round(f30.revenue7)) : '—';
       el('rp-orders').textContent = f30 ? fmtN(f30.orders7) : '—';
-      el('rp-orders-d').textContent = f30 ? '全販路' : '';
+      // 計測基盤の無い環境(lite)の売上・注文は Stripe の購入の台帳から(ホームの売上と同じ)
+      el('rp-orders-d').textContent = f30 ? (f30.lite ? 'Stripe の購入' : '全販路') : '';
       el('rp-clicks').textContent = f30 ? fmtN(f30.clicks7) : '—';
       el('rp-clicks-d').textContent = f30 && f30.clickRate != null ? '対LP訪問 ' + pctTxt(f30.clickRate) : '';
       el('rp-visits').textContent = f30 ? fmtN(f30.visits7) : '—';
@@ -9129,7 +9180,9 @@ function __route(url) {
       setRow('読者1人あたりの1日の上限', '超えた分は翌日に回します', '<span class="v num">' + fmtN(sf.contactDailyMax) + ' 通</span>') +
       setRow('一斉配信の対象の上限', '超えると、送る前に中止します', '<span class="v num">' + fmtN(sf.castMaxTargets) + ' 人</span>') +
       setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「Rondo が最初に届けてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
-        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください' : '直近14日に100通以上届いて、開封が1件も記録されていません。計測の設定を確かめてください') + '</span>' : ''),
+        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください'
+          : dm.hold === 'no_reactions' ? '直近14日に100通以上届いて、開封が1件も記録されていません。計測の設定を確かめてください'
+            : '直近14日に開封の記録が無く、Resend の計測の設定も確かめられていません。開封が記録されるか、監査で計測が確かめられると再開します') + '</span>' : ''),
         setSw('set-sw-dorm', dm.enabled !== false, false, '休眠の整理') +
         '<input class="set-in n" id="set-in-dormdays" type="number" min="30" max="730" step="1" aria-label="休眠とみなす日数" value="' + esc(dm.days) + '"><span class="sw-l">日</span>' +
         '<input class="set-in n" id="set-in-dormsends" type="number" min="1" max="200" step="1" aria-label="その間に届いた通数" value="' + esc(dm.minSends) + '"><span class="sw-l">通以上</span>' +
