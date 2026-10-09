@@ -732,18 +732,9 @@ const reportDemo = (() => {
     ok: true,
     slots: mailSlots.map((s) => ({ slot: s.slot, subject: s.subject, sent: s.sent, failed: s.slot === 4 ? 3 : 0, opens: s.opens, clicks: s.clicks })),
     daily: daily30(556, 220),
-    offers: [{ label: '教材B', clicks: 1480, revenue: 238400, orders: 8 }, { label: '教材A', clicks: 3120, revenue: 176400, orders: 18 }, { label: '教材C', clicks: 1100, revenue: 67200, orders: 15 }],
-    funnel: {
-      offerLabel: '教材A',
-      d7: fp(5360, 1420, 84, 34, 126000, 11), d30: fp(21400, 5700, 372, 150, 482000, 41),
-      p7: fp(4890, 1280, 77, 30, 112000, 10), p30: fp(19200, 5090, 331, 140, 421000, 36),
-      sources: {
-        d7: [src('threads', [['profile-link', 1100], ['post-reply', 640], ['', 240]]), src('instagram', [['bio', 700], ['story', 360], ['reel', 150]]),
-          src('mail', [['step-d5', 420], ['step-d7', 310], ['broadcast', 150]]), src('x', [['pin', 380], ['post', 260]]), src('youtube', [['desc', 240]]), { src: '', n: 410, links: [] }],
-        d30: [src('threads', [['profile-link', 4400], ['post-reply', 2560], ['', 940]]), src('instagram', [['bio', 2800], ['story', 1440], ['reel', 600]]),
-          src('mail', [['step-d5', 1680], ['step-d7', 1240], ['broadcast', 600]]), src('x', [['pin', 1520], ['post', 1040]]), src('youtube', [['desc', 960]]), { src: '', n: 1620, links: [] }],
-      },
-    },
+    // 計測基盤(ANALYTICS_DB)の無い配布版の標準: 売れた導線・ファネルの期間・流入元の内訳は null(10-09 本人裁定(b)・Astra LP r11)
+    offers: null,
+    funnel: { d7: null, d30: null, p7: null, p30: null, offerLabel: null, sources: null },
     events30: { open: 9420, click: 1860, unsubscribe: 52 }, eventsPrev30: { open: 8650, click: 1710, unsubscribe: 61 },
   };
 })();
@@ -797,50 +788,69 @@ const calendarDemo = (url) => {
   for (let i = 0; i < days; i++) {
     const day = start + i * JDAY, dow = new Date(day + 9 * JH).getUTCDay();
     const items = [['Threads', 7.5 * JH, 'th1'], ['Threads', 19 * JH, 'th2']];
-    if ((Math.floor(day / JDAY)) % 2 === 0) items.push(['IG', 12 * JH, 'ig']);
-    if (dow === 2 || dow === 5) items.push(['YouTube', 18 * JH, 'yt']);
+    if (dow === 3) items.push(['メール一斉', 20 * JH, 'mc']);
+    if (dow === 6) items.push(['LINE一斉', 12 * JH, 'lc']);
     items.forEach(([channel, off, k], j) => {
       const at = day + off;
-      const status = at < Date.now() ? ((Math.floor(day / JDAY) + j) % 23 === 0 ? 'dead' : 'published') : 'queued';
-      social.push({ channel, d: md(day), at_ms: at, status, title: titleAt(Math.floor(day / JDAY) * 3 + j) });
+      const status = at < Date.now() ? (channel === 'Threads' && (Math.floor(day / JDAY) + j) % 23 === 0 ? 'dead' : 'published') : 'queued';
+      const title = channel === 'メール一斉' ? '今週のお知らせ（読者全員）' : channel === 'LINE一斉' ? '週末のおすすめ（講座A 修了）' : titleAt(Math.floor(day / JDAY) * 3 + j);
+      social.push({ channel, d: md(day), at_ms: at, status, title });
     });
+  }
+  // 予約ページの予約(同じ時刻・同じ予約ページはまとめて人数で)。bookingsDemo と同じ見本から数える
+  for (const g of bookingGroups()) {
+    if (g.at < start || g.at >= start + days * JDAY) continue;
+    social.push({ channel: '予約', d: md(g.at), at_ms: g.at, status: g.at < Date.now() ? 'published' : 'queued', title: `${g.title} · 確定${g.booked}人${g.pending ? `・確認待ち${g.pending}人` : ''}` });
   }
   return { ok: true, start, sent: [], plan: [], social };
 };
+const bkAt = (back, h, m = 0) => dayStartMs(back) + h * JH + m * 60000;
+const bkMk = (id, key, title, startAt, mins, status, channel, name, ans) => ({ id, key, title, startAt, endAt: startAt + mins * 60000, label: jfmt(startAt, startAt + mins * 60000), status, canceledBy: status === 'canceled' ? 'user' : null, channel, name, blocked: false, answers: {}, answerList: ans });
+const S1 = () => bkAt(-4, 20), S2 = () => bkAt(-18, 20);
+const bookingAll = () => [
+  bkMk(501, 'consult', '個別相談', bkAt(-1, 14), 30, 'booked', 'line', '佐藤 みか', [{ label: '相談したいこと', value: '商品の価格の決め方' }]),
+  bkMk(502, 'consult', '個別相談', bkAt(-2, 11), 30, 'booked', 'email', '鈴木 けん', [{ label: '相談したいこと', value: 'LINEとメールの使い分け' }]),
+  bkMk(503, 'seminar', 'オンラインセミナー', S1(), 90, 'booked', 'line', '高橋 ひろ', []),
+  bkMk(504, 'seminar', 'オンラインセミナー', S1(), 90, 'waiting', 'email', '田中 ゆかり', [{ label: '参加の目的', value: '講座の作り方を知りたい' }]),
+  bkMk(506, 'seminar', 'オンラインセミナー', S1(), 90, 'booked', 'line', '小林 かい', []),
+  bkMk(507, 'seminar', 'オンラインセミナー', S2(), 90, 'booked', 'email', '加藤 なお', []),
+  bkMk(508, 'seminar', 'オンラインセミナー', S2(), 90, 'booked', 'line', '吉田 さき', [{ label: '参加の目的', value: 'LINEの配信を始めたい' }]),
+  bkMk(505, 'consult', '個別相談', bkAt(-6, 16), 30, 'pending', 'line', '伊藤 まなぶ', []),
+  bkMk(490, 'consult', '個別相談', bkAt(1, 15), 30, 'done', 'line', '渡辺 りく', [{ label: '相談したいこと', value: '配信の頻度' }]),
+  bkMk(491, 'seminar', 'オンラインセミナー', bkAt(3, 20), 90, 'done', 'email', '山本 あおい', []),
+  bkMk(492, 'consult', '個別相談', bkAt(5, 13), 30, 'canceled', 'line', '中村 そら', []),
+];
+const bookingGroups = () => {
+  const m = new Map();
+  for (const b of bookingAll()) {
+    if (!['booked', 'pending', 'done'].includes(b.status)) continue;
+    const k = b.key + '|' + b.startAt;
+    const g = m.get(k) || { at: b.startAt, title: b.title, booked: 0, pending: 0 };
+    if (b.status === 'pending') g.pending++; else g.booked++;
+    m.set(k, g);
+  }
+  return [...m.values()];
+};
 const bookingsDemo = (view) => {
-  const at = (back, h, m = 0) => dayStartMs(back) + h * JH + m * 60000;
-  const bk = (id, key, title, startAt, mins, status, channel, name, ans, blocked = false) => ({ id, key, title, startAt, endAt: startAt + mins * 60000, label: jfmt(startAt, startAt + mins * 60000), status, canceledBy: status === 'canceled' ? 'user' : null, channel, name, blocked, answers: {}, answerList: ans });
-  const upcoming = [
-    bk(501, 'consult', '個別相談', at(-1, 14), 30, 'booked', 'line', '佐藤 みか', [{ label: '相談したいこと', value: '商品の価格の決め方' }]),
-    bk(502, 'consult', '個別相談', at(-2, 11), 30, 'booked', 'email', '鈴木 けん', [{ label: '相談したいこと', value: 'LINEとメールの使い分け' }]),
-    bk(503, 'seminar', 'オンラインセミナー', at(-4, 20), 90, 'booked', 'line', '高橋 ひろ', []),
-    bk(504, 'seminar', 'オンラインセミナー', at(-4, 20), 90, 'waiting', 'email', '田中 ゆかり', [{ label: '参加の目的', value: '講座の作り方を知りたい' }]),
-    bk(505, 'consult', '個別相談', at(-6, 16), 30, 'pending', 'line', '伊藤 まなぶ', []),
-  ];
-  const past = [
-    bk(490, 'consult', '個別相談', at(1, 15), 30, 'done', 'line', '渡辺 りく', [{ label: '相談したいこと', value: '配信の頻度' }]),
-    bk(491, 'seminar', 'オンラインセミナー', at(3, 20), 90, 'done', 'email', '山本 あおい', []),
-    bk(492, 'consult', '個別相談', at(5, 13), 30, 'canceled', 'line', '中村 そら', []),
-  ];
+  const all = bookingAll();
+  const cnt = (at, st) => all.filter((b) => b.key === 'seminar' && b.startAt === at && b.status === st).length;
   return {
     ok: true,
     sessions: [
-      { key: 'seminar', title: 'オンラインセミナー', startAt: at(-4, 20), label: jfmt(at(-4, 20), at(-4, 21.5)), note: 'Zoom', capacity: 50, booked: 34, waiting: 0 },
-      { key: 'seminar', title: 'オンラインセミナー', startAt: at(-18, 20), label: jfmt(at(-18, 20), at(-18, 21.5)), note: 'Zoom', capacity: 50, booked: 50, waiting: 6 },
+      { key: 'seminar', title: 'オンラインセミナー', startAt: S1(), label: jfmt(S1(), S1() + 90 * 60000), note: 'Zoom', capacity: 2, booked: cnt(S1(), 'booked'), waiting: cnt(S1(), 'waiting') },
+      { key: 'seminar', title: 'オンラインセミナー', startAt: S2(), label: jfmt(S2(), S2() + 90 * 60000), note: 'Zoom', capacity: 30, booked: cnt(S2(), 'booked'), waiting: cnt(S2(), 'waiting') },
     ],
-    notify: [{ key: 'seminar', title: 'オンラインセミナー', count: 73 }],
+    notify: [{ key: 'seminar', title: 'オンラインセミナー', count: 12 }],
     keys: [{ key: 'consult', title: '個別相談', kind: 'slots' }, { key: 'seminar', title: 'オンラインセミナー', kind: 'sessions' }],
-    bookings: view === 'past' ? past : upcoming,
-    blocks: [{ id: 1, key: 'consult', title: '個別相談', day: ymdOf(-8), startAt: null, label: `${jfmt(at(-8, 12)).replace(/\d+:\d+$/, '')}（その日全部）` }],
+    bookings: view === 'past' ? all.filter((b) => b.startAt < Date.now()) : all.filter((b) => b.startAt >= Date.now()),
+    blocks: [{ id: 1, key: 'consult', title: '個別相談', day: ymdOf(-8), startAt: null, label: `${jfmt(bkAt(-8, 12)).replace(/\d+:\d+$/, '')}（その日全部）` }],
   };
 };
-const bookingParticipantsDemo = {
-  ok: true, label: jfmt(dayStartMs(-4) + 20 * JH, dayStartMs(-4) + 21.5 * JH), title: 'オンラインセミナー',
-  participants: [
-    { id: 503, name: '高橋 ひろ', channel: 'line', status: 'booked', answerList: [] },
-    { id: 504, name: '田中 ゆかり', channel: 'email', status: 'waiting', answerList: [{ label: '参加の目的', value: '講座の作り方を知りたい' }] },
-    { id: 506, name: '小林 かい', channel: 'line', status: 'booked', answerList: [] },
-  ],
+const bookingParticipantsDemo = (url) => {
+  const at = Number(url.searchParams.get('session'));
+  const ps = bookingAll().filter((b) => b.key === 'seminar' && b.startAt === at && b.status !== 'canceled');
+  return { ok: true, label: jfmt(at, at + 90 * 60000), title: 'オンラインセミナー',
+    participants: ps.map((b) => ({ id: b.id, name: b.name, channel: b.channel, status: b.status, answerList: b.answerList })) };
 };
 const heatDemo = (url) => {
   const pages = [
@@ -923,7 +933,7 @@ function __route(url) {
         { cast_id: 'c1', title: 'セミナー録画のお知らせ', segment_label: 'セミナー申込', send_at: Date.now() - 50 * H, status: 'done', target_count: 812, sent_count: 812, failed_count: 0 }],
       diag: { none: 8200, 1: 1400, 2: 980, 3: 860, 4: 420, 5: 220 }, richmenuLevels: null,
       daily: daily30(23, 10),
-      funnel: { clicks: [{ channel: 'ig', ck7: 241, ck30: 988 }, { channel: 'threads', ck7: 118, ck30: 402 }, { channel: 'youtube', ck7: 64, ck30: 250 }], follows7: 171, follows30: 690 } };
+      funnel: { clicks: null, follows7: 171, follows30: 690 } };
   }
   else if (url.pathname === '/api/admin/persons') {
     const P = (id, seg, score, email, line, ig, tags, n, total) => ({ id, created_at: Date.now() - id * 9 * H, score, segment: seg, email, line_id: line ? `U${String(id).padStart(32, '0')}` : null,
@@ -968,7 +978,7 @@ function __route(url) {
   else if (url.pathname === '/api/admin/mail-list') body = mailListDemo(url.searchParams.get('product'));
   else if (url.pathname === '/api/admin/calendar') body = calendarDemo(url);
   else if (url.pathname === '/api/admin/bookings') body = bookingsDemo(url.searchParams.get('view'));
-  else if (/^\/api\/admin\/bookings\/[^/]+\/participants$/.test(url.pathname)) body = bookingParticipantsDemo;
+  else if (/^\/api\/admin\/bookings\/[^/]+\/participants$/.test(url.pathname)) body = bookingParticipantsDemo(url);
   else if (url.pathname === '/api/admin/contacts') {
     body = { ok: true, total: 2, rows: [
       { id: 1, email: 'reader1@example.com', status: 'active', confirmed_at: Date.now() - 9 * 86400000, slot: 8, scenario_status: 'active', next_send_at: Date.now() + 86400000 },
@@ -9118,8 +9128,8 @@ function __route(url) {
         '<span class="v ' + (kill.on ? 'bad' : 'ok') + '">' + (kill.on ? '停止中' : '配信中') + '</span><button class="btn ' + (kill.on ? 'ghost' : 'danger') + ' sm" type="button" id="set-kill">' + (kill.on ? '配信を再開' : 'すべて止める') + '</button>') +
       setRow('読者1人あたりの1日の上限', '超えた分は翌日に回します', '<span class="v num">' + fmtN(sf.contactDailyMax) + ' 通</span>') +
       setRow('一斉配信の対象の上限', '超えると、送る前に中止します', '<span class="v num">' + fmtN(sf.castMaxTargets) + ' 人</span>') +
-      setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「受信を始めてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
-        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください' : '直近14日に100通以上届いて、開封もクリックも1件も記録されていません。計測の設定を確かめてください') + '</span>' : ''),
+      setRow('休眠の整理', '長く開封のない読者への送信を止めて、届きやすさを守ります。条件は「Rondo が最初に届けてからこの日数が経っていて、そのあいだ開封もクリックも1件もなく、何通以上届いている」。開封の計測が確かめられない日は休みます' +
+        (dm.hold ? '<br><span class="set-warn">いまは休んでいます: ' + esc(dm.hold === 'tracking_unverified' ? '開封・クリックの計測(Resend の計測サブドメイン)が未設定か未検証です。監査の「開封・クリック計測」を確かめてください' : '直近14日に100通以上届いて、開封が1件も記録されていません。計測の設定を確かめてください') + '</span>' : ''),
         setSw('set-sw-dorm', dm.enabled !== false, false, '休眠の整理') +
         '<input class="set-in n" id="set-in-dormdays" type="number" min="30" max="730" step="1" aria-label="休眠とみなす日数" value="' + esc(dm.days) + '"><span class="sw-l">日</span>' +
         '<input class="set-in n" id="set-in-dormsends" type="number" min="1" max="200" step="1" aria-label="その間に届いた通数" value="' + esc(dm.minSends) + '"><span class="sw-l">通以上</span>' +
