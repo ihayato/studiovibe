@@ -101,7 +101,7 @@ header.top nav a:hover{color:var(--ink)}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 /* 事前登録の札（このページの主役。金はここと主ボタンだけ） */
 .offer{padding:22px 24px 18px;box-shadow:var(--shadow),inset 0 0 0 1px color-mix(in srgb,var(--accent) 28%,transparent)}
-.o-head{display:flex;align-items:center;gap:10px;margin:0 0 6px}
+.o-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 6px}
 .o-tag{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent-hi);background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:999px;padding:2px 12px}
 .o-date{font-size:13px;color:var(--ink2)}
 .o-main{font-family:var(--font-display);font-weight:800;font-size:24px;line-height:1.4;margin:0 0 16px}
@@ -273,6 +273,11 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
 #ai .fit{margin-top:16px}
 .terms{max-width:920px;margin:20px auto 0;text-align:center;font-size:12.5px;line-height:1.8;color:var(--ink2)}
 .terms a{margin-left:6px}
+.fit-kick{margin:40px 0 0}
+.row small{display:block;font-size:12px;color:var(--ink2);line-height:1.6}
+.fit-note{max-width:820px;margin:28px auto 0;text-align:center;font-size:15px;color:var(--ink2);word-break:auto-phrase}
+@media (max-width:520px){.fit-note br{display:none}.fit-note{text-align:left}}
+@media (max-width:420px){.row{grid-template-columns:1fr;gap:2px}.cost{padding:22px 18px 18px}}
 </style>
 </head>
 <body>
@@ -297,15 +302,15 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
     <div>
       <p class="kick">Claude Code・Codexで、発信の商売を回す人へ。</p>
       <h1><span class="ph">LINEも、</span><span class="ph">インスタも、</span><span class="ph">メールも。</span><br><em class="ph">ひとつの画面で。</em></h1>
-      <p class="lead">配信も、返信も、売上も。<br>自分のCloudflareに設置する、ソースコードごと¥9,800の買い切りです。</p>
+      <p class="lead">配信も、返信も、売上も。<br>自分のCloudflareに設置する、ソースコードごとの買い切りです。</p>
       <div class="offer face">
-        <p class="o-head"><span class="o-tag">事前登録・無料</span><span class="o-date">発売日は決まり次第お知らせ</span></p>
+        <p class="o-head"><span class="o-tag">事前登録・無料</span><span class="o-date">発売日は未定</span></p>
         <p class="o-main">発売当日、<b>10%オフ</b>で買えます。</p>
         <p class="o-price num">¥9,800 → <b>¥8,820</b></p>
         <div class="ctas">
           <a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">無料で事前登録する</a>
         </div>
-        <p class="fine">押すとイケハヤのメルマガ（Substack）が開きます。メールアドレスを入れて登録すれば完了です。割引リンクはこのメルマガで届きます。</p>
+        <p class="fine">押すとイケハヤのメルマガ（Substack）が開きます。メールアドレスを入れて登録すれば完了です。</p>
       </div>
       <p class="demo-link"><a href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモ">先に触ってみる：見本の数字で動くデモ →</a></p>
       <div class="proof">
@@ -313,7 +318,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <div><b>3,336</b><span>イケハヤのメール読者</span></div>
         <div><b>2,022</b><span>イケハヤのLINE友だち</span></div>
       </div>
-      <p class="fine proof-note">3つとも2026年10月8日時点。読者と友だちは、イケハヤがRondoで運用している実数です。</p>
+      <p class="fine proof-note">2026年10月8日時点。読者と友だちは、Rondoで運用中の実数です。</p>
     </div>
     <div>
       <figure class="face shot hero-shot" style="margin:0">
@@ -499,10 +504,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
       <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
       <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
     </div>
-    <div class="fit">
-      <div class="face-lo"><h3>向いている人</h3><ul><li>Claude CodeやCodexを使っている</li><li>発信で商売をしている</li><li>配信ツールの月額と仕様に縛られたくない</li></ul></div>
-      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい</li><li>サポート窓口が必要</li><li>独自ドメインを用意できない</li></ul></div>
-    </div>
+    <p class="fit-note">ノーコードで完結したい人、サポート窓口が必要な人には向きません。<br>メールの送信元に、独自ドメインが必要です。</p>
   </div>
 </section>
 
@@ -522,7 +524,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <h3>別にかかる運用費</h3>
         <div class="row"><span>Cloudflare（有料プラン）</span><b>月5ドル〜</b></div>
         <div class="row"><span>独自ドメイン</span><b>年1,000円台〜</b></div>
-        <div class="row"><span>メール送信（Resend）</span><b>月3,000通まで無料／月20ドル〜</b></div>
+        <div class="row"><span>メール送信（Resend）<small>無料枠は月3,000通・1日100通まで</small></span><b>無料〜月20ドル</b></div>
         <div class="row"><span>開発AI（Claude CodeかCodex）</span><b>月3,000円ほど〜</b></div>
         <p class="fine">配信量・利用量に応じて増えることがあります。LINE公式アカウントやAIの返事の利用料は別です。</p>
       </div>
@@ -551,7 +553,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
 <section class="last" data-sec="final">
   <div class="wrap">
     <h2>発売日に、10%オフで<span class="hang">。</span></h2>
-    <p class="lede">登録は無料。発売のお知らせと、当日の割引リンクがメールで届きます。</p>
+    <p class="lede">イケハヤのメルマガ（Substack）に無料登録すると、<br>発売のお知らせと当日の割引リンクが届きます。</p>
     <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
   </div>
 </section>
