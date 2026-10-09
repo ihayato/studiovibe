@@ -166,7 +166,7 @@ header.top nav a:hover{color:var(--ink)}
 .inv li{position:relative;padding-left:16px;font-size:14px;line-height:1.75;color:var(--ink)}
 .inv li::before{content:"";position:absolute;left:1px;top:.78em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
 .inv li small{color:var(--ink2);font-size:12.5px}
-.inv .new{display:none}
+
 @media (max-width:520px){.inv{grid-template-columns:minmax(0,1fr)}}
 
 /* AI */
@@ -255,6 +255,24 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   .faq summary::after{transition:none}
   .dock{transition:none}
 }
+/* 画面の拡大（v4 から移植） */
+dialog.zoom{max-width:none;max-height:none;width:100vw;height:100dvh;margin:0;padding:0;border:0;background:rgba(26,24,38,.88)}
+dialog.zoom::backdrop{background:rgba(26,24,38,.6)}
+dialog.zoom .zin{width:100%;height:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:grid;place-items:start center;padding:56px 12px 24px}
+dialog.zoom img{width:min(1600px,100%);height:auto;border-radius:10px;box-shadow:var(--shadow)}
+@media (max-width:760px){dialog.zoom img{width:auto;max-width:none;height:auto;min-width:900px}}
+dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px;padding:0 16px;border:0;border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;box-shadow:var(--shadow-lo)}
+.o-price{margin:-8px 0 16px;font-size:15px;color:var(--ink2)}
+.o-price b{font-size:20px;font-weight:600;color:var(--ink)}
+.demo-link{margin:14px 0 0;font-size:14px}
+.demo-link a{text-underline-offset:4px}
+@media (max-width:360px){header.top .btn.sm{letter-spacing:1px;padding:0 12px}}
+.connect{max-width:1000px;margin:72px auto 0;text-align:center}
+.connect > h3{font-size:22px}
+.connect .chips{margin-top:20px}
+#ai .fit{margin-top:16px}
+.terms{max-width:920px;margin:20px auto 0;text-align:center;font-size:12.5px;line-height:1.8;color:var(--ink2)}
+.terms a{margin-left:6px}
 </style>
 </head>
 <body>
@@ -267,7 +285,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <a href="#price" data-rondo-label="ヘッダー 価格">価格</a>
       <a href="#faq" data-rondo-label="ヘッダー よくある質問">よくある質問</a>
     </nav>
-    <a class="btn pri sm" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
+    <a class="btn pri sm" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA ヘッダー事前登録" data-rondo-cta="presale">事前登録で10%オフ</a>
   </div>
 </header>
 
@@ -277,24 +295,25 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section class="hero" data-sec="hero">
   <div class="wrap grid">
     <div>
-      <p class="kick">メール・LINE・Instagram・Threads・YouTube</p>
+      <p class="kick">Claude Code・Codexで、発信の商売を回す人へ。</p>
       <h1><span class="ph">LINEも、</span><span class="ph">インスタも、</span><span class="ph">メールも。</span><br><em class="ph">ひとつの画面で。</em></h1>
-      <p class="lead">配信も、返信も、売上も。<br>1つの管理画面で回せる、買い切りのマーケティングツールです。</p>
+      <p class="lead">配信も、返信も、売上も。<br>自分のCloudflareに設置する、ソースコードごと¥9,800の買い切りです。</p>
       <div class="offer face">
-        <p class="o-head"><span class="o-tag">事前登録</span><span class="o-date">発売日は未定</span></p>
-        <p class="o-main">発売当日に、<b>10%オフ</b>。</p>
+        <p class="o-head"><span class="o-tag">事前登録・無料</span><span class="o-date">発売日は決まり次第お知らせ</span></p>
+        <p class="o-main">発売当日、<b>10%オフ</b>で買えます。</p>
+        <p class="o-price num">¥9,800 → <b>¥8,820</b></p>
         <div class="ctas">
-          <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">無料で事前登録する</a>
-          <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー デモ">デモを触る</a>
+          <a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA ヒーロー事前登録" data-rondo-cta="presale">無料で事前登録する</a>
         </div>
-        <p class="fine">割引リンクは、イケハヤのメルマガ（Substack・無料）でお届けします。</p>
+        <p class="fine">押すとイケハヤのメルマガ（Substack）が開きます。メールアドレスを入れて登録すれば完了です。割引リンクはこのメルマガで届きます。</p>
       </div>
+      <p class="demo-link"><a href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモ">先に触ってみる：見本の数字で動くデモ →</a></p>
       <div class="proof">
         <div><b>284</b><span>人がβ版を購入</span></div>
-        <div><b>3,336</b><span>人のメール読者</span></div>
-        <div><b>2,022</b><span>人のLINE友だち</span></div>
+        <div><b>3,336</b><span>イケハヤのメール読者</span></div>
+        <div><b>2,022</b><span>イケハヤのLINE友だち</span></div>
       </div>
-      <p class="fine proof-note">読者と友だちは、イケハヤがRondoで運用している実数（2026年10月8日時点）。</p>
+      <p class="fine proof-note">3つとも2026年10月8日時点。読者と友だちは、イケハヤがRondoで運用している実数です。</p>
     </div>
     <div>
       <figure class="face shot hero-shot" style="margin:0">
@@ -314,7 +333,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <!-- 2. できること -->
 <section id="jobs" data-sec="jobs">
   <div class="wrap">
-    <h2 class="center">毎日の仕事が、ひとつに<span class="hang">。</span></h2>
+    <h2 class="center">配信・返信・予約・売上を、ひとつに<span class="hang">。</span></h2>
     <div class="jobs">
       <div class="face-lo"><p class="j-n num">01</p><h3>配る</h3><p>メールとLINEの<br>ステップ配信・一斉配信</p></div>
       <div class="face-lo"><p class="j-n num">02</p><h3>返す</h3><p>DM・コメント・メールの返信を<br>1つの受信箱で</p></div>
@@ -328,6 +347,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 <section id="screens" data-sec="screens">
   <div class="wrap">
     <h2 class="center">実際の画面<span class="hang">。</span></h2>
+    <p class="fine center" style="margin-top:10px">管理画面の実物です。表示している数字は見本です。</p>
     <div class="scr">
       <div class="tabs" role="tablist" aria-label="管理画面">
         <button type="button" class="tab" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="true" data-rondo-label="画面 ダッシュボード">ダッシュボード</button>
@@ -360,6 +380,94 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
         <figure class="book"><div class="phone"><img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページ。セミナーの募集ページで、申し込み状況と残りの席数が出ている" width="780" height="1560" loading="lazy"></div></figure>
         <p class="cap">イケハヤのセミナーで使っている予約ページ。定員・キャンセル待ち・リマインドまで。</p>
       </div>
+      <div class="connect">
+      <h3 class="center">つながるもの</h3>
+    <ul class="chips" aria-label="つながるもの">
+      <li><i style="background:var(--ch-mail)"></i>メール</li><li><i style="background:var(--ch-line)"></i>LINE</li><li><i style="background:var(--ch-ig)"></i>Instagram</li><li><i style="background:var(--ch-th)"></i>Threads</li><li><i style="background:var(--ch-yt)"></i>YouTube</li><li><i style="background:var(--ink2)"></i>予約ページ</li><li><i style="background:var(--ink2)"></i>Stripeの売上</li><li><i style="background:var(--ink2)"></i>LP分析</li>
+    </ul>
+    <p class="fine chips-note">連携には各サービスの初回設定が必要です。X・note・Substackの数字は、あなたのAIがつないで取り込みます。</p>
+    <details class="all" data-rondo-click-sec="all">
+      <summary data-rondo-label="全機能 開く">v1.0の全機能を見る</summary>
+      <div class="inv">
+      <div><h3>連携の条件</h3><ul>
+        <li>各サービスのアカウント・アプリ登録と初回設定が必要</li>
+        <li>Instagramの返信は、相手の最後のメッセージから24時間まで</li>
+        <li>YouTubeは投稿から30日以内のコメントを取り込み</li>
+        <li>X・note・Substackの数字は、あなたのAIが作る収集の仕組みで</li>
+        <li>予約ページで参加費の決済はできません</li>
+      </ul></div>
+
+      <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
+        <li>ステップメール・一斉配信</li>
+        <li>複数の講座と、講座ごとの登録ページ</li>
+        <li>タグ・購入・名簿の条件を組み合わせた絞り込み</li>
+        <li>管理画面からのテスト送信</li>
+        <li>押したら動くリンク・本文の分岐・この講座だけ止める</li>
+        <li>件名のA/B（勝った方を自動で採用）</li>
+        <li>購入で講座を始める・止める・タグを付ける</li>
+        <li>配信への返信とお問い合わせを受信箱で</li>
+        <li>旧ツールの読者CSV・購入者CSVの取り込み</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-line)"></i>LINE</h3><ul>
+        <li>ステップ配信・一斉配信・リッチメニュー</li>
+        <li>タグ・友だち情報・分岐・リマインダ</li>
+        <li>タグで切り替わるリッチメニュー</li>
+        <li>流入経路の計測と、経路ごとの友だち追加</li>
+        <li>A/Bテスト・分析</li>
+        <li>画像・動画・カルーセル・フォーム</li>
+        <li>LステップのCSVからタグと友だち情報</li>
+        <li>AIの返事（任意・確認してから送る運用も）</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-ig)"></i>Instagram</h3><ul>
+        <li>DM・ストーリーへの返信・コメント・メンションに自動応答してLINEへ</li>
+        <li>DMメニュー（質問ボタン・常設メニュー）</li>
+        <li>ストーリーのキャンペーンごとの成果表</li>
+        <li>管理画面からDMに返信</li>
+        <li>フォロワー・投稿・いいね・コメントの毎日の集計</li>
+        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足してつなぎ直す）</li>
+        <li>DMのAIの返事（任意・試運転から）</li>
+        <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
+        <li>つなぐ・フォロワー数の毎日の集計</li>
+        <li>予約投稿と、直後の返信でLINEのリンク</li>
+        <li>送信の停止ボタン・1日の本数と間隔の上限</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ch-yt)"></i>YouTube</h3><ul>
+        <li>登録者・再生・日ごとの視聴の集計</li>
+        <li>コメントを受信箱に取り込んで返信</li>
+        <li>説明欄のリンクの計測</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
+        <li>LINE・Instagram・YouTube・メールを1つの一覧に</li>
+        <li>名前と本文の検索</li>
+        <li>会話のラベル・ラベルやタグでの絞り込み</li>
+        <li>すべて既読・要対応をすべて対応済みに</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>数字</h3><ul>
+        <li>ダッシュボード（売上・読者と友だち・チャネルの調子）</li>
+        <li>チャネルの「すべて」と、チャネルごとの4枚</li>
+        <li>売上と配信（売上・登録・メールの成績）・LP分析（ヒートマップと到達）</li>
+        <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
+        <li>X・note・Substackの数字の受け口</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
+        <li>セミナー（定員・キャンセル待ちと繰り上げ）</li>
+        <li>個別相談の空き枠（1枠1人）</li>
+        <li>リマインド・Googleカレンダー・参加者のCSV</li>
+      </ul></div>
+      <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
+        <li>設定の画面・デザインの7つの衣</li>
+        <li>緊急停止・二重送信の防止</li>
+        <li>メールとLINEを合わせた1人1日の上限（任意）</li>
+        <li>監査の画面に接続の健康と容量</li>
+        <li>毎日のバックアップと復元の練習・過去30日への巻き戻し</li>
+        <li>導入の点検（送信ドメインの検査まで）</li>
+        <li>Codexでも導入・運用できる入口</li>
+      </ul></div>
+      </div>
+    </details>
+      </div>
       <div class="demo-cta">
         <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">見本の数字でデモを触る</a>
       </div>
@@ -367,141 +475,7 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
   </div>
 </section>
 
-<!-- 4. つながるもの -->
-<section id="channels" data-sec="channels">
-  <div class="wrap center">
-    <h2>つながるもの<span class="hang">。</span></h2>
-    <ul class="chips" aria-label="つながるもの">
-      <li><i style="background:var(--ch-mail)"></i>メール</li><li><i style="background:var(--ch-line)"></i>LINE</li><li><i style="background:var(--ch-ig)"></i>Instagram</li><li><i style="background:var(--ch-th)"></i>Threads</li><li><i style="background:var(--ch-yt)"></i>YouTube</li><li><i style="background:var(--ink2)"></i>予約ページ</li><li><i style="background:var(--ink2)"></i>Stripeの売上</li><li><i style="background:var(--ink2)"></i>LP分析</li>
-    </ul>
-    <p class="fine chips-note">X・note・Substackの数字は、あなたのAIがつないで取り込みます。</p>
-    <details class="all" data-rondo-click-sec="all">
-      <summary data-rondo-label="全機能 開く">v1.0の全機能を見る</summary>
-      <div class="inv">
-
-      <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
-        <li>ステップメール・一斉配信</li>
-        <li>複数の講座と、講座ごとの登録ページ<span class="new">NEW</span></li>
-        <li>タグ・購入・名簿の条件を組み合わせた絞り込み<span class="new">NEW</span></li>
-        <li>管理画面からのテスト送信<span class="new">NEW</span></li>
-        <li>押したら動くリンク・本文の分岐・この講座だけ止める<span class="new">NEW</span></li>
-        <li>件名のA/B（勝った方を自動で採用）</li>
-        <li>購入で講座を始める・止める・タグを付ける<span class="new">NEW</span></li>
-        <li>配信への返信とお問い合わせを受信箱で<span class="new">NEW</span></li>
-        <li>旧ツールの読者CSV・購入者CSVの取り込み<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ch-line)"></i>LINE</h3><ul>
-        <li>ステップ配信・一斉配信・リッチメニュー</li>
-        <li>タグ・友だち情報・分岐・リマインダ<span class="new">NEW</span></li>
-        <li>タグで切り替わるリッチメニュー<span class="new">NEW</span></li>
-        <li>流入経路の計測と、経路ごとの友だち追加<span class="new">NEW</span></li>
-        <li>A/Bテスト・分析<span class="new">NEW</span></li>
-        <li>画像・動画・カルーセル・フォーム<span class="new">NEW</span></li>
-        <li>LステップのCSVからタグと友だち情報<span class="new">NEW</span></li>
-        <li>AIの返事（任意・確認してから送る運用も）<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ch-ig)"></i>Instagram</h3><ul>
-        <li>DM・ストーリーへの返信・コメント・メンションに自動応答してLINEへ<span class="new">NEW</span></li>
-        <li>DMメニュー（質問ボタン・常設メニュー）<span class="new">NEW</span></li>
-        <li>ストーリーのキャンペーンごとの成果表<span class="new">NEW</span></li>
-        <li>管理画面からDMに返信<span class="new">NEW</span></li>
-        <li>フォロワー・投稿・いいね・コメントの毎日の集計<span class="new">NEW</span></li>
-        <li>ビュー・リーチ・プロフィール訪問の集計（Metaの許可を足してつなぎ直す）<span class="new">NEW</span></li>
-        <li>DMのAIの返事（任意・試運転から）<span class="new">NEW</span></li>
-        <li><small>コメントへの返信には、Metaの追加の許可が要ります</small></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ch-th)"></i>Threads</h3><ul>
-        <li>つなぐ・フォロワー数の毎日の集計<span class="new">NEW</span></li>
-        <li>予約投稿と、直後の返信でLINEのリンク<span class="new">NEW</span></li>
-        <li>送信の停止ボタン・1日の本数と間隔の上限<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ch-yt)"></i>YouTube</h3><ul>
-        <li>登録者・再生・日ごとの視聴の集計<span class="new">NEW</span></li>
-        <li>コメントを受信箱に取り込んで返信<span class="new">NEW</span></li>
-        <li>説明欄のリンクの計測<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
-        <li>LINE・Instagram・YouTube・メールを1つの一覧に<span class="new">NEW</span></li>
-        <li>名前と本文の検索<span class="new">NEW</span></li>
-        <li>会話のラベル・ラベルやタグでの絞り込み<span class="new">NEW</span></li>
-        <li>すべて既読・要対応をすべて対応済みに<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ink2)"></i>数字</h3><ul>
-        <li>ダッシュボード（売上・読者と友だち・チャネルの調子）</li>
-        <li>チャネルの「すべて」と、チャネルごとの4枚<span class="new">NEW</span></li>
-        <li>売上と配信（売上・登録・メールの成績）・LP分析（ヒートマップと到達）</li>
-        <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
-        <li>X・note・Substackの数字の受け口</li>
-      </ul></div>
-      <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
-        <li>セミナー（定員・キャンセル待ちと繰り上げ）<span class="new">NEW</span></li>
-        <li>個別相談の空き枠（1枠1人）<span class="new">NEW</span></li>
-        <li>リマインド・Googleカレンダー・参加者のCSV<span class="new">NEW</span></li>
-      </ul></div>
-      <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
-        <li>設定の画面・デザインの7つの衣<span class="new">NEW</span></li>
-        <li>緊急停止・二重送信の防止</li>
-        <li>メールとLINEを合わせた1人1日の上限（任意）<span class="new">NEW</span></li>
-        <li>監査の画面に接続の健康と容量<span class="new">NEW</span></li>
-        <li>毎日のバックアップと復元の練習<span class="new">NEW</span>・過去30日への巻き戻し</li>
-        <li>導入の点検（送信ドメインの検査まで）<span class="new">NEW</span></li>
-        <li>Codexでも導入・運用できる入口<span class="new">NEW</span></li>
-      </ul></div>
-      </div>
-    </details>
-  </div>
-</section>
-
-<!-- 5. AIで設置・改造 -->
-<section id="ai" data-sec="ai">
-  <div class="wrap">
-    <div class="center">
-      <h2>設置も改造も、<br class="sp">AIに日本語で<span class="hang">。</span></h2>
-      <p class="lede">届くのは、ソースコード一式とAIが読む手順書。<br>Claude CodeやCodexに頼めば、設置から機能の追加まで進みます。</p>
-    </div>
-    <div class="split">
-      <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
-      <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. 向く人 -->
-<section id="fit" data-sec="fit">
-  <div class="wrap">
-    <h2 class="center">万人向けではありません<span class="hang">。</span></h2>
-    <div class="fit">
-      <div class="face-lo"><h3>向いている人</h3><ul><li>Claude CodeやCodexを使っている</li><li>発信で商売をしている</li><li>ツールの月額から抜けたい</li></ul></div>
-      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい</li><li>サポート窓口が必要</li><li>独自ドメインを用意できない</li></ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. 価格 -->
-<section id="price" data-sec="reserve">
-  <div class="wrap">
-    <h2 class="center">¥9,800、買い切り<span class="hang">。</span></h2>
-    <div class="buy">
-      <div class="face price">
-        <p class="kick">正式版 v1.0 ・ 発売日は未定</p>
-        <p class="big num">¥9,800<small>税込</small></p>
-        <div class="presale"><b>事前登録で10%オフ</b><span>発売当日、期間限定の割引リンクをお届けします。</span></div>
-        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
-        <p class="fine">イケハヤのメルマガ（Substack）に登録すると届きます。</p>
-      </div>
-      <div class="face-lo cost">
-        <h3>別にかかる運用費</h3>
-        <div class="row"><span>Cloudflare（有料プラン）</span><b>月5ドル〜</b></div>
-        <div class="row"><span>独自ドメイン</span><b>年1,000円台〜</b></div>
-        <div class="row"><span>メール送信（Resend）</span><b>無料枠あり</b></div>
-        <div class="row"><span>開発AI（Claude CodeかCodex）</span><b>月3,000円ほど〜</b></div>
-        <p class="fine">LINE公式アカウントやAIの返事の利用料は別です。サポート窓口はありません。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. 声 -->
+<!-- 4. 声 -->
 <section id="voices" data-sec="voices">
   <div class="wrap">
     <h2 class="center">β版を使った人の声</h2>
@@ -510,33 +484,75 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/urasan2785/status/2106303786293846426" data-rondo-label="声 urasan2785">@urasan2785 の投稿をXで見る</a></blockquote>
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/omochibigaku/status/2095624022440686035" data-rondo-label="声 omochibigaku">@omochibigaku の投稿をXで見る</a></blockquote>
       <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/kabuco_h/status/2087035751662002419" data-rondo-label="声 kabuco_h">@kabuco_h の投稿をXで見る</a></blockquote>
-      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/hsrk_g_hsrk/status/2088765079605178801" data-rondo-label="声 hsrk_g_hsrk">@hsrk_g_hsrk の投稿をXで見る</a></blockquote>
-      <blockquote class="twitter-tweet" data-dnt="true" data-conversation="none" data-lang="ja" data-theme="light"><a href="https://twitter.com/siroradio51/status/2088986470547931317" data-rondo-label="声 siroradio51">@siroradio51 の投稿をXで見る</a></blockquote>
     </div>
   </div>
 </section>
 
-<!-- 9. よくある質問 -->
+<!-- 5. 設置と運用・向く人 -->
+<section id="ai" data-sec="ai-fit">
+  <div class="wrap">
+    <div class="center">
+      <h2>設置と運用は、<br class="sp">あなたと開発AIで<span class="hang">。</span></h2>
+      <p class="lede">届くのは、ソースコード一式とAIが読む手順書。<br>Claude CodeやCodexに頼めば、設置から機能の追加まで進みます。</p>
+    </div>
+    <div class="split">
+      <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
+      <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
+    </div>
+    <div class="fit">
+      <div class="face-lo"><h3>向いている人</h3><ul><li>Claude CodeやCodexを使っている</li><li>発信で商売をしている</li><li>配信ツールの月額と仕様に縛られたくない</li></ul></div>
+      <div class="face-lo no"><h3>向いていない人</h3><ul><li>ノーコードで完結したい</li><li>サポート窓口が必要</li><li>独自ドメインを用意できない</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 価格 -->
+<section id="price" data-sec="price">
+  <div class="wrap">
+    <h2 class="center">¥9,800、買い切り<span class="hang">。</span></h2>
+    <div class="buy">
+      <div class="face price">
+        <p class="kick">正式版 v1.0 ・ 発売日は未定</p>
+        <p class="big num">¥9,800<small>税込</small></p>
+        <div class="presale"><b>事前登録で10%オフ（¥8,820）</b><span>発売当日、期間限定の割引リンクをメールでお届けします。</span></div>
+        <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
+        <p class="fine">Substackが開きます。メールアドレスを入れて登録すれば完了です（無料）。</p>
+      </div>
+      <div class="face-lo cost">
+        <h3>別にかかる運用費</h3>
+        <div class="row"><span>Cloudflare（有料プラン）</span><b>月5ドル〜</b></div>
+        <div class="row"><span>独自ドメイン</span><b>年1,000円台〜</b></div>
+        <div class="row"><span>メール送信（Resend）</span><b>月3,000通まで無料／月20ドル〜</b></div>
+        <div class="row"><span>開発AI（Claude CodeかCodex）</span><b>月3,000円ほど〜</b></div>
+        <p class="fine">配信量・利用量に応じて増えることがあります。LINE公式アカウントやAIの返事の利用料は別です。</p>
+      </div>
+    </div>
+    <p class="terms">v1系の更新は無償（時期・内容の保証なし）・技術サポートなし・購入者都合の返金は不可（法令に基づく対応を除く）。<a href="https://ikehaya.com/tokutei/" target="_blank" rel="noopener" data-rondo-label="価格 特商法">特定商取引法に基づく表記</a></p>
+  </div>
+</section>
+
+<!-- 7. よくある質問 -->
 <section id="faq" data-sec="faq">
   <div class="wrap">
     <h2 class="center">よくある質問</h2>
     <div class="faq">
       <details><summary data-rondo-click-sec="faq-1" data-rondo-label="FAQ 発売日">いつ発売ですか？</summary><div class="a">発売日は未定です。事前登録（Substack・無料）の方には、発売のお知らせと、発売当日から使える期間限定の10%オフのリンクをお送りします。登録はいつでも解除できます。</div></details>
+      <details><summary data-rondo-click-sec="faq-7" data-rondo-label="FAQ 登録済み">もうイケハヤのメルマガを読んでいます。</summary><div class="a">登録済みなら、何もしなくて大丈夫です。発売のお知らせと割引リンクは、いま届いているメルマガでお送りします。</div></details>
       <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードは開発AIが書きます。ただしノーコードツールではありません。AIに日本語で頼み、結果を自分で確かめられることが前提です。</div></details>
       <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額">月額はかかりますか？</summary><div class="a">Rondoへの月額はありません。Cloudflare・独自ドメイン・開発AIなどの運用費を、それぞれのサービスに直接払います。</div></details>
-      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入と運用は、あなたと開発AIで行います。v1系の更新は無償でお届けします。</div></details>
+      <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートはありません。導入と運用は、あなたと開発AIで行います。v1系の更新は無償でお届けします（時期・内容の保証はありません）。</div></details>
       <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ 乗り換え">いまの配信ツールから乗り換えられますか？</summary><div class="a">メールの読者はCSVで取り込めます。LINEはLステップのCSVから、タグと友だち情報を持ち込めます。</div></details>
       <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコードを納品するデジタル商品のため、購入者都合の返金はできません（法令に基づく対応を除きます）。</div></details>
     </div>
   </div>
 </section>
 
-<!-- 10. 終盤 -->
+<!-- 8. 終盤 -->
 <section class="last" data-sec="final">
   <div class="wrap">
     <h2>発売日に、10%オフで<span class="hang">。</span></h2>
-    <p class="lede">登録は無料。発売当日に、割引リンクが届きます。</p>
-    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
+    <p class="lede">登録は無料。発売のお知らせと、当日の割引リンクがメールで届きます。</p>
+    <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 最終事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
   </div>
 </section>
 
@@ -557,8 +573,8 @@ footer .copy{margin-left:auto;font-size:12px;color:var(--ink3)}
 </footer>
 
 <div class="dock" id="dock" aria-hidden="true" data-rondo-click-sec="dock">
-  <span class="p"><b>発売日に10%オフ</b>事前登録は無料</span>
-  <a class="btn pri" href="https://ihayato.substack.com/" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録する</a>
+  <span class="p"><b>発売日に10%オフ</b>Substackで無料登録</span>
+  <a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" tabindex="-1" data-rondo-label="CTA 下の固定事前登録" data-rondo-cta="presale">事前登録する</a>
 </div>
 
 <script>
