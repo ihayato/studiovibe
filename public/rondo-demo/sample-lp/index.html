@@ -48,7 +48,14 @@ footer{padding:48px 24px 120px;text-align:center;font-size:12.5px;color:var(--di
 // デモ: 計測はしない(送信を止める)・開いたらヒートマップを重ねる・集計データは見本からページの中で作る
 (function () {
   try { navigator.sendBeacon = function () { return true; }; } catch (e) {}
-  if (!/rondoheat=/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search + '#rondoheat=demo&hm=click');
+  // 閲覧の合言葉は本物の形(ページ.期限.署名)でないと heat-client が閲覧モードに入らない(10-10 の heat-client から)。中身は見本
+  var TOK = 'demo.1.' + new Array(65).join('0');
+  if (location.hash.indexOf('rondoheat=' + TOK) < 0) {
+    var hm = (location.hash.match(/hm=(click|dead|scroll|dwell)/) || [])[1] || 'click';
+    history.replaceState(null, '', location.pathname + location.search + '#rondoheat=' + TOK + '&hm=' + hm);
+  }
+  // 閲覧すると heat-client が「この端末は計測しない」印(rondoheat_off)を残す。同じ vibe.co.jp の本物の LP の計測まで止まるので、デモでは残させない
+  try { var _set = Storage.prototype.setItem; Storage.prototype.setItem = function (k) { if (k === 'rondoheat_off') return; return _set.apply(this, arguments); }; } catch (e) {}
   var D = {"sections":[{"sec":"ヒーロー","reachRate":1,"dwellAvgMs":9800},{"sec":"悩みの共感","reachRate":0.82,"dwellAvgMs":14200},{"sec":"解決策","reachRate":0.64,"dwellAvgMs":18600},{"sec":"実績","reachRate":0.36,"dwellAvgMs":11300},{"sec":"料金","reachRate":0.29,"dwellAvgMs":16900},{"sec":"よくある質問","reachRate":0.19,"dwellAvgMs":8200}],"click":[{"sel":"a.cta-main","n":612},{"sel":"a.cta-hero","n":498},{"sel":"summary.faq","n":244},{"sel":"a.nav-cta","n":96},{"sel":".step","n":40}],"dead":[{"sel":"img.proof","n":131},{"sel":".price b","n":58},{"sel":".hero h1","n":44},{"sel":".pain li","n":30}]};
   var GRID = 20;
   // 決まった並びの揺らぎ(開くたびに形が変わらない)
