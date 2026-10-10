@@ -326,6 +326,88 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
 .fit-note{max-width:820px;margin:28px auto 0;text-align:center;font-size:15px;color:var(--ink2);word-break:auto-phrase}
 @media (max-width:520px){.fit-note br{display:none}.fit-note{text-align:left}}
 @media (max-width:420px){.row{grid-template-columns:1fr;gap:2px}.cost{padding:22px 18px 18px}}
+
+/* ---- v6 案で足したもの ---- */
+.inbox.rev{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+.inbox.rev > figure{order:-1}
+#kachi{background:var(--surface2)}
+#kachi .shot .real{aspect-ratio:1500/993}
+@media (max-width:920px){.inbox.rev{grid-template-columns:minmax(0,1fr)}.inbox.rev > figure{order:0}}
+@media (max-width:520px){#kachi .shot .real{aspect-ratio:auto;max-height:620px}}
+#inbox .shot .real{aspect-ratio:1500/1000}
+.book2{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:28px;align-items:center;max-width:1000px;margin:0 auto}
+.book2 .shot .real{aspect-ratio:4/3;overflow:hidden}
+.book2 .book figcaption{margin-top:10px;text-align:center;font-size:12px;color:var(--ink2)}
+.book2 .phone{max-width:230px;border-radius:26px;padding:8px}
+.book2 .phone img{border-radius:19px}
+@media (max-width:760px){.book2{grid-template-columns:minmax(0,1fr)}.book2 .book{display:none}}
+.guard{max-width:920px;margin:48px auto 0}
+.guard > h3{font-size:19px}
+.guard ul{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.guard li{display:grid;gap:4px;align-content:start;padding:18px 16px 16px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow-lo)}
+.guard svg{width:22px;height:22px;fill:none;stroke:var(--ink2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:4px}
+.guard b{font-size:15px;line-height:1.5}
+.guard span{font-size:13px;line-height:1.7;color:var(--ink2);word-break:auto-phrase}
+.guard .fine{margin-top:14px}
+@media (max-width:920px){.guard ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.guard ul{grid-template-columns:minmax(0,1fr)}.guard li{grid-template-columns:28px minmax(0,1fr);column-gap:10px}.guard li svg{grid-row:span 2;margin:2px 0 0}}
+
+/* 予約の節: 実際のページ(スマホ)を主役に、セミナーと個別相談の2枚を脇に */
+.bk{display:grid;grid-template-columns:300px minmax(0,1fr);gap:48px;align-items:start;max-width:1000px;margin:44px auto 0}
+.bk-real{margin:0;display:grid;gap:16px}
+.bk-real .phone{display:block;max-width:300px;margin:0 auto;overflow:hidden}
+.bk-real .phone img{border-radius:22px}
+.bk-real figcaption{font-size:13.5px;line-height:1.8;color:var(--ink2);word-break:auto-phrase}
+.bk-real figcaption b{display:block;font-family:var(--font-display);font-weight:800;font-size:19px;color:var(--ink);margin-bottom:2px}
+.bk-real figcaption a{display:inline-block;margin-top:4px;text-underline-offset:4px}
+.bk-kinds{display:grid;gap:16px}
+.bk-kinds article{padding:22px 22px 18px;display:grid;gap:12px}
+.bk-kinds h3{font-size:19px}
+.bk-kinds ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.bk-kinds li{position:relative;padding-left:18px;font-size:14.5px;line-height:1.7}
+.bk-kinds li::before{content:"";position:absolute;left:2px;top:.66em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.bk-kinds .real{border-radius:8px;overflow:hidden;aspect-ratio:16/7;box-shadow:inset 0 0 0 1px var(--line)}
+.bk-kinds .real img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.bk-cap{margin:-4px 0 0;font-size:12px;color:var(--ink2)}
+.bk-note{margin-top:28px}
+.scr .cap .nw{white-space:nowrap}
+@media (max-width:520px){.scr .cap br{display:none}.scr .cap{text-align:left}}
+@media (max-width:860px){.bk{grid-template-columns:minmax(0,1fr);gap:32px;max-width:560px}.bk-real .phone{max-width:280px}.bk-real figcaption{text-align:center}}
+@media (max-width:520px){.bk-kinds article{padding:20px 16px 16px}.bk-kinds .real{aspect-ratio:16/9}}
+
+/* デモ: ヒーローのボタンと、ページで唯一の暗い帯 */
+.demo-link{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:18px 0 0}
+.demo-btn{min-height:48px;padding:0 20px;font-size:15px;letter-spacing:1.5px;gap:10px}
+.demo-btn svg{width:14px;height:14px;fill:var(--accent)}
+.demo-link > span{font-size:13px;color:var(--ink2)}
+#demo{background:#1E1C2A;padding:96px 0;color:#ECE8DC}
+.demo{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:56px;align-items:center}
+.demo-tag{display:inline-block;margin:0 0 18px;font:600 12px/1 var(--font-num);letter-spacing:.24em;color:#1E1C2A;background:var(--accent-lacquer);padding:6px 12px;border-radius:999px}
+#demo h2{color:#F5F3EC}
+#demo .lede{color:#BDB8CC;margin-top:16px}
+.demo-chips{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.demo-chips{gap:4px 0}
+.demo-chips li{font-size:13.5px;color:#DCD7E6}
+.demo-chips li+li::before{content:"・";color:#6F6B86;margin:0 2px}
+.demo-chips::before{content:"開ける画面";flex-basis:100%;font-size:12px;letter-spacing:.06em;color:#9C97AE}
+.demo-go{margin-top:28px;gap:10px;color:#1E1C2A;background:linear-gradient(180deg,#E6BC65,var(--accent-lacquer));box-shadow:0 8px 24px rgba(217,169,76,.25)}
+.demo-go svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.demo-go:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(217,169,76,.32)}
+.demo-go:focus-visible{outline:2px solid var(--accent-lacquer);outline-offset:3px}
+.demo-fine{margin:12px 0 0;font-size:12.5px;color:#9C97AE}
+.demo-vis{position:relative;display:block;padding:0 0 40px;text-decoration:none}
+.demo-pc{display:block;border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);transition:transform 200ms ease-out}
+.demo-pc .bar{display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;background:#2C2A3A;font:11.5px/1 var(--font-num);color:#9C97AE}
+.demo-pc .bar i{width:8px;height:8px;border-radius:50%;background:#4A4760}
+.demo-pc .bar span{margin-left:8px}
+.demo-sp{position:absolute;right:-12px;bottom:0;width:27%;border-radius:22px;padding:6px;background:#0F0E16;box-shadow:0 20px 50px rgba(0,0,0,.5);transition:transform 200ms ease-out}
+.demo-sp img{border-radius:17px}
+.demo-vis:hover .demo-pc{transform:translateY(-3px)}
+.demo-vis:hover .demo-sp{transform:translateY(-6px)}
+.demo-vis:focus-visible{outline:2px solid var(--accent-lacquer);outline-offset:6px;border-radius:12px}
+@media (max-width:920px){.demo{grid-template-columns:minmax(0,1fr);gap:40px}.demo-vis{max-width:620px;margin:0 auto;width:100%}}
+@media (max-width:520px){#demo{padding:72px 0}.demo-go{width:100%}.demo-pc{display:none}.demo-vis{padding:0}.demo-sp{position:static;display:block;width:68%;max-width:260px;margin:0 auto}#demo .lede br{display:none}}
+@media (prefers-reduced-motion:reduce){.demo-pc,.demo-sp{transition:none}.demo-vis:hover .demo-pc,.demo-vis:hover .demo-sp,.demo-go:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -334,6 +416,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
   <div class="in">
     <a class="logo" href="#top" data-rondo-label="ヘッダー ロゴ"><img src="/rondo-assets/rondo-mark.svg" alt="" width="28" height="28">Rondo</a>
     <nav aria-label="ページ内">
+      <a href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヘッダー デモ">デモ</a>
       <a href="#screens" data-rondo-label="ヘッダー 画面">画面</a>
       <a href="#price" data-rondo-label="ヘッダー 価格">価格</a>
       <a href="#faq" data-rondo-label="ヘッダー よくある質問">よくある質問</a>
@@ -360,7 +443,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         </div>
         <p class="fine">押すとイケハヤのメルマガ（Substack）が開きます。メールアドレスを入れて登録すれば完了です。</p>
       </div>
-      <p class="demo-link"><a href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモ">先に触ってみる：見本の数字で動くデモ →</a></p>
+      <p class="demo-link"><a class="btn sec demo-btn" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="ヒーロー デモ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>管理画面のデモを触る</a><span>登録不要・見本の数字で動きます</span></p>
     </div>
     <div>
       <figure class="face shot hero-shot" style="margin:0">
@@ -416,8 +499,28 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         </ul>
       </article>
     </div>
-    <p class="vs-plus">さらに、<b>予約ページ</b>と<b>売上・LP分析</b>も同じ画面に。</p>
+    <p class="vs-plus">さらに、<b>Threads</b>と<b>予約ページ</b>、<b>売上・LP分析</b>も同じ画面に。</p>
     <p class="fine center vs-note">コメントへの自動返信には、Metaの追加の許可が要ります。</p>
+  </div>
+</section>
+
+<!-- 2.5 デモ -->
+<section id="demo" data-sec="demo">
+  <div class="wrap demo">
+    <div class="demo-txt">
+      <p class="demo-tag">DEMO</p>
+      <h2>説明を読むより、<br>触るのが早い<span class="hang">。</span></h2>
+      <p class="lede">登録もログインも要りません。見本の数字が入った管理画面を、PCでもスマホでも、そのまま操作できます。</p>
+      <ul class="demo-chips" aria-label="デモで開ける画面">
+        <li>ホーム</li><li>受信箱</li><li>予約</li><li>売上と配信</li><li>LP分析</li><li>設定</li>
+      </ul>
+      <a class="btn demo-go" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="デモ帯 デモを開く">デモを触ってみる<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+      <p class="demo-fine">数字と名前はすべて見本です。保存や送信はされません。</p>
+    </div>
+    <a class="demo-vis" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="デモ帯 画面" aria-label="デモを開く">
+      <span class="demo-pc"><span class="bar"><i></i><i></i><i></i><span>vibe.co.jp/rondo-demo</span></span><img src="/rondo-assets/v6/demo-pc.webp" width="1400" height="831" loading="lazy" alt="デモの管理画面のホーム。売上・読者・LINE友だちの数字とチャネルの調子"></span>
+      <span class="demo-sp"><img src="/rondo-assets/v6/demo-sp.webp" width="520" height="1067" loading="lazy" alt="スマホで開いたデモのホーム"></span>
+    </a>
   </div>
 </section>
 
@@ -427,20 +530,83 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
     <div>
       <p class="kick">受信箱</p>
       <h2>DMも、コメントも、<br>メールの返信も。<br>1つの受信箱で返す<span class="hang">。</span></h2>
-      <p class="lede">LINE・Instagram・YouTube・メール。返事が要るものが1つの一覧に並び、その場で返せます。</p>
+      <p class="lede">LINE・Instagram・<span>Threads・</span>YouTube・メール。返事が要るものが1つの一覧に並び、その場で返せます。</p>
       <ul class="bul">
-        <li>要対応・未読・AIの確認待ちで絞り込み</li>
-        <li>名前と本文で検索、自分のラベルで整理</li>
+        <li>要対応・未読・AIの確認待ち、ラベルで絞り込み</li>
         <li>メールは、どの配信への返信かが分かる</li>
+        <li>Threadsは、合言葉のコメントに自動で返信（任意）</li>
         <li>DMの返事をAIに任せることも（任意）</li>
       </ul>
-      <p class="fine inbox-note">Instagramは相手の最後のメッセージから24時間まで、YouTubeは投稿から30日以内のコメントが対象です。</p>
+      <p class="fine inbox-note">Instagramは相手の最後のメッセージから24時間まで、YouTubeは投稿から30日以内のコメント、Threadsは投稿への直接のコメントが対象です。</p>
     </div>
     <figure class="face shot">
       <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 受信箱</span></div>
-      <a class="real" href="/rondo-assets/rondo-admin-inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-inbox-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-inbox.webp" width="1500" height="1324" loading="lazy" alt="受信箱の実物。LINE・Instagram・YouTube・メールの会話が、要対応やAIの確認待ちの札、ラベルつきで1つの一覧に並んでいる"></picture></a>
+      <a class="real" href="/rondo-assets/v6/inbox.webp" data-zoom data-rondo-label="受信箱 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/v6/inbox-sp.webp" width="600" height="1150"><img src="/rondo-assets/v6/inbox.webp" width="1500" height="1000" loading="lazy" alt="受信箱の実物。LINE・Instagram・Threads・YouTube・メールの会話が、要対応やAIの確認待ちの札、ラベルつきで1つの一覧に並んでいる"></picture></a>
       <figcaption>受信箱の実物（名前と本文は見本）</figcaption>
     </figure>
+  </div>
+</section>
+
+<!-- 3.5 勝ちパターン帳 -->
+<section id="kachi" data-sec="kachi">
+  <div class="wrap inbox rev">
+    <div>
+      <p class="kick">勝ちパターン帳</p>
+      <h2>毎週、<br>答え合わせが届く<span class="hang">。</span></h2>
+      <p class="lede">どの件名、どの投稿が当たったのか。帳面は毎週、自動で更新されます。<br>Claude Codeに一言頼めば、イケハヤAIが講評と、次に試す案を書きます。</p>
+      <ul class="bul">
+        <li>A/Bで確かめた型と、SNSの見立てを分けて記録</li>
+        <li>試した案は、結果がたまったら当たり外れを判定</li>
+        <li>どの配信から売れたかも、同じ帳面に</li>
+      </ul>
+      <p class="fine inbox-note">講評は、あなたのClaude Codeがいま使っている定額プランの枠で書きます。Rondoの費用やAPIの追加料金はかかりません。試すかどうかは、あなたが決めます。</p>
+    </div>
+    <figure class="face shot">
+      <div class="bar"><i></i><i></i><i></i><span>rondo /admin · 勝ちパターン帳</span></div>
+      <a class="real" href="/rondo-assets/v6/kachi.webp" data-zoom data-rondo-label="勝ちパターン帳 画面の拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/v6/kachi-sp.webp" width="600" height="1150"><img src="/rondo-assets/v6/kachi.webp" width="1500" height="993" loading="lazy" alt="勝ちパターン帳の実物。今週の講評と、ステップの第3便の件名を問いかけ型に変える案、試す・見送るのボタン"></picture></a>
+      <figcaption>勝ちパターン帳の実物（数字は見本）</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 3.7 予約ページ -->
+<section id="booking" data-sec="booking">
+  <div class="wrap">
+    <div class="center">
+      <p class="kick">予約ページ</p>
+      <h2>セミナーも、個別相談も。<br>申し込みから当日まで<span class="hang">。</span></h2>
+      <p class="lede">募集のページ、申し込み、リマインド、名簿まで。<br>LINEやメールの配信から、そのまま案内できます。</p>
+    </div>
+    <div class="bk">
+      <figure class="bk-real">
+        <a class="phone" href="https://rondo.nubonba.workers.dev/r/aidouga1017?v=2" target="_blank" rel="noopener" data-rondo-label="予約 実際のページ"><img src="/rondo-assets/v6/real-top.webp" width="600" height="1308" loading="lazy" alt="イケハヤのAI動画編集＆動画生成 実演セミナーの募集ページ。1,000名がお申し込み済みで満席と出ている"></a>
+        <figcaption><b>定員1,000名が、満席に。</b>イケハヤの実演セミナー（10/17）で、実際に使っている募集ページです。<a href="https://rondo.nubonba.workers.dev/r/aidouga1017?v=2" target="_blank" rel="noopener" data-rondo-label="予約 実際のページ リンク">実際のページを見る →</a></figcaption>
+      </figure>
+      <div class="bk-kinds">
+        <article class="face-lo">
+          <h3>セミナー・イベント</h3>
+          <ul>
+            <li>回ごとの定員と、残りの席のゲージ</li>
+            <li>満席のあとはキャンセル待ちと、次回の先行案内</li>
+            <li>前日と1時間前に、自動でリマインド</li>
+            <li>Stripeとつなげば、予約ページでそのまま参加費を払えます</li>
+          </ul>
+          <a class="real" href="/rondo-assets/v6/booking.webp" data-zoom data-rondo-label="予約 セミナー 拡大"><img src="/rondo-assets/v6/booking.webp" width="1500" height="1462" loading="lazy" alt="セミナーの管理画面。回ごとのカードと、選んだ回の名簿"></a>
+          <p class="bk-cap">管理画面では、回ごとの名簿で。</p>
+        </article>
+        <article class="face-lo">
+          <h3>個別相談</h3>
+          <ul>
+            <li>曜日ごとの受付時間から、空き枠を自動で出す</li>
+            <li>申し込みのときに、相談したいことを聞いておける</li>
+            <li>Googleカレンダーへの追加と、リマインドも</li>
+          </ul>
+          <a class="real" href="/rondo-assets/v6/consult.webp" data-zoom data-rondo-label="予約 個別相談 拡大"><img src="/rondo-assets/v6/consult.webp" width="1500" height="1160" loading="lazy" alt="個別相談の管理画面。1週間の予定表に、予約と空き枠と閉じた枠が並ぶ"></a>
+          <p class="bk-cap">管理画面では、週の予定表で。</p>
+        </article>
+      </div>
+    </div>
+    <p class="fine center bk-note">募集の文面や受付の時間は、開発AIに頼んで設定します。有料のイベントは、Stripeとつなぐと予約ページでそのまま支払えます。払った人には確定の案内が自動で届き、取り消しの返金も管理画面から。</p>
   </div>
 </section>
 
@@ -454,7 +620,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <button type="button" class="tab" role="tab" id="tab-home" aria-controls="pane-home" aria-selected="true" data-rondo-label="画面 ダッシュボード">ダッシュボード</button>
         <button type="button" class="tab" role="tab" id="tab-mail" aria-controls="pane-mail" aria-selected="false" tabindex="-1" data-rondo-label="画面 メール">メール</button>
         <button type="button" class="tab" role="tab" id="tab-line" aria-controls="pane-line" aria-selected="false" tabindex="-1" data-rondo-label="画面 LINE">LINE</button>
-        <button type="button" class="tab" role="tab" id="tab-book" aria-controls="pane-book" aria-selected="false" tabindex="-1" data-rondo-label="画面 予約">予約ページ</button>
+        <button type="button" class="tab" role="tab" id="tab-robe" aria-controls="pane-robe" aria-selected="false" tabindex="-1" data-rondo-label="画面 着せ替え">着せ替え</button>
       </div>
       <div role="tabpanel" id="pane-home" aria-labelledby="tab-home">
         <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · ダッシュボード</span></div>
@@ -471,9 +637,10 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
           <a class="real" href="/rondo-assets/rondo-admin-line.webp" data-zoom data-rondo-label="画面 LINE 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/rondo-admin-line-sp.webp" width="600" height="1154"><img src="/rondo-assets/rondo-admin-line.webp" width="1600" height="1200" loading="lazy" alt="LINEの画面。友だち・追加・ブロックの4枚と30日の推移"></picture></a></figure>
         <p class="cap">友だちの追加とブロックを、日ごとに。流入経路ごとの数も見られます。</p>
       </div>
-      <div role="tabpanel" id="pane-book" aria-labelledby="tab-book" hidden>
-        <figure class="book"><div class="phone"><img src="/rondo-assets/rondo-booking-seminar.webp" alt="Rondoの予約ページ。セミナーの募集ページで、申し込み状況と残りの席数が出ている" width="780" height="1560" loading="lazy"></div></figure>
-        <p class="cap">イケハヤのセミナーで使っている予約ページ。定員・キャンセル待ち・リマインドまで。</p>
+      <div role="tabpanel" id="pane-robe" aria-labelledby="tab-robe" hidden>
+        <figure class="face shot"><div class="bar"><i></i><i></i><i></i><span>rondo /admin · 設定 · デザイン</span></div>
+          <a class="real" href="/rondo-assets/v6/robes.webp" data-zoom data-rondo-label="画面 着せ替え 拡大"><picture><source media="(max-width:520px)" srcset="/rondo-assets/v6/robes-sp.webp" width="600" height="1150"><img src="/rondo-assets/v6/robes.webp" width="1500" height="1125" loading="lazy" alt="設定のデザイン。和の衣8種とSaaS風2種の見本が並ぶ"></picture></a></figure>
+        <p class="cap">管理画面の見た目は、和の衣・SaaS風・遊び（瓦版・駄菓子など）から選べて、<span class="nw">差し色・見出しの文字・角の丸みも</span>自分で調整できます。<br>ソースコードごと手元にあるので、開発AIに頼めば、色も配置も自由に作り変えられます。</p>
       </div>
       <div class="connect">
       <h3 class="center">つながるもの</h3>
@@ -489,7 +656,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <li>Instagramの返信は、相手の最後のメッセージから24時間まで</li>
         <li>YouTubeは投稿から30日以内のコメントを取り込み</li>
         <li>X・note・Substackの数字は、あなたのAIが作る収集の仕組みで</li>
-        <li>予約ページで参加費の決済はできません</li>
+        <li>有料のイベントは、予約ページでそのまま支払い（Stripe）</li>
       </ul></div>
 
       <div><h3><i style="background:var(--ch-mail)"></i>メール</h3><ul>
@@ -527,6 +694,9 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <li>つなぐ・フォロワー数の毎日の集計</li>
         <li>予約投稿と、直後の返信でLINEのリンク</li>
         <li>送信の停止ボタン・1日の本数と間隔の上限</li>
+        <li>コメントを受信箱に取り込んで返信</li>
+        <li>合言葉のコメントに自動返信・AIの返事（任意）</li>
+        <li>どの投稿からLINEの友だちが増えたか</li>
       </ul></div>
       <div><h3><i style="background:var(--ch-yt)"></i>YouTube</h3><ul>
         <li>登録者・再生・日ごとの視聴の集計</li>
@@ -534,7 +704,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <li>説明欄のリンクの計測</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>受信箱</h3><ul>
-        <li>LINE・Instagram・YouTube・メールを1つの一覧に</li>
+        <li>LINE・Instagram・<span>Threads・</span>YouTube・メールを1つの一覧に</li>
         <li>名前と本文の検索</li>
         <li>会話のラベル・ラベルやタグでの絞り込み</li>
         <li>すべて既読・要対応をすべて対応済みに</li>
@@ -545,14 +715,25 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
         <li>売上と配信（売上・登録・メールの成績）・LP分析（ヒートマップと到達）</li>
         <li>顧客の区分（コア・常連・見込み・休眠）とスコア</li>
         <li>X・note・Substackの数字の受け口</li>
+        <li>勝ちパターン帳（毎週の講評・試す案・答え合わせ）</li>
+        <li>配信ごとの購入（どの配信から売れたか）</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>予約ページ</h3><ul>
         <li>セミナー（定員・キャンセル待ちと繰り上げ）</li>
         <li>個別相談の空き枠（1枠1人）</li>
         <li>リマインド・Googleカレンダー・参加者のCSV</li>
+        <li>セミナーは回ごとの名簿、個別相談は週の予定表</li>
+        <li>写真入りの本格的な募集ページ（満席後の先行案内つき）</li>
+        <li>予約ページでそのまま参加費を払える（Stripe）</li>
       </ul></div>
       <div><h3><i style="background:var(--ink2)"></i>運用と守り</h3><ul>
-        <li>設定の画面・デザインの7つの衣</li>
+        <li>着せ替え（和の衣・SaaS風・遊び）と、差し色・文字・角の調整</li>
+        <li>開発AIに頼めば、管理画面の見た目は自由に作り変えられる</li>
+        <li>複数人でログイン（オーナー・編集者・見るだけ）</li>
+        <li>パスキーでログイン</li>
+        <li>毎晩の自動バックアップ（Cloudflare R2）</li>
+        <li>Cloudflareの利用料の見張り</li>
+        <li>案内役の栞（任意）：いまの状況をひとことで</li>
         <li>緊急停止・二重送信の防止</li>
         <li>メールとLINEを合わせた1人1日の上限（任意）</li>
         <li>監査の画面に接続の健康と容量</li>
@@ -564,7 +745,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
     </details>
       </div>
       <div class="demo-cta">
-        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">見本の数字でデモを触る</a>
+        <a class="btn sec" href="/rondo-demo/" target="_blank" rel="noopener" data-rondo-label="画面 デモを開く">この画面を、デモで触る</a>
       </div>
     </div>
   </div>
@@ -622,6 +803,16 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
       <div class="face-lo"><h3>あなたがやること</h3><p>アカウントの作成と承認。<br>動いたかを、自分の目で確かめる。</p></div>
       <div class="face-lo"><h3>AIがやること</h3><p>設置の作業、原稿の流し込み、<br>エラーの修正、機能の追加。</p></div>
     </div>
+    <div class="guard">
+      <h3 class="center">任せても、安心な作り</h3>
+      <ul>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.8 14.2c2.3.2 3.9 1.8 4.4 4.3"/></svg><b>チームで使える</b><span>オーナー・編集者・見るだけ。見るだけの人に、売上の金額は見せません。</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11V8a4 4 0 0 1 8 0v3"/><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M12 15v2"/></svg><b>パスキーでログイン</b><span>指紋や顔認証で、管理画面に入れます。</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 8 8"/><path d="M20 4v5h-5"/><path d="M12 8v4l3 2"/></svg><b>毎晩、自動でバックアップ</b><span>Cloudflareの中で控えを取ります。PCを開いておく必要はありません。</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.4-3.4 7.9-8 9-4.6-1.1-8-4.6-8-9V6z"/><path d="M12 8v5"/><circle cx="12" cy="16" r=".6"/></svg><b>使いすぎを知らせる</b><span>Cloudflareの利用料が急に増えたら、メールで知らせます。</span></li>
+      </ul>
+      <p class="fine center">バックアップと利用料の見張りは、初回の設定で有効になります。</p>
+    </div>
     <p class="fit-note">ノーコードで完結したい人、サポート窓口が必要な人には向きません。<br>メールの送信元に、独自ドメインが必要です。</p>
   </div>
 </section>
@@ -634,7 +825,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
       <div class="face price">
         <p class="kick">正式版 v1.0 ・ Brainで発売予定（発売日は未定）</p>
         <p class="big num">¥29,800<small>税込</small></p>
-        <p class="perk"><span class="o-tag">購入特典</span>「明鏡」のユーザーコミュニティ<span class="nw">「Rondo活用チャンネル」</span>に参加できます。</p>
+        <p class="perk"><span class="o-tag">購入特典</span>「明鏡」のユーザーコミュニティ<span class="nw">「Rondo活用チャンネル」</span>に参加できます。<span>管理画面からも読めます。</span></p>
         <div class="presale"><b>事前登録で10%オフ<span class="nw">（¥26,820）</span></b><span>発売当日、期間限定の割引リンクをメールでお届けします。</span></div>
         <div class="presale"><b>「明鏡」購入者は30%オフ<span class="nw">（¥20,860）</span></b><span>専用の割引リンクをお届けする予定です。</span></div>
         <div class="ctas"><a class="btn pri" href="https://ihayato.substack.com/?utm_source=rondo-lp&amp;utm_medium=lp&amp;utm_campaign=rondo-presale" target="_blank" rel="noopener" data-rondo-label="CTA 価格事前登録" data-rondo-cta="presale">無料で事前登録する</a></div>
@@ -664,6 +855,7 @@ dialog.zoom .x{position:fixed;top:10px;right:12px;min-height:44px;min-width:44px
       <details><summary data-rondo-click-sec="faq-2" data-rondo-label="FAQ プログラミング">プログラミングができなくても使えますか？</summary><div class="a">コードは開発AIが書きます。ただしノーコードツールではありません。AIに日本語で頼み、結果を自分で確かめられることが前提です。</div></details>
       <details><summary data-rondo-click-sec="faq-3" data-rondo-label="FAQ 月額">月額はかかりますか？</summary><div class="a">Rondoへの月額はありません。Cloudflare・独自ドメイン・開発AIなどの運用費を、それぞれのサービスに直接払います。</div></details>
       <details><summary data-rondo-click-sec="faq-4" data-rondo-label="FAQ サポート">サポートはありますか？</summary><div class="a">技術サポートの窓口はありません。導入と運用は、あなたと開発AIで行います。そのかわり購入特典として、「明鏡」の中のユーザーコミュニティ「Rondo活用チャンネル」に参加できます。Rondoはカスタマイズが自由なので、ほかの人の使い方を知ったり、わからないことを質問したりできます。v1系の更新は無償でお届けします（時期・内容の保証はありません）。</div></details>
+      <details><summary data-rondo-click-sec="faq-9" data-rondo-label="FAQ チーム">スタッフと一緒に使えますか？</summary><div class="a">使えます。オーナー・編集者・見るだけの3つの役割で、20人までログインできます。見るだけの人には、売上の金額を見せません。</div></details>
       <details><summary data-rondo-click-sec="faq-5" data-rondo-label="FAQ 乗り換え">いまの配信ツールから乗り換えられますか？</summary><div class="a">メールの読者はCSVで取り込めます。LINEはLステップのCSVから、タグと友だち情報を持ち込めます。</div></details>
       <details><summary data-rondo-click-sec="faq-6" data-rondo-label="FAQ 返金">返金はできますか？</summary><div class="a">ソースコードを納品するデジタル商品のため、購入者都合の返金はできません（法令に基づく対応を除きます）。</div></details>
     </div>
