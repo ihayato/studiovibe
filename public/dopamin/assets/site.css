@@ -413,6 +413,11 @@ body.is-android .qr, body.is-ios .qr { display: none; }
 @media (max-width: 360px) { .sk-fan { height: 196px; } .sk-fan img { width: 116px; } .sk-fan .c { width: 128px; } }
 @media (min-width: 880px) {
   .join-card.sakigake { grid-column: 1 / -1; grid-template-columns: 420px 1fr; column-gap: 40px; align-items: center; padding: 32px 36px; }
+  /* 10-10 先行テストの札を外して2枚になった=月見台の札も横いっぱいに(説明と特典を左右に) */
+  .join-card.kin { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.3fr; column-gap: 40px; align-items: center; padding: 32px 36px; }
+  .join-card.kin .join-tag, .join-card.kin h3 { grid-column: 1; }
+  .join-card.kin .perks { grid-column: 2; grid-row: 1 / span 4; margin: 0; }
+  .join-card.kin .join-act, .join-card.kin .fine { grid-column: 1; }
   .sk-fan { height: 280px; }
   .sk-fan img { width: 160px; } .sk-fan .c { width: 176px; }
 }

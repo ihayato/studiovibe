@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=20261007">
+<link rel="stylesheet" href="assets/site.css?v=20261010">
 <script>document.documentElement.classList.add("js")</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":["VideoGame","MobileApplication"],"name":"どぱくり！","alternateName":["どーぱみんくりっかー！","どーぱみんクリッカー"],"url":"https://vibe.co.jp/dopamin/","image":"https://vibe.co.jp/dopamin/assets/img/ogp.jpg","description":"たたけば斬撃、放っておけば仲間が戦う。かわいい仲間と夜を進む、和風ポップな放置系クリッカー。ダウンロード無料・アプリ内課金なし。","genre":["放置ゲーム","クリッカー"],"gamePlatform":["iOS","Android"],"operatingSystem":"iOS, Android","applicationCategory":"GameApplication","inLanguage":"ja","isPartOf":{"@type":"VideoGameSeries","name":"月蝕綺譚 -Luna Occulta-","url":"https://vibe.co.jp/luna-occulta/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"},"publisher":{"@type":"Organization","name":"合同会社日本の田舎は資本主義のフロンティアだ","url":"https://vibe.co.jp/"}}
@@ -41,7 +41,7 @@
     <nav class="nav" aria-label="ページ内">
       <a href="#movie">ムービー</a><a href="#play">あそびかた</a><a href="#try">ためし斬り</a><a href="#nakama">なかま</a><a href="#asobi">札返し</a><a href="#honpen">月蝕綺譚</a><a href="guide/">攻略</a>
     </nav>
-    <a class="soon-pill" href="#join" data-cta="header" data-analytics-event="cta_click" data-analytics-item="join" data-analytics-context="header">先行プレイ</a>
+    <a class="soon-pill" href="#join" data-cta="header" data-analytics-event="cta_click" data-analytics-item="join" data-analytics-context="header">NFTプレゼント</a>
   </div>
 </header>
 
@@ -50,7 +50,7 @@
     <div class="eclipse" aria-hidden="true"></div>
     <div class="wrap">
       <div class="hero-art">
-        <a class="gift" href="#sakigake" data-analytics-event="cta_click" data-analytics-item="sakigake" data-analytics-context="hero"><img src="assets/img/sakigake/blank.webp" alt="" width="480" height="665"><span>テストプレイ＆会員連携で<b>NFTプレゼント中！</b></span></a>
+        <a class="gift" href="#sakigake" data-analytics-event="cta_click" data-analytics-item="sakigake" data-analytics-context="hero"><img src="assets/img/sakigake/blank.webp" alt="" width="480" height="665"><span>事前登録キャンペーン<b>NFTプレゼント中！</b></span></a>
         <video id="heroVideo" src="assets/video/emma_loop.mp4" poster="assets/img/emma_key.webp" autoplay muted loop playsinline preload="auto" aria-label="星柄の着物のエマが、一角の槍を担いでウインクする"></video>
       </div>
       <div class="hero-copy">
@@ -247,26 +247,29 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <p class="eyebrow">JOIN</p>
-        <h2 class="pop" id="join-h">いますぐ、<span class="red pop inl">先行プレイ</span>。</h2>
+        <h2 class="pop" id="join-h">配信まで、<span class="red pop inl">事前登録キャンペーン</span>。</h2>
       </div>
       <div class="join-grid">
-        <article class="join-card reveal" id="joinTf">
-          <p class="join-tag">iPhone ・ 先行テスト版</p>
-          <h3 class="pop">無料で、先に遊べる。</h3>
-          <ol class="steps">
-            <li><b>1</b><span>下のボタンから参加する<small>iPhoneはTestFlight（Apple公式の試遊アプリ）。Androidのテスト版は受付を終えました</small></span></li>
-            <li><b>2</b><span>アプリを入れる</span></li>
-            <li><b>3</b><span>そのまま遊べる。感想も送れる</span></li>
-          </ol>
-          <div class="join-act tf">
-            <a class="btn primary" href="https://testflight.apple.com/join/e11TtzhJ" rel="noopener" data-cta="join" data-tf data-analytics-event="cta_click" data-analytics-item="testflight" data-analytics-context="join">iPhoneで参加する</a>
-            <figure class="qr"><img src="assets/img/qr/testflight.svg" alt="iPhoneで先行テストに参加するためのQRコード" width="132" height="132" loading="lazy"><figcaption>パソコンの方は<br>iPhoneで読み取り</figcaption></figure>
+        <article class="join-card sakigake reveal" id="sakigake">
+          <div class="sk-fan" aria-hidden="true">
+            <img class="l" src="assets/img/sakigake/ssr_sakuya.webp" alt="" width="480" height="665" loading="lazy">
+            <img class="r" src="assets/img/sakigake/ur_emma.webp" alt="" width="480" height="665" loading="lazy">
+            <img class="c" src="assets/img/sakigake/blank.webp" alt="" width="480" height="665" loading="lazy">
           </div>
-          <div class="join-act gp">
-            <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.ikehaya.kitan_clicker" rel="noopener" data-cta="join" data-gp data-analytics-event="cta_click" data-analytics-item="googleplay" data-analytics-context="join">Androidは事前登録へ</a>
-            <figure class="qr"><img src="assets/img/qr/googleplay.svg" alt="AndroidでGoogle Playの事前登録を開くためのQRコード" width="132" height="132" loading="lazy"><figcaption>パソコンの方は<br>Androidで読み取り</figcaption></figure>
+          <div class="sk-body">
+            <p class="join-tag">事前登録キャンペーン ・ 受け取り無料</p>
+            <h3 class="pop">記念の札<span class="gold pop inl">『先駆けの証』</span>を贈ります。</h3>
+            <p class="sk-lead">月見台に会員登録するだけで、どなたでも受け取れます。受け取りは無料です。</p>
+            <ol class="steps">
+              <li><b>1</b><span>月見台に会員登録する<small>メールアドレスだけで登録できます</small></span></li>
+              <li><b>2</b><span>Gachihoで月見台と連携する<small>受け取るウォレットも紐付けます</small></span></li>
+              <li><b>3</b><span>先駆けの証を受け取る</span></li>
+            </ol>
+            <div class="join-act">
+              <a class="btn primary" href="https://gachiho.ninja/sakigake" rel="noopener" data-cta="sakigake" data-analytics-event="cta_click" data-analytics-item="sakigake" data-analytics-context="join">先駆けの証を受け取る</a>
+            </div>
+            <p class="fine">受け取りは10月24日（土）まで。絵柄は配信日の10月25日（日）に一斉に開帳します。譲渡や売買はできない記念の札です。</p>
           </div>
-          <p class="fine">iPhone版は定員1万人。Android版は10月25日（日）の配信をお待ちください（Google Playで事前登録を受付中）。先行テスト版のセーブは、正式版には引き継がれません。</p>
         </article>
         <article class="join-card kin reveal" id="joinTm">
           <p class="join-tag">シリーズ共通の会員 ・ 月見台</p>
@@ -280,27 +283,6 @@
             <a class="btn kin" href="https://vibe.co.jp/luna-occulta/tsukimidai?via=dopamin-join" data-via="join" data-cta="join" data-analytics-event="cta_click" data-analytics-item="registration" data-analytics-context="join">登録して30勾玉を受け取る</a>
           </div>
           <p class="fine">メールアドレスだけで登録。勾玉は月見台で使うもので、換金・譲渡はできません。</p>
-        </article>
-        <article class="join-card sakigake reveal" id="sakigake">
-          <div class="sk-fan" aria-hidden="true">
-            <img class="l" src="assets/img/sakigake/ssr_sakuya.webp" alt="" width="480" height="665" loading="lazy">
-            <img class="r" src="assets/img/sakigake/ur_emma.webp" alt="" width="480" height="665" loading="lazy">
-            <img class="c" src="assets/img/sakigake/blank.webp" alt="" width="480" height="665" loading="lazy">
-          </div>
-          <div class="sk-body">
-            <p class="join-tag">先行テスト記念 ・ NFTプレゼント中</p>
-            <h3 class="pop">記念の札<span class="gold pop inl">『先駆けの証』</span>を贈ります。</h3>
-            <p class="sk-lead">iPhone・Androidの先行テストで遊んで、月見台と連携した方へ。受け取りは無料です。</p>
-            <ol class="steps">
-              <li><b>1</b><span>先行テストに参加する<small>いまから参加できるのはiPhoneだけです</small></span></li>
-              <li><b>2</b><span>アプリを月見台と連携する</span></li>
-              <li><b>3</b><span>Gachihoで受け取る</span></li>
-            </ol>
-            <div class="join-act">
-              <a class="btn primary" href="https://gachiho.ninja/sakigake" rel="noopener" data-cta="sakigake" data-analytics-event="cta_click" data-analytics-item="sakigake" data-analytics-context="join">先駆けの証を受け取る</a>
-            </div>
-            <p class="fine">譲渡や売買はできない記念の札です。絵柄はストア配信日に一斉に開帳します。受け取りはストア配信日の前日まで。</p>
-          </div>
         </article>
       </div>
     </div>
